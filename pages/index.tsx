@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import MixcloudPlayerWrapper from '../components/MixcloudPlayerWrapper';
+import MixcloudPlayerWrapper from '../components/MixcloudPlayer/MixcloudPlayerWrapper';
 
 const HomePage: React.FC = () => {
   const sampleKeys = [

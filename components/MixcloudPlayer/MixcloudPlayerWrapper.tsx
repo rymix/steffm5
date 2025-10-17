@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dynamically import the MixcloudPlayer with no SSR since it uses browser APIs
 const MixcloudPlayer = dynamic(
-  () => import('../src/lib/MixcloudPlayer').then(mod => ({ default: mod.MixcloudPlayer })),
+  () => import('./MixcloudPlayer').then(mod => ({ default: mod.MixcloudPlayer })),
   { 
     ssr: false,
     loading: () => <div>Loading player...</div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMixcloud } from './useMixcloud';
+import { useMixcloud } from '../../hooks/useMixcloud';
 
 interface MixcloudPlayerProps {
   keys: string[];
