@@ -1,2 +1,2 @@
-export { MixcloudPlayer } from './MixcloudPlayer';
-export { default as MixcloudPlayerWrapper } from './MixcloudPlayerWrapper';
+export { MixcloudPlayer } from "./MixcloudPlayer";
+export { default as MixcloudPlayerWrapper } from "./MixcloudPlayerWrapper";
