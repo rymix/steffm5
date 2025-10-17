@@ -69,9 +69,10 @@ const config = [
       "prettier/prettier": [
         "error",
         {
-          endOfLine: "lf",
+          endOfLine: "crlf",
           trailingComma: "all",
           singleQuote: false,
+          printWidth: 80,
         },
       ],
       
