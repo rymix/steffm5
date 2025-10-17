@@ -1,0 +1,18 @@
+{
+  "recommendations": [
+    "DavidAnson.vscode-markdownlint",
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "github.vscode-github-actions",
+    "GitHub.vscode-pull-request-github",
+    "monokai.theme-monokai-pro-vscode",
+    "naumovs.color-highlight",
+    "styled-components.vscode-styled-components",
+    "stylelint.vscode-stylelint",
+    "VisualStudioExptTeam.intellicode-api-usage-examples",
+    "VisualStudioExptTeam.vscodeintellicode",
+    "vscode-icons-team.vscode-icons"
+  ]
+}
