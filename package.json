@@ -1,10 +1,10 @@
 {
-  "name": "mixcloud-player",
-  "author": "Lewis Hunt",
-  "description": "Simple React Mixcloud player component with playlist support. A lightweight wrapper around the Mixcloud widget API with TypeScript support.",
+  "name": "steffm5",
+  "version": "1.0.0",
+  "author": "Steve Arnott",
+  "description": "Stef.FM - Funky House and Soul Music - Adventures in Decent Music",
+  "license": "MIT",
   "private": false,
-  "version": "1.0.35",
-  "type": "module",
   "jest": {
     "preset": "ts-jest/presets/default-esm",
     "testEnvironment": "jsdom",
@@ -30,15 +30,19 @@
       }
     }
   },
-  "homepage": "https://lewhunt.github.io/mixmotion",
-  "repository": "https://github.com/lewhunt/mixmotion.git",
-  "license": "GPL-3.0",
+  "homepage": "https://github.com/rymix/steffm5.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rymix/steffm5.git"
+  },
   "scripts": {
-    "build": "tsc",
-    "build:lib": "npm run build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "build:lib": "tsc",
     "build:demo": "cd demo && tsc",
-    "dev": "npx http-server demo -p 3000 -o",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "demo": "npx http-server demo -p 3001 -o",
+    "lint": "next lint",
     "test": "jest"
   },
   "peerDependencies": {
@@ -62,8 +66,8 @@
     "http-server": "^14.1.1",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.2",
     "vite": "^7.1.10"
@@ -93,5 +97,8 @@
     "music",
     "streaming",
     "playlist"
-  ]
+  ],
+  "dependencies": {
+    "next": "^15.5.6"
+  }
 }
