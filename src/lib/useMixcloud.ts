@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export interface MixcloudState {
   isPlaying: boolean;
@@ -69,18 +69,20 @@ export const useMixcloud = (options: UseMixcloudOptions): UseMixcloudReturn => {
     volume: 0.8,
   });
 
-  const widgetUrl = state.currentKey 
-    ? `https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed=${encodeURIComponent(state.currentKey)}&autoplay=${autoPlay ? '1' : '0'}`
+  const widgetUrl = state.currentKey
+    ? `https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed=${encodeURIComponent(
+        state.currentKey
+      )}&autoplay=${autoPlay ? "1" : "0"}`
     : null;
 
   // Load Mixcloud widget script
   useEffect(() => {
     if (scriptLoadedRef.current) return;
 
-    const script = document.createElement('script');
-    script.src = 'https://widget.mixcloud.com/media/js/widgetApi.js';
+    const script = document.createElement("script");
+    script.src = "https://widget.mixcloud.com/media/js/widgetApi.js";
     script.async = true;
-    
+
     script.onload = () => {
       scriptLoadedRef.current = true;
     };
@@ -96,7 +98,8 @@ export const useMixcloud = (options: UseMixcloudOptions): UseMixcloudReturn => {
 
   // Initialize widget when iframe loads
   useEffect(() => {
-    if (!scriptLoadedRef.current || !iframeRef.current || !state.currentKey) return;
+    if (!scriptLoadedRef.current || !iframeRef.current || !state.currentKey)
+      return;
 
     const initializeWidget = () => {
       if (window.Mixcloud && iframeRef.current) {
@@ -105,32 +108,43 @@ export const useMixcloud = (options: UseMixcloudOptions): UseMixcloudReturn => {
         // Set up event listeners
         widgetRef.current.ready.then(() => {
           widgetRef.current.events.pause.on(() => {
-            setState(prev => ({ ...prev, isPlaying: false }));
+            setState((prev) => ({ ...prev, isPlaying: false }));
             onPause?.();
           });
 
           widgetRef.current.events.play.on(() => {
-            setState(prev => ({ ...prev, isPlaying: true, isLoading: false }));
+            setState((prev) => ({
+              ...prev,
+              isPlaying: true,
+              isLoading: false,
+            }));
             onPlay?.();
           });
 
           widgetRef.current.events.ended.on(() => {
-            setState(prev => ({ ...prev, isPlaying: false }));
+            setState((prev) => ({ ...prev, isPlaying: false }));
             onEnded?.();
           });
 
           widgetRef.current.events.buffering.on(() => {
-            setState(prev => ({ ...prev, isLoading: true }));
+            setState((prev) => ({ ...prev, isLoading: true }));
           });
 
-          widgetRef.current.events.progress.on((position: number, duration: number) => {
-            setState(prev => ({ ...prev, position, duration, isLoading: false }));
-            onProgress?.(position, duration);
-          });
+          widgetRef.current.events.progress.on(
+            (position: number, duration: number) => {
+              setState((prev) => ({
+                ...prev,
+                position,
+                duration,
+                isLoading: false,
+              }));
+              onProgress?.(position, duration);
+            }
+          );
 
           // Set initial volume
-          widgetRef.current.volume(state.volume);
-          
+          widgetRef.current.setVolume(state.volume);
+
           onReady?.();
         });
       }
@@ -167,19 +181,22 @@ export const useMixcloud = (options: UseMixcloudOptions): UseMixcloudReturn => {
     }
   }, [state.isPlaying, play, pause]);
 
-  const goToTrack = useCallback((index: number) => {
-    if (index >= 0 && index < keys.length) {
-      setState(prev => ({
-        ...prev,
-        currentIndex: index,
-        currentKey: keys[index],
-        isPlaying: false,
-        isLoading: true,
-        position: 0,
-        duration: 0,
-      }));
-    }
-  }, [keys]);
+  const goToTrack = useCallback(
+    (index: number) => {
+      if (index >= 0 && index < keys.length) {
+        setState((prev) => ({
+          ...prev,
+          currentIndex: index,
+          currentKey: keys[index],
+          isPlaying: false,
+          isLoading: true,
+          position: 0,
+          duration: 0,
+        }));
+      }
+    },
+    [keys]
+  );
 
   const next = useCallback(() => {
     const nextIndex = (state.currentIndex + 1) % keys.length;
@@ -187,7 +204,8 @@ export const useMixcloud = (options: UseMixcloudOptions): UseMixcloudReturn => {
   }, [state.currentIndex, keys.length, goToTrack]);
 
   const previous = useCallback(() => {
-    const prevIndex = state.currentIndex === 0 ? keys.length - 1 : state.currentIndex - 1;
+    const prevIndex =
+      state.currentIndex === 0 ? keys.length - 1 : state.currentIndex - 1;
     goToTrack(prevIndex);
   }, [state.currentIndex, keys.length, goToTrack]);
 
@@ -199,9 +217,9 @@ export const useMixcloud = (options: UseMixcloudOptions): UseMixcloudReturn => {
 
   const setVolume = useCallback((volume: number) => {
     const clampedVolume = Math.max(0, Math.min(1, volume));
-    setState(prev => ({ ...prev, volume: clampedVolume }));
+    setState((prev) => ({ ...prev, volume: clampedVolume }));
     if (widgetRef.current) {
-      widgetRef.current.volume(clampedVolume);
+      widgetRef.current.setVolume(clampedVolume);
     }
   }, []);
 
