@@ -7,7 +7,10 @@ interface MixcloudPlayerProps {
   autoPlay?: boolean;
 }
 
-export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ keys, autoPlay = true }) => {
+export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
+  keys,
+  autoPlay = true,
+}) => {
   const { state, actions, iframeRef, widgetUrl } = useMixcloud({
     keys,
     autoPlay,
@@ -15,7 +18,8 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ keys, autoPlay =
     onPlay: () => console.log("Playing"),
     onPause: () => console.log("Paused"),
     onEnded: () => console.log("Ended"),
-    onProgress: (position, duration) => console.log("Progress:", position, duration),
+    onProgress: (position, duration) =>
+      console.log("Progress:", position, duration),
   });
 
   const formatTime = (seconds: number) => {
@@ -36,7 +40,14 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ keys, autoPlay =
           Current Track: {state.currentIndex + 1} of {keys.length}
         </h3>
         <p>Key: {state.currentKey}</p>
-        <p>Status: {state.isLoading ? "Loading..." : state.isPlaying ? "Playing" : "Paused"}</p>
+        <p>
+          Status:{" "}
+          {state.isLoading
+            ? "Loading..."
+            : state.isPlaying
+              ? "Playing"
+              : "Paused"}
+        </p>
         {state.duration > 0 && (
           <p>
             Time: {formatTime(state.position)} / {formatTime(state.duration)}
@@ -112,7 +123,8 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ keys, autoPlay =
               style={{
                 padding: "10px",
                 margin: "5px 0",
-                backgroundColor: index === state.currentIndex ? "#e0e0e0" : "#f5f5f5",
+                backgroundColor:
+                  index === state.currentIndex ? "#e0e0e0" : "#f5f5f5",
                 cursor: "pointer",
                 borderRadius: "4px",
               }}
@@ -120,7 +132,9 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ keys, autoPlay =
             >
               <strong>{index + 1}.</strong> {key}
               {index === state.currentIndex && (
-                <span style={{ marginLeft: "10px" }}>{state.isPlaying ? "▶️" : "⏸️"}</span>
+                <span style={{ marginLeft: "10px" }}>
+                  {state.isPlaying ? "▶️" : "⏸️"}
+                </span>
               )}
             </li>
           ))}

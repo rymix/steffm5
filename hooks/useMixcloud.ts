@@ -45,7 +45,15 @@ declare global {
 }
 
 export const useMixcloud = (options: UseMixcloudOptions): UseMixcloudReturn => {
-  const { keys, autoPlay = true, onReady, onPlay, onPause, onEnded, onProgress } = options;
+  const {
+    keys,
+    autoPlay = true,
+    onReady,
+    onPlay,
+    onPause,
+    onEnded,
+    onProgress,
+  } = options;
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const widgetRef = useRef<any>(null);
@@ -90,7 +98,8 @@ export const useMixcloud = (options: UseMixcloudOptions): UseMixcloudReturn => {
 
   // Initialize widget when iframe loads
   useEffect(() => {
-    if (!scriptLoadedRef.current || !iframeRef.current || !state.currentKey) return;
+    if (!scriptLoadedRef.current || !iframeRef.current || !state.currentKey)
+      return;
 
     const initializeWidget = () => {
       if (window.Mixcloud && iframeRef.current) {
@@ -121,15 +130,17 @@ export const useMixcloud = (options: UseMixcloudOptions): UseMixcloudReturn => {
             setState((prev) => ({ ...prev, isLoading: true }));
           });
 
-          widgetRef.current.events.progress.on((position: number, duration: number) => {
-            setState((prev) => ({
-              ...prev,
-              position,
-              duration,
-              isLoading: false,
-            }));
-            onProgress?.(position, duration);
-          });
+          widgetRef.current.events.progress.on(
+            (position: number, duration: number) => {
+              setState((prev) => ({
+                ...prev,
+                position,
+                duration,
+                isLoading: false,
+              }));
+              onProgress?.(position, duration);
+            },
+          );
 
           // Set initial volume
           widgetRef.current.setVolume(state.volume);
@@ -193,7 +204,8 @@ export const useMixcloud = (options: UseMixcloudOptions): UseMixcloudReturn => {
   }, [state.currentIndex, keys.length, goToTrack]);
 
   const previous = useCallback(() => {
-    const prevIndex = state.currentIndex === 0 ? keys.length - 1 : state.currentIndex - 1;
+    const prevIndex =
+      state.currentIndex === 0 ? keys.length - 1 : state.currentIndex - 1;
     goToTrack(prevIndex);
   }, [state.currentIndex, keys.length, goToTrack]);
 

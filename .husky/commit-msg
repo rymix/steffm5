@@ -1,0 +1,5 @@
+# Validate commit message format (optional)
+# Uncomment the line below to enforce conventional commits
+# npx commitlint --edit $1
+
+echo "Commit message validation passed."

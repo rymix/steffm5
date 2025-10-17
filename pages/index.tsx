@@ -15,7 +15,10 @@ const HomePage: React.FC = () => {
     <>
       <Head>
         <title>Stef.FM - Funky House and Soul Music</title>
-        <meta name="description" content="Adventures in Decent Music - Funky House and Soul Music" />
+        <meta
+          name="description"
+          content="Adventures in Decent Music - Funky House and Soul Music"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -25,7 +28,8 @@ const HomePage: React.FC = () => {
 
         <div className="demo-info">
           <p>
-            <strong>Welcome to Stef.FM!</strong> Funky House and Soul Music powered by Next.js and React.
+            <strong>Welcome to Stef.FM!</strong> Funky House and Soul Music
+            powered by Next.js and React.
           </p>
         </div>
 

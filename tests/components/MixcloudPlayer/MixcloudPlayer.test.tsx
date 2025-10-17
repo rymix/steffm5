@@ -5,7 +5,11 @@ import { render, screen } from "@testing-library/react";
 import { MixcloudPlayer } from "../../../components/MixcloudPlayer/MixcloudPlayer";
 
 describe("MixcloudPlayer", () => {
-  const sampleKeys = ["/rymixxx/test-track-1/", "/rymixxx/test-track-2/", "/rymixxx/test-track-3/"];
+  const sampleKeys = [
+    "/rymixxx/test-track-1/",
+    "/rymixxx/test-track-2/",
+    "/rymixxx/test-track-3/",
+  ];
 
   it("renders without crashing with empty keys", () => {
     render(<MixcloudPlayer keys={[]} />);
@@ -48,7 +52,9 @@ describe("MixcloudPlayer", () => {
 
   it("shows current playing indicator", () => {
     render(<MixcloudPlayer keys={sampleKeys} />);
-    const firstTrackItem = screen.getByText("/rymixxx/test-track-1/").closest("li");
+    const firstTrackItem = screen
+      .getByText("/rymixxx/test-track-1/")
+      .closest("li");
     expect(firstTrackItem).toHaveStyle("background-color: rgb(224, 224, 224)");
   });
 
