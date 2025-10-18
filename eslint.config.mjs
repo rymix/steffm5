@@ -75,7 +75,7 @@ const config = [
           printWidth: 80,
         },
       ],
-      
+
       // TypeScript
       "@typescript-eslint/no-unused-vars": [
         "error",
@@ -85,13 +85,13 @@ const config = [
           varsIgnorePattern: "^_",
         },
       ],
-      
+
       // Import/Export
       "import/extensions": "off",
       "import/prefer-default-export": "off",
       "simple-import-sort/exports": "error",
       "simple-import-sort/imports": "error",
-      
+
       // React
       "react/jsx-filename-extension": [
         "error",
@@ -103,7 +103,7 @@ const config = [
       "react/require-default-props": "off",
       "react/jsx-uses-react": "off",
       "react/react-in-jsx-scope": "off",
-      
+
       // General
       "no-console": "off",
       "no-unused-vars": [
@@ -113,11 +113,11 @@ const config = [
           varsIgnorePattern: "^_",
         },
       ],
-      
+
       // Testing
       "testing-library/prefer-screen-queries": "error",
       "testing-library/render-result-naming-convention": "error",
-      
+
       // Unicorn (selective)
       "unicorn/filename-case": "off",
       "unicorn/prefer-module": "off",

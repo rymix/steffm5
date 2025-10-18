@@ -9,9 +9,9 @@
     "dev": "next dev",
     "build": "next build && node post-build.js",
     "start": "next start",
-    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
-    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "eslint": "node --no-warnings ./node_modules/.bin/eslint .",
+    "eslint:fix": "node --no-warnings ./node_modules/.bin/eslint . --fix",
+    "prettier": "prettier --write .",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "test": "jest",
     "prepare": "husky"
