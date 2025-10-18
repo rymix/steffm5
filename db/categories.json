@@ -1,0 +1,52 @@
+{
+  "categories": [
+    {
+      "index": 1,
+      "code": "aidm",
+      "name": "Adventures in Decent Music",
+      "shortName": "ADV",
+      "x": -34,
+      "y": 72
+    },
+    {
+      "index": 2,
+      "code": "mpos",
+      "namixes.jsonme": "My Pair of Shoes",
+      "shortName": "SHOES",
+      "x": -56,
+      "y": 26
+    },
+    {
+      "index": 3,
+      "code": "special",
+      "name": "Special",
+      "shortName": "SPEC",
+      "x": -12,
+      "y": -14
+    },
+    {
+      "index": 4,
+      "code": "cocksoup",
+      "name": "Cocksoup",
+      "shortName": "COCK",
+      "x": 82,
+      "y": -14
+    },
+    {
+      "index": 5,
+      "code": "fav",
+      "name": "Favourites",
+      "shortName": "FAV",
+      "x": 116,
+      "y": 26
+    },
+    {
+      "index": 6,
+      "code": "all",
+      "name": "All",
+      "shortName": "ALL",
+      "x": 113,
+      "y": 72
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "backgroundCategories": [
+    {
+      "code": "table",
+      "name": "Tabletop",
+      "folder": "wallpapers/table",
+      "type": "Macintosh",
+      "order": 1
+    },
+    {
+      "code": "3.1",
+      "name": "Windows 3.1",
+      "folder": "wallpapers/windows/3.1",
+      "type": "RetroPC",
+      "order": 2
+    },
+    {
+      "code": "95",
+      "name": "Windows 95",
+      "folder": "wallpapers/windows/95",
+      "type": "RetroPC",
+      "order": 3
+    },
+    {
+      "code": "xp",
+      "name": "Windows XP",
+      "folder": "wallpapers/windows/xp",
+      "type": "RetroPC",
+      "order": 4
+    },
+    {
+      "code": "system7",
+      "name": "System 7",
+      "folder": "wallpapers/mac/system7",
+      "type": "Macintosh",
+      "order": 5
+    }
+  ]
+}

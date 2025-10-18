@@ -1,0 +1,1108 @@
+{
+  "backgrounds": [
+    {
+      "backgroundCategory": "3.1",
+      "name": "256 Color",
+      "fileName": "256color.png",
+      "tileType": "tile",
+      "width": 80,
+      "height": 50
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Arcade",
+      "fileName": "arcade.png",
+      "tileType": "tile",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Arches",
+      "fileName": "arches.png",
+      "tileType": "tile",
+      "width": 123,
+      "height": 160
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Argyle",
+      "fileName": "argyle.png",
+      "tileType": "tile",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Cars",
+      "fileName": "cars.png",
+      "tileType": "tile",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Castle",
+      "fileName": "castle.png",
+      "tileType": "tile",
+      "width": 33,
+      "height": 33
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Egypt",
+      "fileName": "egypt.png",
+      "tileType": "tile",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Flock",
+      "fileName": "flock.png",
+      "tileType": "tile",
+      "width": 56,
+      "height": 54
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Honey",
+      "fileName": "honey.png",
+      "tileType": "tile",
+      "width": 28,
+      "height": 46
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Leaves",
+      "fileName": "leaves.png",
+      "tileType": "tile",
+      "width": 200,
+      "height": 150
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Marble",
+      "fileName": "marble.png",
+      "tileType": "tile",
+      "width": 246,
+      "height": 222
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Red Brick",
+      "fileName": "redbrick.png",
+      "tileType": "tile",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Squares",
+      "fileName": "squares.png",
+      "tileType": "tile",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Tartan",
+      "fileName": "tartan.png",
+      "tileType": "tile",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Thatch",
+      "fileName": "thatch.png",
+      "tileType": "tile",
+      "width": 31,
+      "height": 30
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "Windows 3.1 Logo",
+      "fileName": "winlogo.png",
+      "tileType": "tile",
+      "width": 320,
+      "height": 240
+    },
+    {
+      "backgroundCategory": "3.1",
+      "name": "ZigZag",
+      "fileName": "zigzag.png",
+      "tileType": "tile",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Black Thatch",
+      "fileName": "blackthatch.png",
+      "tileType": "tile",
+      "width": 31,
+      "height": 30
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Blocks",
+      "fileName": "blocks.png",
+      "tileType": "tile",
+      "width": 54,
+      "height": 96
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Blue Rivets",
+      "fileName": "bluerivets.png",
+      "tileType": "tile",
+      "width": 16,
+      "height": 16
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Bubbles",
+      "fileName": "bubbles.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Clouds",
+      "fileName": "clouds.png",
+      "tileType": "stretch",
+      "width": 640,
+      "height": 480
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Forest",
+      "fileName": "forest.png",
+      "tileType": "tile",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Gold Weave",
+      "fileName": "goldweave.png",
+      "tileType": "tile",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Hounds Tooth",
+      "fileName": "houndstooth.png",
+      "tileType": "tile",
+      "width": 27,
+      "height": 25
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Metal Links",
+      "fileName": "metallinks.png",
+      "tileType": "tile",
+      "width": 200,
+      "height": 180
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Pinstripe",
+      "fileName": "pinstripe.png",
+      "tileType": "tile",
+      "width": 30,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Sandstone",
+      "fileName": "sandstone.png",
+      "tileType": "tile",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Setup",
+      "fileName": "setup.png",
+      "tileType": "stretch",
+      "width": 640,
+      "height": 480
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Stitches",
+      "fileName": "stitches.png",
+      "tileType": "tile",
+      "width": 96,
+      "height": 96
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Straw Mat",
+      "fileName": "strawmat.png",
+      "tileType": "tile",
+      "width": 30,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Tiles",
+      "fileName": "tiles.png",
+      "tileType": "tile",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Trinagles",
+      "fileName": "triangles.png",
+      "tileType": "tile",
+      "width": 16,
+      "height": 16
+    },
+    {
+      "backgroundCategory": "95",
+      "name": "Waves",
+      "fileName": "waves.png",
+      "tileType": "tile",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Bliss",
+      "fileName": "bliss.png",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Aquarium",
+      "fileName": "aquarium.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Ascent",
+      "fileName": "ascent.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Autumn",
+      "fileName": "autumn.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Azul",
+      "fileName": "azul.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Crystal",
+      "fileName": "crystal.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Da Vinci",
+      "fileName": "davinci.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Follow",
+      "fileName": "follow.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Home",
+      "fileName": "home.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Moon Flower",
+      "fileName": "moonflower.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Ocean",
+      "fileName": "ocean.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Peace",
+      "fileName": "peace.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Star Tracks",
+      "fileName": "startracks.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Stonehenge",
+      "fileName": "stonehenge.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Stream",
+      "fileName": "stream.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Tulips",
+      "fileName": "tulips.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Vortec Space",
+      "fileName": "vortecspace.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Wind",
+      "fileName": "wind.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Blue Lace",
+      "fileName": "bluelace16.png",
+      "tileType": "tile",
+      "width": 48,
+      "height": 48
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Feather Texture",
+      "fileName": "feathertexture.png",
+      "tileType": "tile",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Santa Fe Stucce",
+      "fileName": "santafestucco.png",
+      "tileType": "tile",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "backgroundCategory": "xp",
+      "name": "Soap Bubbles",
+      "fileName": "soapbubbles.png",
+      "tileType": "tile",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "10042",
+      "fileName": "10042.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "1111",
+      "fileName": "1111.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "11703",
+      "fileName": "11703.png",
+      "tileType": "tile",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "12484",
+      "fileName": "12484.png",
+      "tileType": "tile",
+      "width": 16,
+      "height": 16
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "12593",
+      "fileName": "12593.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "128",
+      "fileName": "128.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "12821",
+      "fileName": "12821.png",
+      "tileType": "tile",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "129",
+      "fileName": "129.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "130",
+      "fileName": "130.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "13096",
+      "fileName": "13096.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "131",
+      "fileName": "131.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "132",
+      "fileName": "132.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "133",
+      "fileName": "133.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "134",
+      "fileName": "134.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "136",
+      "fileName": "136.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "13665",
+      "fileName": "13665.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "137",
+      "fileName": "137.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "139",
+      "fileName": "139.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "141",
+      "fileName": "141.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "142",
+      "fileName": "142.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "144",
+      "fileName": "144.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "145",
+      "fileName": "145.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "146",
+      "fileName": "146.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "147",
+      "fileName": "147.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "148",
+      "fileName": "148.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "149",
+      "fileName": "149.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "150",
+      "fileName": "150.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "151",
+      "fileName": "151.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "16825",
+      "fileName": "16825.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "16974",
+      "fileName": "16974.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "17803",
+      "fileName": "17803.png",
+      "tileType": "tile",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "18078",
+      "fileName": "18078.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "19688",
+      "fileName": "19688.png",
+      "tileType": "tile",
+      "width": 16,
+      "height": 16
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "1969",
+      "fileName": "1969.png",
+      "tileType": "tile",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "1970",
+      "fileName": "1970.png",
+      "tileType": "tile",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "1971",
+      "fileName": "1971.png",
+      "tileType": "tile",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "1972",
+      "fileName": "1972.png",
+      "tileType": "tile",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "1973",
+      "fileName": "1973.png",
+      "tileType": "tile",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "1974",
+      "fileName": "1974.png",
+      "tileType": "tile",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "1975",
+      "fileName": "1975.png",
+      "tileType": "tile",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "1976",
+      "fileName": "1976.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "1977",
+      "fileName": "1977.png",
+      "tileType": "tile",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "1978",
+      "fileName": "1978.png",
+      "tileType": "tile",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "20318",
+      "fileName": "20318.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "20446",
+      "fileName": "20446.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "21225",
+      "fileName": "21225.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "22348",
+      "fileName": "22348.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "23295",
+      "fileName": "23295.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "24517",
+      "fileName": "24517.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "24642",
+      "fileName": "24642.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "24817",
+      "fileName": "24817.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "2767",
+      "fileName": "2767.png",
+      "tileType": "tile",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "28851",
+      "fileName": "28851.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "28920",
+      "fileName": "28920.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "29907",
+      "fileName": "29907.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "30711",
+      "fileName": "30711.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "30930",
+      "fileName": "30930.png",
+      "tileType": "tile",
+      "width": 512,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "31689",
+      "fileName": "31689.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "32307",
+      "fileName": "32307.png",
+      "tileType": "tile",
+      "width": 512,
+      "height": 32
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "32623",
+      "fileName": "32623.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "3727",
+      "fileName": "3727.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "4193",
+      "fileName": "4193.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "547",
+      "fileName": "547.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "6006",
+      "fileName": "6006.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "6741",
+      "fileName": "6741.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "7041",
+      "fileName": "7041.png",
+      "tileType": "tile",
+      "width": 32,
+      "height": 512
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "7321",
+      "fileName": "7321.png",
+      "tileType": "tile",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "7344",
+      "fileName": "7344.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "7527",
+      "fileName": "7527.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "8388",
+      "fileName": "8388.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "8448",
+      "fileName": "8448.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "870",
+      "fileName": "870.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "9695",
+      "fileName": "9695.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "system7",
+      "name": "987",
+      "fileName": "987.png",
+      "tileType": "tile",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "backgroundCategory": "table",
+      "name": "Wood 1",
+      "fileName": "wood-pattern1.png",
+      "tileType": "tile",
+      "width": 203,
+      "height": 317
+    },
+    {
+      "backgroundCategory": "table",
+      "name": "Wood 2",
+      "fileName": "wood-pattern2.png",
+      "tileType": "tile",
+      "width": 400,
+      "height": 317
+    },
+    {
+      "backgroundCategory": "table",
+      "name": "Wood 3",
+      "fileName": "wood-pattern3.png",
+      "tileType": "tile",
+      "width": 400,
+      "height": 400
+    },
+    {
+      "backgroundCategory": "table",
+      "name": "Wood 4",
+      "fileName": "wood-pattern4.png",
+      "tileType": "tile",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "backgroundCategory": "table",
+      "name": "Wood 5",
+      "fileName": "wood-pattern5.png",
+      "tileType": "tile",
+      "width": 317,
+      "height": 203
+    },
+    {
+      "backgroundCategory": "table",
+      "name": "Wood 6",
+      "fileName": "wood-pattern6.png",
+      "tileType": "tile",
+      "width": 317,
+      "height": 400
+    },
+    {
+      "backgroundCategory": "table",
+      "name": "Wood 7",
+      "fileName": "wood-pattern7.png",
+      "tileType": "tile",
+      "width": 400,
+      "height": 400
+    },
+    {
+      "backgroundCategory": "table",
+      "name": "Wood 8",
+      "fileName": "wood-pattern8.png",
+      "tileType": "tile",
+      "width": 512,
+      "height": 512
+    }
+  ]
+}
