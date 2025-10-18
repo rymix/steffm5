@@ -23,6 +23,7 @@
       "db": ["./db/index"],
       "db/*": ["./db/*"],
       "components/*": ["./components/*"],
+      "contexts/*": ["./contexts/*"],
       "hooks/*": ["./hooks/*"],
       "pages/*": ["./pages/*"],
       "public/*": ["./public/*"],

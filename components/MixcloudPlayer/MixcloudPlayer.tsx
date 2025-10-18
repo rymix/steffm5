@@ -1,6 +1,5 @@
-import React from "react";
-
-import { useMixcloud } from "hooks/useMixcloud";
+import { useMixcloud } from "contexts/mixcloud";
+import React, { useEffect, useRef } from "react";
 
 interface MixcloudPlayerProps {
   keys: string[];
@@ -11,16 +10,17 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
   keys,
   autoPlay = true,
 }) => {
-  const { state, actions, iframeRef, widgetUrl } = useMixcloud({
-    keys,
-    autoPlay,
-    onReady: () => console.log("Widget ready"),
-    onPlay: () => console.log("Playing"),
-    onPause: () => console.log("Paused"),
-    onEnded: () => console.log("Ended"),
-    onProgress: (position, duration) =>
-      console.log("Progress:", position, duration),
-  });
+  const { state, actions, iframeRef, widgetUrl } = useMixcloud();
+  const initializedRef = useRef(false);
+
+  // Initialize keys once on mount
+  useEffect(() => {
+    if (!initializedRef.current && keys.length > 0) {
+      actions.setKeys(keys);
+      actions.setAutoPlay(autoPlay);
+      initializedRef.current = true;
+    }
+  }, []); // Empty dependency array - only run on mount
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -28,7 +28,7 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  if (keys.length === 0) {
+  if (state.keys.length === 0) {
     return <div>No tracks provided</div>;
   }
 
@@ -37,7 +37,7 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
       {/* Current track info */}
       <div style={{ marginBottom: "20px" }}>
         <h3>
-          Current Track: {state.currentIndex + 1} of {keys.length}
+          Current Track: {state.currentIndex + 1} of {state.keys.length}
         </h3>
         <p>Key: {state.currentKey}</p>
         <p>
@@ -73,13 +73,13 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
 
       {/* Controls */}
       <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-        <button onClick={actions.previous} disabled={keys.length <= 1}>
+        <button onClick={actions.previous} disabled={state.keys.length <= 1}>
           Previous
         </button>
         <button onClick={actions.toggle} disabled={state.isLoading}>
           {state.isPlaying ? "Pause" : "Play"}
         </button>
-        <button onClick={actions.next} disabled={keys.length <= 1}>
+        <button onClick={actions.next} disabled={state.keys.length <= 1}>
           Next
         </button>
       </div>
@@ -117,7 +117,7 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
       <div>
         <h4>Playlist:</h4>
         <ul style={{ listStyle: "none", padding: 0 }}>
-          {keys.map((key, index) => (
+          {state.keys.map((key, index) => (
             <li
               key={key}
               style={{

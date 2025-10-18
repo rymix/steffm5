@@ -1,10 +1,14 @@
-import type { MixcloudContextState } from "contexts/mixcloud/types";
+import type {
+  MixcloudContextState,
+  MixcloudProviderProps,
+} from "contexts/mixcloud/types";
 import useMixcloudContextState from "contexts/mixcloud/useMixcloudContextState";
 import contextFactory from "utils/contextFactory";
 
-const { Consumer, Provider, useContext } = contextFactory<MixcloudContextState>(
-  useMixcloudContextState,
-);
+const { Consumer, Provider, useContext } = contextFactory<
+  MixcloudContextState,
+  Omit<MixcloudProviderProps, "children">
+>(useMixcloudContextState);
 
 export {
   Consumer as MixcloudConsumer,

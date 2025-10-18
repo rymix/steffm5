@@ -1,24 +1,23 @@
 import { createContext, JSX, useContext } from "react";
 
-type ProcessProviderProps = {
+type ContextFactoryProviderProps<TOptions = any> = {
   children: React.ReactNode;
-  initialMcKey?: string;
-};
+} & TOptions;
 
-const contextFactory = <T,>(
-  useContextState: (_initialMcKey?: string) => T,
+const contextFactory = <T, TOptions = any>(
+  useContextState: (_options?: TOptions) => T,
   ContextComponent?: React.ComponentType,
 ): {
   Consumer: React.Consumer<T>;
-  Provider: (_props: ProcessProviderProps) => JSX.Element;
+  Provider: (_props: ContextFactoryProviderProps<TOptions>) => JSX.Element;
   useContext: () => T;
 } => {
   const Context = createContext<T>({} as T);
   const ProcessProvider = ({
     children,
-    initialMcKey,
-  }: ProcessProviderProps): JSX.Element => (
-    <Context.Provider value={useContextState(initialMcKey)}>
+    ...options
+  }: ContextFactoryProviderProps<TOptions>): JSX.Element => (
+    <Context.Provider value={useContextState(options as TOptions)}>
       {children}
       {ContextComponent ? <ContextComponent /> : <></>}
     </Context.Provider>
