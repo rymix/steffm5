@@ -1,6 +1,7 @@
 import Head from "next/head";
 import React from "react";
 
+import MixList from "@/components/MixList";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 
 const HomePage: React.FC = () => {
@@ -34,6 +35,7 @@ const HomePage: React.FC = () => {
         </div>
 
         <MixcloudPlayerWrapper keys={sampleKeys} autoPlay={true} />
+        <MixList />
       </div>
     </>
   );
