@@ -17,6 +17,18 @@
     "noEmit": true,
     "incremental": true,
     "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "db": ["./db/index"],
+      "db/*": ["./db/*"],
+      "components/*": ["./components/*"],
+      "hooks/*": ["./hooks/*"],
+      "pages/*": ["./pages/*"],
+      "public/*": ["./public/*"],
+      "styles/*": ["./styles/*"],
+      "utils/*": ["./utils/*"]
+    },
     "plugins": [
       {
         "name": "next"

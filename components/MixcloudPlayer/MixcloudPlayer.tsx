@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useMixcloud } from "../../hooks/useMixcloud";
+import { useMixcloud } from "hooks/useMixcloud";
 
 interface MixcloudPlayerProps {
   keys: string[];

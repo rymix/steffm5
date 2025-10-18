@@ -63,6 +63,15 @@ const config = [
       react: {
         version: "detect",
       },
+      "import/resolver": {
+        typescript: {
+          alwaysTryTypes: true,
+          project: "./tsconfig.json",
+        },
+        node: {
+          extensions: [".js", ".jsx", ".ts", ".tsx"],
+        },
+      },
     },
     rules: {
       // Prettier
@@ -89,8 +98,27 @@ const config = [
       // Import/Export
       "import/extensions": "off",
       "import/prefer-default-export": "off",
+      "import/no-relative-parent-imports": "off", // Disabled - using absolute imports via TypeScript paths
+      "import/no-useless-path-segments": [
+        "error",
+        {
+          noUselessIndex: true,
+        },
+      ],
       "simple-import-sort/exports": "error",
-      "simple-import-sort/imports": "error",
+      "simple-import-sort/imports": [
+        "error",
+        {
+          groups: [
+            // External packages come first
+            ["^\\w"],
+            // Internal absolute imports
+            ["^@/", "^db", "^components/", "^hooks/", "^pages/", "^styles/"],
+            // Relative imports
+            ["^\\."],
+          ],
+        },
+      ],
 
       // React
       "react/jsx-filename-extension": [

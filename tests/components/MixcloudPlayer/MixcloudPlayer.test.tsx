@@ -1,8 +1,7 @@
+import { MixcloudPlayer } from "components/MixcloudPlayer/MixcloudPlayer";
+
 import "@testing-library/jest-dom";
-
 import { render, screen } from "@testing-library/react";
-
-import { MixcloudPlayer } from "../../../components/MixcloudPlayer/MixcloudPlayer";
 
 describe("MixcloudPlayer", () => {
   const sampleKeys = [
