@@ -1,10 +1,7 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useRef } from "react";
 
-interface MixcloudPlayerProps {
-  keys: string[];
-  autoPlay?: boolean;
-}
+import { MixcloudPlayerProps } from "components/MixcloudPlayer/types";
 
 export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
   keys,
