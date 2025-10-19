@@ -1,9 +1,8 @@
 import { useMixcloud } from "contexts/mixcloud";
-import React, { useState } from "react";
+import React from "react";
 
 import {
   StyledMixFilter,
-  StyledMixFilterActiveFilters,
   StyledMixFilterFormButton,
   StyledMixFilterFormButtons,
   StyledMixFilterFormElements,
@@ -11,25 +10,21 @@ import {
 
 export const MixFilter: React.FC = () => {
   const { state, actions } = useMixcloud();
-  const [filters, setFilters] = useState({
-    category: "",
-    name: "",
-    tags: "",
-  });
 
   const handleFilterChange = (key: string, value: string) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    actions.updateFilter(key, value);
   };
 
   const handleApplyFilters = () => {
     const cleanFilters = Object.fromEntries(
-      Object.entries(filters).filter(([_, value]) => value.trim() !== ""),
+      Object.entries(state.filters).filter(
+        ([_, value]) => value?.trim() !== "",
+      ),
     );
     actions.applyFilters(cleanFilters);
   };
 
   const handleClearFilters = () => {
-    setFilters({ category: "", name: "", tags: "" });
     actions.clearFilters();
   };
 
@@ -41,7 +36,7 @@ export const MixFilter: React.FC = () => {
         <div>
           <label>Category:</label>
           <select
-            value={filters.category}
+            value={state.filters.category || ""}
             onChange={(e) => handleFilterChange("category", e.target.value)}
           >
             <option value="">All</option>
@@ -57,7 +52,7 @@ export const MixFilter: React.FC = () => {
           <label>Name:</label>
           <input
             type="text"
-            value={filters.name}
+            value={state.filters.name || ""}
             onChange={(e) => handleFilterChange("name", e.target.value)}
             placeholder="Search by name..."
           />
@@ -67,7 +62,7 @@ export const MixFilter: React.FC = () => {
           <label>Tags:</label>
           <input
             type="text"
-            value={filters.tags}
+            value={state.filters.tags || ""}
             onChange={(e) => handleFilterChange("tags", e.target.value)}
             placeholder="Search by tag..."
           />
@@ -90,13 +85,6 @@ export const MixFilter: React.FC = () => {
           Clear Filters
         </StyledMixFilterFormButton>
       </StyledMixFilterFormButtons>
-
-      {Object.keys(state.currentFilters).length > 0 && (
-        <StyledMixFilterActiveFilters>
-          <strong>Active filters:</strong>{" "}
-          {JSON.stringify(state.currentFilters, null, 2)}
-        </StyledMixFilterActiveFilters>
-      )}
     </StyledMixFilter>
   );
 };

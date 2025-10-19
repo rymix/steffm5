@@ -18,6 +18,7 @@ export interface MixcloudState {
   isLoadingMixes: boolean;
   currentFilters: MixcloudFilters;
   error: string | null;
+  filters: MixcloudFilters;
 }
 
 export interface MixcloudActions {
@@ -34,6 +35,8 @@ export interface MixcloudActions {
   loadMixes: (_filters?: MixcloudFilters) => Promise<void>;
   applyFilters: (_filters: MixcloudFilters) => Promise<void>;
   clearFilters: () => Promise<void>;
+  setFilters: (_filters: MixcloudFilters) => void;
+  updateFilter: (_key: string, _value: string) => void;
 }
 
 export interface MixcloudContextState {

@@ -57,6 +57,11 @@ const useMixcloudContextState = (
     isLoadingMixes: false,
     currentFilters: {},
     error: null,
+    filters: {
+      category: "",
+      name: "",
+      tags: "",
+    },
   });
 
   const widgetUrl = state.currentKey
@@ -282,8 +287,27 @@ const useMixcloudContextState = (
   );
 
   const clearFilters = useCallback(async () => {
+    setState((prev) => ({
+      ...prev,
+      filters: {
+        category: "",
+        name: "",
+        tags: "",
+      },
+    }));
     await loadMixes({});
   }, [loadMixes]);
+
+  const setFilters = useCallback((filters: MixcloudFilters) => {
+    setState((prev) => ({ ...prev, filters }));
+  }, []);
+
+  const updateFilter = useCallback((key: string, value: string) => {
+    setState((prev) => ({
+      ...prev,
+      filters: { ...prev.filters, [key]: value },
+    }));
+  }, []);
 
   const actions: MixcloudActions = useMemo(
     () => ({
@@ -300,6 +324,8 @@ const useMixcloudContextState = (
       loadMixes,
       applyFilters,
       clearFilters,
+      setFilters,
+      updateFilter,
     }),
     [
       play,
@@ -315,6 +341,8 @@ const useMixcloudContextState = (
       loadMixes,
       applyFilters,
       clearFilters,
+      setFilters,
+      updateFilter,
     ],
   );
 
