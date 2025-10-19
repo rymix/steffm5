@@ -1,20 +1,21 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useRef } from "react";
 
-import { MixcloudPlayerProps } from "components/MixcloudPlayer/types";
+interface MixcloudPlayerProps {
+  autoPlay?: boolean;
+}
 
 export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
-  keys,
   autoPlay = true,
 }) => {
   const { state, actions, iframeRef, widgetUrl } = useMixcloud();
   const initializedRef = useRef(false);
 
-  // Initialize keys once on mount
+  // Initialize by loading mixes from API on mount
   useEffect(() => {
-    if (!initializedRef.current && keys.length > 0) {
-      actions.setKeys(keys);
+    if (!initializedRef.current) {
       actions.setAutoPlay(autoPlay);
+      actions.loadMixes(); // Load all mixes initially
       initializedRef.current = true;
     }
   }, []); // Empty dependency array - only run on mount
@@ -25,8 +26,26 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
+  if (state.isLoadingMixes) {
+    return <div>Loading mixes...</div>;
+  }
+
+  if (state.error) {
+    return (
+      <div style={{ color: "red" }}>
+        Error loading mixes: {state.error}
+        <button
+          onClick={() => actions.clearFilters()}
+          style={{ marginLeft: "10px" }}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   if (state.keys.length === 0) {
-    return <div>No tracks provided</div>;
+    return <div>No mixes found</div>;
   }
 
   return (
@@ -62,7 +81,7 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
             width="100%"
             height="120"
             src={widgetUrl}
-            frameBorder="0"
+            style={{ border: "none" }}
             allow="autoplay; encrypted-media"
           />
         </div>

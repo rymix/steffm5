@@ -1,3 +1,11 @@
+export interface MixcloudFilters {
+  category?: string;
+  name?: string;
+  notes?: string;
+  tags?: string;
+  date?: string;
+}
+
 export interface MixcloudState {
   isPlaying: boolean;
   isLoading: boolean;
@@ -7,6 +15,9 @@ export interface MixcloudState {
   position: number;
   volume: number;
   keys: string[];
+  isLoadingMixes: boolean;
+  currentFilters: MixcloudFilters;
+  error: string | null;
 }
 
 export interface MixcloudActions {
@@ -20,6 +31,9 @@ export interface MixcloudActions {
   setVolume: (_volume: number) => void;
   setKeys: (_keys: string[]) => void;
   setAutoPlay: (_autoPlay: boolean) => void;
+  loadMixes: (_filters?: MixcloudFilters) => Promise<void>;
+  applyFilters: (_filters: MixcloudFilters) => Promise<void>;
+  clearFilters: () => Promise<void>;
 }
 
 export interface MixcloudContextState {

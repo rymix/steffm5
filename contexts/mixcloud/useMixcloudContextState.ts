@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { mcKeyFormatter } from "utils/functions";
+
+import type { Mix } from "db/types";
 
 import type {
   MixcloudActions,
   MixcloudContextState,
+  MixcloudFilters,
   MixcloudState,
 } from "./types";
 
@@ -50,6 +54,9 @@ const useMixcloudContextState = (
     position: 0,
     volume: 0.8,
     keys: initialKeys,
+    isLoadingMixes: false,
+    currentFilters: {},
+    error: null,
   });
 
   const widgetUrl = state.currentKey
@@ -223,6 +230,61 @@ const useMixcloudContextState = (
     setAutoPlayState(newAutoPlay);
   }, []);
 
+  // API functions
+  const loadMixes = useCallback(async (filters: MixcloudFilters = {}) => {
+    setState((prev) => ({ ...prev, isLoadingMixes: true, error: null }));
+
+    try {
+      const queryParams = new URLSearchParams();
+
+      if (filters.category) queryParams.append("category", filters.category);
+      if (filters.name) queryParams.append("name", filters.name);
+      if (filters.notes) queryParams.append("notes", filters.notes);
+      if (filters.tags) queryParams.append("tags", filters.tags);
+      if (filters.date) queryParams.append("date", filters.date);
+
+      const response = await fetch(`/api/mixes?${queryParams.toString()}`);
+
+      if (!response.ok) {
+        throw new Error(`Failed to load mixes: ${response.statusText}`);
+      }
+
+      const mixes: Mix[] = await response.json();
+      const keys = mixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
+
+      setState((prev) => ({
+        ...prev,
+        keys,
+        currentFilters: filters,
+        isLoadingMixes: false,
+        error: null,
+        currentIndex: 0,
+        currentKey: keys[0] || null,
+        isPlaying: false,
+        position: 0,
+        duration: 0,
+      }));
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        isLoadingMixes: false,
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      }));
+    }
+  }, []);
+
+  const applyFilters = useCallback(
+    async (filters: MixcloudFilters) => {
+      await loadMixes(filters);
+    },
+    [loadMixes],
+  );
+
+  const clearFilters = useCallback(async () => {
+    await loadMixes({});
+  }, [loadMixes]);
+
   const actions: MixcloudActions = useMemo(
     () => ({
       play,
@@ -235,6 +297,9 @@ const useMixcloudContextState = (
       setVolume,
       setKeys,
       setAutoPlay,
+      loadMixes,
+      applyFilters,
+      clearFilters,
     }),
     [
       play,
@@ -247,6 +312,9 @@ const useMixcloudContextState = (
       setVolume,
       setKeys,
       setAutoPlay,
+      loadMixes,
+      applyFilters,
+      clearFilters,
     ],
   );
 

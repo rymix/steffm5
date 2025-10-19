@@ -12,15 +12,13 @@ const MixcloudPlayer = dynamic(
 );
 
 interface MixcloudPlayerWrapperProps {
-  keys: string[];
   autoPlay?: boolean;
 }
 
 const MixcloudPlayerWrapper: React.FC<MixcloudPlayerWrapperProps> = ({
-  keys,
   autoPlay = true,
 }) => {
-  return <MixcloudPlayer keys={keys} autoPlay={autoPlay} />;
+  return <MixcloudPlayer autoPlay={autoPlay} />;
 };
 
 export default MixcloudPlayerWrapper;

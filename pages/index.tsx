@@ -1,17 +1,11 @@
 import Head from "next/head";
 import React from "react";
 
+import { MixFilter } from "@/components/MixFilter";
 import MixList from "@/components/MixList";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 
 const HomePage: React.FC = () => {
-  const sampleKeys = [
-    "/rymixxx/adventures-in-decent-music-volume-1/",
-    "/rymixxx/adventures-in-decent-music-volume-2/",
-    "/rymixxx/stefs-disco-mix/",
-    "/rymixxx/my-pair-of-shoes-volume-9-deep-n-soulful/",
-  ];
-
   return (
     <>
       <Head>
@@ -34,7 +28,8 @@ const HomePage: React.FC = () => {
           </p>
         </div>
 
-        <MixcloudPlayerWrapper keys={sampleKeys} autoPlay={true} />
+        <MixFilter />
+        <MixcloudPlayerWrapper autoPlay={true} />
         <MixList />
       </div>
     </>
