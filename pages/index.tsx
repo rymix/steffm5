@@ -1,11 +1,22 @@
 import Head from "next/head";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 
 import { FilterStatus } from "@/components/FilterStatus";
 import { MixFilter } from "@/components/MixFilter";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 
 const HomePage: React.FC = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Clean up URL if it has a mix query parameter
+    if (router.query.mix) {
+      // Store the mix key for the player component to use
+      window.history.replaceState({}, "", "/");
+    }
+  }, [router.query.mix]);
+
   return (
     <>
       <Head>

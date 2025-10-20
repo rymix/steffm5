@@ -29,6 +29,7 @@ export type MixcloudState = {
   currentFilters: MixcloudFilters;
   error: string | null;
   filters: MixcloudFilters;
+  shareMessage: string | null;
 };
 
 export type MixcloudActions = {
@@ -50,6 +51,8 @@ export type MixcloudActions = {
   loadRandomMix: (_category?: string) => Promise<void>;
   loadMixesPreserveCurrent: (_filters?: MixcloudFilters) => Promise<void>;
   loadMixesWithRandomStart: (_filters?: MixcloudFilters) => Promise<void>;
+  loadSpecificMix: (_mixKey: string) => Promise<void>;
+  shareCurrentMix: () => void;
 };
 
 export type MixcloudContextState = {

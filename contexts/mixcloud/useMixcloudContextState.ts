@@ -54,6 +54,7 @@ const useMixcloudContextState = (
       name: "",
       tags: "",
     },
+    shareMessage: null,
   });
 
   const widgetUrl = state.currentKey
@@ -455,6 +456,80 @@ const useMixcloudContextState = (
     [],
   );
 
+  const loadSpecificMix = useCallback(async (mixKey: string) => {
+    setState((prev) => ({ ...prev, isLoadingMixes: true, error: null }));
+
+    try {
+      // Load all mixes first to get the full list context
+      const response = await fetch("/api/mixes");
+
+      if (!response.ok) {
+        throw new Error(`Failed to load mixes: ${response.statusText}`);
+      }
+
+      const mixes: Mix[] = await response.json();
+      const keys = mixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
+
+      // Find the specific mix in the list
+      const targetIndex = keys.findIndex((key) => key === mixKey);
+
+      if (targetIndex === -1) {
+        throw new Error(`Mix "${mixKey}" not found`);
+      }
+
+      setState((prev) => ({
+        ...prev,
+        keys,
+        currentFilters: {},
+        isLoadingMixes: false,
+        error: null,
+        currentIndex: targetIndex,
+        currentKey: mixKey,
+        isPlaying: false,
+        position: 0,
+        duration: 0,
+      }));
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        isLoadingMixes: false,
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      }));
+    }
+  }, []);
+
+  const shareCurrentMix = useCallback(() => {
+    if (state.currentKey) {
+      const shareUrl = `${window.location.origin}?mix=${encodeURIComponent(state.currentKey)}`;
+
+      // Copy to clipboard
+      navigator.clipboard
+        .writeText(shareUrl)
+        .then(() => {
+          setState((prev) => ({
+            ...prev,
+            shareMessage: "Share URL copied to clipboard!",
+          }));
+          // Clear message after 3 seconds
+          setTimeout(() => {
+            setState((prev) => ({ ...prev, shareMessage: null }));
+          }, 3000);
+        })
+        .catch((err) => {
+          console.error("Failed to copy to clipboard:", err);
+          setState((prev) => ({
+            ...prev,
+            shareMessage: "Failed to copy. URL: " + shareUrl,
+          }));
+          // Clear message after 5 seconds for error
+          setTimeout(() => {
+            setState((prev) => ({ ...prev, shareMessage: null }));
+          }, 5000);
+        });
+    }
+  }, [state.currentKey]);
+
   const actions: MixcloudActions = useMemo(
     () => ({
       play,
@@ -475,6 +550,8 @@ const useMixcloudContextState = (
       loadRandomMix,
       loadMixesPreserveCurrent,
       loadMixesWithRandomStart,
+      loadSpecificMix,
+      shareCurrentMix,
     }),
     [
       play,
@@ -495,6 +572,8 @@ const useMixcloudContextState = (
       loadRandomMix,
       loadMixesPreserveCurrent,
       loadMixesWithRandomStart,
+      loadSpecificMix,
+      shareCurrentMix,
     ],
   );
 

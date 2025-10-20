@@ -16,9 +16,18 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
     if (!initializedRef.current) {
       actions.setAutoPlay(autoPlay);
 
-      // Single API call approach: Load all mixes and start with random one
-      // This avoids widget reinitialization issues
-      actions.loadMixesWithRandomStart();
+      // Check for shared mix in URL query parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const sharedMixKey = urlParams.get("mix");
+
+      if (sharedMixKey) {
+        // Load specific shared mix
+        actions.loadSpecificMix(decodeURIComponent(sharedMixKey));
+      } else {
+        // Single API call approach: Load all mixes and start with random one
+        // This avoids widget reinitialization issues
+        actions.loadMixesWithRandomStart();
+      }
 
       initializedRef.current = true;
     }
@@ -124,7 +133,32 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
         <button onClick={actions.next} disabled={state.keys.length <= 1}>
           Next
         </button>
+        <button
+          onClick={actions.shareCurrentMix}
+          disabled={!state.currentKey}
+          title="Copy share link to clipboard"
+        >
+          Share
+        </button>
       </div>
+
+      {/* Share message */}
+      {state.shareMessage && (
+        <div
+          style={{
+            backgroundColor: state.shareMessage.includes("Failed")
+              ? "#ffcdd2"
+              : "#c8e6c9",
+            padding: "8px 12px",
+            borderRadius: "4px",
+            marginBottom: "20px",
+            fontSize: "14px",
+            border: `1px solid ${state.shareMessage.includes("Failed") ? "#f44336" : "#4caf50"}`,
+          }}
+        >
+          {state.shareMessage}
+        </div>
+      )}
 
       {/* Progress bar */}
       {state.duration > 0 && (
