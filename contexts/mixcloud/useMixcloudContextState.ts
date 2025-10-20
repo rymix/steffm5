@@ -8,6 +8,7 @@ import type {
   MixcloudContextState,
   MixcloudFilters,
   MixcloudState,
+  UseMixcloudContextStateOptions,
 } from "./types";
 
 declare global {
@@ -15,16 +16,6 @@ declare global {
     Mixcloud: any;
     onMixcloudWidgetReady?: () => void;
   }
-}
-
-interface UseMixcloudContextStateOptions {
-  initialKeys?: string[];
-  initialAutoPlay?: boolean;
-  onReady?: () => void;
-  onPlay?: () => void;
-  onPause?: () => void;
-  onEnded?: () => void;
-  onProgress?: (_position: number, _duration: number) => void;
 }
 
 const useMixcloudContextState = (

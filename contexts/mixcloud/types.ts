@@ -1,12 +1,22 @@
-export interface MixcloudFilters {
+export type UseMixcloudContextStateOptions = {
+  initialKeys?: string[];
+  initialAutoPlay?: boolean;
+  onReady?: () => void;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onEnded?: () => void;
+  onProgress?: (_position: number, _duration: number) => void;
+};
+
+export type MixcloudFilters = {
   category?: string;
   name?: string;
   notes?: string;
   tags?: string;
   date?: string;
-}
+};
 
-export interface MixcloudState {
+export type MixcloudState = {
   isPlaying: boolean;
   isLoading: boolean;
   currentIndex: number;
@@ -19,9 +29,9 @@ export interface MixcloudState {
   currentFilters: MixcloudFilters;
   error: string | null;
   filters: MixcloudFilters;
-}
+};
 
-export interface MixcloudActions {
+export type MixcloudActions = {
   play: () => void;
   pause: () => void;
   toggle: () => void;
@@ -37,17 +47,17 @@ export interface MixcloudActions {
   clearFilters: () => Promise<void>;
   setFilters: (_filters: MixcloudFilters) => void;
   updateFilter: (_key: string, _value: string) => void;
-}
+};
 
-export interface MixcloudContextState {
+export type MixcloudContextState = {
   state: MixcloudState;
   actions: MixcloudActions;
   iframeRef: React.RefObject<HTMLIFrameElement>;
   widgetUrl: string | null;
   autoPlay: boolean;
-}
+};
 
-export interface MixcloudProviderProps {
+export type MixcloudProviderProps = {
   children: React.ReactNode;
   initialKeys?: string[];
   initialAutoPlay?: boolean;
@@ -56,4 +66,4 @@ export interface MixcloudProviderProps {
   onPause?: () => void;
   onEnded?: () => void;
   onProgress?: (_position: number, _duration: number) => void;
-}
+};
