@@ -54,13 +54,12 @@ const useMixcloudContextState = (
       name: "",
       tags: "",
     },
-    widgetInteractionRequired: true, // Track if user interaction is needed
   });
 
   const widgetUrl = state.currentKey
     ? `https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed=${encodeURIComponent(
         state.currentKey,
-      )}&autoplay=0` // Always disable autoplay in URL, use programmatic control instead
+      )}&autoplay=${autoPlay ? "1" : "0"}`
     : null;
 
   // Load Mixcloud widget script
@@ -108,7 +107,6 @@ const useMixcloudContextState = (
               ...prev,
               isPlaying: true,
               isLoading: false,
-              widgetInteractionRequired: false, // Widget is now interactive
             }));
             onPlay?.();
           });
@@ -155,17 +153,9 @@ const useMixcloudContextState = (
 
   const play = useCallback(() => {
     if (widgetRef.current && widgetReadyRef.current) {
-      // For initial interaction, try to play directly through iframe click
-      if (state.widgetInteractionRequired && iframeRef.current) {
-        // Simulate click on the iframe to enable autoplay
-        iframeRef.current.contentWindow?.postMessage("play", "*");
-        // Also try direct widget play as fallback
-        widgetRef.current.play();
-      } else {
-        widgetRef.current.play();
-      }
+      widgetRef.current.play();
     }
-  }, [state.widgetInteractionRequired]);
+  }, []);
 
   const pause = useCallback(() => {
     if (widgetRef.current) {

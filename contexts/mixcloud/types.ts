@@ -29,7 +29,6 @@ export type MixcloudState = {
   currentFilters: MixcloudFilters;
   error: string | null;
   filters: MixcloudFilters;
-  widgetInteractionRequired: boolean;
 };
 
 export type MixcloudActions = {

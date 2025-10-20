@@ -101,67 +101,27 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
       {/* Mixcloud Widget */}
       {widgetUrl && (
         <StyledMixcloudPlayerWidget>
-          {state.widgetInteractionRequired && (
-            <div
-              style={{
-                backgroundColor: "#ffeb3b",
-                padding: "8px",
-                marginBottom: "8px",
-                borderRadius: "4px",
-                fontSize: "12px",
-              }}
-            >
-              ⚠️ Click the widget below to enable player controls
-            </div>
-          )}
           <iframe
             key={state.currentKey} // Force re-render when track changes
             ref={iframeRef}
             width="100%"
             height="120"
             src={widgetUrl}
-            style={{
-              border: "none",
-              cursor: state.widgetInteractionRequired ? "pointer" : "default",
-            }}
+            style={{ border: "none" }}
             allow="autoplay; encrypted-media"
-            onClick={() => {
-              if (state.widgetInteractionRequired) {
-                // This click will enable the widget for programmatic control
-                setTimeout(() => actions.play(), 100);
-              }
-            }}
           />
         </StyledMixcloudPlayerWidget>
       )}
 
       {/* Controls */}
       <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-        <button
-          onClick={actions.previous}
-          disabled={state.keys.length <= 1}
-          style={{ opacity: state.widgetInteractionRequired ? 0.5 : 1 }}
-        >
+        <button onClick={actions.previous} disabled={state.keys.length <= 1}>
           Previous
         </button>
-        <button
-          onClick={actions.toggle}
-          disabled={state.isLoading}
-          style={{
-            opacity: state.widgetInteractionRequired ? 0.5 : 1,
-            backgroundColor: state.widgetInteractionRequired ? "#ccc" : "",
-          }}
-          title={
-            state.widgetInteractionRequired ? "Click widget above first" : ""
-          }
-        >
+        <button onClick={actions.toggle} disabled={state.isLoading}>
           {state.isPlaying ? "Pause" : "Play"}
         </button>
-        <button
-          onClick={actions.next}
-          disabled={state.keys.length <= 1}
-          style={{ opacity: state.widgetInteractionRequired ? 0.5 : 1 }}
-        >
+        <button onClick={actions.next} disabled={state.keys.length <= 1}>
           Next
         </button>
       </div>
