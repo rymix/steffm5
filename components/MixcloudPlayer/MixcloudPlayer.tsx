@@ -1,9 +1,17 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useRef } from "react";
 
-interface MixcloudPlayerProps {
-  autoPlay?: boolean;
-}
+import {
+  StyledMixcloudPlayer,
+  StyledMixcloudPlayerControls,
+  StyledMixcloudPlayerCurrentTrackInfo,
+  StyledMixcloudPlayerProgressBar,
+  StyledMixcloudPlayerTrackList,
+  StyledMixcloudPlayerTrackListItem,
+  StyledMixcloudPlayerVolumeControl,
+  StyledMixcloudPlayerWidget,
+} from "./styles";
+import { MixcloudPlayerProps } from "./types";
 
 export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
   autoPlay = true,
@@ -49,9 +57,9 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
   }
 
   return (
-    <div style={{ maxWidth: "600px", margin: "0 auto", padding: "20px" }}>
+    <StyledMixcloudPlayer>
       {/* Current track info */}
-      <div style={{ marginBottom: "20px" }}>
+      <StyledMixcloudPlayerCurrentTrackInfo>
         <h3>
           Current Track: {state.currentIndex + 1} of {state.keys.length}
         </h3>
@@ -70,11 +78,11 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
           </p>
         )}
         <p>Volume: {Math.round(state.volume * 100)}%</p>
-      </div>
+      </StyledMixcloudPlayerCurrentTrackInfo>
 
       {/* Mixcloud Widget */}
       {widgetUrl && (
-        <div style={{ marginBottom: "20px" }}>
+        <StyledMixcloudPlayerWidget>
           <iframe
             key={state.currentKey} // Force re-render when track changes
             ref={iframeRef}
@@ -84,11 +92,11 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
             style={{ border: "none" }}
             allow="autoplay; encrypted-media"
           />
-        </div>
+        </StyledMixcloudPlayerWidget>
       )}
 
       {/* Controls */}
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+      <StyledMixcloudPlayerControls>
         <button onClick={actions.previous} disabled={state.keys.length <= 1}>
           Previous
         </button>
@@ -98,11 +106,11 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
         <button onClick={actions.next} disabled={state.keys.length <= 1}>
           Next
         </button>
-      </div>
+      </StyledMixcloudPlayerControls>
 
       {/* Progress bar */}
       {state.duration > 0 && (
-        <div style={{ marginBottom: "20px" }}>
+        <StyledMixcloudPlayerProgressBar>
           <label>Progress:</label>
           <input
             type="range"
@@ -112,11 +120,11 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
             onChange={(e) => actions.seek(Number(e.target.value))}
             style={{ width: "100%" }}
           />
-        </div>
+        </StyledMixcloudPlayerProgressBar>
       )}
 
       {/* Volume control */}
-      <div style={{ marginBottom: "20px" }}>
+      <StyledMixcloudPlayerVolumeControl>
         <label>Volume: {Math.round(state.volume * 100)}%</label>
         <input
           type="range"
@@ -127,23 +135,16 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
           onChange={(e) => actions.setVolume(Number(e.target.value))}
           style={{ width: "100%" }}
         />
-      </div>
+      </StyledMixcloudPlayerVolumeControl>
 
       {/* Track list */}
-      <div>
+      <StyledMixcloudPlayerTrackList>
         <h4>Playlist:</h4>
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul>
           {state.keys.map((key, index) => (
-            <li
+            <StyledMixcloudPlayerTrackListItem
               key={key}
-              style={{
-                padding: "10px",
-                margin: "5px 0",
-                backgroundColor:
-                  index === state.currentIndex ? "#e0e0e0" : "#f5f5f5",
-                cursor: "pointer",
-                borderRadius: "4px",
-              }}
+              $isCurrent={index === state.currentIndex ? true : false}
               onClick={() => actions.goToTrack(index)}
             >
               <strong>{index + 1}.</strong> {key}
@@ -152,10 +153,10 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
                   {state.isPlaying ? "▶️" : "⏸️"}
                 </span>
               )}
-            </li>
+            </StyledMixcloudPlayerTrackListItem>
           ))}
         </ul>
-      </div>
-    </div>
+      </StyledMixcloudPlayerTrackList>
+    </StyledMixcloudPlayer>
   );
 };
