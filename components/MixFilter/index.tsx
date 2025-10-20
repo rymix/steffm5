@@ -3,6 +3,7 @@ import React from "react";
 
 import {
   StyledMixFilter,
+  StyledMixFilterForm,
   StyledMixFilterFormButton,
   StyledMixFilterFormButtons,
   StyledMixFilterFormElements,
@@ -28,63 +29,71 @@ export const MixFilter: React.FC = () => {
     actions.clearFilters();
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleApplyFilters();
+  };
+
   return (
     <StyledMixFilter>
       <h3>Filter Mixes</h3>
 
-      <StyledMixFilterFormElements>
-        <div>
-          <label>Category:</label>
-          <select
-            value={state.filters.category || ""}
-            onChange={(e) => handleFilterChange("category", e.target.value)}
+      <StyledMixFilterForm onSubmit={handleSubmit}>
+        <StyledMixFilterFormElements>
+          <div>
+            <label>Category:</label>
+            <select
+              value={state.filters.category || ""}
+              onChange={(e) => handleFilterChange("category", e.target.value)}
+            >
+              <option value="">All</option>
+              <option value="aidm">Adventures in Decent Music</option>
+              <option value="mpos">My Pair of Shoes</option>
+              <option value="special">Special</option>
+              <option value="cocksoup">Cocksoup</option>
+              <option value="fav">Favourites</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Name:</label>
+            <input
+              type="text"
+              value={state.filters.name || ""}
+              onChange={(e) => handleFilterChange("name", e.target.value)}
+              placeholder="Search by name..."
+            />
+          </div>
+
+          <div>
+            <label>Tags:</label>
+            <input
+              type="text"
+              value={state.filters.tags || ""}
+              onChange={(e) => handleFilterChange("tags", e.target.value)}
+              placeholder="Search by tag..."
+            />
+          </div>
+        </StyledMixFilterFormElements>
+
+        <StyledMixFilterFormButtons>
+          <StyledMixFilterFormButton
+            type="submit"
+            disabled={state.isLoadingMixes}
           >
-            <option value="">All</option>
-            <option value="aidm">Adventures in Decent Music</option>
-            <option value="mpos">My Pair of Shoes</option>
-            <option value="special">Special</option>
-            <option value="cocksoup">Cocksoup</option>
-            <option value="fav">Favourites</option>
-          </select>
-        </div>
+            {state.isLoadingMixes ? "Applying..." : "Apply Filters"}
+          </StyledMixFilterFormButton>
 
-        <div>
-          <label>Name:</label>
-          <input
-            type="text"
-            value={state.filters.name || ""}
-            onChange={(e) => handleFilterChange("name", e.target.value)}
-            placeholder="Search by name..."
-          />
-        </div>
-
-        <div>
-          <label>Tags:</label>
-          <input
-            type="text"
-            value={state.filters.tags || ""}
-            onChange={(e) => handleFilterChange("tags", e.target.value)}
-            placeholder="Search by tag..."
-          />
-        </div>
-      </StyledMixFilterFormElements>
-
-      <StyledMixFilterFormButtons>
-        <StyledMixFilterFormButton
-          onClick={handleApplyFilters}
-          disabled={state.isLoadingMixes}
-        >
-          {state.isLoadingMixes ? "Applying..." : "Apply Filters"}
-        </StyledMixFilterFormButton>
-
-        <StyledMixFilterFormButton
-          onClick={handleClearFilters}
-          disabled={state.isLoadingMixes}
-          $isLoadingMixes={state.isLoadingMixes}
-        >
-          Clear Filters
-        </StyledMixFilterFormButton>
-      </StyledMixFilterFormButtons>
+          <StyledMixFilterFormButton
+            type="button"
+            onClick={handleClearFilters}
+            disabled={state.isLoadingMixes}
+            $isLoadingMixes={state.isLoadingMixes}
+          >
+            Clear Filters
+          </StyledMixFilterFormButton>
+        </StyledMixFilterFormButtons>
+      </StyledMixFilterForm>
     </StyledMixFilter>
   );
 };

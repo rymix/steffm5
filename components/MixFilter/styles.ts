@@ -9,6 +9,10 @@ export const StyledMixFilter = styled.div`
   margin-bottom: 20px;
 `;
 
+export const StyledMixFilterForm = styled.form`
+  width: 100%;
+`;
+
 export const StyledMixFilterFormElements = styled.div`
   display: flex;
   gap: 15px;

@@ -31,7 +31,9 @@ export default async function handler(
   }
 
   if (typeof tags === "string") {
-    filteredMixes = filteredMixes.filter((mix) => mix.tags.includes(tags));
+    filteredMixes = filteredMixes.filter((mix) =>
+      mix.tags.some((tag) => tag.toLowerCase().includes(tags.toLowerCase())),
+    );
   }
 
   if (typeof date === "string") {
