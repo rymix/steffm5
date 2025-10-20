@@ -29,6 +29,7 @@ export type MixcloudState = {
   currentFilters: MixcloudFilters;
   error: string | null;
   filters: MixcloudFilters;
+  widgetInteractionRequired: boolean;
 };
 
 export type MixcloudActions = {
@@ -47,6 +48,9 @@ export type MixcloudActions = {
   clearFilters: () => Promise<void>;
   setFilters: (_filters: MixcloudFilters) => void;
   updateFilter: (_key: string, _value: string) => void;
+  loadRandomMix: (_category?: string) => Promise<void>;
+  loadMixesPreserveCurrent: (_filters?: MixcloudFilters) => Promise<void>;
+  loadMixesWithRandomStart: (_filters?: MixcloudFilters) => Promise<void>;
 };
 
 export type MixcloudContextState = {

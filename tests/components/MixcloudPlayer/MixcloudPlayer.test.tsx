@@ -14,8 +14,16 @@ describe("MixcloudPlayer", () => {
 
   // Mock fetch for API calls
   beforeEach(() => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
+    global.fetch = jest.fn((url: string) => {
+      if (url.includes("/api/randomMix")) {
+        // Mock random mix API
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ mcKey: "test-track-1" }),
+        });
+      }
+      // Mock regular mixes API (for filter tests)
+      return Promise.resolve({
         ok: true,
         json: () =>
           Promise.resolve([
@@ -23,8 +31,8 @@ describe("MixcloudPlayer", () => {
             { mixcloudKey: "test-track-2" },
             { mixcloudKey: "test-track-3" },
           ]),
-      }),
-    ) as jest.Mock;
+      });
+    }) as jest.Mock;
   });
 
   afterEach(() => {
@@ -34,14 +42,14 @@ describe("MixcloudPlayer", () => {
   it("renders without crashing", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getByText("Current Track: 1 of 3")).toBeInTheDocument();
+      expect(screen.getByText("Current Mix: 1 of 1")).toBeInTheDocument();
     });
   });
 
   it("renders with loaded tracks", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getByText("Current Track: 1 of 3")).toBeInTheDocument();
+      expect(screen.getByText("Current Mix: 1 of 1")).toBeInTheDocument();
     });
     expect(screen.getByText("Key: /rymixxx/test-track-1/")).toBeInTheDocument();
   });
@@ -69,8 +77,6 @@ describe("MixcloudPlayer", () => {
       expect(screen.getByText("Playlist:")).toBeInTheDocument();
     });
     expect(screen.getByText("/rymixxx/test-track-1/")).toBeInTheDocument();
-    expect(screen.getByText("/rymixxx/test-track-2/")).toBeInTheDocument();
-    expect(screen.getByText("/rymixxx/test-track-3/")).toBeInTheDocument();
   });
 
   it("shows current playing indicator", async () => {
@@ -105,12 +111,23 @@ describe("MixcloudPlayer", () => {
     expect(screen.getByText("Next")).toBeDisabled();
   });
 
-  it("enables previous/next buttons with multiple tracks", async () => {
+  it("disables previous/next buttons with single random track", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
       expect(screen.getByText("Previous")).toBeInTheDocument();
     });
-    expect(screen.getByText("Previous")).not.toBeDisabled();
-    expect(screen.getByText("Next")).not.toBeDisabled();
+    expect(screen.getByText("Previous")).toBeDisabled();
+    expect(screen.getByText("Next")).toBeDisabled();
+  });
+
+  it("shows single track in playlist by default", async () => {
+    renderWithProvider(<MixcloudPlayer />);
+    await waitFor(() => {
+      expect(screen.getByText("Playlist:")).toBeInTheDocument();
+    });
+
+    // Should only show one track (the random one)
+    const playlistItems = screen.getAllByText(/^\d+\./);
+    expect(playlistItems).toHaveLength(1);
   });
 });

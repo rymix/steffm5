@@ -34,18 +34,19 @@ const useMixcloudContextState = (
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const widgetRef = useRef<any>(null);
   const scriptLoadedRef = useRef(false);
+  const widgetReadyRef = useRef(false);
   const [autoPlay, setAutoPlayState] = useState(initialAutoPlay);
 
   const [state, setState] = useState<MixcloudState>({
     isPlaying: false,
     isLoading: false,
     currentIndex: 0,
-    currentKey: initialKeys[0] || null,
+    currentKey: initialKeys.length > 0 ? initialKeys[0] : null,
     duration: 0,
     position: 0,
     volume: 0.8,
-    keys: initialKeys,
-    isLoadingMixes: false,
+    keys: initialKeys.length > 0 ? initialKeys : [], // Start empty if no initial keys
+    isLoadingMixes: initialKeys.length === 0, // Show loading if starting empty
     currentFilters: {},
     error: null,
     filters: {
@@ -53,12 +54,13 @@ const useMixcloudContextState = (
       name: "",
       tags: "",
     },
+    widgetInteractionRequired: true, // Track if user interaction is needed
   });
 
   const widgetUrl = state.currentKey
     ? `https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed=${encodeURIComponent(
         state.currentKey,
-      )}&autoplay=${autoPlay ? "1" : "0"}`
+      )}&autoplay=0` // Always disable autoplay in URL, use programmatic control instead
     : null;
 
   // Load Mixcloud widget script
@@ -89,10 +91,13 @@ const useMixcloudContextState = (
 
     const initializeWidget = () => {
       if (window.Mixcloud && iframeRef.current) {
+        widgetReadyRef.current = false; // Reset ready state
         widgetRef.current = window.Mixcloud.PlayerWidget(iframeRef.current);
 
         // Set up event listeners
         widgetRef.current.ready.then(() => {
+          widgetReadyRef.current = true;
+
           widgetRef.current.events.pause.on(() => {
             setState((prev) => ({ ...prev, isPlaying: false }));
             onPause?.();
@@ -103,6 +108,7 @@ const useMixcloudContextState = (
               ...prev,
               isPlaying: true,
               isLoading: false,
+              widgetInteractionRequired: false, // Widget is now interactive
             }));
             onPlay?.();
           });
@@ -148,10 +154,18 @@ const useMixcloudContextState = (
   }, [state.currentKey, onReady, onPlay, onPause, onEnded, onProgress]);
 
   const play = useCallback(() => {
-    if (widgetRef.current) {
-      widgetRef.current.play();
+    if (widgetRef.current && widgetReadyRef.current) {
+      // For initial interaction, try to play directly through iframe click
+      if (state.widgetInteractionRequired && iframeRef.current) {
+        // Simulate click on the iframe to enable autoplay
+        iframeRef.current.contentWindow?.postMessage("play", "*");
+        // Also try direct widget play as fallback
+        widgetRef.current.play();
+      } else {
+        widgetRef.current.play();
+      }
     }
-  }, []);
+  }, [state.widgetInteractionRequired]);
 
   const pause = useCallback(() => {
     if (widgetRef.current) {
@@ -178,6 +192,7 @@ const useMixcloudContextState = (
           isLoading: true,
           position: 0,
           duration: 0,
+          // Keep existing interaction state - don't reset it
         }));
       }
     },
@@ -300,6 +315,156 @@ const useMixcloudContextState = (
     }));
   }, []);
 
+  const loadRandomMix = useCallback(async (category?: string) => {
+    setState((prev) => ({ ...prev, isLoadingMixes: true, error: null }));
+
+    try {
+      const url =
+        category && category !== "all"
+          ? `/api/randomMix/${category}`
+          : "/api/randomMix";
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to load random mix: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const randomKey = mcKeyFormatter(data.mcKey);
+
+      setState((prev) => ({
+        ...prev,
+        keys: [randomKey],
+        currentIndex: 0,
+        currentKey: randomKey,
+        isLoadingMixes: false,
+        error: null,
+        isPlaying: false,
+        position: 0,
+        duration: 0,
+      }));
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        isLoadingMixes: false,
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      }));
+    }
+  }, []);
+
+  const loadMixesPreserveCurrent = useCallback(
+    async (filters: MixcloudFilters = {}) => {
+      setState((prev) => ({ ...prev, isLoadingMixes: true, error: null }));
+
+      try {
+        const queryParams = new URLSearchParams();
+
+        if (filters.category) queryParams.append("category", filters.category);
+        if (filters.name) queryParams.append("name", filters.name);
+        if (filters.notes) queryParams.append("notes", filters.notes);
+        if (filters.tags) queryParams.append("tags", filters.tags);
+        if (filters.date) queryParams.append("date", filters.date);
+
+        const response = await fetch(`/api/mixes?${queryParams.toString()}`);
+
+        if (!response.ok) {
+          throw new Error(`Failed to load mixes: ${response.statusText}`);
+        }
+
+        const mixes: Mix[] = await response.json();
+        const keys = mixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
+
+        setState((prev) => {
+          const currentKey = prev.currentKey;
+          let newCurrentIndex = 0;
+
+          // Find the current playing mix in the new list
+          if (currentKey) {
+            const foundIndex = keys.findIndex((key) => key === currentKey);
+            if (foundIndex !== -1) {
+              newCurrentIndex = foundIndex;
+            } else {
+              // Current mix not found in filtered list, keep it at the beginning
+              keys.unshift(currentKey);
+              newCurrentIndex = 0;
+            }
+          }
+
+          return {
+            ...prev,
+            keys,
+            currentFilters: filters,
+            isLoadingMixes: false,
+            error: null,
+            currentIndex: newCurrentIndex,
+            // IMPORTANT: Do NOT change currentKey to avoid widget reinitialization
+            // This preserves the widget's autoplay capability
+          };
+        });
+      } catch (error) {
+        setState((prev) => ({
+          ...prev,
+          isLoadingMixes: false,
+          error:
+            error instanceof Error ? error.message : "Unknown error occurred",
+        }));
+      }
+    },
+    [],
+  );
+
+  const loadMixesWithRandomStart = useCallback(
+    async (filters: MixcloudFilters = {}) => {
+      setState((prev) => ({ ...prev, isLoadingMixes: true, error: null }));
+
+      try {
+        const queryParams = new URLSearchParams();
+
+        if (filters.category) queryParams.append("category", filters.category);
+        if (filters.name) queryParams.append("name", filters.name);
+        if (filters.notes) queryParams.append("notes", filters.notes);
+        if (filters.tags) queryParams.append("tags", filters.tags);
+        if (filters.date) queryParams.append("date", filters.date);
+
+        const response = await fetch(`/api/mixes?${queryParams.toString()}`);
+
+        if (!response.ok) {
+          throw new Error(`Failed to load mixes: ${response.statusText}`);
+        }
+
+        const mixes: Mix[] = await response.json();
+        const keys = mixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
+
+        // Select a random starting index
+        const randomIndex = Math.floor(Math.random() * keys.length);
+        const randomKey = keys[randomIndex];
+
+        setState((prev) => ({
+          ...prev,
+          keys,
+          currentFilters: filters,
+          isLoadingMixes: false,
+          error: null,
+          currentIndex: randomIndex,
+          currentKey: randomKey,
+          isPlaying: false,
+          position: 0,
+          duration: 0,
+        }));
+      } catch (error) {
+        setState((prev) => ({
+          ...prev,
+          isLoadingMixes: false,
+          error:
+            error instanceof Error ? error.message : "Unknown error occurred",
+        }));
+      }
+    },
+    [],
+  );
+
   const actions: MixcloudActions = useMemo(
     () => ({
       play,
@@ -317,6 +482,9 @@ const useMixcloudContextState = (
       clearFilters,
       setFilters,
       updateFilter,
+      loadRandomMix,
+      loadMixesPreserveCurrent,
+      loadMixesWithRandomStart,
     }),
     [
       play,
@@ -334,6 +502,9 @@ const useMixcloudContextState = (
       clearFilters,
       setFilters,
       updateFilter,
+      loadRandomMix,
+      loadMixesPreserveCurrent,
+      loadMixesWithRandomStart,
     ],
   );
 

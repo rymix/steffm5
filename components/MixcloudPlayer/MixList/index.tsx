@@ -11,7 +11,7 @@ export const MixcloudPlayerMixList: React.FC = () => {
 
   return (
     <StyledMixcloudPlayerMixList>
-      <h4>Mix List:</h4>
+      <h4>Playlist:</h4>
       <ul>
         {state.keys.map((key, index) => (
           <StyledMixcloudPlayerMixListItem

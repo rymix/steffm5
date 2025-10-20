@@ -12,7 +12,7 @@ export const MixcloudPlayerCurrentMixInfo: React.FC<
   return (
     <StyledMixcloudPlayerCurrentMixInfo>
       <h3>
-        Current Track: {state.currentIndex + 1} of {state.keys.length}
+        Current Mix: {state.currentIndex + 1} of {state.keys.length}
       </h3>
       <p>Key: {state.currentKey}</p>
       <p>
