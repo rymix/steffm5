@@ -1,16 +1,12 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useRef } from "react";
 
-import {
-  StyledMixcloudPlayer,
-  StyledMixcloudPlayerControls,
-  StyledMixcloudPlayerCurrentTrackInfo,
-  StyledMixcloudPlayerProgressBar,
-  StyledMixcloudPlayerTrackList,
-  StyledMixcloudPlayerTrackListItem,
-  StyledMixcloudPlayerVolumeControl,
-  StyledMixcloudPlayerWidget,
-} from "./styles";
+import { MixcloudPlayerControls } from "../Controls";
+import { MixcloudPlayerCurrentMixInfo } from "../CurrentMixInfo";
+import { MixcloudPlayerMixList } from "../MixList";
+import { MixcloudPlayerProgressBar } from "../ProgressBar";
+import { MixcloudPlayerVolumeControl } from "../VolumeControl";
+import { StyledMixcloudPlayer, StyledMixcloudPlayerWidget } from "./styles";
 import { MixcloudPlayerProps } from "./types";
 
 export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
@@ -58,27 +54,8 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
 
   return (
     <StyledMixcloudPlayer>
-      {/* Current track info */}
-      <StyledMixcloudPlayerCurrentTrackInfo>
-        <h3>
-          Current Track: {state.currentIndex + 1} of {state.keys.length}
-        </h3>
-        <p>Key: {state.currentKey}</p>
-        <p>
-          Status:{" "}
-          {state.isLoading
-            ? "Loading..."
-            : state.isPlaying
-              ? "Playing"
-              : "Paused"}
-        </p>
-        {state.duration > 0 && (
-          <p>
-            Time: {formatTime(state.position)} / {formatTime(state.duration)}
-          </p>
-        )}
-        <p>Volume: {Math.round(state.volume * 100)}%</p>
-      </StyledMixcloudPlayerCurrentTrackInfo>
+      {/* Current mix info */}
+      <MixcloudPlayerCurrentMixInfo formatTime={formatTime} />
 
       {/* Mixcloud Widget */}
       {widgetUrl && (
@@ -96,67 +73,16 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
       )}
 
       {/* Controls */}
-      <StyledMixcloudPlayerControls>
-        <button onClick={actions.previous} disabled={state.keys.length <= 1}>
-          Previous
-        </button>
-        <button onClick={actions.toggle} disabled={state.isLoading}>
-          {state.isPlaying ? "Pause" : "Play"}
-        </button>
-        <button onClick={actions.next} disabled={state.keys.length <= 1}>
-          Next
-        </button>
-      </StyledMixcloudPlayerControls>
+      <MixcloudPlayerControls />
 
       {/* Progress bar */}
-      {state.duration > 0 && (
-        <StyledMixcloudPlayerProgressBar>
-          <label>Progress:</label>
-          <input
-            type="range"
-            min={0}
-            max={state.duration}
-            value={state.position}
-            onChange={(e) => actions.seek(Number(e.target.value))}
-            style={{ width: "100%" }}
-          />
-        </StyledMixcloudPlayerProgressBar>
-      )}
+      <MixcloudPlayerProgressBar />
 
       {/* Volume control */}
-      <StyledMixcloudPlayerVolumeControl>
-        <label>Volume: {Math.round(state.volume * 100)}%</label>
-        <input
-          type="range"
-          min={0}
-          max={1}
-          step={0.01}
-          value={state.volume}
-          onChange={(e) => actions.setVolume(Number(e.target.value))}
-          style={{ width: "100%" }}
-        />
-      </StyledMixcloudPlayerVolumeControl>
+      <MixcloudPlayerVolumeControl />
 
       {/* Track list */}
-      <StyledMixcloudPlayerTrackList>
-        <h4>Playlist:</h4>
-        <ul>
-          {state.keys.map((key, index) => (
-            <StyledMixcloudPlayerTrackListItem
-              key={key}
-              $isCurrent={index === state.currentIndex ? true : false}
-              onClick={() => actions.goToTrack(index)}
-            >
-              <strong>{index + 1}.</strong> {key}
-              {index === state.currentIndex && (
-                <span style={{ marginLeft: "10px" }}>
-                  {state.isPlaying ? "▶️" : "⏸️"}
-                </span>
-              )}
-            </StyledMixcloudPlayerTrackListItem>
-          ))}
-        </ul>
-      </StyledMixcloudPlayerTrackList>
+      <MixcloudPlayerMixList />
     </StyledMixcloudPlayer>
   );
 };

@@ -3,7 +3,6 @@ import React from "react";
 
 import { FilterStatus } from "@/components/FilterStatus";
 import { MixFilter } from "@/components/MixFilter";
-import MixList from "@/components/MixList";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 
 const HomePage: React.FC = () => {
@@ -32,7 +31,6 @@ const HomePage: React.FC = () => {
         <MixFilter />
         <FilterStatus />
         <MixcloudPlayerWrapper autoPlay={true} />
-        <MixList />
       </div>
     </>
   );
