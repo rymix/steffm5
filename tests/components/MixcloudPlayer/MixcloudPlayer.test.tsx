@@ -94,22 +94,24 @@ describe("MixcloudPlayer", () => {
     expect(screen.getByText("⏸️")).toBeInTheDocument();
   });
 
-  it("displays player controls", async () => {
+  it("displays player widget", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getByText("Previous")).toBeInTheDocument();
+      // Check for the iframe element
+      const iframe = document.querySelector("iframe");
+      expect(iframe).toBeInTheDocument();
     });
-    expect(screen.getByText("Play")).toBeInTheDocument();
-    expect(screen.getByText("Next")).toBeInTheDocument();
-    expect(screen.getByText("Share")).toBeInTheDocument();
   });
 
-  it("displays volume control", async () => {
+  it("displays only player widget and playlist", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getByText(/Volume: \d+%/)).toBeInTheDocument(); // Volume control label
+      // Check for the iframe element
+      const iframe = document.querySelector("iframe");
+      expect(iframe).toBeInTheDocument();
     });
-    expect(screen.getByRole("slider")).toBeInTheDocument();
+    // Should have playlist
+    expect(screen.getByText("Playlist:")).toBeInTheDocument();
   });
 
   it("displays playlist with all tracks", async () => {
@@ -136,7 +138,7 @@ describe("MixcloudPlayer", () => {
     );
   });
 
-  it("disables previous/next buttons with single track", async () => {
+  it("handles single track scenarios", async () => {
     // Mock fetch for single track
     global.fetch = jest.fn(() =>
       Promise.resolve({
@@ -164,20 +166,20 @@ describe("MixcloudPlayer", () => {
       </MixcloudProvider>,
     );
     await waitFor(() => {
-      expect(screen.getByText("Previous")).toBeInTheDocument();
+      expect(screen.getByText("Playlist:")).toBeInTheDocument();
     });
-    expect(screen.getByText("Previous")).toBeDisabled();
-    expect(screen.getByText("Next")).toBeDisabled();
+    // Should show the single track
+    expect(screen.getByText("/rymixxx/single-track/")).toBeInTheDocument();
   });
 
-  it("enables previous/next buttons with multiple tracks", async () => {
+  it("handles multiple tracks scenarios", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getByText("Previous")).toBeInTheDocument();
+      expect(screen.getByText("Playlist:")).toBeInTheDocument();
     });
-    // Now that we load all tracks, buttons should be enabled
-    expect(screen.getByText("Previous")).toBeEnabled();
-    expect(screen.getByText("Next")).toBeEnabled();
+    // Should have playlist with multiple tracks
+    const playlistItems = screen.getAllByText(/^\d+\./);
+    expect(playlistItems).toHaveLength(3);
   });
 
   it("shows all tracks in playlist by default", async () => {

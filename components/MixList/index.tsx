@@ -21,9 +21,7 @@ const MixcloudPlayerMixList: React.FC = () => {
           >
             <strong>{index + 1}.</strong> {key}
             {index === state.currentIndex && (
-              <span style={{ marginLeft: "10px" }}>
-                {state.isPlaying ? "▶️" : "⏸️"}
-              </span>
+              <span>{state.isPlaying ? "▶️" : "⏸️"}</span>
             )}
           </StyledMixcloudPlayerMixListItem>
         ))}

@@ -53,12 +53,6 @@ const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
     actions,
   ]);
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
-
   if (state.isLoadingMixes) {
     return <div>Loading mixes...</div>;
   }
@@ -97,88 +91,6 @@ const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
           />
         </StyledMixcloudPlayerWidget>
       )}
-
-      {/* Controls */}
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-        <button onClick={actions.previous} disabled={state.keys.length <= 1}>
-          Previous
-        </button>
-        <button onClick={actions.toggle} disabled={state.isLoading}>
-          {state.isPlaying ? "Pause" : "Play"}
-        </button>
-        <button onClick={actions.next} disabled={state.keys.length <= 1}>
-          Next
-        </button>
-        <button
-          onClick={actions.shareCurrentMix}
-          disabled={!state.currentKey}
-          title="Copy share link to clipboard"
-        >
-          Share
-        </button>
-      </div>
-
-      {/* Share message */}
-      {state.shareMessage && (
-        <div
-          style={{
-            backgroundColor: state.shareMessage.includes("Failed")
-              ? "#ffcdd2"
-              : "#c8e6c9",
-            padding: "8px 12px",
-            borderRadius: "4px",
-            marginBottom: "20px",
-            fontSize: "14px",
-            border: `1px solid ${state.shareMessage.includes("Failed") ? "#f44336" : "#4caf50"}`,
-          }}
-        >
-          {state.shareMessage}
-        </div>
-      )}
-
-      {/* Progress bar - Display only (Mixcloud ToS compliance) */}
-      {state.duration > 0 && (
-        <div style={{ marginBottom: "20px" }}>
-          <label>
-            Progress: {formatTime(state.position)} /{" "}
-            {formatTime(state.duration)}
-          </label>
-          <div
-            style={{
-              width: "100%",
-              height: "6px",
-              backgroundColor: "#f0f0f0",
-              borderRadius: "3px",
-              overflow: "hidden",
-              marginTop: "4px",
-            }}
-          >
-            <div
-              style={{
-                width: `${(state.position / state.duration) * 100}%`,
-                height: "100%",
-                backgroundColor: "#2196f3",
-                borderRadius: "3px",
-                transition: "width 0.5s ease",
-              }}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Volume control */}
-      <div style={{ marginBottom: "20px" }}>
-        <label>Volume: {Math.round(state.volume * 100)}%</label>
-        <input
-          type="range"
-          min={0}
-          max={1}
-          step={0.01}
-          value={state.volume}
-          onChange={(e) => actions.setVolume(Number(e.target.value))}
-          style={{ width: "100%" }}
-        />
-      </div>
 
       {/* Track list */}
       <MixcloudPlayerMixList />

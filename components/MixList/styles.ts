@@ -15,4 +15,8 @@ export const StyledMixcloudPlayerMixListItem = styled.li<StyledMixcloudPlayerMix
   background-color: ${(props) => (props.$isCurrent ? "#e0e0e0" : "#f5f5f5")};
   cursor: pointer;
   border-radius: 4px;
+
+  span {
+    margin-left: 10px;
+  }
 `;
