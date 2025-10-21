@@ -2,8 +2,9 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
-import { FilterStatus } from "@/components/FilterStatus";
-import { MixFilter } from "@/components/MixFilter";
+import MixcloudPlayerCurrentMixInfo from "@/components/CurrentMixInfo";
+import FilterStatus from "@/components/FilterStatus";
+import MixFilter from "@/components/MixFilter";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 
 const HomePage: React.FC = () => {
@@ -41,6 +42,7 @@ const HomePage: React.FC = () => {
 
         <MixFilter />
         <FilterStatus />
+        <MixcloudPlayerCurrentMixInfo />
         <MixcloudPlayerWrapper autoPlay={true} />
       </div>
     </>

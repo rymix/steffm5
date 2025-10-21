@@ -3,7 +3,7 @@ import React from "react";
 
 import { StyledMixcloudPlayerVolumeControl } from "./styles";
 
-export const MixcloudPlayerVolumeControl: React.FC = () => {
+const MixcloudPlayerVolumeControl: React.FC = () => {
   const { state, actions } = useMixcloud();
 
   return (
@@ -21,3 +21,5 @@ export const MixcloudPlayerVolumeControl: React.FC = () => {
     </StyledMixcloudPlayerVolumeControl>
   );
 };
+
+export default MixcloudPlayerVolumeControl;

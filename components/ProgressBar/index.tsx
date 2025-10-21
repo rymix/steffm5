@@ -3,7 +3,7 @@ import React from "react";
 
 import { StyledMixcloudPlayerProgressBar } from "./styles";
 
-export const MixcloudPlayerProgressBar: React.FC = () => {
+const MixcloudPlayerProgressBar: React.FC = () => {
   const { state, actions } = useMixcloud();
 
   if (state.duration <= 0) {
@@ -24,3 +24,5 @@ export const MixcloudPlayerProgressBar: React.FC = () => {
     </StyledMixcloudPlayerProgressBar>
   );
 };
+
+export default MixcloudPlayerProgressBar;

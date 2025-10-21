@@ -11,7 +11,7 @@ import {
   StyledMixcloudPlayerMixListStatusDot,
 } from "./styles";
 
-export const MixcloudPlayerMixList: React.FC = () => {
+const MixcloudPlayerMixList: React.FC = () => {
   const { state, actions } = useMixcloud();
 
   return (
@@ -102,3 +102,5 @@ export const MixcloudPlayerMixList: React.FC = () => {
     </StyledMixcloudPlayerMixList>
   );
 };
+
+export default MixcloudPlayerMixList;

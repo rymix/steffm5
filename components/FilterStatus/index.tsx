@@ -3,7 +3,7 @@ import React from "react";
 
 import { StyledFilterStatus, StyledFilterStatusItem } from "./styles";
 
-export const FilterStatus: React.FC = () => {
+const FilterStatus: React.FC = () => {
   const { state } = useMixcloud();
   const { filters } = state;
 
@@ -26,3 +26,5 @@ export const FilterStatus: React.FC = () => {
     </StyledFilterStatus>
   );
 };
+
+export default FilterStatus;

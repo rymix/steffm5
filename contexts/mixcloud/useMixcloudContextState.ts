@@ -54,6 +54,7 @@ const useMixcloudContextState = (
     position: 0,
     volume: 0.8,
     keys: initialKeys.length > 0 ? initialKeys : [], // Start empty if no initial keys
+    mixData: [],
     isLoadingMixes: initialKeys.length === 0, // Show loading if starting empty
     currentFilters: {},
     error: null,
@@ -345,6 +346,7 @@ const useMixcloudContextState = (
       setState((prev) => ({
         ...prev,
         keys,
+        mixData: mixes,
         currentFilters: filters,
         isLoadingMixes: false,
         error: null,
@@ -474,6 +476,7 @@ const useMixcloudContextState = (
           return {
             ...prev,
             keys,
+            mixData: mixes,
             currentFilters: filters,
             isLoadingMixes: false,
             error: null,
@@ -523,6 +526,7 @@ const useMixcloudContextState = (
         setState((prev) => ({
           ...prev,
           keys,
+          mixData: mixes,
           currentFilters: filters,
           isLoadingMixes: false,
           error: null,
@@ -573,6 +577,7 @@ const useMixcloudContextState = (
       setState((prev) => ({
         ...prev,
         keys,
+        mixData: mixes,
         currentFilters: {},
         isLoadingMixes: false,
         error: null,
@@ -686,6 +691,20 @@ const useMixcloudContextState = (
     [state.currentKey],
   );
 
+  const getCurrentMix = useCallback((): Mix | null => {
+    if (!state.currentKey || state.mixData.length === 0) {
+      return null;
+    }
+
+    // Find the mix data based on the current key
+    return (
+      state.mixData.find((mix) => {
+        const mixKey = mcKeyFormatter(mix.mixcloudKey);
+        return mixKey === state.currentKey;
+      }) || null
+    );
+  }, [state.currentKey, state.mixData]);
+
   const actions: MixcloudActions = useMemo(
     () => ({
       play,
@@ -711,6 +730,7 @@ const useMixcloudContextState = (
       getMixProgress,
       updateMixProgress,
       startMixOver,
+      getCurrentMix,
     }),
     [
       play,
@@ -736,6 +756,7 @@ const useMixcloudContextState = (
       getMixProgress,
       updateMixProgress,
       startMixOver,
+      getCurrentMix,
     ],
   );
 

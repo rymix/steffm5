@@ -1,3 +1,5 @@
+import type { Mix } from "db/types";
+
 export type UseMixcloudContextStateOptions = {
   initialKeys?: string[];
   initialAutoPlay?: boolean;
@@ -37,6 +39,7 @@ export type MixcloudState = {
   position: number;
   volume: number;
   keys: string[];
+  mixData: Mix[];
   isLoadingMixes: boolean;
   currentFilters: MixcloudFilters;
   error: string | null;
@@ -74,6 +77,7 @@ export type MixcloudActions = {
     _duration: number,
   ) => void;
   startMixOver: (_key: string) => void;
+  getCurrentMix: () => Mix | null;
 };
 
 export type MixcloudContextState = {

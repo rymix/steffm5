@@ -9,7 +9,7 @@ import {
   StyledMixFilterFormElements,
 } from "./styles";
 
-export const MixFilter: React.FC = () => {
+const MixFilter: React.FC = () => {
   const { state, actions } = useMixcloud();
 
   const handleFilterChange = (key: string, value: string) => {
@@ -97,3 +97,5 @@ export const MixFilter: React.FC = () => {
     </StyledMixFilter>
   );
 };
+
+export default MixFilter;

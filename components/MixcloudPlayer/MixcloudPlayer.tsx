@@ -1,13 +1,11 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useRef } from "react";
 
-import { MixcloudPlayerMixList } from "./MixList";
+import MixcloudPlayerMixList from "./MixList";
 import { StyledMixcloudPlayer, StyledMixcloudPlayerWidget } from "./styles";
 import { MixcloudPlayerProps } from "./types";
 
-export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
-  autoPlay = true,
-}) => {
+const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
   const { state, actions, iframeRef, widgetUrl } = useMixcloud();
   const initializedRef = useRef(false);
 
@@ -85,28 +83,6 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
 
   return (
     <StyledMixcloudPlayer>
-      {/* Current mix info */}
-      <div style={{ marginBottom: "20px" }}>
-        <h3>
-          Current Mix: {state.currentIndex + 1} of {state.keys.length}
-        </h3>
-        <p>Key: {state.currentKey}</p>
-        <p>
-          Status:{" "}
-          {state.isLoading
-            ? "Loading..."
-            : state.isPlaying
-              ? "Playing"
-              : "Paused"}
-        </p>
-        {state.duration > 0 && (
-          <p>
-            Time: {formatTime(state.position)} / {formatTime(state.duration)}
-          </p>
-        )}
-        <p>Volume: {Math.round(state.volume * 100)}%</p>
-      </div>
-
       {/* Mixcloud Widget */}
       {widgetUrl && (
         <StyledMixcloudPlayerWidget>
@@ -209,3 +185,5 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
     </StyledMixcloudPlayer>
   );
 };
+
+export default MixcloudPlayer;

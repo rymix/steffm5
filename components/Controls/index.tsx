@@ -3,7 +3,7 @@ import React from "react";
 
 import { StyledMixcloudPlayerControls } from "./styles";
 
-export const MixcloudPlayerControls: React.FC = () => {
+const MixcloudPlayerControls: React.FC = () => {
   const { state, actions } = useMixcloud();
 
   return (
@@ -20,3 +20,5 @@ export const MixcloudPlayerControls: React.FC = () => {
     </StyledMixcloudPlayerControls>
   );
 };
+
+export default MixcloudPlayerControls;
