@@ -64,6 +64,7 @@ const useMixcloudContextState = (
     },
     shareMessage: null,
     mixProgress,
+    pendingSeekPosition: null,
   });
 
   // Sync state with persisted mix progress
@@ -151,12 +152,32 @@ const useMixcloudContextState = (
 
           widgetRef.current.events.progress.on(
             (position: number, duration: number) => {
-              setState((prev) => ({
-                ...prev,
-                position,
-                duration,
-                isLoading: false,
-              }));
+              setState((prev) => {
+                // Handle pending seek position
+                if (prev.pendingSeekPosition !== null && duration > 0) {
+                  // Seek to the saved position once we have duration info
+                  setTimeout(() => {
+                    if (widgetRef.current) {
+                      widgetRef.current.seek(prev.pendingSeekPosition);
+                    }
+                  }, 500); // Small delay to ensure widget is ready
+
+                  return {
+                    ...prev,
+                    position,
+                    duration,
+                    isLoading: false,
+                    pendingSeekPosition: null, // Clear the pending seek
+                  };
+                }
+
+                return {
+                  ...prev,
+                  position,
+                  duration,
+                  isLoading: false,
+                };
+              });
 
               // Update mix progress if we have a current key and valid duration
               if (state.currentKey && duration > 0) {
@@ -181,6 +202,16 @@ const useMixcloudContextState = (
 
           // Set initial volume
           widgetRef.current.setVolume(state.volume);
+
+          // Handle pending seek position if widget just became ready
+          if (state.pendingSeekPosition !== null) {
+            setTimeout(() => {
+              if (widgetRef.current && state.pendingSeekPosition !== null) {
+                widgetRef.current.seek(state.pendingSeekPosition);
+                setState((prev) => ({ ...prev, pendingSeekPosition: null }));
+              }
+            }, 1000);
+          }
 
           onReady?.();
         });
@@ -219,21 +250,32 @@ const useMixcloudContextState = (
   }, [state.isPlaying, play, pause]);
 
   const goToTrack = useCallback(
-    (index: number) => {
+    (index: number, fromSavedPosition: boolean = false) => {
       if (index >= 0 && index < state.keys.length) {
+        const mixKey = state.keys[index];
+        const progress = mixProgress[mixKey];
+
+        // Determine if we should seek to saved position
+        let seekPosition = null;
+        if (fromSavedPosition && progress && progress.position > 20) {
+          // Only seek if we have meaningful progress (more than 20 seconds)
+          seekPosition = progress.position;
+        }
+
         setState((prev) => ({
           ...prev,
           currentIndex: index,
-          currentKey: state.keys[index],
+          currentKey: mixKey,
           isPlaying: false,
           isLoading: true,
           position: 0,
           duration: 0,
+          pendingSeekPosition: seekPosition,
           // Keep existing interaction state - don't reset it
         }));
       }
     },
-    [state.keys],
+    [state.keys, mixProgress],
   );
 
   const next = useCallback(() => {
@@ -610,6 +652,30 @@ const useMixcloudContextState = (
     [getProgressStatus],
   );
 
+  const startMixOver = useCallback(
+    (key: string) => {
+      // Reset progress for the specified mix
+      const resetProgress: MixProgress = {
+        key,
+        duration: 0,
+        position: 0,
+        lastPlayed: Date.now(),
+        status: "unplayed",
+      };
+
+      setMixProgress((prev) => ({
+        ...prev,
+        [key]: resetProgress,
+      }));
+
+      // If this is the current playing mix, seek to the beginning
+      if (state.currentKey === key && widgetRef.current) {
+        widgetRef.current.seek(0);
+      }
+    },
+    [state.currentKey],
+  );
+
   const actions: MixcloudActions = useMemo(
     () => ({
       play,
@@ -634,6 +700,7 @@ const useMixcloudContextState = (
       shareCurrentMix,
       getMixProgress,
       updateMixProgress,
+      startMixOver,
     }),
     [
       play,
@@ -658,6 +725,7 @@ const useMixcloudContextState = (
       shareCurrentMix,
       getMixProgress,
       updateMixProgress,
+      startMixOver,
     ],
   );
 

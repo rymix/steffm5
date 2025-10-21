@@ -43,6 +43,7 @@ export type MixcloudState = {
   filters: MixcloudFilters;
   shareMessage: string | null;
   mixProgress: MixProgressMap;
+  pendingSeekPosition: number | null;
 };
 
 export type MixcloudActions = {
@@ -51,7 +52,7 @@ export type MixcloudActions = {
   toggle: () => void;
   next: () => void;
   previous: () => void;
-  goToTrack: (_index: number) => void;
+  goToTrack: (_index: number, _fromSavedPosition?: boolean) => void;
   seek: (_position: number) => void;
   setVolume: (_volume: number) => void;
   setKeys: (_keys: string[]) => void;
@@ -72,6 +73,7 @@ export type MixcloudActions = {
     _position: number,
     _duration: number,
   ) => void;
+  startMixOver: (_key: string) => void;
 };
 
 export type MixcloudContextState = {

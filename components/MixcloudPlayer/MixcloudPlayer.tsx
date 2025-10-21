@@ -160,18 +160,33 @@ export const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({
         </div>
       )}
 
-      {/* Progress bar */}
+      {/* Progress bar - Display only (Mixcloud ToS compliance) */}
       {state.duration > 0 && (
         <div style={{ marginBottom: "20px" }}>
-          <label>Progress:</label>
-          <input
-            type="range"
-            min={0}
-            max={state.duration}
-            value={state.position}
-            onChange={(e) => actions.seek(Number(e.target.value))}
-            style={{ width: "100%" }}
-          />
+          <label>
+            Progress: {formatTime(state.position)} /{" "}
+            {formatTime(state.duration)}
+          </label>
+          <div
+            style={{
+              width: "100%",
+              height: "6px",
+              backgroundColor: "#f0f0f0",
+              borderRadius: "3px",
+              overflow: "hidden",
+              marginTop: "4px",
+            }}
+          >
+            <div
+              style={{
+                width: `${(state.position / state.duration) * 100}%`,
+                height: "100%",
+                backgroundColor: "#2196f3",
+                borderRadius: "3px",
+                transition: "width 0.5s ease",
+              }}
+            />
+          </div>
         </div>
       )}
 

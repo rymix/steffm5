@@ -40,11 +40,55 @@ export const MixcloudPlayerMixList: React.FC = () => {
                     <strong>{index + 1}.</strong> {key}
                   </span>
                 </StyledMixcloudPlayerMixListItemInfo>
-                {index === state.currentIndex && (
-                  <span style={{ marginLeft: "10px" }}>
-                    {state.isPlaying ? "▶️" : "⏸️"}
-                  </span>
-                )}
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  {progress.status === "in_progress" && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        actions.goToTrack(index, true);
+                      }}
+                      style={{
+                        fontSize: "12px",
+                        padding: "2px 6px",
+                        backgroundColor: "#ff9800",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "3px",
+                        cursor: "pointer",
+                      }}
+                      title="Resume from saved position"
+                    >
+                      Resume
+                    </button>
+                  )}
+                  {progress.status !== "unplayed" && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        actions.startMixOver(key);
+                      }}
+                      style={{
+                        fontSize: "12px",
+                        padding: "2px 6px",
+                        backgroundColor: "#2196f3",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "3px",
+                        cursor: "pointer",
+                      }}
+                      title="Start from beginning"
+                    >
+                      Start Over
+                    </button>
+                  )}
+                  {index === state.currentIndex && (
+                    <span style={{ marginLeft: "4px" }}>
+                      {state.isPlaying ? "▶️" : "⏸️"}
+                    </span>
+                  )}
+                </div>
               </StyledMixcloudPlayerMixListItemContent>
               <StyledMixcloudPlayerMixListProgressBarContainer>
                 <StyledMixcloudPlayerMixListProgressBar
