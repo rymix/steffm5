@@ -321,6 +321,18 @@ const useMixcloudContextState = (
     setAutoPlayState(newAutoPlay);
   }, []);
 
+  // Helper function to sort mixes by listOrder first, then name second
+  const sortMixes = useCallback((mixes: Mix[]): Mix[] => {
+    return [...mixes].sort((a, b) => {
+      // First sort by listOrder
+      if (a.listOrder !== b.listOrder) {
+        return a.listOrder - b.listOrder;
+      }
+      // Then sort by name
+      return a.name.localeCompare(b.name);
+    });
+  }, []);
+
   // API functions
   const loadMixes = useCallback(async (filters: MixcloudFilters = {}) => {
     setState((prev) => ({ ...prev, isLoadingMixes: true, error: null }));
@@ -341,12 +353,13 @@ const useMixcloudContextState = (
       }
 
       const mixes: Mix[] = await response.json();
-      const keys = mixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
+      const sortedMixes = sortMixes(mixes);
+      const keys = sortedMixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
 
       setState((prev) => ({
         ...prev,
         keys,
-        mixData: mixes,
+        mixData: sortedMixes,
         currentFilters: filters,
         isLoadingMixes: false,
         error: null,
@@ -455,7 +468,8 @@ const useMixcloudContextState = (
         }
 
         const mixes: Mix[] = await response.json();
-        const keys = mixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
+        const sortedMixes = sortMixes(mixes);
+        const keys = sortedMixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
 
         setState((prev) => {
           const currentKey = prev.currentKey;
@@ -476,7 +490,7 @@ const useMixcloudContextState = (
           return {
             ...prev,
             keys,
-            mixData: mixes,
+            mixData: sortedMixes,
             currentFilters: filters,
             isLoadingMixes: false,
             error: null,
@@ -517,7 +531,8 @@ const useMixcloudContextState = (
         }
 
         const mixes: Mix[] = await response.json();
-        const keys = mixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
+        const sortedMixes = sortMixes(mixes);
+        const keys = sortedMixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
 
         // Select a random starting index
         const randomIndex = Math.floor(Math.random() * keys.length);
@@ -526,7 +541,7 @@ const useMixcloudContextState = (
         setState((prev) => ({
           ...prev,
           keys,
-          mixData: mixes,
+          mixData: sortedMixes,
           currentFilters: filters,
           isLoadingMixes: false,
           error: null,
@@ -565,7 +580,8 @@ const useMixcloudContextState = (
       }
 
       const mixes: Mix[] = await response.json();
-      const keys = mixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
+      const sortedMixes = sortMixes(mixes);
+      const keys = sortedMixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
 
       // Find the specific mix in the list using the full key
       const targetIndex = keys.findIndex((key) => key === fullMixKey);
@@ -577,7 +593,7 @@ const useMixcloudContextState = (
       setState((prev) => ({
         ...prev,
         keys,
-        mixData: mixes,
+        mixData: sortedMixes,
         currentFilters: {},
         isLoadingMixes: false,
         error: null,
