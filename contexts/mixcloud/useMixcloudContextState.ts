@@ -548,6 +548,11 @@ const useMixcloudContextState = (
     setState((prev) => ({ ...prev, isLoadingMixes: true, error: null }));
 
     try {
+      // Convert clean mix key back to full format if needed
+      const fullMixKey = mixKey.startsWith("/rymixxx/")
+        ? mixKey
+        : `/rymixxx/${mixKey}/`;
+
       // Load all mixes first to get the full list context
       const response = await fetch("/api/mixes");
 
@@ -558,11 +563,11 @@ const useMixcloudContextState = (
       const mixes: Mix[] = await response.json();
       const keys = mixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
 
-      // Find the specific mix in the list
-      const targetIndex = keys.findIndex((key) => key === mixKey);
+      // Find the specific mix in the list using the full key
+      const targetIndex = keys.findIndex((key) => key === fullMixKey);
 
       if (targetIndex === -1) {
-        throw new Error(`Mix "${mixKey}" not found`);
+        throw new Error(`Mix "${fullMixKey}" not found`);
       }
 
       setState((prev) => ({
@@ -572,7 +577,7 @@ const useMixcloudContextState = (
         isLoadingMixes: false,
         error: null,
         currentIndex: targetIndex,
-        currentKey: mixKey,
+        currentKey: fullMixKey,
         isPlaying: false,
         position: 0,
         duration: 0,
@@ -589,7 +594,12 @@ const useMixcloudContextState = (
 
   const shareCurrentMix = useCallback(() => {
     if (state.currentKey) {
-      const shareUrl = `${window.location.origin}?mix=${encodeURIComponent(state.currentKey)}`;
+      // Clean up the mix key for sharing - remove /rymixxx/ prefix and trailing slash
+      const cleanMixKey = state.currentKey
+        .replace(/^\/rymixxx\//, "") // Remove /rymixxx/ prefix
+        .replace(/\/$/, ""); // Remove trailing slash
+
+      const shareUrl = `${window.location.origin}?mix=${encodeURIComponent(cleanMixKey)}`;
 
       // Copy to clipboard
       navigator.clipboard
