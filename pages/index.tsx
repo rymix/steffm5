@@ -6,6 +6,7 @@ import MixcloudPlayerControls from "@/components/Controls";
 import MixcloudPlayerCurrentMixInfo from "@/components/CurrentMixInfo";
 import FilterStatus from "@/components/FilterStatus";
 import MixFilter from "@/components/MixFilter";
+import MixcloudPlayerMixList from "@/components/MixList";
 import MixcloudPlayerProgressBar from "@/components/ProgressBar";
 import TrackList from "@/components/TrackList";
 import MixcloudPlayerVolumeControl from "@/components/VolumeControl";
@@ -44,14 +45,15 @@ const HomePage: React.FC = () => {
           </p>
         </div>
 
-        <MixFilter />
-        <FilterStatus />
-        <MixcloudPlayerCurrentMixInfo />
+        <MixcloudPlayerWrapper autoPlay={true} />
         <MixcloudPlayerControls />
         <MixcloudPlayerProgressBar />
         <MixcloudPlayerVolumeControl />
+        <MixFilter />
+        <FilterStatus />
+        <MixcloudPlayerCurrentMixInfo />
         <TrackList />
-        <MixcloudPlayerWrapper autoPlay={true} />
+        <MixcloudPlayerMixList />
       </div>
     </>
   );

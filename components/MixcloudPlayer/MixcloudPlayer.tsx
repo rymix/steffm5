@@ -1,7 +1,6 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useRef } from "react";
 
-import MixcloudPlayerMixList from "./MixList";
 import { StyledMixcloudPlayer, StyledMixcloudPlayerWidget } from "./styles";
 import { MixcloudPlayerProps } from "./types";
 
@@ -94,9 +93,6 @@ const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
           />
         </StyledMixcloudPlayerWidget>
       )}
-
-      {/* Track list */}
-      <MixcloudPlayerMixList />
     </StyledMixcloudPlayer>
   );
 };

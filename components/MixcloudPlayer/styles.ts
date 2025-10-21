@@ -8,4 +8,7 @@ export const StyledMixcloudPlayer = styled.div`
 
 export const StyledMixcloudPlayerWidget = styled.div`
   margin-bottom: 20px;
+  position: fixed;
+  bottom: -500px;
+  left: 0;
 `;
