@@ -721,6 +721,26 @@ const useMixcloudContextState = (
     );
   }, [state.currentKey, state.mixData]);
 
+  const playRandomFromCurrentList = useCallback(() => {
+    if (state.keys.length === 0) {
+      return; // No mixes available
+    }
+
+    // Get a random index from the current filtered list
+    const randomIndex = Math.floor(Math.random() * state.keys.length);
+    const randomKey = state.keys[randomIndex];
+
+    // Update state to play the random mix
+    setState((prev) => ({
+      ...prev,
+      currentIndex: randomIndex,
+      currentKey: randomKey,
+      isPlaying: false,
+      position: 0,
+      duration: 0,
+    }));
+  }, [state.keys]);
+
   const actions: MixcloudActions = useMemo(
     () => ({
       play,
@@ -747,6 +767,7 @@ const useMixcloudContextState = (
       updateMixProgress,
       startMixOver,
       getCurrentMix,
+      playRandomFromCurrentList,
     }),
     [
       play,
@@ -773,6 +794,7 @@ const useMixcloudContextState = (
       updateMixProgress,
       startMixOver,
       getCurrentMix,
+      playRandomFromCurrentList,
     ],
   );
 

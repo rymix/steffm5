@@ -35,6 +35,14 @@ const MixcloudPlayerControls: React.FC = () => {
           Next
         </StyledMixcloudPlayerControlButton>
         <StyledMixcloudPlayerControlButton
+          onClick={actions.playRandomFromCurrentList}
+          disabled={state.keys.length === 0}
+          title="Play random mix from current filtered list"
+          $variant="secondary"
+        >
+          Random
+        </StyledMixcloudPlayerControlButton>
+        <StyledMixcloudPlayerControlButton
           onClick={actions.shareCurrentMix}
           disabled={!state.currentKey}
           title="Copy share link to clipboard"

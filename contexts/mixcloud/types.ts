@@ -78,6 +78,7 @@ export type MixcloudActions = {
   ) => void;
   startMixOver: (_key: string) => void;
   getCurrentMix: () => Mix | null;
+  playRandomFromCurrentList: () => void;
 };
 
 export type MixcloudContextState = {
