@@ -16,6 +16,18 @@ export type MixcloudFilters = {
   date?: string;
 };
 
+export type MixProgressStatus = "unplayed" | "in_progress" | "complete";
+
+export type MixProgress = {
+  key: string;
+  duration: number;
+  position: number;
+  lastPlayed: number; // timestamp
+  status: MixProgressStatus;
+};
+
+export type MixProgressMap = Record<string, MixProgress>;
+
 export type MixcloudState = {
   isPlaying: boolean;
   isLoading: boolean;
@@ -30,6 +42,7 @@ export type MixcloudState = {
   error: string | null;
   filters: MixcloudFilters;
   shareMessage: string | null;
+  mixProgress: MixProgressMap;
 };
 
 export type MixcloudActions = {
@@ -53,6 +66,12 @@ export type MixcloudActions = {
   loadMixesWithRandomStart: (_filters?: MixcloudFilters) => Promise<void>;
   loadSpecificMix: (_mixKey: string) => Promise<void>;
   shareCurrentMix: () => void;
+  getMixProgress: (_key: string) => MixProgress;
+  updateMixProgress: (
+    _key: string,
+    _position: number,
+    _duration: number,
+  ) => void;
 };
 
 export type MixcloudContextState = {

@@ -2,12 +2,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { mcKeyFormatter } from "utils/functions";
 
 import type { Mix } from "db/types";
+import usePersistedState from "hooks/usePersistedState";
 
 import type {
   MixcloudActions,
   MixcloudContextState,
   MixcloudFilters,
   MixcloudState,
+  MixProgress,
+  MixProgressMap,
+  MixProgressStatus,
   UseMixcloudContextStateOptions,
 } from "./types";
 
@@ -36,6 +40,10 @@ const useMixcloudContextState = (
   const scriptLoadedRef = useRef(false);
   const widgetReadyRef = useRef(false);
   const [autoPlay, setAutoPlayState] = useState(initialAutoPlay);
+  const [mixProgress, setMixProgress] = usePersistedState<MixProgressMap>(
+    "mix-progress",
+    {},
+  );
 
   const [state, setState] = useState<MixcloudState>({
     isPlaying: false,
@@ -55,7 +63,27 @@ const useMixcloudContextState = (
       tags: "",
     },
     shareMessage: null,
+    mixProgress,
   });
+
+  // Sync state with persisted mix progress
+  useEffect(() => {
+    setState((prev) => ({ ...prev, mixProgress }));
+  }, [mixProgress]);
+
+  // Helper function to determine progress status
+  const getProgressStatus = useCallback(
+    (position: number, duration: number): MixProgressStatus => {
+      if (position < 20) {
+        return "unplayed";
+      } else if (position >= duration - 20) {
+        return "complete";
+      } else {
+        return "in_progress";
+      }
+    },
+    [],
+  );
 
   const widgetUrl = state.currentKey
     ? `https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed=${encodeURIComponent(
@@ -129,6 +157,24 @@ const useMixcloudContextState = (
                 duration,
                 isLoading: false,
               }));
+
+              // Update mix progress if we have a current key and valid duration
+              if (state.currentKey && duration > 0) {
+                const status = getProgressStatus(position, duration);
+                const progressData: MixProgress = {
+                  key: state.currentKey,
+                  duration,
+                  position,
+                  lastPlayed: Date.now(),
+                  status,
+                };
+
+                setMixProgress((prev) => ({
+                  ...prev,
+                  [state.currentKey!]: progressData,
+                }));
+              }
+
               onProgress?.(position, duration);
             },
           );
@@ -530,6 +576,40 @@ const useMixcloudContextState = (
     }
   }, [state.currentKey]);
 
+  const getMixProgress = useCallback(
+    (key: string): MixProgress => {
+      return (
+        mixProgress[key] || {
+          key,
+          duration: 0,
+          position: 0,
+          lastPlayed: 0,
+          status: "unplayed",
+        }
+      );
+    },
+    [mixProgress],
+  );
+
+  const updateMixProgress = useCallback(
+    (key: string, position: number, duration: number) => {
+      const status = getProgressStatus(position, duration);
+      const progressData: MixProgress = {
+        key,
+        duration,
+        position,
+        lastPlayed: Date.now(),
+        status,
+      };
+
+      setMixProgress((prev) => ({
+        ...prev,
+        [key]: progressData,
+      }));
+    },
+    [getProgressStatus],
+  );
+
   const actions: MixcloudActions = useMemo(
     () => ({
       play,
@@ -552,6 +632,8 @@ const useMixcloudContextState = (
       loadMixesWithRandomStart,
       loadSpecificMix,
       shareCurrentMix,
+      getMixProgress,
+      updateMixProgress,
     }),
     [
       play,
@@ -574,6 +656,8 @@ const useMixcloudContextState = (
       loadMixesWithRandomStart,
       loadSpecificMix,
       shareCurrentMix,
+      getMixProgress,
+      updateMixProgress,
     ],
   );
 
