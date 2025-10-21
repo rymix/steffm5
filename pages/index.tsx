@@ -7,6 +7,7 @@ import MixcloudPlayerCurrentMixInfo from "@/components/CurrentMixInfo";
 import FilterStatus from "@/components/FilterStatus";
 import MixFilter from "@/components/MixFilter";
 import MixcloudPlayerProgressBar from "@/components/ProgressBar";
+import TrackList from "@/components/TrackList";
 import MixcloudPlayerVolumeControl from "@/components/VolumeControl";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 
@@ -49,6 +50,7 @@ const HomePage: React.FC = () => {
         <MixcloudPlayerControls />
         <MixcloudPlayerProgressBar />
         <MixcloudPlayerVolumeControl />
+        <TrackList />
         <MixcloudPlayerWrapper autoPlay={true} />
       </div>
     </>
