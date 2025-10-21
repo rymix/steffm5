@@ -8,6 +8,7 @@ import { MixcloudPlayerProps } from "./types";
 const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
   const { state, actions, iframeRef, widgetUrl } = useMixcloud();
   const initializedRef = useRef(false);
+  const autoPlayTriggeredRef = useRef(false);
 
   // Initialize by loading all mixes with random starting point (client-side only)
   useEffect(() => {
@@ -31,17 +32,19 @@ const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
     }
   }, []); // Empty dependency array - only run on mount
 
-  // Auto-start playback when widget is ready and autoPlay is enabled
+  // Auto-start playback when widget is ready and autoPlay is enabled (only once)
   useEffect(() => {
     if (
       autoPlay &&
       !state.isLoadingMixes &&
       state.currentKey &&
-      !state.isPlaying
+      !state.isPlaying &&
+      !autoPlayTriggeredRef.current
     ) {
       // Small delay to ensure widget is fully loaded
       const timer = setTimeout(() => {
         actions.play();
+        autoPlayTriggeredRef.current = true; // Prevent re-triggering
       }, 1000);
       return () => clearTimeout(timer);
     }
