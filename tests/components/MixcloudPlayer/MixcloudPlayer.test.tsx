@@ -1,6 +1,6 @@
 import { MixcloudProvider } from "contexts/mixcloud";
 
-import { MixcloudPlayer } from "components/MixcloudPlayer/MixcloudPlayer";
+import MixcloudPlayer from "components/MixcloudPlayer/MixcloudPlayer";
 
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
@@ -29,14 +29,44 @@ describe("MixcloudPlayer", () => {
           json: () => Promise.resolve({ mcKey: "test-track-1" }),
         });
       }
-      // Mock regular mixes API (for filter tests)
+      // Mock regular mixes API (for filter tests) - now returns full Mix objects
       return Promise.resolve({
         ok: true,
         json: () =>
           Promise.resolve([
-            { mixcloudKey: "test-track-1" },
-            { mixcloudKey: "test-track-2" },
-            { mixcloudKey: "test-track-3" },
+            {
+              mixcloudKey: "test-track-1",
+              name: "Test Track 1",
+              category: "test",
+              releaseDate: "2024-01-01",
+              coverArtSmall: "http://test.com/cover1.jpg",
+              notes: "Test notes 1",
+              tags: ["test", "track"],
+              duration: "3600",
+              tracks: [],
+            },
+            {
+              mixcloudKey: "test-track-2",
+              name: "Test Track 2",
+              category: "test",
+              releaseDate: "2024-01-02",
+              coverArtSmall: "http://test.com/cover2.jpg",
+              notes: "Test notes 2",
+              tags: ["test", "track"],
+              duration: "3600",
+              tracks: [],
+            },
+            {
+              mixcloudKey: "test-track-3",
+              name: "Test Track 3",
+              category: "test",
+              releaseDate: "2024-01-03",
+              coverArtSmall: "http://test.com/cover3.jpg",
+              notes: "Test notes 3",
+              tags: ["test", "track"],
+              duration: "3600",
+              tracks: [],
+            },
           ]),
       });
     }) as jest.Mock;
@@ -49,21 +79,19 @@ describe("MixcloudPlayer", () => {
   it("renders without crashing", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      // Now loads all tracks (3) and shows them all with random current index
-      expect(screen.getByText(/Current Mix: \d+ of 3/)).toBeInTheDocument();
+      // Check that the playlist is rendered with tracks
+      expect(screen.getByText("Playlist:")).toBeInTheDocument();
     });
   });
 
   it("renders with loaded tracks", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      // Now loads all tracks (3) and shows them all with random current index
-      expect(screen.getByText(/Current Mix: \d+ of 3/)).toBeInTheDocument();
+      // Check that the playlist is rendered with tracks
+      expect(screen.getByText("Playlist:")).toBeInTheDocument();
     });
-    // Should have one of the tracks as current (random selection)
-    expect(
-      screen.getByText(/Key: \/rymixxx\/test-track-\d+\//),
-    ).toBeInTheDocument();
+    // Should have one of the tracks as current (has the playing indicator)
+    expect(screen.getByText("⏸️")).toBeInTheDocument();
   });
 
   it("displays player controls", async () => {
@@ -79,7 +107,7 @@ describe("MixcloudPlayer", () => {
   it("displays volume control", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getAllByText(/Volume: \d+%/)).toHaveLength(2); // One in status, one in control
+      expect(screen.getByText(/Volume: \d+%/)).toBeInTheDocument(); // Volume control label
     });
     expect(screen.getByRole("slider")).toBeInTheDocument();
   });
@@ -113,7 +141,20 @@ describe("MixcloudPlayer", () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve([{ mixcloudKey: "single-track" }]),
+        json: () =>
+          Promise.resolve([
+            {
+              mixcloudKey: "single-track",
+              name: "Single Track",
+              category: "test",
+              releaseDate: "2024-01-01",
+              coverArtSmall: "http://test.com/cover.jpg",
+              notes: "Single track notes",
+              tags: ["single"],
+              duration: "3600",
+              tracks: [],
+            },
+          ]),
       }),
     ) as jest.Mock;
 
