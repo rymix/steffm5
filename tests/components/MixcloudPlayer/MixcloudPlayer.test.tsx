@@ -14,6 +14,13 @@ describe("MixcloudPlayer", () => {
 
   // Mock fetch for API calls
   beforeEach(() => {
+    // Mock clipboard API
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: jest.fn(() => Promise.resolve()),
+      },
+    });
+
     global.fetch = jest.fn((url: string) => {
       if (url.includes("/api/randomMix")) {
         // Mock random mix API
@@ -42,16 +49,21 @@ describe("MixcloudPlayer", () => {
   it("renders without crashing", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getByText("Current Mix: 1 of 1")).toBeInTheDocument();
+      // Now loads all tracks (3) and shows them all with random current index
+      expect(screen.getByText(/Current Mix: \d+ of 3/)).toBeInTheDocument();
     });
   });
 
   it("renders with loaded tracks", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getByText("Current Mix: 1 of 1")).toBeInTheDocument();
+      // Now loads all tracks (3) and shows them all with random current index
+      expect(screen.getByText(/Current Mix: \d+ of 3/)).toBeInTheDocument();
     });
-    expect(screen.getByText("Key: /rymixxx/test-track-1/")).toBeInTheDocument();
+    // Should have one of the tracks as current (random selection)
+    expect(
+      screen.getByText(/Key: \/rymixxx\/test-track-\d+\//),
+    ).toBeInTheDocument();
   });
 
   it("displays player controls", async () => {
@@ -61,6 +73,7 @@ describe("MixcloudPlayer", () => {
     });
     expect(screen.getByText("Play")).toBeInTheDocument();
     expect(screen.getByText("Next")).toBeInTheDocument();
+    expect(screen.getByText("Share")).toBeInTheDocument();
   });
 
   it("displays volume control", async () => {
@@ -76,18 +89,23 @@ describe("MixcloudPlayer", () => {
     await waitFor(() => {
       expect(screen.getByText("Playlist:")).toBeInTheDocument();
     });
+    // Should show all 3 tracks in the playlist
     expect(screen.getByText("/rymixxx/test-track-1/")).toBeInTheDocument();
+    expect(screen.getByText("/rymixxx/test-track-2/")).toBeInTheDocument();
+    expect(screen.getByText("/rymixxx/test-track-3/")).toBeInTheDocument();
   });
 
   it("shows current playing indicator", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getByText("/rymixxx/test-track-1/")).toBeInTheDocument();
+      expect(screen.getByText("Playlist:")).toBeInTheDocument();
     });
-    const firstTrackItem = screen
-      .getByText("/rymixxx/test-track-1/")
-      .closest("li");
-    expect(firstTrackItem).toHaveStyle("background-color: rgb(224, 224, 224)");
+    // Find the currently playing track (has the pause emoji)
+    const playingIndicator = screen.getByText("⏸️");
+    const currentTrackItem = playingIndicator.closest("li");
+    expect(currentTrackItem).toHaveStyle(
+      "background-color: rgb(224, 224, 224)",
+    );
   });
 
   it("disables previous/next buttons with single track", async () => {
@@ -111,23 +129,24 @@ describe("MixcloudPlayer", () => {
     expect(screen.getByText("Next")).toBeDisabled();
   });
 
-  it("disables previous/next buttons with single random track", async () => {
+  it("enables previous/next buttons with multiple tracks", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
       expect(screen.getByText("Previous")).toBeInTheDocument();
     });
-    expect(screen.getByText("Previous")).toBeDisabled();
-    expect(screen.getByText("Next")).toBeDisabled();
+    // Now that we load all tracks, buttons should be enabled
+    expect(screen.getByText("Previous")).toBeEnabled();
+    expect(screen.getByText("Next")).toBeEnabled();
   });
 
-  it("shows single track in playlist by default", async () => {
+  it("shows all tracks in playlist by default", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
       expect(screen.getByText("Playlist:")).toBeInTheDocument();
     });
 
-    // Should only show one track (the random one)
+    // Should show all tracks (3 in our mock)
     const playlistItems = screen.getAllByText(/^\d+\./);
-    expect(playlistItems).toHaveLength(1);
+    expect(playlistItems).toHaveLength(3);
   });
 });
