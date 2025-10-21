@@ -36,15 +36,7 @@ const HomePage: React.FC = () => {
       </Head>
 
       <div className="container">
-        <h1>Stef.FM - Adventures in Decent Music</h1>
-
-        <div className="demo-info">
-          <p>
-            <strong>Welcome to Stef.FM!</strong> Funky House and Soul Music
-            powered by Next.js and React.
-          </p>
-        </div>
-
+        <h1>Stef.FM</h1>
         <MixcloudPlayerWrapper autoPlay={true} />
         <MixcloudPlayerControls />
         <MixcloudPlayerProgressBar />
