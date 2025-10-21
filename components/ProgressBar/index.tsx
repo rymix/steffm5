@@ -9,12 +9,23 @@ import {
 } from "./styles";
 
 const MixcloudPlayerProgressBar: React.FC = () => {
-  const { state } = useMixcloud();
+  const { state, actions } = useMixcloud();
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const handleProgressClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (state.duration <= 0) return;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const progressPercent = clickX / rect.width;
+    const newPosition = progressPercent * state.duration;
+
+    actions.seek(Math.max(0, Math.min(state.duration, newPosition)));
   };
 
   if (state.duration <= 0) {
@@ -28,7 +39,7 @@ const MixcloudPlayerProgressBar: React.FC = () => {
       <StyledMixcloudPlayerProgressBarLabel>
         Progress: {formatTime(state.position)} / {formatTime(state.duration)}
       </StyledMixcloudPlayerProgressBarLabel>
-      <StyledMixcloudPlayerProgressBarTrack>
+      <StyledMixcloudPlayerProgressBarTrack onClick={handleProgressClick}>
         <StyledMixcloudPlayerProgressBarFill $progress={progress} />
       </StyledMixcloudPlayerProgressBarTrack>
     </StyledMixcloudPlayerProgressBar>

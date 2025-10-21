@@ -66,6 +66,7 @@ const useMixcloudContextState = (
     shareMessage: null,
     mixProgress,
     pendingSeekPosition: null,
+    shuffleMode: false,
   });
 
   // Sync state with persisted mix progress
@@ -92,6 +93,65 @@ const useMixcloudContextState = (
         state.currentKey,
       )}&autoplay=${autoPlay ? "1" : "0"}`
     : null;
+
+  // Helper functions for shuffle logic
+  const getUnplayedMixes = useCallback(() => {
+    return state.keys.filter((key) => {
+      const progress = mixProgress[key];
+      return !progress || progress.status === "unplayed";
+    });
+  }, [state.keys, mixProgress]);
+
+  const playNextMix = useCallback(() => {
+    if (state.keys.length === 0) return;
+
+    if (state.shuffleMode) {
+      // Shuffle mode: play random unplayed mix, or any random if all played
+      const unplayedMixes = getUnplayedMixes();
+
+      if (unplayedMixes.length > 0) {
+        // Play random unplayed mix
+        const randomIndex = Math.floor(Math.random() * unplayedMixes.length);
+        const randomKey = unplayedMixes[randomIndex];
+        const keyIndex = state.keys.indexOf(randomKey);
+
+        setState((prev) => ({
+          ...prev,
+          currentIndex: keyIndex,
+          currentKey: randomKey,
+          isPlaying: false,
+          position: 0,
+          duration: 0,
+        }));
+      } else {
+        // All mixes played, play any random mix
+        const randomIndex = Math.floor(Math.random() * state.keys.length);
+        const randomKey = state.keys[randomIndex];
+
+        setState((prev) => ({
+          ...prev,
+          currentIndex: randomIndex,
+          currentKey: randomKey,
+          isPlaying: false,
+          position: 0,
+          duration: 0,
+        }));
+      }
+    } else {
+      // Normal mode: play next in order, loop to first when at end
+      const nextIndex = (state.currentIndex + 1) % state.keys.length;
+      const nextKey = state.keys[nextIndex];
+
+      setState((prev) => ({
+        ...prev,
+        currentIndex: nextIndex,
+        currentKey: nextKey,
+        isPlaying: false,
+        position: 0,
+        duration: 0,
+      }));
+    }
+  }, [state.keys, state.currentIndex, state.shuffleMode, getUnplayedMixes]);
 
   // Load Mixcloud widget script
   useEffect(() => {
@@ -145,6 +205,8 @@ const useMixcloudContextState = (
           widgetRef.current.events.ended.on(() => {
             setState((prev) => ({ ...prev, isPlaying: false }));
             onEnded?.();
+            // Auto-advance to next mix
+            playNextMix();
           });
 
           widgetRef.current.events.buffering.on(() => {
@@ -228,7 +290,15 @@ const useMixcloudContextState = (
     }, 100);
 
     return () => clearInterval(checkScript);
-  }, [state.currentKey, onReady, onPlay, onPause, onEnded, onProgress]);
+  }, [
+    state.currentKey,
+    onReady,
+    onPlay,
+    onPause,
+    onEnded,
+    onProgress,
+    playNextMix,
+  ]);
 
   const play = useCallback(() => {
     if (widgetRef.current && widgetReadyRef.current) {
@@ -280,9 +350,8 @@ const useMixcloudContextState = (
   );
 
   const next = useCallback(() => {
-    const nextIndex = (state.currentIndex + 1) % state.keys.length;
-    goToTrack(nextIndex);
-  }, [state.currentIndex, state.keys.length, goToTrack]);
+    playNextMix();
+  }, [playNextMix]);
 
   const previous = useCallback(() => {
     const prevIndex =
@@ -741,6 +810,10 @@ const useMixcloudContextState = (
     }));
   }, [state.keys]);
 
+  const toggleShuffle = useCallback(() => {
+    setState((prev) => ({ ...prev, shuffleMode: !prev.shuffleMode }));
+  }, []);
+
   const actions: MixcloudActions = useMemo(
     () => ({
       play,
@@ -768,6 +841,7 @@ const useMixcloudContextState = (
       startMixOver,
       getCurrentMix,
       playRandomFromCurrentList,
+      toggleShuffle,
     }),
     [
       play,
@@ -795,6 +869,7 @@ const useMixcloudContextState = (
       startMixOver,
       getCurrentMix,
       playRandomFromCurrentList,
+      toggleShuffle,
     ],
   );
 

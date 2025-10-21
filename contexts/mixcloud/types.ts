@@ -47,6 +47,7 @@ export type MixcloudState = {
   shareMessage: string | null;
   mixProgress: MixProgressMap;
   pendingSeekPosition: number | null;
+  shuffleMode: boolean;
 };
 
 export type MixcloudActions = {
@@ -79,6 +80,7 @@ export type MixcloudActions = {
   startMixOver: (_key: string) => void;
   getCurrentMix: () => Mix | null;
   playRandomFromCurrentList: () => void;
+  toggleShuffle: () => void;
 };
 
 export type MixcloudContextState = {

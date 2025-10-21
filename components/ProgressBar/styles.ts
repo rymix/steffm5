@@ -19,6 +19,12 @@ export const StyledMixcloudPlayerProgressBarTrack = styled.div`
   border-radius: 3px;
   overflow: hidden;
   margin-top: 4px;
+  cursor: pointer;
+
+  &:hover {
+    height: 8px;
+    background-color: #e0e0e0;
+  }
 `;
 
 export const StyledMixcloudPlayerProgressBarFill = styled.div<{

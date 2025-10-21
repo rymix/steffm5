@@ -43,6 +43,13 @@ const MixcloudPlayerControls: React.FC = () => {
           Random
         </StyledMixcloudPlayerControlButton>
         <StyledMixcloudPlayerControlButton
+          onClick={actions.toggleShuffle}
+          title={`Shuffle mode: ${state.shuffleMode ? "ON" : "OFF"}`}
+          $variant={state.shuffleMode ? "primary" : "secondary"}
+        >
+          Shuffle: {state.shuffleMode ? "ON" : "OFF"}
+        </StyledMixcloudPlayerControlButton>
+        <StyledMixcloudPlayerControlButton
           onClick={actions.shareCurrentMix}
           disabled={!state.currentKey}
           title="Copy share link to clipboard"
