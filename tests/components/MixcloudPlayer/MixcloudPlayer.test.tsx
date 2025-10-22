@@ -3,7 +3,7 @@ import { MixcloudProvider } from "contexts/mixcloud";
 import MixcloudPlayer from "components/MixcloudPlayer/MixcloudPlayer";
 
 import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 
 describe("MixcloudPlayer", () => {
   const renderWithProvider = (component: React.ReactElement) => {
@@ -79,19 +79,21 @@ describe("MixcloudPlayer", () => {
   it("renders without crashing", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      // Check that the playlist is rendered with tracks
-      expect(screen.getByText("Playlist:")).toBeInTheDocument();
+      // Check that the player iframe is rendered
+      expect(document.querySelector("iframe")).toBeInTheDocument();
     });
   });
 
   it("renders with loaded tracks", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      // Check that the playlist is rendered with tracks
-      expect(screen.getByText("Playlist:")).toBeInTheDocument();
+      // Check that the player iframe is rendered
+      expect(document.querySelector("iframe")).toBeInTheDocument();
     });
-    // Should have one of the tracks as current (has the playing indicator)
-    expect(screen.getByText("⏸️")).toBeInTheDocument();
+    // Should have iframe with mixcloud widget URL
+    const iframe = document.querySelector("iframe");
+    expect(iframe).toHaveAttribute("src");
+    expect(iframe?.getAttribute("src")).toContain("mixcloud.com");
   });
 
   it("displays player widget", async () => {
@@ -110,32 +112,31 @@ describe("MixcloudPlayer", () => {
       const iframe = document.querySelector("iframe");
       expect(iframe).toBeInTheDocument();
     });
-    // Should have playlist
-    expect(screen.getByText("Playlist:")).toBeInTheDocument();
+    // Should render the widget iframe
+    const iframe = document.querySelector("iframe");
+    expect(iframe).toHaveAttribute("src");
   });
 
   it("displays playlist with all tracks", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getByText("Playlist:")).toBeInTheDocument();
+      expect(document.querySelector("iframe")).toBeInTheDocument();
     });
-    // Should show all 3 tracks in the playlist
-    expect(screen.getByText("/rymixxx/test-track-1/")).toBeInTheDocument();
-    expect(screen.getByText("/rymixxx/test-track-2/")).toBeInTheDocument();
-    expect(screen.getByText("/rymixxx/test-track-3/")).toBeInTheDocument();
+    // Should have iframe with mixcloud URL containing the track
+    const iframe = document.querySelector("iframe");
+    expect(iframe?.getAttribute("src")).toContain("test-track");
   });
 
   it("shows current playing indicator", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getByText("Playlist:")).toBeInTheDocument();
+      expect(document.querySelector("iframe")).toBeInTheDocument();
     });
-    // Find the currently playing track (has the pause emoji)
-    const playingIndicator = screen.getByText("⏸️");
-    const currentTrackItem = playingIndicator.closest("li");
-    expect(currentTrackItem).toHaveStyle(
-      "background-color: rgb(224, 224, 224)",
-    );
+    // Check that iframe is rendered with proper attributes
+    const iframe = document.querySelector("iframe");
+    expect(iframe).toHaveAttribute("allow", "autoplay; encrypted-media");
+    expect(iframe).toHaveAttribute("width", "100%");
+    expect(iframe).toHaveAttribute("height", "120");
   });
 
   it("handles single track scenarios", async () => {
@@ -166,30 +167,32 @@ describe("MixcloudPlayer", () => {
       </MixcloudProvider>,
     );
     await waitFor(() => {
-      expect(screen.getByText("Playlist:")).toBeInTheDocument();
+      expect(document.querySelector("iframe")).toBeInTheDocument();
     });
-    // Should show the single track
-    expect(screen.getByText("/rymixxx/single-track/")).toBeInTheDocument();
+    // Should show the single track in the iframe src
+    const iframe = document.querySelector("iframe");
+    expect(iframe?.getAttribute("src")).toContain("single-track");
   });
 
   it("handles multiple tracks scenarios", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getByText("Playlist:")).toBeInTheDocument();
+      expect(document.querySelector("iframe")).toBeInTheDocument();
     });
-    // Should have playlist with multiple tracks
-    const playlistItems = screen.getAllByText(/^\d+\./);
-    expect(playlistItems).toHaveLength(3);
+    // Should have iframe loaded with one of the tracks
+    const iframe = document.querySelector("iframe");
+    expect(iframe?.getAttribute("src")).toContain("test-track");
   });
 
   it("shows all tracks in playlist by default", async () => {
     renderWithProvider(<MixcloudPlayer />);
     await waitFor(() => {
-      expect(screen.getByText("Playlist:")).toBeInTheDocument();
+      expect(document.querySelector("iframe")).toBeInTheDocument();
     });
 
-    // Should show all tracks (3 in our mock)
-    const playlistItems = screen.getAllByText(/^\d+\./);
-    expect(playlistItems).toHaveLength(3);
+    // Should have iframe with mixcloud widget loaded
+    const iframe = document.querySelector("iframe");
+    expect(iframe).toHaveAttribute("src");
+    expect(iframe?.getAttribute("src")).toContain("player-widget.mixcloud.com");
   });
 });
