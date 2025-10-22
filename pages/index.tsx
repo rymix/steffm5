@@ -2,14 +2,14 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
-import MixcloudPlayerControls from "@/components/Controls";
-import MixcloudPlayerCurrentMixInfo from "@/components/CurrentMixInfo";
+import Controls from "@/components/Controls";
+import CurrentMixInfo from "@/components/CurrentMixInfo";
 import FilterStatus from "@/components/FilterStatus";
-import MixcloudPlayerMixList from "@/components/MixcloudPlayer/MixList";
+import MixList from "@/components/MixcloudPlayer/MixList";
 import MixFilter from "@/components/MixFilter";
-import MixcloudPlayerProgressBar from "@/components/ProgressBar";
+import ProgressBar from "@/components/ProgressBar";
 import TrackList from "@/components/TrackList";
-import MixcloudPlayerVolumeControl from "@/components/VolumeControl";
+import VolumeControl from "@/components/VolumeControl";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 
 const HomePage: React.FC = () => {
@@ -38,14 +38,14 @@ const HomePage: React.FC = () => {
       <div className="container">
         <h1>Stef.FM</h1>
         <MixcloudPlayerWrapper autoPlay={true} />
-        <MixcloudPlayerControls />
-        <MixcloudPlayerProgressBar />
-        <MixcloudPlayerVolumeControl />
+        <Controls />
+        <ProgressBar />
+        <VolumeControl />
         <MixFilter />
         <FilterStatus />
-        <MixcloudPlayerCurrentMixInfo />
+        <CurrentMixInfo />
         <TrackList />
-        <MixcloudPlayerMixList />
+        <MixList />
       </div>
     </>
   );

@@ -2,14 +2,14 @@ import type { MixProgressStatus } from "contexts/mixcloud/types";
 
 export type MixcloudPlayerMixListProps = Record<string, never>;
 
-export type StyledMixcloudPlayerMixListItemProps = {
+export type StyledMixListItemProps = {
   $isCurrent: boolean;
 };
 
-export type StyledMixcloudPlayerMixListProgressBarProps = {
+export type StyledMixListProgressBarProps = {
   $progress: number; // 0-100
 };
 
-export type StyledMixcloudPlayerMixListStatusDotProps = {
+export type StyledMixListStatusDotProps = {
   $status: MixProgressStatus;
 };

@@ -1,19 +1,19 @@
 import styled from "styled-components";
 
 import type {
-  StyledMixcloudPlayerMixListItemProps,
-  StyledMixcloudPlayerMixListProgressBarProps,
-  StyledMixcloudPlayerMixListStatusDotProps,
+  StyledMixListItemProps,
+  StyledMixListProgressBarProps,
+  StyledMixListStatusDotProps,
 } from "./types";
 
-export const StyledMixcloudPlayerMixList = styled.div`
+export const StyledMixList = styled.div`
   ul {
     list-style: none;
     padding: 0;
   }
 `;
 
-export const StyledMixcloudPlayerMixListItem = styled.li<StyledMixcloudPlayerMixListItemProps>`
+export const StyledMixListItem = styled.li<StyledMixListItemProps>`
   padding: 10px;
   margin: 5px 0;
   background-color: ${(props) => (props.$isCurrent ? "#e0e0e0" : "#f5f5f5")};
@@ -22,20 +22,20 @@ export const StyledMixcloudPlayerMixListItem = styled.li<StyledMixcloudPlayerMix
   position: relative;
 `;
 
-export const StyledMixcloudPlayerMixListItemContent = styled.div`
+export const StyledMixListItemContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 6px;
 `;
 
-export const StyledMixcloudPlayerMixListItemInfo = styled.div`
+export const StyledMixListItemInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
 `;
 
-export const StyledMixcloudPlayerMixListStatusDot = styled.div<StyledMixcloudPlayerMixListStatusDotProps>`
+export const StyledMixListStatusDot = styled.div<StyledMixListStatusDotProps>`
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -54,7 +54,7 @@ export const StyledMixcloudPlayerMixListStatusDot = styled.div<StyledMixcloudPla
   flex-shrink: 0;
 `;
 
-export const StyledMixcloudPlayerMixListProgressBarContainer = styled.div`
+export const StyledMixListProgressBarContainer = styled.div`
   width: 100%;
   height: 4px;
   background-color: rgba(0, 0, 0, 0.1);
@@ -62,7 +62,7 @@ export const StyledMixcloudPlayerMixListProgressBarContainer = styled.div`
   overflow: hidden;
 `;
 
-export const StyledMixcloudPlayerMixListProgressBar = styled.div<StyledMixcloudPlayerMixListProgressBarProps>`
+export const StyledMixListProgressBar = styled.div<StyledMixListProgressBarProps>`
   height: 100%;
   background-color: #2196f3;
   border-radius: 2px;

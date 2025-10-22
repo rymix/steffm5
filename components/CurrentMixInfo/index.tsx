@@ -2,19 +2,19 @@ import { useMixcloud } from "contexts/mixcloud";
 import React from "react";
 
 import {
-  StyledMixcloudPlayerCurrentMixInfo,
-  StyledMixcloudPlayerCurrentMixInfoContent,
-  StyledMixcloudPlayerCurrentMixInfoCoverArt,
-  StyledMixcloudPlayerCurrentMixInfoDetails,
-  StyledMixcloudPlayerCurrentMixInfoHeader,
-  StyledMixcloudPlayerCurrentMixInfoMeta,
-  StyledMixcloudPlayerCurrentMixInfoNotes,
-  StyledMixcloudPlayerCurrentMixInfoSubtitle,
-  StyledMixcloudPlayerCurrentMixInfoTagBadge,
-  StyledMixcloudPlayerCurrentMixInfoTagContainer,
+  StyledCurrentMixInfo,
+  StyledCurrentMixInfoContent,
+  StyledCurrentMixInfoCoverArt,
+  StyledCurrentMixInfoDetails,
+  StyledCurrentMixInfoHeader,
+  StyledCurrentMixInfoMeta,
+  StyledCurrentMixInfoNotes,
+  StyledCurrentMixInfoSubtitle,
+  StyledCurrentMixInfoTagBadge,
+  StyledCurrentMixInfoTagContainer,
 } from "./styles";
 
-const MixcloudPlayerCurrentMixInfo: React.FC = () => {
+const CurrentMixInfo: React.FC = () => {
   const { state, actions } = useMixcloud();
   const currentMix = actions.getCurrentMix();
   const currentProgress = state.currentKey
@@ -29,7 +29,7 @@ const MixcloudPlayerCurrentMixInfo: React.FC = () => {
 
   if (!currentMix) {
     return (
-      <StyledMixcloudPlayerCurrentMixInfo>
+      <StyledCurrentMixInfo>
         <h3>
           Current Mix: {state.currentIndex + 1} of {state.keys.length}
         </h3>
@@ -48,35 +48,35 @@ const MixcloudPlayerCurrentMixInfo: React.FC = () => {
           </p>
         )}
         <p>Volume: {Math.round(state.volume * 100)}%</p>
-      </StyledMixcloudPlayerCurrentMixInfo>
+      </StyledCurrentMixInfo>
     );
   }
 
   return (
-    <StyledMixcloudPlayerCurrentMixInfo>
-      <StyledMixcloudPlayerCurrentMixInfoContent>
-        <StyledMixcloudPlayerCurrentMixInfoCoverArt>
+    <StyledCurrentMixInfo>
+      <StyledCurrentMixInfoContent>
+        <StyledCurrentMixInfoCoverArt>
           <img
             src={currentMix.coverArtSmall}
             alt={`Cover art for ${currentMix.name}`}
             width="80"
             height="80"
           />
-        </StyledMixcloudPlayerCurrentMixInfoCoverArt>
+        </StyledCurrentMixInfoCoverArt>
 
-        <StyledMixcloudPlayerCurrentMixInfoDetails>
-          <StyledMixcloudPlayerCurrentMixInfoHeader>
-            <StyledMixcloudPlayerCurrentMixInfoTagBadge category>
+        <StyledCurrentMixInfoDetails>
+          <StyledCurrentMixInfoHeader>
+            <StyledCurrentMixInfoTagBadge category>
               {currentMix.category}
-            </StyledMixcloudPlayerCurrentMixInfoTagBadge>
+            </StyledCurrentMixInfoTagBadge>
             <h3>{currentMix.name}</h3>
-          </StyledMixcloudPlayerCurrentMixInfoHeader>
+          </StyledCurrentMixInfoHeader>
 
-          <StyledMixcloudPlayerCurrentMixInfoSubtitle>
+          <StyledCurrentMixInfoSubtitle>
             Released: {new Date(currentMix.releaseDate).toLocaleDateString()}
-          </StyledMixcloudPlayerCurrentMixInfoSubtitle>
+          </StyledCurrentMixInfoSubtitle>
 
-          <StyledMixcloudPlayerCurrentMixInfoMeta>
+          <StyledCurrentMixInfoMeta>
             <span>
               Status:{" "}
               {state.isLoading
@@ -97,27 +97,27 @@ const MixcloudPlayerCurrentMixInfo: React.FC = () => {
             <span>
               Track: {state.currentIndex + 1} of {state.keys.length}
             </span>
-          </StyledMixcloudPlayerCurrentMixInfoMeta>
+          </StyledCurrentMixInfoMeta>
 
           {currentMix.notes && (
-            <StyledMixcloudPlayerCurrentMixInfoNotes>
+            <StyledCurrentMixInfoNotes>
               {currentMix.notes}
-            </StyledMixcloudPlayerCurrentMixInfoNotes>
+            </StyledCurrentMixInfoNotes>
           )}
 
           {currentMix.tags && currentMix.tags.length > 0 && (
-            <StyledMixcloudPlayerCurrentMixInfoTagContainer>
+            <StyledCurrentMixInfoTagContainer>
               {currentMix.tags.map((tag, index) => (
-                <StyledMixcloudPlayerCurrentMixInfoTagBadge key={index}>
+                <StyledCurrentMixInfoTagBadge key={index}>
                   {tag}
-                </StyledMixcloudPlayerCurrentMixInfoTagBadge>
+                </StyledCurrentMixInfoTagBadge>
               ))}
-            </StyledMixcloudPlayerCurrentMixInfoTagContainer>
+            </StyledCurrentMixInfoTagContainer>
           )}
-        </StyledMixcloudPlayerCurrentMixInfoDetails>
-      </StyledMixcloudPlayerCurrentMixInfoContent>
-    </StyledMixcloudPlayerCurrentMixInfo>
+        </StyledCurrentMixInfoDetails>
+      </StyledCurrentMixInfoContent>
+    </StyledCurrentMixInfo>
   );
 };
 
-export default MixcloudPlayerCurrentMixInfo;
+export default CurrentMixInfo;

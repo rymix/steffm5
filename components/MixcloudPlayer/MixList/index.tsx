@@ -2,20 +2,20 @@ import { useMixcloud } from "contexts/mixcloud";
 import React from "react";
 
 import {
-  StyledMixcloudPlayerMixList,
-  StyledMixcloudPlayerMixListItem,
-  StyledMixcloudPlayerMixListItemContent,
-  StyledMixcloudPlayerMixListItemInfo,
-  StyledMixcloudPlayerMixListProgressBar,
-  StyledMixcloudPlayerMixListProgressBarContainer,
-  StyledMixcloudPlayerMixListStatusDot,
+  StyledMixList,
+  StyledMixListItem,
+  StyledMixListItemContent,
+  StyledMixListItemInfo,
+  StyledMixListProgressBar,
+  StyledMixListProgressBarContainer,
+  StyledMixListStatusDot,
 } from "./styles";
 
 const MixcloudPlayerMixList: React.FC = () => {
   const { state, actions } = useMixcloud();
 
   return (
-    <StyledMixcloudPlayerMixList>
+    <StyledMixList>
       <h4>Playlist:</h4>
       <ul>
         {state.keys.map((key, index) => {
@@ -26,20 +26,18 @@ const MixcloudPlayerMixList: React.FC = () => {
               : 0;
 
           return (
-            <StyledMixcloudPlayerMixListItem
+            <StyledMixListItem
               key={key}
               $isCurrent={index === state.currentIndex}
               onClick={() => actions.goToTrack(index)}
             >
-              <StyledMixcloudPlayerMixListItemContent>
-                <StyledMixcloudPlayerMixListItemInfo>
-                  <StyledMixcloudPlayerMixListStatusDot
-                    $status={progress.status}
-                  />
+              <StyledMixListItemContent>
+                <StyledMixListItemInfo>
+                  <StyledMixListStatusDot $status={progress.status} />
                   <span>
                     <strong>{index + 1}.</strong> {key}
                   </span>
-                </StyledMixcloudPlayerMixListItemInfo>
+                </StyledMixListItemInfo>
                 <div
                   style={{ display: "flex", alignItems: "center", gap: "8px" }}
                 >
@@ -89,17 +87,15 @@ const MixcloudPlayerMixList: React.FC = () => {
                     </span>
                   )}
                 </div>
-              </StyledMixcloudPlayerMixListItemContent>
-              <StyledMixcloudPlayerMixListProgressBarContainer>
-                <StyledMixcloudPlayerMixListProgressBar
-                  $progress={progressPercentage}
-                />
-              </StyledMixcloudPlayerMixListProgressBarContainer>
-            </StyledMixcloudPlayerMixListItem>
+              </StyledMixListItemContent>
+              <StyledMixListProgressBarContainer>
+                <StyledMixListProgressBar $progress={progressPercentage} />
+              </StyledMixListProgressBarContainer>
+            </StyledMixListItem>
           );
         })}
       </ul>
-    </StyledMixcloudPlayerMixList>
+    </StyledMixList>
   );
 };
 

@@ -1,16 +1,16 @@
 import styled from "styled-components";
 
-export const StyledMixcloudPlayerCurrentMixInfo = styled.div`
+export const StyledCurrentMixInfo = styled.div`
   margin-bottom: 20px;
 `;
 
-export const StyledMixcloudPlayerCurrentMixInfoContent = styled.div`
+export const StyledCurrentMixInfoContent = styled.div`
   display: flex;
   gap: 16px;
   align-items: flex-start;
 `;
 
-export const StyledMixcloudPlayerCurrentMixInfoCoverArt = styled.div`
+export const StyledCurrentMixInfoCoverArt = styled.div`
   flex-shrink: 0;
 
   img {
@@ -19,12 +19,12 @@ export const StyledMixcloudPlayerCurrentMixInfoCoverArt = styled.div`
   }
 `;
 
-export const StyledMixcloudPlayerCurrentMixInfoDetails = styled.div`
+export const StyledCurrentMixInfoDetails = styled.div`
   flex: 1;
   min-width: 0; /* Allow text to wrap */
 `;
 
-export const StyledMixcloudPlayerCurrentMixInfoHeader = styled.div`
+export const StyledCurrentMixInfoHeader = styled.div`
   margin-bottom: 8px;
 
   h3 {
@@ -35,13 +35,13 @@ export const StyledMixcloudPlayerCurrentMixInfoHeader = styled.div`
   }
 `;
 
-export const StyledMixcloudPlayerCurrentMixInfoSubtitle = styled.div`
+export const StyledCurrentMixInfoSubtitle = styled.div`
   color: #666;
   font-size: 0.9em;
   margin-bottom: 12px;
 `;
 
-export const StyledMixcloudPlayerCurrentMixInfoMeta = styled.div`
+export const StyledCurrentMixInfoMeta = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -54,7 +54,7 @@ export const StyledMixcloudPlayerCurrentMixInfoMeta = styled.div`
   }
 `;
 
-export const StyledMixcloudPlayerCurrentMixInfoNotes = styled.div`
+export const StyledCurrentMixInfoNotes = styled.div`
   background: #f8f9fa;
   padding: 12px;
   border-radius: 6px;
@@ -64,13 +64,13 @@ export const StyledMixcloudPlayerCurrentMixInfoNotes = styled.div`
   border-left: 3px solid #007bff;
 `;
 
-export const StyledMixcloudPlayerCurrentMixInfoTagContainer = styled.div`
+export const StyledCurrentMixInfoTagContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 `;
 
-export const StyledMixcloudPlayerCurrentMixInfoTagBadge = styled.span<{
+export const StyledCurrentMixInfoTagBadge = styled.span<{
   category?: boolean;
 }>`
   display: inline-block;

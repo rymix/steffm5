@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-export const StyledMixcloudPlayerControls = styled.div`
+export const StyledControls = styled.div`
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
   flex-wrap: wrap;
 `;
 
-export const StyledMixcloudPlayerControlButton = styled.button<{
+export const StyledControlButton = styled.button<{
   $variant?: "primary" | "secondary" | "share";
 }>`
   padding: 10px 16px;
@@ -71,7 +71,7 @@ export const StyledMixcloudPlayerControlButton = styled.button<{
   }}
 `;
 
-export const StyledMixcloudPlayerShareMessage = styled.div<{
+export const StyledShareMessage = styled.div<{
   $isError?: boolean;
 }>`
   padding: 8px 12px;

@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-export const StyledMixcloudPlayerProgressBar = styled.div`
+export const StyledProgressBar = styled.div`
   margin-bottom: 20px;
 `;
 
-export const StyledMixcloudPlayerProgressBarLabel = styled.label`
+export const StyledProgressBarLabel = styled.label`
   display: block;
   font-size: 14px;
   font-weight: 500;
@@ -12,7 +12,7 @@ export const StyledMixcloudPlayerProgressBarLabel = styled.label`
   margin-bottom: 8px;
 `;
 
-export const StyledMixcloudPlayerProgressBarTrack = styled.div`
+export const StyledProgressBarTrack = styled.div`
   width: 100%;
   height: 6px;
   background-color: #f0f0f0;
@@ -27,7 +27,7 @@ export const StyledMixcloudPlayerProgressBarTrack = styled.div`
   }
 `;
 
-export const StyledMixcloudPlayerProgressBarFill = styled.div<{
+export const StyledProgressBarFill = styled.div<{
   $progress: number;
 }>`
   height: 100%;

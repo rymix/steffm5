@@ -2,20 +2,20 @@ import { useMixcloud } from "contexts/mixcloud";
 import React from "react";
 
 import {
-  StyledMixcloudPlayerVolumeControl,
-  StyledMixcloudPlayerVolumeControlLabel,
-  StyledMixcloudPlayerVolumeControlSlider,
+  StyledVolumeControl,
+  StyledVolumeControlLabel,
+  StyledVolumeControlSlider,
 } from "./styles";
 
-const MixcloudPlayerVolumeControl: React.FC = () => {
+const VolumeControl: React.FC = () => {
   const { state, actions } = useMixcloud();
 
   return (
-    <StyledMixcloudPlayerVolumeControl>
-      <StyledMixcloudPlayerVolumeControlLabel>
+    <StyledVolumeControl>
+      <StyledVolumeControlLabel>
         Volume: {Math.round(state.volume * 100)}%
-      </StyledMixcloudPlayerVolumeControlLabel>
-      <StyledMixcloudPlayerVolumeControlSlider
+      </StyledVolumeControlLabel>
+      <StyledVolumeControlSlider
         type="range"
         min={0}
         max={1}
@@ -23,8 +23,8 @@ const MixcloudPlayerVolumeControl: React.FC = () => {
         value={state.volume}
         onChange={(e) => actions.setVolume(Number(e.target.value))}
       />
-    </StyledMixcloudPlayerVolumeControl>
+    </StyledVolumeControl>
   );
 };
 
-export default MixcloudPlayerVolumeControl;
+export default VolumeControl;

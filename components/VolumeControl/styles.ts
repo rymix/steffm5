@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-export const StyledMixcloudPlayerVolumeControl = styled.div`
+export const StyledVolumeControl = styled.div`
   margin-bottom: 20px;
 `;
 
-export const StyledMixcloudPlayerVolumeControlLabel = styled.label`
+export const StyledVolumeControlLabel = styled.label`
   display: block;
   font-size: 14px;
   font-weight: 500;
@@ -12,7 +12,7 @@ export const StyledMixcloudPlayerVolumeControlLabel = styled.label`
   margin-bottom: 8px;
 `;
 
-export const StyledMixcloudPlayerVolumeControlSlider = styled.input`
+export const StyledVolumeControlSlider = styled.input`
   width: 100%;
   height: 6px;
   border-radius: 3px;

@@ -2,13 +2,13 @@ import { useMixcloud } from "contexts/mixcloud";
 import React from "react";
 
 import {
-  StyledMixcloudPlayerProgressBar,
-  StyledMixcloudPlayerProgressBarFill,
-  StyledMixcloudPlayerProgressBarLabel,
-  StyledMixcloudPlayerProgressBarTrack,
+  StyledProgressBar,
+  StyledProgressBarFill,
+  StyledProgressBarLabel,
+  StyledProgressBarTrack,
 } from "./styles";
 
-const MixcloudPlayerProgressBar: React.FC = () => {
+const ProgressBar: React.FC = () => {
   const { state, actions } = useMixcloud();
 
   const formatTime = (seconds: number) => {
@@ -35,15 +35,15 @@ const MixcloudPlayerProgressBar: React.FC = () => {
   const progress = (state.position / state.duration) * 100;
 
   return (
-    <StyledMixcloudPlayerProgressBar>
-      <StyledMixcloudPlayerProgressBarLabel>
+    <StyledProgressBar>
+      <StyledProgressBarLabel>
         Progress: {formatTime(state.position)} / {formatTime(state.duration)}
-      </StyledMixcloudPlayerProgressBarLabel>
-      <StyledMixcloudPlayerProgressBarTrack onClick={handleProgressClick}>
-        <StyledMixcloudPlayerProgressBarFill $progress={progress} />
-      </StyledMixcloudPlayerProgressBarTrack>
-    </StyledMixcloudPlayerProgressBar>
+      </StyledProgressBarLabel>
+      <StyledProgressBarTrack onClick={handleProgressClick}>
+        <StyledProgressBarFill $progress={progress} />
+      </StyledProgressBarTrack>
+    </StyledProgressBar>
   );
 };
 
-export default MixcloudPlayerProgressBar;
+export default ProgressBar;
