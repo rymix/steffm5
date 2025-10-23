@@ -4,6 +4,7 @@ export type MixcloudPlayerMixListProps = Record<string, never>;
 
 export type StyledMixListItemProps = {
   $isCurrent: boolean;
+  $isExpanded?: boolean;
 };
 
 export type StyledMixListProgressBarProps = {
