@@ -1,11 +1,11 @@
 import { useModal } from "contexts/modal";
-import React, { useEffect, useState } from "react";
+import { useOverlay } from "contexts/overlay";
+import React, { useEffect, useRef, useState } from "react";
 
 import HelloWorldModal from "components/HelloWorldModal";
 import SecondModal from "components/SecondModal";
 
 import {
-  StyledBackdrop,
   StyledBurgerButton,
   StyledBurgerLine,
   StyledMenu,
@@ -22,14 +22,27 @@ interface BurgerMenuProps {
 
 const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [prevModalOpen, setPrevModalOpen] = useState(false);
   const modal = useModal();
+  const overlay = useOverlay();
+  const justOpenedMenuRef = useRef(false);
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    const newOpenState = !isOpen;
+    if (newOpenState) {
+      justOpenedMenuRef.current = true;
+      // Clear the flag after a short delay
+      setTimeout(() => {
+        justOpenedMenuRef.current = false;
+      }, 200);
+    }
+    setIsOpen(newOpenState);
+    overlay.actions.setMenuOpen(newOpenState);
   };
 
   const closeMenu = () => {
     setIsOpen(false);
+    overlay.actions.setMenuOpen(false);
   };
 
   // Handle ESC key
@@ -42,22 +55,30 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
 
     if (isOpen) {
       document.addEventListener("keydown", handleKeyDown);
-      // Prevent background scrolling when menu is open
-      document.body.style.overflow = "hidden";
     }
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
-  // Handle backdrop click
-  const handleBackdropClick = (event: React.MouseEvent) => {
-    if (event.target === event.currentTarget) {
+  // Sync local state with overlay state (for external close commands like backdrop clicks)
+  useEffect(() => {
+    if (!overlay.state.isMenuOpen && isOpen) {
+      setIsOpen(false);
+    }
+  }, [overlay.state.isMenuOpen, isOpen]);
+
+  // Auto-close menu when modal opens, but not if menu was just opened by user
+  useEffect(() => {
+    const modalJustOpened = modal.state.isOpen && !prevModalOpen;
+
+    if (modalJustOpened && isOpen && !justOpenedMenuRef.current) {
       closeMenu();
     }
-  };
+
+    setPrevModalOpen(modal.state.isOpen);
+  }, [modal.state.isOpen, prevModalOpen, isOpen]);
 
   const handleModalDemo = (
     id: string,
@@ -88,86 +109,80 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
       </StyledBurgerButton>
 
       {isOpen && (
-        <StyledBackdrop $isOpen={isOpen} onClick={handleBackdropClick}>
-          <StyledMenu $isOpen={isOpen}>
-            <StyledMenuContent>
-              <StyledMenuTitle>Menu</StyledMenuTitle>
+        <StyledMenu $isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
+          <StyledMenuContent>
+            <StyledMenuTitle>Menu</StyledMenuTitle>
 
-              <StyledMenuSection>
-                <h3>Navigation</h3>
-                <StyledMenuItem onClick={() => console.log("Home clicked")}>
-                  🏠 Home
-                </StyledMenuItem>
-                <StyledMenuItem onClick={() => console.log("About clicked")}>
-                  ℹ️ About
-                </StyledMenuItem>
-                <StyledMenuItem onClick={() => console.log("Settings clicked")}>
-                  ⚙️ Settings
-                </StyledMenuItem>
-              </StyledMenuSection>
+            <StyledMenuSection>
+              <h3>Navigation</h3>
+              <StyledMenuItem onClick={() => console.log("Home clicked")}>
+                🏠 Home
+              </StyledMenuItem>
+              <StyledMenuItem onClick={() => console.log("About clicked")}>
+                ℹ️ About
+              </StyledMenuItem>
+              <StyledMenuItem onClick={() => console.log("Settings clicked")}>
+                ⚙️ Settings
+              </StyledMenuItem>
+            </StyledMenuSection>
 
-              <StyledMenuSection>
-                <h3>Modal Demos</h3>
-                <StyledMenuItem
-                  onClick={() =>
-                    handleModalDemo(
-                      "hello-world-menu",
-                      "Hello World (from Menu)",
-                      <HelloWorldModal />,
-                      8000,
-                    )
-                  }
-                >
-                  👋 Hello World Modal
-                </StyledMenuItem>
-                <StyledMenuItem
-                  onClick={() =>
-                    handleModalDemo(
-                      "second-modal-menu",
-                      "Second Modal (from Menu)",
-                      <SecondModal />,
-                      12000,
-                    )
-                  }
-                >
-                  🎯 Second Modal Demo
-                </StyledMenuItem>
-              </StyledMenuSection>
+            <StyledMenuSection>
+              <h3>Modal Demos</h3>
+              <StyledMenuItem
+                onClick={() =>
+                  handleModalDemo(
+                    "hello-world-menu",
+                    "Hello World (from Menu)",
+                    <HelloWorldModal />,
+                    8000,
+                  )
+                }
+              >
+                👋 Hello World Modal
+              </StyledMenuItem>
+              <StyledMenuItem
+                onClick={() =>
+                  handleModalDemo(
+                    "second-modal-menu",
+                    "Second Modal (from Menu)",
+                    <SecondModal />,
+                    12000,
+                  )
+                }
+              >
+                🎯 Second Modal Demo
+              </StyledMenuItem>
+            </StyledMenuSection>
 
-              <StyledMenuSection>
-                <h3>Music</h3>
-                <StyledMenuItem
-                  onClick={() => console.log("Playlists clicked")}
-                >
-                  🎵 Playlists
-                </StyledMenuItem>
-                <StyledMenuItem onClick={() => console.log("Browse clicked")}>
-                  🔍 Browse
-                </StyledMenuItem>
-                <StyledMenuItem
-                  onClick={() => console.log("Favorites clicked")}
-                >
-                  ❤️ Favorites
-                </StyledMenuItem>
-              </StyledMenuSection>
+            <StyledMenuSection>
+              <h3>Music</h3>
+              <StyledMenuItem onClick={() => console.log("Playlists clicked")}>
+                🎵 Playlists
+              </StyledMenuItem>
+              <StyledMenuItem onClick={() => console.log("Browse clicked")}>
+                🔍 Browse
+              </StyledMenuItem>
+              <StyledMenuItem onClick={() => console.log("Favorites clicked")}>
+                ❤️ Favorites
+              </StyledMenuItem>
+            </StyledMenuSection>
 
-              <StyledMenuSection>
-                <h3>Help</h3>
-                <StyledMenuItem onClick={() => console.log("Support clicked")}>
-                  💬 Support
-                </StyledMenuItem>
-                <StyledMenuItem onClick={() => console.log("Feedback clicked")}>
-                  📝 Feedback
-                </StyledMenuItem>
-              </StyledMenuSection>
-            </StyledMenuContent>
+            <StyledMenuSection>
+              <h3>Help</h3>
+              <StyledMenuItem onClick={() => console.log("Support clicked")}>
+                💬 Support
+              </StyledMenuItem>
+              <StyledMenuItem onClick={() => console.log("Feedback clicked")}>
+                📝 Feedback
+              </StyledMenuItem>
+            </StyledMenuSection>
+          </StyledMenuContent>
 
-            <StyledMenuFooter>
-              <p>Stef.FM v1.0</p>
-              <p>Adventures in Decent Music</p>
-            </StyledMenuFooter>
-          </StyledMenu>
-        </StyledBackdrop>
+          <StyledMenuFooter>
+            <p>Stef.FM v1.0</p>
+            <p>Adventures in Decent Music</p>
+          </StyledMenuFooter>
+        </StyledMenu>
       )}
     </>
   );

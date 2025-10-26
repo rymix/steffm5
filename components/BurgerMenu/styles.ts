@@ -9,10 +9,6 @@ interface StyledBurgerLineProps {
   $line: "top" | "middle" | "bottom";
 }
 
-interface StyledBackdropProps {
-  $isOpen: boolean;
-}
-
 interface StyledMenuProps {
   $isOpen: boolean;
 }
@@ -21,7 +17,7 @@ export const StyledBurgerButton = styled.button<StyledBurgerButtonProps>`
   position: fixed;
   top: 20px;
   left: 20px;
-  z-index: 1001;
+  z-index: 1002; /* Above shared overlay and menu */
   width: 48px;
   height: 48px;
   background: rgba(0, 0, 0, 0.8);
@@ -33,7 +29,7 @@ export const StyledBurgerButton = styled.button<StyledBurgerButtonProps>`
   justify-content: center;
   align-items: center;
   gap: 4px;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     background: rgba(0, 0, 0, 0.9);
@@ -84,18 +80,6 @@ export const StyledBurgerLine = styled.div<StyledBurgerLineProps>`
   }}
 `;
 
-export const StyledBackdrop = styled.div<StyledBackdropProps>`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
-  z-index: 1000;
-  transition: opacity 0.3s ease-in-out;
-  opacity: ${(props) => (props.$isOpen ? 1 : 0)};
-`;
-
 export const StyledMenu = styled.div<StyledMenuProps>`
   position: fixed;
   top: 0;
@@ -105,7 +89,8 @@ export const StyledMenu = styled.div<StyledMenuProps>`
   max-width: 80vw;
   background: white;
   box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 1001; /* Above shared overlay, below burger button */
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   transform: ${(props) =>
     props.$isOpen ? "translateX(0)" : "translateX(-100%)"};
   display: flex;

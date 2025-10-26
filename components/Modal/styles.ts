@@ -1,30 +1,16 @@
 import styled from "styled-components";
 
-interface StyledModalBackdropProps {
-  $isOpen: boolean;
-}
-
 interface StyledModalProps {
   $isOpen: boolean;
 }
 
-export const StyledModalBackdrop = styled.div<StyledModalBackdropProps>`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-  transition: opacity 0.3s ease-in-out;
-  opacity: ${(props) => (props.$isOpen ? 1 : 0)};
-`;
-
 export const StyledModal = styled.div<StyledModalProps>`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)
+    ${(props) => (props.$isOpen ? "scale(1)" : "scale(0.9) translateY(-20px)")};
+  z-index: 1000; /* Above shared overlay, below menu */
   background: white;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
@@ -35,8 +21,6 @@ export const StyledModal = styled.div<StyledModalProps>`
   flex-direction: column;
   overflow: hidden;
   transition: all 0.3s ease-in-out;
-  transform: ${(props) =>
-    props.$isOpen ? "scale(1) translateY(0)" : "scale(0.9) translateY(-20px)"};
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};
 `;
 
