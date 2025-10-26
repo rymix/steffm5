@@ -216,6 +216,89 @@ function Demo() {
 
 <hr>
 
+## Modal System
+
+The project includes a powerful modal system with global state management, auto-close functionality, and smooth transitions. The modal system uses React Context and supports content switching without closing/reopening.
+
+### Basic Modal Usage
+
+```tsx
+import { useModal } from "contexts/modal";
+
+function MyComponent() {
+  const modal = useModal();
+
+  const handleOpenModal = () => {
+    modal.actions.openModal({
+      id: "notification",
+      title: "Success!",
+      component: <SuccessMessage />,
+      autoCloseTimeout: 3000 // Auto-close after 3 seconds
+    });
+  };
+
+  return <button onClick={handleOpenModal}>Show Success</button>;
+}
+```
+
+### Modal Content Switching
+
+```tsx
+// Switch between different modal contents
+const switchToSettings = () => {
+  modal.actions.switchContent({
+    id: "settings",
+    title: "Settings",
+    component: <SettingsPanel />,
+    autoCloseTimeout: 15000
+  });
+};
+
+const switchToAbout = () => {
+  modal.actions.switchContent({
+    id: "about", 
+    title: "About",
+    component: <AboutPanel />
+    // No timeout - stays open until user closes
+  });
+};
+```
+
+### External Modal Control
+
+```tsx
+// Close modal from anywhere in the app
+modal.actions.closeModal();
+
+// Perfect for burger menus or navigation
+const handleMenuClick = (menuItem) => {
+  if (modal.state.isOpen) {
+    // Switch content instead of closing/reopening
+    modal.actions.switchContent({
+      id: menuItem.id,
+      title: menuItem.title, 
+      component: menuItem.component,
+      autoCloseTimeout: menuItem.timeout
+    });
+  } else {
+    modal.actions.openModal({...menuItem});
+  }
+};
+```
+
+### Features
+
+- ✅ **Auto-close timeout** - Set custom timeout durations
+- ✅ **Content switching** - Change modal content without closing/reopening  
+- ✅ **Global state management** - Control modals from anywhere in the app
+- ✅ **Smooth transitions** - Fade in/out effects with scale and translate
+- ✅ **Background dimming** - Prevents interaction with background content
+- ✅ **Keyboard support** - ESC key to close
+- ✅ **Click outside to close** - Intuitive UX pattern
+- ✅ **Scrollable content** - Handles long content gracefully
+
+<hr>
+
 ## useStore Hook
 
 For more control you can import the `useStore` custom hook to globally access player state. View the inner components like `MixmotionPlayerUI` for examples of use. The below snippet shows basic usage to get current show title and playing state:

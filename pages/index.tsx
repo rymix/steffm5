@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
+import BurgerMenu from "@/components/BurgerMenu";
 import Controls from "@/components/Controls";
 import CurrentMixInfo from "@/components/CurrentMixInfo";
 import FilterStatus from "@/components/FilterStatus";
@@ -40,6 +41,7 @@ const HomePage: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <BurgerMenu />
       <div className="container">
         <h1>Stef.FM</h1>
         <MusicTicker width="100%" height="50px" speed={5} />
