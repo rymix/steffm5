@@ -13,14 +13,14 @@ export const StyledSection = styled.section`
   }
 
   h1 {
-    color: #2c3e50;
+    color: #e74c3c;
     margin-top: 0;
     margin-bottom: 16px;
     font-size: 2rem;
   }
 
   h2 {
-    color: #34495e;
+    color: #c0392b;
     margin-top: 24px;
     margin-bottom: 12px;
     font-size: 1.5rem;
@@ -40,21 +40,10 @@ export const StyledSection = styled.section`
     margin: 12px 0;
     text-align: justify;
   }
-
-  pre {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 4px;
-    padding: 16px;
-    font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
-    font-size: 14px;
-    overflow-x: auto;
-    color: #495057;
-  }
 `;
 
 export const StyledButton = styled.button`
-  background: #27ae60;
+  background: #3498db;
   color: white;
   border: none;
   border-radius: 6px;
@@ -65,7 +54,7 @@ export const StyledButton = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    background: #229954;
+    background: #2980b9;
     transform: translateY(-1px);
   }
 
@@ -74,7 +63,7 @@ export const StyledButton = styled.button`
   }
 
   &:focus {
-    outline: 2px solid #27ae60;
+    outline: 2px solid #3498db;
     outline-offset: 2px;
   }
 `;

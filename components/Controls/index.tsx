@@ -1,8 +1,8 @@
 import { useMixcloud } from "contexts/mixcloud";
-import React, { useState } from "react";
+import { useModal } from "contexts/modal";
+import React from "react";
 
 import HelloWorldModal from "components/HelloWorldModal";
-import Modal from "components/Modal";
 
 import {
   StyledControlButton,
@@ -12,7 +12,7 @@ import {
 
 const Controls: React.FC = () => {
   const { state, actions } = useMixcloud();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modal = useModal();
 
   return (
     <>
@@ -61,8 +61,15 @@ const Controls: React.FC = () => {
           {state.volume === 0 ? "Unmute" : "Mute"}
         </StyledControlButton>
         <StyledControlButton
-          onClick={() => setIsModalOpen(true)}
-          title="Open Hello World modal demo"
+          onClick={() =>
+            modal.actions.openModal({
+              id: "hello-world",
+              title: "Hello World Demo",
+              component: <HelloWorldModal />,
+              autoCloseTimeout: 10000, // Auto-close after 10 seconds
+            })
+          }
+          title="Open Hello World modal demo (auto-closes in 10s)"
           $variant="secondary"
         >
           Hello World
@@ -82,14 +89,6 @@ const Controls: React.FC = () => {
           {state.shareMessage}
         </StyledShareMessage>
       )}
-
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Hello World Demo"
-      >
-        <HelloWorldModal />
-      </Modal>
     </>
   );
 };

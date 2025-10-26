@@ -1,6 +1,14 @@
 import styled from "styled-components";
 
-export const StyledModalBackdrop = styled.div`
+interface StyledModalBackdropProps {
+  $isOpen: boolean;
+}
+
+interface StyledModalProps {
+  $isOpen: boolean;
+}
+
+export const StyledModalBackdrop = styled.div<StyledModalBackdropProps>`
   position: fixed;
   top: 0;
   left: 0;
@@ -12,9 +20,11 @@ export const StyledModalBackdrop = styled.div`
   justify-content: center;
   z-index: 1000;
   padding: 20px;
+  transition: opacity 0.3s ease-in-out;
+  opacity: ${(props) => (props.$isOpen ? 1 : 0)};
 `;
 
-export const StyledModal = styled.div`
+export const StyledModal = styled.div<StyledModalProps>`
   background: white;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
@@ -24,6 +34,10 @@ export const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  transform: ${(props) =>
+    props.$isOpen ? "scale(1) translateY(0)" : "scale(0.9) translateY(-20px)"};
+  opacity: ${(props) => (props.$isOpen ? 1 : 0)};
 `;
 
 export const StyledModalHeader = styled.div`

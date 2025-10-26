@@ -1,8 +1,13 @@
+import { useModal } from "contexts/modal";
 import React from "react";
 
-import { StyledContent, StyledSection } from "./styles";
+import SecondModal from "components/SecondModal";
+
+import { StyledButton, StyledContent, StyledSection } from "./styles";
 
 const HelloWorldModal: React.FC = () => {
+  const modal = useModal();
+
   return (
     <StyledContent>
       <StyledSection>
@@ -86,15 +91,32 @@ const HelloWorldModal: React.FC = () => {
       </StyledSection>
 
       <StyledSection>
+        <h2>Test Modal Switching</h2>
+        <p>Click the button below to switch to another modal:</p>
+        <StyledButton
+          onClick={() =>
+            modal.actions.switchContent({
+              id: "second-modal",
+              title: "Second Modal",
+              component: <SecondModal />,
+              autoCloseTimeout: 15000, // Auto-close after 15 seconds
+            })
+          }
+        >
+          Switch to Second Modal
+        </StyledButton>
+      </StyledSection>
+
+      <StyledSection>
         <h2>Usage Example</h2>
         <pre>
-          {`<Modal
-  isOpen={isModalOpen}
-  onClose={() => setIsModalOpen(false)}
-  title="Hello World"
->
-  <HelloWorldModal />
-</Modal>`}
+          {`// Using the global modal system
+modal.actions.openModal({
+  id: "my-modal",
+  title: "My Modal",
+  component: <MyComponent />,
+  autoCloseTimeout: 5000
+});`}
         </pre>
       </StyledSection>
     </StyledContent>

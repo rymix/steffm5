@@ -1,5 +1,8 @@
 import { MixcloudProvider } from "contexts/mixcloud";
+import { ModalProvider } from "contexts/modal";
 import type { AppProps } from "next/app";
+
+import GlobalModal from "components/GlobalModal";
 
 import "../styles/globals.css";
 
@@ -16,7 +19,10 @@ export default function App({ Component, pageProps }: AppProps) {
         console.log("Progress:", position, duration)
       }
     >
-      <Component {...pageProps} />
+      <ModalProvider>
+        <Component {...pageProps} />
+        <GlobalModal />
+      </ModalProvider>
     </MixcloudProvider>
   );
 }

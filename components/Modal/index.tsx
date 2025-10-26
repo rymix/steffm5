@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
   StyledModal,
@@ -13,10 +13,48 @@ interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   title?: string;
+  autoCloseTimeout?: number;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  children,
+  title,
+  autoCloseTimeout,
+}) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Handle auto-close timeout
+  useEffect(() => {
+    if (isOpen && autoCloseTimeout && autoCloseTimeout > 0) {
+      timeoutRef.current = setTimeout(() => {
+        onClose();
+      }, autoCloseTimeout);
+    }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, [isOpen, autoCloseTimeout, onClose]);
+
+  // Handle visibility for transitions
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+    } else {
+      // Delay hiding to allow fade out
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   // Handle ESC key press
   useEffect(() => {
@@ -45,13 +83,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
     }
   };
 
-  if (!isOpen) {
+  if (!isVisible) {
     return null;
   }
 
   return (
-    <StyledModalBackdrop onClick={handleBackdropClick}>
-      <StyledModal ref={modalRef}>
+    <StyledModalBackdrop $isOpen={isOpen} onClick={handleBackdropClick}>
+      <StyledModal ref={modalRef} $isOpen={isOpen}>
         <StyledModalHeader>
           {title && <h2>{title}</h2>}
           <StyledModalCloseButton onClick={onClose} aria-label="Close modal">
