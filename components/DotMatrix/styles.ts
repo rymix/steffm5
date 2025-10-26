@@ -27,10 +27,7 @@ export const StyledDotMatrix = styled.div<{
   &::after {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0 0 0 0;
     background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.05) 50%);
     background-size: 100% 3px;
     pointer-events: none;

@@ -120,6 +120,7 @@ export const StyledMixDetails = styled.div`
       opacity: 0;
       max-height: 0;
     }
+
     to {
       opacity: 1;
       max-height: 500px;

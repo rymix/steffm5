@@ -50,6 +50,13 @@ const Controls: React.FC = () => {
           Shuffle: {state.shuffleMode ? "ON" : "OFF"}
         </StyledControlButton>
         <StyledControlButton
+          onClick={actions.toggleMute}
+          title={`${state.volume === 0 ? "Unmute" : "Mute"} (Volume: ${Math.round(state.volume * 100)}%)`}
+          $variant={state.volume === 0 ? "primary" : "secondary"}
+        >
+          {state.volume === 0 ? "Unmute" : "Mute"}
+        </StyledControlButton>
+        <StyledControlButton
           onClick={actions.shareCurrentMix}
           disabled={!state.currentKey}
           title="Copy share link to clipboard"

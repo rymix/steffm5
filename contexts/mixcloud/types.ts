@@ -38,6 +38,7 @@ export type MixcloudState = {
   duration: number;
   position: number;
   volume: number;
+  previousVolume: number;
   keys: string[];
   mixData: Mix[];
   isLoadingMixes: boolean;
@@ -59,6 +60,7 @@ export type MixcloudActions = {
   goToTrack: (_index: number, _fromSavedPosition?: boolean) => void;
   seek: (_position: number) => void;
   setVolume: (_volume: number) => void;
+  toggleMute: () => void;
   setKeys: (_keys: string[]) => void;
   setAutoPlay: (_autoPlay: boolean) => void;
   loadMixes: (_filters?: MixcloudFilters) => Promise<void>;

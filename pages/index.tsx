@@ -12,9 +12,13 @@ import ProgressBar from "@/components/ProgressBar";
 import TrackList from "@/components/TrackList";
 import VolumeControl from "@/components/VolumeControl";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
+import useKeyboardControls from "hooks/useKeyboardControls";
 
 const HomePage: React.FC = () => {
   const router = useRouter();
+
+  // Enable keyboard controls
+  useKeyboardControls({ enabled: true });
 
   useEffect(() => {
     // Clean up URL if it has a mix query parameter

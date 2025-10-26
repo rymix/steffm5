@@ -53,6 +53,7 @@ const useMixcloudContextState = (
     duration: 0,
     position: 0,
     volume: 0.8,
+    previousVolume: 0.8,
     keys: initialKeys.length > 0 ? initialKeys : [], // Start empty if no initial keys
     mixData: [],
     isLoadingMixes: initialKeys.length === 0, // Show loading if starting empty
@@ -367,10 +368,32 @@ const useMixcloudContextState = (
 
   const setVolume = useCallback((volume: number) => {
     const clampedVolume = Math.max(0, Math.min(1, volume));
-    setState((prev) => ({ ...prev, volume: clampedVolume }));
+    setState((prev) => ({
+      ...prev,
+      previousVolume: prev.volume > 0 ? prev.volume : prev.previousVolume,
+      volume: clampedVolume,
+    }));
     if (widgetRef.current) {
       widgetRef.current.setVolume(clampedVolume);
     }
+  }, []);
+
+  const toggleMute = useCallback(() => {
+    setState((prev) => {
+      const newVolume = prev.volume === 0 ? prev.previousVolume : 0;
+      const newPreviousVolume =
+        prev.volume > 0 ? prev.volume : prev.previousVolume;
+
+      if (widgetRef.current) {
+        widgetRef.current.setVolume(newVolume);
+      }
+
+      return {
+        ...prev,
+        volume: newVolume,
+        previousVolume: newPreviousVolume,
+      };
+    });
   }, []);
 
   const setKeys = useCallback((keys: string[]) => {
@@ -824,6 +847,7 @@ const useMixcloudContextState = (
       goToTrack,
       seek,
       setVolume,
+      toggleMute,
       setKeys,
       setAutoPlay,
       loadMixes,
@@ -852,6 +876,7 @@ const useMixcloudContextState = (
       goToTrack,
       seek,
       setVolume,
+      toggleMute,
       setKeys,
       setAutoPlay,
       loadMixes,

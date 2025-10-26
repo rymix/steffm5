@@ -27,7 +27,7 @@ export const StyledTickerViewport = styled.div`
   align-items: center;
   height: 100%;
   padding: 0 8px;
-  font-family: "Courier New", "Monaco", "Lucida Console", monospace;
+  font-family: "Courier New", Monaco, "Lucida Console", monospace;
   font-size: 20px;
   font-weight: bold;
   line-height: 1;
