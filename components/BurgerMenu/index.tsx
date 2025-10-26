@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import HelloWorldModal from "components/HelloWorldModal";
 import SecondModal from "components/SecondModal";
 
+import MixList from "../MixList";
 import {
   StyledBurgerButton,
   StyledBurgerLine,
@@ -156,8 +157,17 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
 
             <StyledMenuSection>
               <h3>Music</h3>
-              <StyledMenuItem onClick={() => console.log("Playlists clicked")}>
-                🎵 Playlists
+              <StyledMenuItem
+                onClick={() =>
+                  handleModalDemo(
+                    "second-modal-menu",
+                    "Second Modal (from Menu)",
+                    <MixList />,
+                    null,
+                  )
+                }
+              >
+                🎵 Mix List
               </StyledMenuItem>
               <StyledMenuItem onClick={() => console.log("Browse clicked")}>
                 🔍 Browse

@@ -7,7 +7,6 @@ import Controls from "@/components/Controls";
 import CurrentMixInfo from "@/components/CurrentMixInfo";
 import FilterStatus from "@/components/FilterStatus";
 import MixFilter from "@/components/MixFilter";
-import MixList from "@/components/MixList";
 import MusicTicker from "@/components/MusicTicker";
 import ProgressBar from "@/components/ProgressBar";
 import TrackList from "@/components/TrackList";
@@ -53,7 +52,6 @@ const HomePage: React.FC = () => {
         <FilterStatus />
         <CurrentMixInfo />
         <TrackList />
-        <MixList />
       </div>
     </>
   );

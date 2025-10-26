@@ -35,7 +35,7 @@ type MixItemState = {
   tracks: Track[];
 };
 
-const MixcloudPlayerMixList: React.FC = () => {
+const MixList: React.FC = () => {
   const { state, actions } = useMixcloud();
   const [mixStates, setMixStates] = useState<Record<string, MixItemState>>({});
 
@@ -141,7 +141,7 @@ const MixcloudPlayerMixList: React.FC = () => {
   if (state.isLoadingMixes) {
     return (
       <StyledMixList>
-        <h4>Playlist:</h4>
+        <h4>Mix List</h4>
         <div>Loading mixes...</div>
       </StyledMixList>
     );
@@ -151,7 +151,7 @@ const MixcloudPlayerMixList: React.FC = () => {
   if (!state.keys || state.keys.length === 0) {
     return (
       <StyledMixList>
-        <h4>Playlist:</h4>
+        <h4>Mix List</h4>
         <div>No mixes available</div>
       </StyledMixList>
     );
@@ -159,7 +159,7 @@ const MixcloudPlayerMixList: React.FC = () => {
 
   return (
     <StyledMixList>
-      <h4>Playlist:</h4>
+      <h4>Mix List</h4>
       <ul>
         {state.keys.map((key, index) => {
           const progress = actions?.getMixProgress?.(key) || {
@@ -352,4 +352,4 @@ const MixcloudPlayerMixList: React.FC = () => {
   );
 };
 
-export default MixcloudPlayerMixList;
+export default MixList;
