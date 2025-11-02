@@ -2,6 +2,13 @@ import styled from "styled-components";
 
 export const StyledVolumeControl = styled.div`
   margin-bottom: 20px;
+  max-width: 250px;
+`;
+
+export const StyledVolumeControlContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 
 export const StyledVolumeControlLabel = styled.label`
@@ -12,8 +19,21 @@ export const StyledVolumeControlLabel = styled.label`
   margin-bottom: 8px;
 `;
 
+export const StyledVolumeIcon = styled.span`
+  font-size: 18px;
+  cursor: pointer;
+  user-select: none;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+`;
+
 export const StyledVolumeControlSlider = styled.input`
-  width: 100%;
+  flex: 1;
   height: 6px;
   border-radius: 3px;
   background: #f0f0f0;
