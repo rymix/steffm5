@@ -9,6 +9,7 @@ import {
   StyledCurrentMixStatus,
   StyledDetailRow,
   StyledHoverControls,
+  StyledLoadingText,
   StyledMixDetails,
   StyledMixHeader,
   StyledMixList,
@@ -210,8 +211,11 @@ const MixList: React.FC = () => {
                   <StyledControlsContainer>
                     {/* Control buttons - only show on hover */}
                     <StyledHoverControls>
-                      {/* Only show Play button if this mix is not currently playing */}
-                      {!(index === state.currentIndex && state.isPlaying) && (
+                      {/* Only show Play button if this mix is not currently playing or loading */}
+                      {!(
+                        index === state.currentIndex &&
+                        (state.isPlaying || state.isLoading)
+                      ) && (
                         <StyledControlButton
                           $variant="play"
                           onClick={() => actions?.goToTrack?.(index)}
@@ -220,15 +224,19 @@ const MixList: React.FC = () => {
                           Play
                         </StyledControlButton>
                       )}
-                      {progress.status === "in_progress" && (
-                        <StyledControlButton
-                          $variant="resume"
-                          onClick={() => actions?.goToTrack?.(index, true)}
-                          title="Resume from saved position"
-                        >
-                          Resume
-                        </StyledControlButton>
-                      )}
+                      {progress.status === "in_progress" &&
+                        !(
+                          index === state.currentIndex &&
+                          (state.isPlaying || state.isLoading)
+                        ) && (
+                          <StyledControlButton
+                            $variant="resume"
+                            onClick={() => actions?.goToTrack?.(index, true)}
+                            title="Resume from saved position"
+                          >
+                            Resume
+                          </StyledControlButton>
+                        )}
                       {progress.status !== "unplayed" && (
                         <StyledControlButton
                           $variant="restart"
@@ -252,7 +260,10 @@ const MixList: React.FC = () => {
                             Pause
                           </StyledControlButton>
                         )}
-                        {!state.isPlaying && (
+                        {!state.isPlaying && state.isLoading && (
+                          <StyledLoadingText>Loading...</StyledLoadingText>
+                        )}
+                        {!state.isPlaying && !state.isLoading && (
                           <StyledPausedText>Paused</StyledPausedText>
                         )}
                       </StyledCurrentMixStatus>

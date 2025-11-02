@@ -235,6 +235,12 @@ export const StyledPausedText = styled.span`
   color: #666;
 `;
 
+export const StyledLoadingText = styled.span`
+  font-size: 12px;
+  color: #007bff;
+  font-weight: 500;
+`;
+
 export const StyledToggleIcon = styled.span`
   font-size: 16px;
   cursor: pointer;
