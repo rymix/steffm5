@@ -14,9 +14,9 @@ export const StyledModal = styled.div<StyledModalProps>`
   background: white;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-  max-width: 90vw;
+  max-width: 95vw;
   max-height: 90vh;
-  width: 600px;
+  width: 800px;
   display: flex;
   flex-direction: column;
   overflow: hidden;

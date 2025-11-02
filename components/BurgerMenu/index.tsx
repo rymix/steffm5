@@ -3,9 +3,9 @@ import { useOverlay } from "contexts/overlay";
 import React, { useEffect, useRef, useState } from "react";
 
 import HelloWorldModal from "components/HelloWorldModal";
+import MixListPage from "components/MixListPage";
 import SecondModal from "components/SecondModal";
 
-import MixList from "../MixList";
 import {
   StyledBurgerButton,
   StyledBurgerLine,
@@ -160,10 +160,10 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
               <StyledMenuItem
                 onClick={() =>
                   handleModalDemo(
-                    "second-modal-menu",
-                    "Second Modal (from Menu)",
-                    <MixList />,
-                    null,
+                    "mix-list-modal",
+                    "Mix Library",
+                    <MixListPage />,
+                    undefined,
                   )
                 }
               >

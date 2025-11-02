@@ -9,7 +9,6 @@ import {
   StyledCurrentMixStatus,
   StyledDetailRow,
   StyledHoverControls,
-  StyledLoadTracksButton,
   StyledMixDetails,
   StyledMixHeader,
   StyledMixList,
@@ -53,69 +52,68 @@ const MixList: React.FC = () => {
     [state.mixData],
   );
 
-  const toggleExpanded = useCallback((key: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setMixStates((prev) => ({
-      ...prev,
-      [key]: {
-        ...prev[key],
-        expanded: !prev[key]?.expanded,
-        tracksLoaded: prev[key]?.tracksLoaded || false,
-        loadingTracks: false,
-        tracks: prev[key]?.tracks || [],
-      },
-    }));
-  }, []);
+  const toggleExpanded = useCallback(
+    async (key: string, e: React.MouseEvent) => {
+      e.stopPropagation();
+      const currentState = mixStates[key];
+      const willBeExpanded = !currentState?.expanded;
 
-  const loadTracks = useCallback(async (key: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    setMixStates((prev) => ({
-      ...prev,
-      [key]: {
-        ...prev[key],
-        expanded: prev[key]?.expanded || false,
-        tracksLoaded: false,
-        loadingTracks: true,
-        tracks: prev[key]?.tracks || [],
-      },
-    }));
-
-    try {
-      // Remove the /rymixxx/ prefix and trailing / for API call
-      const originalKey = key.replace(/^\/rymixxx\/|\/$/g, "");
-      const response = await fetch(
-        `/api/tracks/${encodeURIComponent(originalKey)}`,
-      );
-      if (response.ok) {
-        const tracks: Track[] = await response.json();
-        setMixStates((prev) => ({
-          ...prev,
-          [key]: {
-            ...prev[key],
-            expanded: prev[key]?.expanded || false,
-            tracksLoaded: true,
-            loadingTracks: false,
-            tracks,
-          },
-        }));
-      } else {
-        throw new Error("Failed to load tracks");
-      }
-    } catch (error) {
-      console.error("Error loading tracks:", error);
       setMixStates((prev) => ({
         ...prev,
         [key]: {
           ...prev[key],
-          expanded: prev[key]?.expanded || false,
-          tracksLoaded: false,
-          loadingTracks: false,
+          expanded: willBeExpanded,
+          tracksLoaded: prev[key]?.tracksLoaded || false,
+          loadingTracks:
+            willBeExpanded && !prev[key]?.tracksLoaded ? true : false,
           tracks: prev[key]?.tracks || [],
         },
       }));
-    }
-  }, []);
+
+      // Auto-load tracks when expanding if they haven't been loaded yet
+      if (
+        willBeExpanded &&
+        !currentState?.tracksLoaded &&
+        !currentState?.loadingTracks
+      ) {
+        try {
+          // Remove the /rymixxx/ prefix and trailing / for API call
+          const originalKey = key.replace(/^\/rymixxx\/|\/$/g, "");
+          const response = await fetch(
+            `/api/tracks/${encodeURIComponent(originalKey)}`,
+          );
+          if (response.ok) {
+            const tracks: Track[] = await response.json();
+            setMixStates((prev) => ({
+              ...prev,
+              [key]: {
+                ...prev[key],
+                expanded: true,
+                tracksLoaded: true,
+                loadingTracks: false,
+                tracks,
+              },
+            }));
+          } else {
+            throw new Error("Failed to load tracks");
+          }
+        } catch (error) {
+          console.error("Error loading tracks:", error);
+          setMixStates((prev) => ({
+            ...prev,
+            [key]: {
+              ...prev[key],
+              expanded: true,
+              tracksLoaded: false,
+              loadingTracks: false,
+              tracks: prev[key]?.tracks || [],
+            },
+          }));
+        }
+      }
+    },
+    [mixStates],
+  );
 
   const formatDate = useCallback((dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -303,14 +301,6 @@ const MixList: React.FC = () => {
                   )}
 
                   <div style={{ marginTop: "12px" }}>
-                    {!mixState?.tracksLoaded && !mixState?.loadingTracks && (
-                      <StyledLoadTracksButton
-                        onClick={(e: React.MouseEvent) => loadTracks(key, e)}
-                      >
-                        Load Track Details
-                      </StyledLoadTracksButton>
-                    )}
-
                     {mixState?.loadingTracks && (
                       <div style={{ fontSize: "12px", color: "#666" }}>
                         Loading tracks...
@@ -340,6 +330,18 @@ const MixList: React.FC = () => {
                           </StyledTrackItem>
                         ))}
                       </StyledTrackList>
+                    )}
+
+                    {!mixState?.tracksLoaded && !mixState?.loadingTracks && (
+                      <div
+                        style={{
+                          fontSize: "12px",
+                          color: "#888",
+                          fontStyle: "italic",
+                        }}
+                      >
+                        Track details will load automatically
+                      </div>
                     )}
                   </div>
                 </StyledMixDetails>

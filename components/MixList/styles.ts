@@ -10,6 +10,7 @@ export const StyledMixList = styled.div`
   ul {
     list-style: none;
     padding: 0;
+    margin: 0;
   }
 `;
 
