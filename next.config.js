@@ -5,20 +5,35 @@ const nextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: path.join(__dirname, "../../"),
   output: "standalone",
+  // Enable HMR and fast refresh
+  experimental: {
+    // Ensure fast refresh is enabled
+    optimizePackageImports: ["styled-components"],
+  },
   compiler: {
     styledComponents: {
       displayName: process.env.NODE_ENV !== "production",
       fileName: process.env.NODE_ENV !== "production",
       minify: process.env.NODE_ENV === "production",
-      transpileTemplateLiterals: true,
-      pure: true,
+      transpileTemplateLiterals: false, // Set to false for better HMR support
+      pure: false, // Set to false for better HMR support
+      ssr: true,
     },
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
     if (!isServer) {
       config.resolve.fallback = {
         crypto: false,
         stream: false,
+      };
+    }
+
+    // Improve HMR and file watching in development
+    if (dev) {
+      config.watchOptions = {
+        poll: 1000, // Check for changes every second
+        aggregateTimeout: 300,
+        ignored: ["**/node_modules/**", "**/.git/**", "**/.next/**"],
       };
     }
 
