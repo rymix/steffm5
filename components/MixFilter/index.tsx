@@ -1,5 +1,5 @@
 import { useMixcloud } from "contexts/mixcloud";
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   StyledMixFilter,
@@ -7,18 +7,95 @@ import {
   StyledMixFilterFormButton,
   StyledMixFilterFormButtons,
   StyledMixFilterFormElements,
+  StyledTagContainer,
+  StyledTagLozenge,
 } from "./styles";
 
 const MixFilter: React.FC = () => {
   const { state, actions } = useMixcloud();
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [availableTags, setAvailableTags] = useState<string[]>([]);
+  const [selectedTag, setSelectedTag] = useState<string>("");
+  const [showTags, setShowTags] = useState(false);
 
-  const handleFilterChange = (key: string, value: string) => {
-    actions.updateFilter(key, value);
+  // Load available tags on component mount
+  useEffect(() => {
+    const loadTags = async () => {
+      try {
+        const response = await fetch("/api/tags");
+        if (response.ok) {
+          const tags = await response.json();
+          setAvailableTags(tags);
+        }
+      } catch (error) {
+        console.error("Failed to load tags:", error);
+      }
+    };
+    loadTags();
+  }, []);
+
+  // Update selected tag when filter state changes
+  useEffect(() => {
+    const tagsString = state.filters.tags || "";
+    setSelectedTag(tagsString);
+  }, [state.filters.tags]);
+
+  // Apply filters with cleaned values
+  const applyFilters = useCallback(() => {
+    const filtersWithTags = {
+      ...state.filters,
+      tags: selectedTag,
+    };
+    const cleanFilters = Object.fromEntries(
+      Object.entries(filtersWithTags).filter(
+        ([_, value]) => value?.trim() !== "",
+      ),
+    );
+    actions.applyFilters(cleanFilters);
+  }, [state.filters, selectedTag, actions]);
+
+  // Debounced apply for text inputs
+  const debouncedApplyFilters = useCallback(() => {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+    debounceTimeoutRef.current = setTimeout(() => {
+      applyFilters();
+    }, 300); // 300ms delay for live search
+  }, [applyFilters]);
+
+  // Handle category change (immediate application)
+  const handleCategoryChange = (value: string) => {
+    actions.updateFilter("category", value);
+    // Apply filters immediately for dropdown
+    setTimeout(() => {
+      const cleanFilters = Object.fromEntries(
+        Object.entries({ ...state.filters, category: value }).filter(
+          ([_, filterValue]) => filterValue?.trim() !== "",
+        ),
+      );
+      actions.applyFilters(cleanFilters);
+    }, 0);
   };
 
-  const handleApplyFilters = () => {
+  // Handle text input change (debounced application)
+  const handleTextInputChange = (key: string, value: string) => {
+    actions.updateFilter(key, value);
+    debouncedApplyFilters();
+  };
+
+  // Handle tag selection (single selection)
+  const handleTagSelect = (tag: string) => {
+    const newSelectedTag = selectedTag === tag ? "" : tag;
+    setSelectedTag(newSelectedTag);
+
+    // Apply filters immediately for tag selection
+    const filtersWithTags = {
+      ...state.filters,
+      tags: newSelectedTag,
+    };
     const cleanFilters = Object.fromEntries(
-      Object.entries(state.filters).filter(
+      Object.entries(filtersWithTags).filter(
         ([_, value]) => value?.trim() !== "",
       ),
     );
@@ -26,25 +103,35 @@ const MixFilter: React.FC = () => {
   };
 
   const handleClearFilters = () => {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+    setSelectedTag("");
     actions.clearFilters();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleApplyFilters();
-  };
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <StyledMixFilter>
-      <h3>Filter Mixes</h3>
+      <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#495057" }}>
+        Filter Mixes
+      </h4>
 
-      <StyledMixFilterForm onSubmit={handleSubmit}>
+      <StyledMixFilterForm>
         <StyledMixFilterFormElements>
           <div>
             <label>Category:</label>
             <select
               value={state.filters.category || ""}
-              onChange={(e) => handleFilterChange("category", e.target.value)}
+              onChange={(e) => handleCategoryChange(e.target.value)}
             >
               <option value="">All</option>
               <option value="aidm">Adventures in Decent Music</option>
@@ -60,30 +147,56 @@ const MixFilter: React.FC = () => {
             <input
               type="text"
               value={state.filters.name || ""}
-              onChange={(e) => handleFilterChange("name", e.target.value)}
-              placeholder="Search by name..."
+              onChange={(e) => handleTextInputChange("name", e.target.value)}
+              placeholder="Search by name (live search)..."
             />
           </div>
 
-          <div>
-            <label>Tags:</label>
-            <input
-              type="text"
-              value={state.filters.tags || ""}
-              onChange={(e) => handleFilterChange("tags", e.target.value)}
-              placeholder="Search by tag..."
-            />
+          <div style={{ flex: "1 1 100%" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <label>Tags:</label>
+              <button
+                type="button"
+                onClick={() => setShowTags(!showTags)}
+                style={{
+                  background: "none",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  padding: "2px 8px",
+                  fontSize: "11px",
+                  cursor: "pointer",
+                }}
+              >
+                {showTags ? "Hide" : "Show"}
+              </button>
+              {selectedTag && (
+                <span
+                  style={{
+                    fontSize: "12px",
+                    color: "#007bff",
+                    fontWeight: "bold",
+                  }}
+                ></span>
+              )}
+            </div>
+            {showTags && (
+              <StyledTagContainer>
+                {availableTags.map((tag) => (
+                  <StyledTagLozenge
+                    key={tag}
+                    type="button"
+                    $isSelected={selectedTag === tag}
+                    onClick={() => handleTagSelect(tag)}
+                  >
+                    {tag}
+                  </StyledTagLozenge>
+                ))}
+              </StyledTagContainer>
+            )}
           </div>
         </StyledMixFilterFormElements>
 
         <StyledMixFilterFormButtons>
-          <StyledMixFilterFormButton
-            type="submit"
-            disabled={state.isLoadingMixes}
-          >
-            {state.isLoadingMixes ? "Applying..." : "Apply Filters"}
-          </StyledMixFilterFormButton>
-
           <StyledMixFilterFormButton
             type="button"
             onClick={handleClearFilters}

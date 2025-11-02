@@ -15,7 +15,6 @@ const MixListPage: React.FC = () => {
   return (
     <StyledMixListPage>
       <StyledMixListPageHeader>
-        <h2>Mix Library</h2>
         <p>Browse and explore your music collection</p>
       </StyledMixListPageHeader>
 
