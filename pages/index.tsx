@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import BurgerMenu from "@/components/BurgerMenu";
 import Controls from "@/components/Controls";
 import CurrentMixInfo from "@/components/CurrentMixInfo";
+import FilterStatusWidget from "@/components/FilterStatusWidget";
 import MusicTicker from "@/components/MusicTicker";
 import ProgressBar from "@/components/ProgressBar";
 import TrackList from "@/components/TrackList";
@@ -46,6 +47,7 @@ const HomePage: React.FC = () => {
         <Controls />
         <ProgressBar />
         <VolumeControl />
+        <FilterStatusWidget />
         <CurrentMixInfo />
         <TrackList />
       </div>

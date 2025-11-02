@@ -478,18 +478,6 @@ const useMixcloudContextState = (
     [loadMixes],
   );
 
-  const clearFilters = useCallback(async () => {
-    setState((prev) => ({
-      ...prev,
-      filters: {
-        category: "",
-        name: "",
-        tags: "",
-      },
-    }));
-    await loadMixes({});
-  }, [loadMixes]);
-
   const setFilters = useCallback((filters: MixcloudFilters) => {
     setState((prev) => ({ ...prev, filters }));
   }, []);
@@ -602,6 +590,64 @@ const useMixcloudContextState = (
     },
     [],
   );
+
+  const clearFilters = useCallback(async () => {
+    setState((prev) => ({ ...prev, isLoadingMixes: true, error: null }));
+
+    try {
+      // Reset the filter state
+      setState((prev) => ({
+        ...prev,
+        filters: {
+          category: "",
+          name: "",
+          tags: "",
+        },
+      }));
+
+      // Load all mixes without filters
+      const response = await fetch("/api/mixes");
+
+      if (!response.ok) {
+        throw new Error(`Failed to load mixes: ${response.statusText}`);
+      }
+
+      const mixes: Mix[] = await response.json();
+      const sortedMixes = sortMixes(mixes);
+      const keys = sortedMixes.map((mix) => mcKeyFormatter(mix.mixcloudKey));
+
+      setState((prev) => {
+        const currentKey = prev.currentKey;
+        let newCurrentIndex = prev.currentIndex;
+
+        // Find the current playing mix in the new unfiltered list
+        if (currentKey) {
+          const foundIndex = keys.findIndex((key) => key === currentKey);
+          if (foundIndex !== -1) {
+            newCurrentIndex = foundIndex;
+          }
+        }
+
+        return {
+          ...prev,
+          keys,
+          mixData: sortedMixes,
+          currentFilters: {},
+          isLoadingMixes: false,
+          error: null,
+          currentIndex: newCurrentIndex,
+          // CRITICAL: Do NOT update currentKey - this prevents widget reload
+        };
+      });
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        isLoadingMixes: false,
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      }));
+    }
+  }, [sortMixes]);
 
   const loadMixesWithRandomStart = useCallback(
     async (filters: MixcloudFilters = {}) => {

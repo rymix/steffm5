@@ -2,9 +2,7 @@ import { useModal } from "contexts/modal";
 import { useOverlay } from "contexts/overlay";
 import React, { useEffect, useRef, useState } from "react";
 
-import HelloWorldModal from "components/HelloWorldModal";
 import MixListPage from "components/MixListPage";
-import SecondModal from "components/SecondModal";
 
 import {
   StyledBurgerButton,
@@ -128,34 +126,6 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
             </StyledMenuSection>
 
             <StyledMenuSection>
-              <h3>Modal Demos</h3>
-              <StyledMenuItem
-                onClick={() =>
-                  handleModalDemo(
-                    "hello-world-menu",
-                    "Hello World (from Menu)",
-                    <HelloWorldModal />,
-                    8000,
-                  )
-                }
-              >
-                👋 Hello World Modal
-              </StyledMenuItem>
-              <StyledMenuItem
-                onClick={() =>
-                  handleModalDemo(
-                    "second-modal-menu",
-                    "Second Modal (from Menu)",
-                    <SecondModal />,
-                    12000,
-                  )
-                }
-              >
-                🎯 Second Modal Demo
-              </StyledMenuItem>
-            </StyledMenuSection>
-
-            <StyledMenuSection>
               <h3>Music</h3>
               <StyledMenuItem
                 onClick={() =>
@@ -174,16 +144,6 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
               </StyledMenuItem>
               <StyledMenuItem onClick={() => console.log("Favorites clicked")}>
                 ❤️ Favorites
-              </StyledMenuItem>
-            </StyledMenuSection>
-
-            <StyledMenuSection>
-              <h3>Help</h3>
-              <StyledMenuItem onClick={() => console.log("Support clicked")}>
-                💬 Support
-              </StyledMenuItem>
-              <StyledMenuItem onClick={() => console.log("Feedback clicked")}>
-                📝 Feedback
               </StyledMenuItem>
             </StyledMenuSection>
           </StyledMenuContent>
