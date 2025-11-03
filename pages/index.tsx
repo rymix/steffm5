@@ -6,7 +6,6 @@ import BurgerMenu from "@/components/BurgerMenu";
 import Controls from "@/components/Controls";
 import CurrentMixInfo from "@/components/CurrentMixInfo";
 import FilterStatusWidget from "@/components/FilterStatusWidget";
-import MusicTicker from "@/components/MusicTicker";
 import ProgressBar from "@/components/ProgressBar";
 import TrackList from "@/components/TrackList";
 import VolumeControl from "@/components/VolumeControl";
@@ -42,7 +41,6 @@ const HomePage: React.FC = () => {
       <BurgerMenu />
       <div className="container">
         <h1>Stef.FM</h1>
-        <MusicTicker width="100%" height="50px" speed={5} />
         <MixcloudPlayerWrapper autoPlay={true} />
         <Controls />
         <ProgressBar />

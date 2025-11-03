@@ -6,7 +6,6 @@ import type { Track } from "db/types";
 import {
   StyledTrackList,
   StyledTrackListContainer,
-  StyledTrackListHeader,
   StyledTrackListItem,
   StyledTrackListItemArtist,
   StyledTrackListItemContent,
@@ -113,11 +112,6 @@ const TrackList: React.FC = () => {
 
   return (
     <StyledTrackList>
-      <StyledTrackListHeader>
-        Tracks ({trackStatuses.length}) - Position: {Math.floor(state.position)}
-        s / Duration: {Math.floor(state.duration)}s
-      </StyledTrackListHeader>
-
       <StyledTrackListContainer>
         {trackStatuses.map(({ track, status, trackIndex }) => {
           return (

@@ -4,7 +4,6 @@ import React from "react";
 import {
   StyledVolumeControl,
   StyledVolumeControlContainer,
-  StyledVolumeControlLabel,
   StyledVolumeControlSlider,
   StyledVolumeIcon,
 } from "./styles";
@@ -21,9 +20,6 @@ const VolumeControl: React.FC = () => {
 
   return (
     <StyledVolumeControl>
-      <StyledVolumeControlLabel>
-        Volume: {Math.round(state.volume * 100)}%
-      </StyledVolumeControlLabel>
       <StyledVolumeControlContainer>
         <StyledVolumeIcon
           onClick={actions.toggleMute}

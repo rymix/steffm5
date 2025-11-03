@@ -37,7 +37,7 @@ const ProgressBar: React.FC = () => {
   return (
     <StyledProgressBar>
       <StyledProgressBarLabel>
-        Progress: {formatTime(state.position)} / {formatTime(state.duration)}
+        {formatTime(state.position)} / {formatTime(state.duration)}
       </StyledProgressBarLabel>
       <StyledProgressBarTrack onClick={handleProgressClick}>
         <StyledProgressBarFill $progress={progress} />
