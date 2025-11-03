@@ -10,7 +10,7 @@ import TrackList from "@/components/TrackList";
 import VolumeControl from "@/components/VolumeControl";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 
-import { StyledHeaderRow, StyledMiniPlayerToggle } from "./styles";
+import { StyledMiniPlayerToggle } from "./styles";
 
 const HomePage: React.FC = () => {
   const [showMiniPlayer, setShowMiniPlayer] = useState(false);
@@ -20,16 +20,14 @@ const HomePage: React.FC = () => {
       <BurgerMenu />
       <div className="container">
         <h1>Stef.FM</h1>
-        <StyledHeaderRow>
-          <FilterStatusWidget />
-          <StyledMiniPlayerToggle
-            onClick={() => setShowMiniPlayer(!showMiniPlayer)}
-            $isActive={showMiniPlayer}
-            title="Toggle Mini Player"
-          >
-            {showMiniPlayer ? "🎵 Hide Mini Player" : "🎵 Show Mini Player"}
-          </StyledMiniPlayerToggle>
-        </StyledHeaderRow>
+        <FilterStatusWidget />
+        <StyledMiniPlayerToggle
+          onClick={() => setShowMiniPlayer(!showMiniPlayer)}
+          $isActive={showMiniPlayer}
+          title="Toggle Mini Player"
+        >
+          {showMiniPlayer ? "🎵 Hide Mini Player" : "🎵 Show Mini Player"}
+        </StyledMiniPlayerToggle>
         <MixcloudPlayerWrapper autoPlay={true} />
         <Controls />
         <ProgressBar />
