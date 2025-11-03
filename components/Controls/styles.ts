@@ -5,6 +5,7 @@ export const StyledControls = styled.div`
   gap: 12px;
   margin-bottom: 20px;
   flex-wrap: wrap;
+  position: relative;
 `;
 
 export const StyledControlButton = styled.button<{
@@ -18,6 +19,7 @@ export const StyledControlButton = styled.button<{
   cursor: pointer;
   transition: all 0.2s ease;
   min-width: 80px;
+  position: relative;
 
   &:disabled {
     opacity: 0.5;
@@ -71,25 +73,56 @@ export const StyledControlButton = styled.button<{
   }}
 `;
 
-export const StyledShareMessage = styled.div<{
-  $isError?: boolean;
+export const StyledShareTooltip = styled.div<{
+  $show: boolean;
 }>`
+  position: absolute;
+  top: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
   padding: 8px 12px;
-  border-radius: 4px;
-  margin-bottom: 20px;
-  font-size: 14px;
-  border: 1px solid;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1000;
 
-  ${({ $isError }) =>
-    $isError
-      ? `
-        background-color: #ffcdd2;
-        color: #d32f2f;
-        border-color: #f44336;
-      `
-      : `
-        background-color: #c8e6c9;
-        color: #2e7d32;
-        border-color: #4caf50;
-      `}
+  opacity: ${({ $show }) => ($show ? 1 : 0)};
+  visibility: ${({ $show }) => ($show ? "visible" : "hidden")};
+  transform: translateX(-50%)
+    translateY(${({ $show }) => ($show ? "0px" : "-10px")});
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #333;
+  }
+
+  ${({ $show }) =>
+    $show &&
+    `
+    animation: fadeUpOut 2s ease-in-out forwards;
+  `}
+
+  @keyframes fadeUpOut {
+    0% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0px);
+    }
+    70% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-10px);
+    }
+  }
 `;

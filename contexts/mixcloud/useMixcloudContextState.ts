@@ -64,7 +64,6 @@ const useMixcloudContextState = (
       name: "",
       tags: "",
     },
-    shareMessage: null,
     mixProgress,
     pendingSeekPosition: null,
     shuffleMode: false,
@@ -764,25 +763,11 @@ const useMixcloudContextState = (
       navigator.clipboard
         .writeText(shareUrl)
         .then(() => {
-          setState((prev) => ({
-            ...prev,
-            shareMessage: "Share URL copied to clipboard!",
-          }));
-          // Clear message after 3 seconds
-          setTimeout(() => {
-            setState((prev) => ({ ...prev, shareMessage: null }));
-          }, 3000);
+          // Success - tooltip will be handled in the UI component
         })
         .catch((err) => {
           console.error("Failed to copy to clipboard:", err);
-          setState((prev) => ({
-            ...prev,
-            shareMessage: "Failed to copy. URL: " + shareUrl,
-          }));
-          // Clear message after 5 seconds for error
-          setTimeout(() => {
-            setState((prev) => ({ ...prev, shareMessage: null }));
-          }, 5000);
+          // Could potentially emit an error event here if needed
         });
     }
   }, [state.currentKey]);

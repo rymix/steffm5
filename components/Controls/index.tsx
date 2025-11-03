@@ -1,14 +1,22 @@
 import { useMixcloud } from "contexts/mixcloud";
-import React from "react";
+import React, { useRef, useState } from "react";
 
 import {
   StyledControlButton,
   StyledControls,
-  StyledShareMessage,
+  StyledShareTooltip,
 } from "./styles";
 
 const Controls: React.FC = () => {
   const { state, actions } = useMixcloud();
+  const [showTooltip, setShowTooltip] = useState(false);
+  const shareButtonRef = useRef<HTMLButtonElement>(null);
+
+  const handleShare = () => {
+    actions.shareCurrentMix();
+    setShowTooltip(true);
+    setTimeout(() => setShowTooltip(false), 2000);
+  };
 
   return (
     <>
@@ -50,20 +58,18 @@ const Controls: React.FC = () => {
           Shuffle: {state.shuffleMode ? "ON" : "OFF"}
         </StyledControlButton>
         <StyledControlButton
-          onClick={actions.shareCurrentMix}
+          ref={shareButtonRef}
+          onClick={handleShare}
           disabled={!state.currentKey}
           title="Copy share link to clipboard"
           $variant="share"
         >
           Share
+          <StyledShareTooltip $show={showTooltip}>
+            Share URL copied to clipboard!
+          </StyledShareTooltip>
         </StyledControlButton>
       </StyledControls>
-
-      {state.shareMessage && (
-        <StyledShareMessage $isError={state.shareMessage.includes("Failed")}>
-          {state.shareMessage}
-        </StyledShareMessage>
-      )}
     </>
   );
 };

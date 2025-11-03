@@ -45,7 +45,6 @@ export type MixcloudState = {
   currentFilters: MixcloudFilters;
   error: string | null;
   filters: MixcloudFilters;
-  shareMessage: string | null;
   mixProgress: MixProgressMap;
   pendingSeekPosition: number | null;
   shuffleMode: boolean;
