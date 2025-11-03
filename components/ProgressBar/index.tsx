@@ -28,19 +28,26 @@ const ProgressBar: React.FC = () => {
     actions.seek(Math.max(0, Math.min(state.duration, newPosition)));
   };
 
-  if (state.duration <= 0) {
-    return null;
-  }
-
-  const progress = (state.position / state.duration) * 100;
+  const hasValidDuration = state.duration > 0;
+  const progress = hasValidDuration
+    ? (state.position / state.duration) * 100
+    : 0;
 
   return (
     <StyledProgressBar>
-      <StyledProgressBarLabel>
-        {formatTime(state.position)} / {formatTime(state.duration)}
+      <StyledProgressBarLabel $isPlaceholder={!hasValidDuration}>
+        {hasValidDuration
+          ? `${formatTime(state.position)} / ${formatTime(state.duration)}`
+          : "0:00 / 0:00"}
       </StyledProgressBarLabel>
-      <StyledProgressBarTrack onClick={handleProgressClick}>
-        <StyledProgressBarFill $progress={progress} />
+      <StyledProgressBarTrack
+        onClick={hasValidDuration ? handleProgressClick : undefined}
+        $isPlaceholder={!hasValidDuration}
+      >
+        <StyledProgressBarFill
+          $progress={progress}
+          $isPlaceholder={!hasValidDuration}
+        />
       </StyledProgressBarTrack>
     </StyledProgressBar>
   );

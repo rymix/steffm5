@@ -41,11 +41,11 @@ const HomePage: React.FC = () => {
       <BurgerMenu />
       <div className="container">
         <h1>Stef.FM</h1>
+        <FilterStatusWidget />
         <MixcloudPlayerWrapper autoPlay={true} />
         <Controls />
         <ProgressBar />
         <VolumeControl />
-        <FilterStatusWidget />
         <CurrentMixInfo />
         <TrackList />
       </div>

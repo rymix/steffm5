@@ -68,7 +68,16 @@ const CurrentMixInfo: React.FC = () => {
           </StyledCurrentMixInfoHeader>
 
           <StyledCurrentMixInfoSubtitle>
-            Released: {new Date(currentMix.releaseDate).toLocaleDateString()}
+            Released:{" "}
+            {new Date(currentMix.releaseDate).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </StyledCurrentMixInfoSubtitle>
+
+          <StyledCurrentMixInfoSubtitle>
+            Duration: {formatTime(state.duration)}
           </StyledCurrentMixInfoSubtitle>
 
           {currentMix.notes && (
