@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 
 import MixListPage from "components/MixListPage";
 
+import About from "../ContentPages/About";
+import Statistics from "../ContentPages/Statistics";
 import {
   StyledBurgerButton,
   StyledBurgerLine,
@@ -114,14 +116,29 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
 
             <StyledMenuSection>
               <h3>Navigation</h3>
-              <StyledMenuItem onClick={() => console.log("Home clicked")}>
-                🏠 Home
+              <StyledMenuItem
+                onClick={() =>
+                  handleModalDemo(
+                    "about-modal",
+                    "About Stef.FM",
+                    <About />,
+                    undefined,
+                  )
+                }
+              >
+                ℹ️ About{" "}
               </StyledMenuItem>
-              <StyledMenuItem onClick={() => console.log("About clicked")}>
-                ℹ️ About
-              </StyledMenuItem>
-              <StyledMenuItem onClick={() => console.log("Settings clicked")}>
-                ⚙️ Settings
+              <StyledMenuItem
+                onClick={() =>
+                  handleModalDemo(
+                    "statistics-modal",
+                    "Statistics",
+                    <Statistics />,
+                    undefined,
+                  )
+                }
+              >
+                📊 Satistics{" "}
               </StyledMenuItem>
             </StyledMenuSection>
 
