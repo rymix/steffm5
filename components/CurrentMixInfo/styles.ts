@@ -71,7 +71,7 @@ export const StyledCurrentMixInfoTagContainer = styled.div`
 `;
 
 export const StyledCurrentMixInfoTagBadge = styled.span<{
-  category?: boolean;
+  $category?: boolean;
 }>`
   display: inline-block;
   padding: 4px 8px;
@@ -80,8 +80,8 @@ export const StyledCurrentMixInfoTagBadge = styled.span<{
   border-radius: 12px;
   white-space: nowrap;
 
-  ${({ category }) =>
-    category
+  ${({ $category }) =>
+    $category
       ? `
         background: #007bff;
         color: white;

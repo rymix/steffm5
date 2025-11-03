@@ -37,7 +37,6 @@ const handler = async (
     .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 
   const categories = db.data?.categories || [];
-  console.log("categories", categories);
   const categoryMixCounts = categories.map((category) => ({
     category: category.name,
     count: mixes.filter((mix) => mix.category === category.code).length,

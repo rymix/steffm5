@@ -149,7 +149,6 @@ export const About: React.FC = () => {
             target="_blank"
             onClick={() => {
               // Analytics could be added here if needed
-              console.log("Clicked Dustin Brett YouTube link");
             }}
           >
             YouTube tutorials
@@ -165,7 +164,6 @@ export const About: React.FC = () => {
             target="_blank"
             onClick={() => {
               // Analytics could be added here if needed
-              console.log("Clicked Lewis Hunt link");
             }}
           >
             Mixmotion library for Mixcloud

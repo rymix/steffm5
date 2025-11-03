@@ -61,7 +61,7 @@ const CurrentMixInfo: React.FC = () => {
 
         <StyledCurrentMixInfoDetails>
           <StyledCurrentMixInfoHeader>
-            <StyledCurrentMixInfoTagBadge category>
+            <StyledCurrentMixInfoTagBadge $category>
               {currentMix.category}
             </StyledCurrentMixInfoTagBadge>
             <h3>{currentMix.name}</h3>

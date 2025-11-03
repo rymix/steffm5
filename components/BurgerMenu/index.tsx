@@ -156,10 +156,18 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
               >
                 🎵 Mix List
               </StyledMenuItem>
-              <StyledMenuItem onClick={() => console.log("Browse clicked")}>
+              <StyledMenuItem
+                onClick={() => {
+                  /* TODO: Implement Browse functionality */
+                }}
+              >
                 🔍 Browse
               </StyledMenuItem>
-              <StyledMenuItem onClick={() => console.log("Favorites clicked")}>
+              <StyledMenuItem
+                onClick={() => {
+                  /* TODO: Implement Favorites functionality */
+                }}
+              >
                 ❤️ Favorites
               </StyledMenuItem>
             </StyledMenuSection>
