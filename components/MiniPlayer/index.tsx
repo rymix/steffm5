@@ -1,5 +1,11 @@
 import { useMixcloud } from "contexts/mixcloud";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import {
   StyledCloseButton,
@@ -43,7 +49,56 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({
   const miniPlayerRef = useRef<HTMLDivElement>(null);
 
   const currentMix = actions.getCurrentMix();
-  const currentTrack = currentMix?.tracks?.[0]; // Simplified - you might want to track actual current track
+
+  // Find the currently playing track based on position
+  const currentTrack = useMemo(() => {
+    if (!currentMix?.tracks || state.position <= 0) return null;
+
+    // Convert MM:SS or H:MM:SS format to seconds
+    const timeToSeconds = (timeString: string): number => {
+      const parts = timeString.split(":");
+      if (parts.length === 2) {
+        // MM:SS format
+        return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+      } else if (parts.length === 3) {
+        // H:MM:SS format
+        return (
+          parseInt(parts[0]) * 3600 +
+          parseInt(parts[1]) * 60 +
+          parseInt(parts[2])
+        );
+      }
+      return 0;
+    };
+
+    // Sort tracks by start time
+    const sortedTracks = [...currentMix.tracks].sort((a, b) => {
+      return timeToSeconds(a.startTime) - timeToSeconds(b.startTime);
+    });
+
+    const tolerance = 2; // 2 seconds tolerance
+
+    // Find the currently playing track
+    for (let i = 0; i < sortedTracks.length; i++) {
+      const track = sortedTracks[i];
+      const nextTrack =
+        i < sortedTracks.length - 1 ? sortedTracks[i + 1] : null;
+
+      const trackStartSeconds = timeToSeconds(track.startTime);
+      const nextTrackStartSeconds = nextTrack
+        ? timeToSeconds(nextTrack.startTime)
+        : state.duration;
+
+      if (
+        state.position >= trackStartSeconds - tolerance &&
+        state.position < nextTrackStartSeconds - tolerance
+      ) {
+        return track;
+      }
+    }
+
+    return null;
+  }, [currentMix, state.position, state.duration]);
 
   const formatTime = useCallback((seconds: number) => {
     const mins = Math.floor(seconds / 60);
