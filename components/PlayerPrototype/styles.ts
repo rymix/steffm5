@@ -1,40 +1,277 @@
 import styled from "styled-components";
 
-export const StyledMixListPage = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+export const StyledPlayerPrototype = styled.div`
+  width: 480px;
+  height: 320px;
 `;
 
-export const StyledMixListPageHeader = styled.div`
-  margin-bottom: 12px;
-  flex-shrink: 0;
+export const StyledWoodPanel = styled.div`
+  background-image:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    ),
+    url("/textures/dark-walnut.jpg");
+  background-size: cover;
+  height: 200px;
+  box-shadow:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.2),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.3);
+`;
 
-  h2 {
-    margin: 0 0 4px 0;
-    color: #333;
-    font-size: 1.25rem;
-    font-weight: 600;
+export const StyledHeader = styled.div`
+  height: 12px;
+`;
+
+export const StyledSlats = styled.div`
+  height: 70px;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 45%,
+    rgba(0, 0, 0, 0.8) 45%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  background-size: 100% 10px;
+`;
+
+export const StyledMainPanel = styled.div`
+  height: 130px;
+`;
+
+export const StyledControls = styled.div`
+  height: 120px;
+  background: #c8c8c8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+  box-shadow:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.2);
+`;
+
+export const StyledVolumeDialShadow = styled.div`
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  box-shadow:
+    0 5px 10px rgba(0, 0, 0, 0.5),
+    0 2px 3px rgba(0, 0, 0, 0.3);
+`;
+
+export const StyledVolumeDial = styled.div<{ $rotation?: number }>`
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    #b8b8b8 0%,
+    #9a9a9a 45%,
+    #d0d0d0 50%,
+    #a8a8a8 55%,
+    #8a8a8a 100%
+  );
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(255, 255, 255, 0.4) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at center,
+      #b8b8b8 0%,
+      #9a9a9a 45%,
+      #d0d0d0 50%,
+      #a8a8a8 55%,
+      #8a8a8a 100%
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  transform: rotate(${(props) => props.$rotation || 0}deg);
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.08s ease-out;
+
+  &:active {
+    cursor: grabbing;
   }
 
-  p {
-    margin: 0;
-    color: #666;
-    font-size: 0.85rem;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #8a8a8a 0%, #6a6a6a 50%, #5a5a5a 100%);
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 24px;
+    background: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #e8e8e8 40%,
+      #a0a0a0 90%,
+      transparent 100%
+    );
+    border-radius: 1.5px 1.5px 0 0;
+    box-shadow:
+      0 0 3px rgba(0, 0, 0, 0.8),
+      1px 0 0 rgba(255, 255, 255, 0.5),
+      -1px 0 0 rgba(0, 0, 0, 0.3);
+    z-index: 2;
   }
 `;
 
-export const StyledMixListPageFilters = styled.div`
-  position: sticky;
-  top: -22px;
-  z-index: 10;
-  background: white;
-  border-bottom: 2px solid #e9ecef;
-  margin-bottom: 16px;
-  flex-shrink: 0;
+export const StyledDialMarker = styled.div`
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  background: radial-gradient(
+    circle at 30% 30%,
+    #ffffff 0%,
+    #d0d0d0 40%,
+    #909090 100%
+  );
+  border-radius: 50%;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.7),
+    0 0.5px 0 rgba(255, 255, 255, 0.8),
+    inset 0 0.5px 1px rgba(255, 255, 255, 0.7),
+    inset 0 -0.5px 1px rgba(0, 0, 0, 0.3);
+  border: 0.5px solid rgba(0, 0, 0, 0.3);
+  z-index: 3;
 `;
 
-export const StyledMixListPageContent = styled.div`
+export const StyledVolumeDialWrapper = styled.div`
+  position: relative;
+  width: 84px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const StyledDialTick = styled.div<{ $angle: number }>`
+  position: absolute;
+  width: 2px;
+  height: 7px;
+  background: #2a2a2a;
+  top: 3px;
+  left: 50%;
+  transform-origin: center 39px;
+  transform: translateX(-50%) rotate(${(props) => props.$angle}deg);
+  border-radius: 0.5px;
+  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.5);
+`;
+
+export const StyledModeDial = styled.span`
+  background: green;
+  width: 60px;
+  height: 60px;
+`;
+
+export const StyledButtonsContainer = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+`;
+
+export const StyledButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 3px;
+`;
+
+export const StyledButtonIcon = styled.div`
+  font-size: 12px;
+  color: #2a2a2a;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const StyledButtonLED = styled.div<{ $active?: boolean }>`
+  width: 30px;
+  height: 3px;
+  border-radius: 1px;
+  background: ${(props) => (props.$active ? "#ff3333" : "#3a0000")};
+  box-shadow: ${(props) =>
+    props.$active
+      ? "0 0 8px #ff3333, 0 0 3px #ff0000, inset 0 0.5px 1px rgba(255, 255, 255, 0.6)"
+      : "inset 0 1px 2px rgba(0, 0, 0, 0.9)"};
+  border: 0.5px solid rgba(0, 0, 0, 0.5);
+  transition: all 0.15s ease;
+`;
+
+export const StyledButtonLabel = styled.div`
+  font-size: 7px;
+  font-weight: bold;
+  color: #2a2a2a;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  text-align: center;
+  height: 12px;
+  display: flex;
+  align-items: center;
+`;
+
+export const StyledButton = styled.button<{ $pressed?: boolean }>`
+  position: relative;
+  width: 50px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 1px;
+  background: #959595;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.12'/%3E%3C/svg%3E"),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+  box-shadow: ${(props) =>
+    props.$pressed
+      ? "0 0.5px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 1px 3px rgba(0, 0, 0, 0.3)"
+      : "0 2px 0 rgba(0, 0, 0, 0.4), 0 0.5px 0 rgba(255, 255, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)"};
+  transform: ${(props) =>
+    props.$pressed ? "translateY(1.5px)" : "translateY(0)"};
+  cursor: pointer;
+  outline: 1.5px solid rgba(0, 0, 0, 0.5);
+  outline-offset: 1.5px;
+  transition: all 0.05s ease;
+
+  &:active {
+    box-shadow:
+      0 0.5px 0 rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 1px 3px rgba(0, 0, 0, 0.3);
+    transform: translateY(1.5px);
+  }
 `;
