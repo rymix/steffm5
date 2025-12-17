@@ -70,34 +70,19 @@ export const StyledVolumeDial = styled.div<{ $rotation?: number }>`
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at center,
-    #b8b8b8 0%,
-    #9a9a9a 45%,
-    #d0d0d0 50%,
-    #a8a8a8 55%,
-    #8a8a8a 100%
-  );
+  background: #c8c8c8;
   background-image:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
-    radial-gradient(
-      circle at 30% 30%,
-      rgba(255, 255, 255, 0.4) 0%,
-      transparent 45%
-    ),
-    radial-gradient(
-      circle at center,
-      #b8b8b8 0%,
-      #9a9a9a 45%,
-      #d0d0d0 50%,
-      #a8a8a8 55%,
-      #8a8a8a 100%
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(0, 0, 0, 0.12) 100%
     );
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  transform: rotate(${(props) => props.$rotation || 0}deg);
+    inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  transform: rotate(${(props) => (props.$rotation || 0) + 270}deg);
   cursor: grab;
   user-select: none;
   transition: transform 0.08s ease-out;
@@ -110,59 +95,68 @@ export const StyledVolumeDial = styled.div<{ $rotation?: number }>`
     content: "";
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    height: 80%;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #8a8a8a 0%, #6a6a6a 50%, #5a5a5a 100%);
-    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.5);
+    left: 5%;
+    transform: translateY(-50%);
+    width: 90%;
+    height: 10px;
+    background: #c8c8c8;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(0, 0, 0, 0.1) 100%
+      );
+    box-shadow:
+      0 2px 3px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
 
   &::after {
     content: "";
     position: absolute;
-    bottom: 50%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 3px;
-    height: 24px;
-    background: linear-gradient(
-      180deg,
-      #ffffff 0%,
-      #e8e8e8 40%,
-      #a0a0a0 90%,
-      transparent 100%
+    top: 50%;
+    right: 8%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(
+      circle at 35% 35%,
+      #ff4444 0%,
+      #dd0000 70%,
+      #aa0000 100%
     );
-    border-radius: 1.5px 1.5px 0 0;
+    border-radius: 50%;
     box-shadow:
-      0 0 3px rgba(0, 0, 0, 0.8),
-      1px 0 0 rgba(255, 255, 255, 0.5),
-      -1px 0 0 rgba(0, 0, 0, 0.3);
+      0 0 4px rgba(255, 0, 0, 0.6),
+      0 1px 2px rgba(0, 0, 0, 0.6),
+      inset 0 0.5px 1px rgba(255, 150, 150, 0.8);
     z-index: 2;
   }
 `;
 
 export const StyledDialMarker = styled.div`
   position: absolute;
-  top: 6px;
+  top: 4px;
   left: 50%;
   transform: translateX(-50%);
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   background: radial-gradient(
     circle at 30% 30%,
     #ffffff 0%,
-    #d0d0d0 40%,
+    #f8f8f8 20%,
+    #d8d8d8 50%,
+    #b0b0b0 80%,
     #909090 100%
   );
   border-radius: 50%;
   box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.7),
-    0 0.5px 0 rgba(255, 255, 255, 0.8),
-    inset 0 0.5px 1px rgba(255, 255, 255, 0.7),
-    inset 0 -0.5px 1px rgba(0, 0, 0, 0.3);
-  border: 0.5px solid rgba(0, 0, 0, 0.3);
+    0 1px 3px rgba(0, 0, 0, 0.8),
+    0 0.5px 0 rgba(255, 255, 255, 0.9),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.4);
+  border: 0.5px solid rgba(0, 0, 0, 0.5);
   z-index: 3;
 `;
 
@@ -188,10 +182,108 @@ export const StyledDialTick = styled.div<{ $angle: number }>`
   box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.5);
 `;
 
-export const StyledModeDial = styled.span`
-  background: green;
-  width: 60px;
-  height: 60px;
+export const StyledModeDial = styled.div<{ $rotation?: number }>`
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #c8c8c8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(0, 0, 0, 0.12) 100%
+    );
+  box-shadow:
+    inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  transform: rotate(${(props) => (props.$rotation || 0) + 270}deg);
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.15s ease-out;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+    width: 90%;
+    height: 10px;
+    background: #c8c8c8;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(0, 0, 0, 0.1) 100%
+      );
+    box-shadow:
+      0 2px 3px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 8%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(
+      circle at 35% 35%,
+      #ff4444 0%,
+      #dd0000 70%,
+      #aa0000 100%
+    );
+    border-radius: 50%;
+    box-shadow:
+      0 0 4px rgba(255, 0, 0, 0.6),
+      0 1px 2px rgba(0, 0, 0, 0.6),
+      inset 0 0.5px 1px rgba(255, 150, 150, 0.8);
+    z-index: 2;
+  }
+`;
+
+export const StyledModeDialWrapper = styled.div`
+  position: relative;
+  width: 84px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const StyledModeDialShadow = styled.div`
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  box-shadow:
+    0 5px 10px rgba(0, 0, 0, 0.5),
+    0 2px 3px rgba(0, 0, 0, 0.3);
+`;
+
+export const StyledDialLabel = styled.div<{ $angle: number; $active: boolean }>`
+  position: absolute;
+  width: 40px;
+  text-align: center;
+  font-size: 8px;
+  font-weight: bold;
+  color: ${(props) => (props.$active ? "#2a2a2a" : "#666666")};
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  transform-origin: center;
+  transform: rotate(${(props) => props.$angle}deg) translate(0, -50px)
+    rotate(${(props) => -props.$angle}deg);
+  pointer-events: none;
 `;
 
 export const StyledButtonsContainer = styled.div`
@@ -246,32 +338,29 @@ export const StyledButton = styled.button<{ $pressed?: boolean }>`
   width: 50px;
   height: 22px;
   padding: 0;
-  border: none;
-  border-radius: 1px;
-  background: #959595;
-  background-image:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.12'/%3E%3C/svg%3E"),
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.15) 0%,
-      rgba(0, 0, 0, 0.15) 100%
-    );
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 2px;
+  background: #8a8a8a;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.1) 45%,
+    rgba(0, 0, 0, 0.05) 55%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
   box-shadow: ${(props) =>
     props.$pressed
-      ? "0 0.5px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 1px 3px rgba(0, 0, 0, 0.3)"
-      : "0 2px 0 rgba(0, 0, 0, 0.4), 0 0.5px 0 rgba(255, 255, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)"};
+      ? "0 0 0 1px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.4)"
+      : "0 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.4), 0 2px 2px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5)"};
   transform: ${(props) =>
-    props.$pressed ? "translateY(1.5px)" : "translateY(0)"};
+    props.$pressed ? "translateY(0.5px)" : "translateY(0)"};
   cursor: pointer;
-  outline: 1.5px solid rgba(0, 0, 0, 0.5);
-  outline-offset: 1.5px;
-  transition: all 0.05s ease;
+  transition: all 0.04s ease;
 
   &:active {
     box-shadow:
-      0 0.5px 0 rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3),
-      inset 0 1px 3px rgba(0, 0, 0, 0.3);
-    transform: translateY(1.5px);
+      0 0 0 1px rgba(0, 0, 0, 0.3),
+      inset 0 1px 2px rgba(0, 0, 0, 0.4);
+    transform: translateY(0.5px);
   }
 `;
