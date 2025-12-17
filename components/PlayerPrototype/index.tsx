@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
+  GlobalFonts,
   StyledButton,
   StyledButtonIcon,
   StyledButtonLabel,
@@ -10,6 +11,8 @@ import {
   StyledControls,
   StyledDialLabel,
   StyledDialTick,
+  StyledDisplay,
+  StyledDisplayText,
   StyledHeader,
   StyledMainPanel,
   StyledModeDial,
@@ -40,6 +43,17 @@ const PlayerPrototype: React.FC = () => {
   const modeLabels = ["Off", "Low", "Med", "High", "Max"];
   const modeTotalRange = modeMaxAngle * 2; // 180 degrees
   const modeStepAngle = modeTotalRange / 4; // 5 steps across range (4 intervals)
+
+  // Scrolling text configuration
+  const trackName = "CLASSIC!VINTAGE!AUDIO!PLAYER!-!NOW!PLAYING";
+  const displayWidth = 20; // Number of characters visible at once
+  const scrollSpeed = 300; // Milliseconds per character scroll
+  const padding = "!!!!"; // 4 characters for padding between loops
+
+  const [scrollPosition, setScrollPosition] = useState<number>(0);
+
+  // Prepare scrolling text with padding
+  const scrollText = trackName + padding;
 
   const handleVolumeMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -114,6 +128,24 @@ const PlayerPrototype: React.FC = () => {
     setModeStep(newStep);
   };
 
+  // Scrolling text effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setScrollPosition((prev) => {
+        const next = prev + 1;
+        return next >= scrollText.length ? 0 : next;
+      });
+    }, scrollSpeed);
+
+    return () => clearInterval(interval);
+  }, [scrollText.length, scrollSpeed]);
+
+  // Get visible portion of scrolling text
+  const getVisibleText = () => {
+    const doubledText = scrollText + scrollText; // Double for seamless loop
+    return doubledText.substring(scrollPosition, scrollPosition + displayWidth);
+  };
+
   React.useEffect(() => {
     const moveHandler = (e: MouseEvent) => {
       handleVolumeMouseMove(e);
@@ -134,83 +166,94 @@ const PlayerPrototype: React.FC = () => {
   }, [modeStep]);
 
   return (
-    <StyledPlayerPrototype>
-      <StyledWoodPanel>
-        <StyledHeader></StyledHeader>
-        <StyledSlats></StyledSlats>
-        <StyledMainPanel></StyledMainPanel>
-      </StyledWoodPanel>
-      <StyledControls>
-        <StyledVolumeDialWrapper>
-          {/* Tick marks across the volume dial's range */}
-          {Array.from({ length: 11 }).map((_, i) => {
-            const angle = -volumeMaxAngle + (i * (volumeMaxAngle * 2)) / 10;
-            return <StyledDialTick key={i} $angle={angle} />;
-          })}
-          <StyledVolumeDialShadow />
-          <StyledVolumeDial
-            ref={volumeDialRef}
-            $rotation={volumeRotation}
-            onMouseDown={handleVolumeMouseDown}
-            onWheel={handleVolumeWheel}
-          />
-        </StyledVolumeDialWrapper>
-
-        <StyledModeDialWrapper>
-          {/* Labels for each step */}
-          {modeLabels.map((label, i) => {
-            const angle = -modeMaxAngle + i * modeStepAngle;
-            return (
-              <StyledDialLabel key={i} $angle={angle} $active={modeStep === i}>
-                {label}
-              </StyledDialLabel>
-            );
-          })}
-          <StyledModeDialShadow />
-          <StyledModeDial
-            ref={modeDialRef}
-            $rotation={-modeMaxAngle + modeStep * modeStepAngle}
-            onMouseDown={handleModeMouseDown}
-            onWheel={handleModeWheel}
-          />
-        </StyledModeDialWrapper>
-
-        <StyledButtonsContainer>
-          <StyledButtonWrapper>
-            <StyledButtonLED $active={activeButton === "prev"} />
-            <StyledButtonIcon>⏮</StyledButtonIcon>
-            <StyledButton
-              onClick={() =>
-                setActiveButton((prev) => (prev === "prev" ? null : "prev"))
-              }
+    <>
+      <GlobalFonts />
+      <StyledPlayerPrototype>
+        <StyledWoodPanel>
+          <StyledHeader></StyledHeader>
+          <StyledSlats></StyledSlats>
+          <StyledMainPanel>
+            <StyledDisplay>
+              <StyledDisplayText>{getVisibleText()}</StyledDisplayText>
+            </StyledDisplay>
+          </StyledMainPanel>
+        </StyledWoodPanel>
+        <StyledControls>
+          <StyledVolumeDialWrapper>
+            {/* Tick marks across the volume dial's range */}
+            {Array.from({ length: 11 }).map((_, i) => {
+              const angle = -volumeMaxAngle + (i * (volumeMaxAngle * 2)) / 10;
+              return <StyledDialTick key={i} $angle={angle} />;
+            })}
+            <StyledVolumeDialShadow />
+            <StyledVolumeDial
+              ref={volumeDialRef}
+              $rotation={volumeRotation}
+              onMouseDown={handleVolumeMouseDown}
+              onWheel={handleVolumeWheel}
             />
-            <StyledButtonLabel>Prev</StyledButtonLabel>
-          </StyledButtonWrapper>
+          </StyledVolumeDialWrapper>
 
-          <StyledButtonWrapper>
-            <StyledButtonLED $active={activeButton === "play"} />
-            <StyledButtonIcon>▶</StyledButtonIcon>
-            <StyledButton
-              onClick={() =>
-                setActiveButton((prev) => (prev === "play" ? null : "play"))
-              }
+          <StyledModeDialWrapper>
+            {/* Labels for each step */}
+            {modeLabels.map((label, i) => {
+              const angle = -modeMaxAngle + i * modeStepAngle;
+              return (
+                <StyledDialLabel
+                  key={i}
+                  $angle={angle}
+                  $active={modeStep === i}
+                >
+                  {label}
+                </StyledDialLabel>
+              );
+            })}
+            <StyledModeDialShadow />
+            <StyledModeDial
+              ref={modeDialRef}
+              $rotation={-modeMaxAngle + modeStep * modeStepAngle}
+              onMouseDown={handleModeMouseDown}
+              onWheel={handleModeWheel}
             />
-            <StyledButtonLabel>Play</StyledButtonLabel>
-          </StyledButtonWrapper>
+          </StyledModeDialWrapper>
 
-          <StyledButtonWrapper>
-            <StyledButtonLED $active={activeButton === "next"} />
-            <StyledButtonIcon>⏭</StyledButtonIcon>
-            <StyledButton
-              onClick={() =>
-                setActiveButton((prev) => (prev === "next" ? null : "next"))
-              }
-            />
-            <StyledButtonLabel>Next</StyledButtonLabel>
-          </StyledButtonWrapper>
-        </StyledButtonsContainer>
-      </StyledControls>
-    </StyledPlayerPrototype>
+          <StyledButtonsContainer>
+            <StyledButtonWrapper>
+              <StyledButtonLED $active={activeButton === "prev"} />
+              <StyledButtonIcon>⏮</StyledButtonIcon>
+              <StyledButton
+                onClick={() =>
+                  setActiveButton((prev) => (prev === "prev" ? null : "prev"))
+                }
+              />
+              <StyledButtonLabel>Prev</StyledButtonLabel>
+            </StyledButtonWrapper>
+
+            <StyledButtonWrapper>
+              <StyledButtonLED $active={activeButton === "play"} />
+              <StyledButtonIcon>▶</StyledButtonIcon>
+              <StyledButton
+                onClick={() =>
+                  setActiveButton((prev) => (prev === "play" ? null : "play"))
+                }
+              />
+              <StyledButtonLabel>Play</StyledButtonLabel>
+            </StyledButtonWrapper>
+
+            <StyledButtonWrapper>
+              <StyledButtonLED $active={activeButton === "next"} />
+              <StyledButtonIcon>⏭</StyledButtonIcon>
+              <StyledButton
+                onClick={() =>
+                  setActiveButton((prev) => (prev === "next" ? null : "next"))
+                }
+              />
+              <StyledButtonLabel>Next</StyledButtonLabel>
+            </StyledButtonWrapper>
+          </StyledButtonsContainer>
+        </StyledControls>
+      </StyledPlayerPrototype>
+    </>
   );
 };
 

@@ -1,4 +1,15 @@
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+
+export const GlobalFonts = createGlobalStyle`
+  @font-face {
+    font-family: 'DSEG14Classic';
+    src: url('/fonts/DSEG14Classic-Regular.woff2') format('woff2'),
+         url('/fonts/DSEG14Classic-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+`;
 
 export const StyledPlayerPrototype = styled.div`
   width: 480px;
@@ -38,6 +49,39 @@ export const StyledSlats = styled.div`
 
 export const StyledMainPanel = styled.div`
   height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+`;
+
+export const StyledDisplay = styled.div`
+  width: 100%;
+  max-width: 400px;
+  height: 60px;
+  background: #2a3a2a;
+  border: 2px solid #1a1a1a;
+  border-radius: 3px;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.6),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+`;
+
+export const StyledDisplayText = styled.div`
+  font-family: "DSEG14Classic", monospace;
+  font-size: 20px;
+  font-weight: normal;
+  color: #9fdf9f;
+  text-shadow: 0 0 8px rgba(159, 223, 159, 0.6);
+  letter-spacing: 1px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 export const StyledControls = styled.div`
@@ -53,10 +97,18 @@ export const StyledControls = styled.div`
   box-shadow:
     inset 2px 2px 4px rgba(255, 255, 255, 0.4),
     inset -1px -1px 3px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 0 20px;
 `;
 
 export const StyledVolumeDialShadow = styled.div`
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 64px;
   height: 64px;
   border-radius: 50%;
@@ -66,7 +118,9 @@ export const StyledVolumeDialShadow = styled.div`
 `;
 
 export const StyledVolumeDial = styled.div<{ $rotation?: number }>`
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 64px;
   height: 64px;
   border-radius: 50%;
@@ -82,7 +136,8 @@ export const StyledVolumeDial = styled.div<{ $rotation?: number }>`
     inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.35),
     inset -1px -1px 2px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(0, 0, 0, 0.2);
-  transform: rotate(${(props) => (props.$rotation || 0) + 270}deg);
+  transform: translate(-50%, -50%)
+    rotate(${(props) => (props.$rotation || 0) + 270}deg);
   cursor: grab;
   user-select: none;
   transition: transform 0.08s ease-out;
@@ -162,11 +217,9 @@ export const StyledDialMarker = styled.div`
 
 export const StyledVolumeDialWrapper = styled.div`
   position: relative;
-  width: 84px;
-  height: 84px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
 `;
 
 export const StyledDialTick = styled.div<{ $angle: number }>`
@@ -176,14 +229,16 @@ export const StyledDialTick = styled.div<{ $angle: number }>`
   background: #2a2a2a;
   top: 3px;
   left: 50%;
-  transform-origin: center 39px;
+  transform-origin: center 47px;
   transform: translateX(-50%) rotate(${(props) => props.$angle}deg);
   border-radius: 0.5px;
   box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.5);
 `;
 
 export const StyledModeDial = styled.div<{ $rotation?: number }>`
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 64px;
   height: 64px;
   border-radius: 50%;
@@ -199,7 +254,8 @@ export const StyledModeDial = styled.div<{ $rotation?: number }>`
     inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.35),
     inset -1px -1px 2px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(0, 0, 0, 0.2);
-  transform: rotate(${(props) => (props.$rotation || 0) + 270}deg);
+  transform: translate(-50%, -50%)
+    rotate(${(props) => (props.$rotation || 0) + 270}deg);
   cursor: grab;
   user-select: none;
   transition: transform 0.15s ease-out;
@@ -254,15 +310,16 @@ export const StyledModeDial = styled.div<{ $rotation?: number }>`
 
 export const StyledModeDialWrapper = styled.div`
   position: relative;
-  width: 84px;
-  height: 84px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 120px;
+  height: 100px;
+  flex-shrink: 0;
 `;
 
 export const StyledModeDialShadow = styled.div`
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 64px;
   height: 64px;
   border-radius: 50%;
@@ -273,23 +330,26 @@ export const StyledModeDialShadow = styled.div`
 
 export const StyledDialLabel = styled.div<{ $angle: number; $active: boolean }>`
   position: absolute;
+  top: 50%;
+  left: 50%;
   width: 40px;
   text-align: center;
   font-size: 8px;
   font-weight: bold;
-  color: ${(props) => (props.$active ? "#2a2a2a" : "#666666")};
+  color: #2a2a2a;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  transform-origin: center;
-  transform: rotate(${(props) => props.$angle}deg) translate(0, -50px)
-    rotate(${(props) => -props.$angle}deg);
+  transform: translate(-50%, -50%) rotate(${(props) => props.$angle}deg)
+    translate(0, -42px) rotate(${(props) => -props.$angle}deg);
   pointer-events: none;
+  user-select: none;
 `;
 
 export const StyledButtonsContainer = styled.div`
   display: flex;
   gap: 12px;
-  align-items: flex-end;
+  align-items: center;
+  flex-shrink: 0;
 `;
 
 export const StyledButtonWrapper = styled.div`
