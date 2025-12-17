@@ -1,212 +1,508 @@
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
-export const StyledMiniPlayer = styled.div<{
+export const GlobalFonts = createGlobalStyle`
+  @font-face {
+    font-family: 'DSEG14Classic';
+    src: url('/fonts/DSEG14Classic-Regular.woff2') format('woff2'),
+         url('/fonts/DSEG14Classic-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+`;
+
+export const StyledPlayerPrototype = styled.div<{
   $x: number;
   $y: number;
   $isDragging: boolean;
-  $isVisible: boolean;
 }>`
   position: fixed;
   top: ${({ $y }) => $y}px;
   left: ${({ $x }) => $x}px;
-  width: 320px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  width: 480px;
+  height: 320px;
   z-index: 1000;
-  cursor: ${({ $isDragging }) => ($isDragging ? "grabbing" : "grab")};
-  user-select: none;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transform: ${({ $isVisible }) => ($isVisible ? "scale(1)" : "scale(0.8)")};
-  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
-  pointer-events: ${({ $isVisible }) => ($isVisible ? "auto" : "none")};
-  transition: ${({ $isDragging }) =>
-    $isDragging ? "none" : "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)"};
-
-  &:hover {
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
-  }
-`;
-
-export const StyledMiniPlayerHeader = styled.div`
-  padding: 12px 16px 8px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const StyledMiniPlayerTitle = styled.div`
-  color: white;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  opacity: 0.9;
-`;
-
-export const StyledCloseButton = styled.button`
-  background: none;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 4px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 4px 16px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
-  opacity: 0.7;
-  transition: all 0.2s ease;
+  overflow: hidden;
+  cursor: ${({ $isDragging }) => ($isDragging ? "grabbing" : "default")};
+  user-select: none;
+  transition: ${({ $isDragging }) =>
+    $isDragging ? "none" : "box-shadow 0.3s ease"};
 
   &:hover {
-    opacity: 1;
-    background: rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 12px 48px rgba(0, 0, 0, 0.5),
+      0 6px 24px rgba(0, 0, 0, 0.4);
   }
 `;
 
-export const StyledMiniPlayerContent = styled.div`
-  padding: 12px 16px 16px 16px;
+export const StyledWoodPanel = styled.div`
+  background-image:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    ),
+    url("/textures/dark-walnut.jpg");
+  background-size: cover;
+  height: 200px;
+  box-shadow:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.2),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.3);
+
+  &[data-draggable="true"] {
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
 `;
 
-export const StyledTrackInfo = styled.div`
-  margin-bottom: 12px;
+export const StyledHeader = styled.div`
+  height: 12px;
 `;
 
-export const StyledMixName = styled.div`
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+export const StyledSlats = styled.div`
+  position: relative;
+  height: 70px;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 45%,
+    rgba(0, 0, 0, 0.8) 45%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  background-size: 100% 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-left: 20px;
+  padding-top: 8px;
 `;
 
-export const StyledTrackName = styled.div`
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 11px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+export const StyledLogoPlate = styled.div`
+  width: 80px;
+  height: 20px;
+  background: #c8c8c8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+  border-radius: 1px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-export const StyledMiniProgressContainer = styled.div`
-  margin-bottom: 12px;
+export const StyledLogoText = styled.div`
+  font-family: "Helvetica Neue", "Arial", sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #2a2a2a;
+  letter-spacing: 1px;
 `;
 
-export const StyledMiniProgressTrack = styled.div`
+export const StyledMainPanel = styled.div`
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+`;
+
+export const StyledDisplay = styled.div`
   width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
+  max-width: 400px;
+  height: 70px;
+  background: #2a3a2a;
+  border: 2px solid #1a1a1a;
+  border-radius: 3px;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.6),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  gap: 4px;
+`;
+
+export const StyledDisplayText = styled.div`
+  font-family: "DSEG14Classic", monospace;
+  font-size: 20px;
+  font-weight: normal;
+  color: #9fdf9f;
+  text-shadow: 0 0 8px rgba(159, 223, 159, 0.6);
+  letter-spacing: 1px;
+  text-align: center;
+  white-space: nowrap;
   overflow: hidden;
-  cursor: pointer;
+  width: 100%;
 `;
 
-export const StyledMiniProgressFill = styled.div<{ $progress: number }>`
-  height: 100%;
-  background: white;
-  border-radius: 2px;
-  transition: width 0.1s ease;
-  width: ${({ $progress }) => $progress}%;
+export const StyledDisplayProgress = styled.div`
+  font-family: "DSEG14Classic", monospace;
+  font-size: 20px;
+  font-weight: normal;
+  color: #9fdf9f;
+  text-shadow: 0 0 8px rgba(159, 223, 159, 0.6);
+  letter-spacing: 1px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
 `;
 
-export const StyledTimeDisplay = styled.div`
-  display: flex;
-  justify-content: space-between;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 9px;
-  margin-top: 4px;
-`;
-
-export const StyledMiniControls = styled.div`
+export const StyledControls = styled.div`
+  height: 120px;
+  background: #c8c8c8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+  box-shadow:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 20px;
+  padding: 0 20px;
 `;
 
-export const StyledMiniControlButton = styled.button<{ $variant?: string }>`
-  background: ${({ $variant }) =>
-    $variant === "primary"
-      ? "rgba(255, 255, 255, 0.9)"
-      : "rgba(255, 255, 255, 0.1)"};
-  color: ${({ $variant }) => ($variant === "primary" ? "#667eea" : "white")};
-  border: 1px solid rgba(255, 255, 255, 0.2);
+export const StyledVolumeDialShadow = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  width: ${({ $variant }) => ($variant === "primary" ? "44px" : "32px")};
-  height: ${({ $variant }) => ($variant === "primary" ? "44px" : "32px")};
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: ${({ $variant }) => ($variant === "primary" ? "14px" : "12px")};
-  font-weight: 600;
+  box-shadow:
+    0 5px 10px rgba(0, 0, 0, 0.5),
+    0 2px 3px rgba(0, 0, 0, 0.3);
+`;
 
-  &:hover {
-    background: ${({ $variant }) =>
-      $variant === "primary" ? "white" : "rgba(255, 255, 255, 0.2)"};
-    transform: scale(1.05);
-  }
+export const StyledVolumeDial = styled.div<{ $rotation?: number }>`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #c8c8c8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(0, 0, 0, 0.12) 100%
+    );
+  box-shadow:
+    inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, -50%)
+    rotate(${(props) => (props.$rotation || 0) + 270}deg);
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.08s ease-out;
 
   &:active {
-    transform: scale(0.95);
+    cursor: grabbing;
   }
 
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+    width: 90%;
+    height: 10px;
+    background: #c8c8c8;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(0, 0, 0, 0.1) 100%
+      );
+    box-shadow:
+      0 2px 3px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 8%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(
+      circle at 35% 35%,
+      #ff4444 0%,
+      #dd0000 70%,
+      #aa0000 100%
+    );
+    border-radius: 50%;
+    box-shadow:
+      0 0 4px rgba(255, 0, 0, 0.6),
+      0 1px 2px rgba(0, 0, 0, 0.6),
+      inset 0 0.5px 1px rgba(255, 150, 150, 0.8);
+    z-index: 2;
   }
 `;
 
-export const StyledVolumeContainer = styled.div`
+export const StyledDialMarker = styled.div`
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(
+    circle at 30% 30%,
+    #ffffff 0%,
+    #f8f8f8 20%,
+    #d8d8d8 50%,
+    #b0b0b0 80%,
+    #909090 100%
+  );
+  border-radius: 50%;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.8),
+    0 0.5px 0 rgba(255, 255, 255, 0.9),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.4);
+  border: 0.5px solid rgba(0, 0, 0, 0.5);
+  z-index: 3;
+`;
+
+export const StyledVolumeDialWrapper = styled.div`
+  position: relative;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+`;
+
+export const StyledDialTick = styled.div<{ $angle: number }>`
+  position: absolute;
+  width: 2px;
+  height: 7px;
+  background: #2a2a2a;
+  top: 3px;
+  left: 50%;
+  transform-origin: center 47px;
+  transform: translateX(-50%) rotate(${(props) => props.$angle}deg);
+  border-radius: 0.5px;
+  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.5);
+`;
+
+export const StyledModeDial = styled.div<{ $rotation?: number }>`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #c8c8c8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(0, 0, 0, 0.12) 100%
+    );
+  box-shadow:
+    inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, -50%)
+    rotate(${(props) => (props.$rotation || 0) + 270}deg);
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.15s ease-out;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+    width: 90%;
+    height: 10px;
+    background: #c8c8c8;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(0, 0, 0, 0.1) 100%
+      );
+    box-shadow:
+      0 2px 3px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 8%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(
+      circle at 35% 35%,
+      #ff4444 0%,
+      #dd0000 70%,
+      #aa0000 100%
+    );
+    border-radius: 50%;
+    box-shadow:
+      0 0 4px rgba(255, 0, 0, 0.6),
+      0 1px 2px rgba(0, 0, 0, 0.6),
+      inset 0 0.5px 1px rgba(255, 150, 150, 0.8);
+    z-index: 2;
+  }
+`;
+
+export const StyledModeDialWrapper = styled.div`
+  position: relative;
+  width: 120px;
+  height: 100px;
+  flex-shrink: 0;
+`;
+
+export const StyledModeDialShadow = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  box-shadow:
+    0 5px 10px rgba(0, 0, 0, 0.5),
+    0 2px 3px rgba(0, 0, 0, 0.3);
+`;
+
+export const StyledDialLabel = styled.div<{ $angle: number; $active: boolean }>`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  text-align: center;
+  font-size: 8px;
+  font-weight: bold;
+  color: #2a2a2a;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  transform: translate(-50%, -50%) rotate(${(props) => props.$angle}deg)
+    translate(0, -42px) rotate(${(props) => -props.$angle}deg);
+  pointer-events: none;
+  user-select: none;
+`;
+
+export const StyledButtonsContainer = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-shrink: 0;
+`;
+
+export const StyledButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+`;
+
+export const StyledButtonIcon = styled.div`
+  font-size: 12px;
+  color: #2a2a2a;
+  height: 14px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  justify-content: center;
 `;
 
-export const StyledVolumeIcon = styled.span`
-  color: white;
-  font-size: 12px;
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.2s ease;
-
-  &:hover {
-    opacity: 1;
-  }
-`;
-
-export const StyledMiniVolumeSlider = styled.input`
-  flex: 1;
+export const StyledButtonLED = styled.div<{ $active?: boolean }>`
+  width: 30px;
   height: 3px;
+  border-radius: 1px;
+  background: ${(props) => (props.$active ? "#ff3333" : "#3a0000")};
+  box-shadow: ${(props) =>
+    props.$active
+      ? "0 0 8px #ff3333, 0 0 3px #ff0000, inset 0 0.5px 1px rgba(255, 255, 255, 0.6)"
+      : "inset 0 1px 2px rgba(0, 0, 0, 0.9)"};
+  border: 0.5px solid rgba(0, 0, 0, 0.5);
+  transition: all 0.15s ease;
+`;
+
+export const StyledButtonLabel = styled.div`
+  font-size: 7px;
+  font-weight: bold;
+  color: #2a2a2a;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  text-align: center;
+  height: 12px;
+  display: flex;
+  align-items: center;
+`;
+
+export const StyledButton = styled.button<{ $pressed?: boolean }>`
+  position: relative;
+  width: 50px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.4);
   border-radius: 2px;
-  background: rgba(255, 255, 255, 0.2);
-  outline: none;
+  background: #8a8a8a;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.1) 45%,
+    rgba(0, 0, 0, 0.05) 55%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  box-shadow: ${(props) =>
+    props.$pressed
+      ? "0 0 0 1px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.4)"
+      : "0 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.4), 0 2px 2px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5)"};
+  transform: ${(props) =>
+    props.$pressed ? "translateY(0.5px)" : "translateY(0)"};
   cursor: pointer;
+  transition: all 0.04s ease;
 
-  &::-webkit-slider-thumb {
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  }
-
-  &::-moz-range-thumb {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  &:active {
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.3),
+      inset 0 1px 2px rgba(0, 0, 0, 0.4);
+    transform: translateY(0.5px);
   }
 `;
