@@ -12,8 +12,11 @@ import {
   StyledDialLabel,
   StyledDialTick,
   StyledDisplay,
+  StyledDisplayProgress,
   StyledDisplayText,
   StyledHeader,
+  StyledLogoPlate,
+  StyledLogoText,
   StyledMainPanel,
   StyledModeDial,
   StyledModeDialShadow,
@@ -54,6 +57,17 @@ const PlayerPrototype: React.FC = () => {
 
   // Prepare scrolling text with padding
   const scrollText = trackName + padding;
+
+  // Mix progress (0-100%)
+  const [mixProgress, setMixProgress] = useState<number>(35); // Demo value
+
+  // Generate progress bar string
+  const getProgressBar = () => {
+    const progressChars = Math.floor((mixProgress / 100) * displayWidth);
+    const playedPortion = "=".repeat(progressChars);
+    const unplayedPortion = "_".repeat(displayWidth - progressChars);
+    return playedPortion + unplayedPortion;
+  };
 
   const handleVolumeMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -140,6 +154,18 @@ const PlayerPrototype: React.FC = () => {
     return () => clearInterval(interval);
   }, [scrollText.length, scrollSpeed]);
 
+  // Demo: Animate progress (remove this when connecting real data)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMixProgress((prev) => {
+        const next = prev + 1;
+        return next > 100 ? 0 : next;
+      });
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
   // Get visible portion of scrolling text
   const getVisibleText = () => {
     const doubledText = scrollText + scrollText; // Double for seamless loop
@@ -171,10 +197,15 @@ const PlayerPrototype: React.FC = () => {
       <StyledPlayerPrototype>
         <StyledWoodPanel>
           <StyledHeader></StyledHeader>
-          <StyledSlats></StyledSlats>
+          <StyledSlats>
+            <StyledLogoPlate>
+              <StyledLogoText>STEF.FM</StyledLogoText>
+            </StyledLogoPlate>
+          </StyledSlats>
           <StyledMainPanel>
             <StyledDisplay>
               <StyledDisplayText>{getVisibleText()}</StyledDisplayText>
+              <StyledDisplayProgress>{getProgressBar()}</StyledDisplayProgress>
             </StyledDisplay>
           </StyledMainPanel>
         </StyledWoodPanel>

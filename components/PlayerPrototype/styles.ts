@@ -36,6 +36,7 @@ export const StyledHeader = styled.div`
 `;
 
 export const StyledSlats = styled.div`
+  position: relative;
   height: 70px;
   background: repeating-linear-gradient(
     180deg,
@@ -45,6 +46,40 @@ export const StyledSlats = styled.div`
     rgba(0, 0, 0, 0.8) 100%
   );
   background-size: 100% 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-left: 20px;
+  padding-top: 8px;
+`;
+
+export const StyledLogoPlate = styled.div`
+  width: 80px;
+  height: 20px;
+  background: #c8c8c8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+  border-radius: 1px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const StyledLogoText = styled.div`
+  font-family: "Helvetica Neue", "Arial", sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #2a2a2a;
+  letter-spacing: 1px;
 `;
 
 export const StyledMainPanel = styled.div`
@@ -58,7 +93,7 @@ export const StyledMainPanel = styled.div`
 export const StyledDisplay = styled.div`
   width: 100%;
   max-width: 400px;
-  height: 60px;
+  height: 70px;
   background: #2a3a2a;
   border: 2px solid #1a1a1a;
   border-radius: 3px;
@@ -67,9 +102,11 @@ export const StyledDisplay = styled.div`
     inset 0 -1px 2px rgba(0, 0, 0, 0.3),
     0 1px 0 rgba(255, 255, 255, 0.1);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 8px 16px;
+  gap: 4px;
 `;
 
 export const StyledDisplayText = styled.div`
@@ -82,6 +119,20 @@ export const StyledDisplayText = styled.div`
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
+  width: 100%;
+`;
+
+export const StyledDisplayProgress = styled.div`
+  font-family: "DSEG14Classic", monospace;
+  font-size: 20px;
+  font-weight: normal;
+  color: #9fdf9f;
+  text-shadow: 0 0 8px rgba(159, 223, 159, 0.6);
+  letter-spacing: 1px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
 `;
 
 export const StyledControls = styled.div`
