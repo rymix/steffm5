@@ -356,6 +356,43 @@ const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
     }
   }, [isVisible]);
 
+  // Keep player in bounds on window resize
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const handleResize = () => {
+      const playerWidth = 480;
+      const playerHeight = 320;
+
+      // Constrain position to keep player fully visible
+      const constrainedX = Math.max(
+        0,
+        Math.min(window.innerWidth - playerWidth, positionRef.current.x),
+      );
+      const constrainedY = Math.max(
+        0,
+        Math.min(window.innerHeight - playerHeight, positionRef.current.y),
+      );
+
+      // Update ref and DOM if position changed
+      if (
+        constrainedX !== positionRef.current.x ||
+        constrainedY !== positionRef.current.y
+      ) {
+        positionRef.current = { x: constrainedX, y: constrainedY };
+        if (playerRef.current) {
+          playerRef.current.style.transform = `translate3d(${constrainedX}px, ${constrainedY}px, 0)`;
+        }
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isVisible]);
+
   // Direct DOM manipulation for display updates to avoid React re-renders and FOUC
   useEffect(() => {
     // Don't run if not visible
