@@ -148,12 +148,33 @@ export const StyledDisplayText = styled.div`
   font-size: 20px;
   font-weight: normal;
   color: #9fdf9f;
-  text-shadow: 0 0 8px rgba(159, 223, 159, 0.6);
+  text-shadow:
+    0 0 10px rgba(159, 223, 159, 0.8),
+    0 0 4px rgba(159, 223, 159, 0.6);
   letter-spacing: 1px;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   width: 100%;
+  position: relative;
+
+  &::after {
+    content: "~~~~~~~~~~~~~~~~~~~~"; /* 20 tildes for unlit segments */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: rgba(159, 223, 159, 0.08);
+    text-shadow: none;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Text content renders on top */
+  & {
+    position: relative;
+    z-index: 1;
+  }
 `;
 
 export const StyledDisplayProgress = styled.div`
@@ -161,12 +182,33 @@ export const StyledDisplayProgress = styled.div`
   font-size: 20px;
   font-weight: normal;
   color: #9fdf9f;
-  text-shadow: 0 0 8px rgba(159, 223, 159, 0.6);
+  text-shadow:
+    0 0 10px rgba(159, 223, 159, 0.8),
+    0 0 4px rgba(159, 223, 159, 0.6);
   letter-spacing: 1px;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   width: 100%;
+  position: relative;
+
+  &::after {
+    content: "===================="; /* 20 equals signs for unlit segments */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: rgba(159, 223, 159, 0.08);
+    text-shadow: none;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Text content renders on top */
+  & {
+    position: relative;
+    z-index: 1;
+  }
 `;
 
 export const StyledControls = styled.div`

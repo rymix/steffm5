@@ -174,8 +174,8 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
           </StyledMenuContent>
 
           <StyledMenuFooter>
-            <p>Stef.FM v1.0</p>
-            <p>Adventures in Decent Music</p>
+            <p>Stef.FM v5.0</p>
+            <p>Funky House Coming In Your Ears</p>
           </StyledMenuFooter>
         </StyledMenu>
       )}

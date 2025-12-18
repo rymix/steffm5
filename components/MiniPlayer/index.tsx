@@ -33,7 +33,6 @@ import {
 // Constants defined outside component to prevent re-creation on every render
 const DISPLAY_WIDTH = 20; // Number of characters visible at once
 const SCROLL_SPEED = 300; // Milliseconds per character scroll
-const PADDING = "!!!!"; // 4 characters for padding between loops
 
 interface MiniPlayerProps {
   isVisible?: boolean;
@@ -167,17 +166,45 @@ const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
 
   // Scrolling text configuration - memoized to prevent null artifacts
   const trackName = useMemo(() => {
-    let text = "";
-    if (currentTrack?.artistName && currentTrack?.trackName) {
-      text = `${currentTrack.artistName} - ${currentTrack.trackName}`;
-    } else {
-      text = currentMix?.name || "STEF.FM MIXCLOUD PLAYER";
-    }
-    return text.toUpperCase().replace(/ /g, "!");
-  }, [currentTrack?.artistName, currentTrack?.trackName, currentMix?.name]);
+    const parts = [];
 
-  // Prepare scrolling text with padding
-  const scrollText = useMemo(() => trackName + PADDING, [trackName]);
+    if (currentTrack?.trackName) {
+      parts.push(currentTrack.trackName);
+    }
+
+    if (currentTrack?.artistName) {
+      parts.push(currentTrack.artistName);
+    }
+
+    // Add remix artist if present
+    if (currentTrack?.remixArtist) {
+      parts.push(currentTrack.remixArtist);
+    }
+
+    if (currentMix?.name) {
+      parts.push(currentMix.name);
+    }
+
+    // If no track info, show default
+    const text =
+      parts.length > 0 ? parts.join(" * ") : "STEF.FM MIXCLOUD PLAYER";
+
+    return text
+      .toUpperCase()
+      .replace(/'/g, "") // Remove apostrophes entirely for fixed-width display
+      .replace(/ /g, "!");
+  }, [
+    currentTrack?.trackName,
+    currentTrack?.artistName,
+    currentTrack?.remixArtist,
+    currentMix?.name,
+  ]);
+
+  // Prepare scrolling text with padding - triple the text to prevent jump on wrap
+  const scrollText = useMemo(
+    () => (trackName + "!***!").repeat(3),
+    [trackName],
+  );
 
   // Player drag handlers
   const handlePlayerMouseDown = (e: React.MouseEvent) => {
@@ -417,14 +444,14 @@ const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
     const updateDisplay = (timestamp: number) => {
       // Update scroll position every SCROLL_SPEED ms
       if (timestamp - lastUpdateTime >= SCROLL_SPEED) {
-        scrollPositionRef.current =
-          (scrollPositionRef.current + 1) % scrollText.length;
+        // Wrap at 1/3 of scrollText length since it's repeated 3 times
+        const wrapPoint = Math.floor(scrollText.length / 3);
+        scrollPositionRef.current = (scrollPositionRef.current + 1) % wrapPoint;
         lastUpdateTime = timestamp;
       }
 
-      // Get visible text
-      const doubledText = scrollText + scrollText;
-      const visibleText = doubledText.substring(
+      // Get visible text - scrollText is already repeated 3x, so no need to double
+      const visibleText = scrollText.substring(
         scrollPositionRef.current,
         scrollPositionRef.current + DISPLAY_WIDTH,
       );
