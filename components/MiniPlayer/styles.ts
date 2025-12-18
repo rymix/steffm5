@@ -11,14 +11,20 @@ export const GlobalFonts = createGlobalStyle`
   }
 `;
 
-export const StyledPlayerPrototype = styled.div<{
-  $x: number;
-  $y: number;
+export const StyledPlayerPrototype = styled.div.attrs<{
+  $isDragging: boolean;
+}>(({ $isDragging }) => ({
+  style: {
+    cursor: $isDragging ? "grabbing" : "default",
+    willChange: $isDragging ? "transform" : "auto",
+    transition: $isDragging ? "none" : "box-shadow 0.3s ease",
+  },
+}))<{
   $isDragging: boolean;
 }>`
   position: fixed;
-  top: ${({ $y }) => $y}px;
-  left: ${({ $x }) => $x}px;
+  top: 0;
+  left: 0;
   width: 480px;
   height: 320px;
   z-index: 1000;
@@ -27,10 +33,7 @@ export const StyledPlayerPrototype = styled.div<{
     0 4px 16px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
   overflow: hidden;
-  cursor: ${({ $isDragging }) => ($isDragging ? "grabbing" : "default")};
   user-select: none;
-  transition: ${({ $isDragging }) =>
-    $isDragging ? "none" : "box-shadow 0.3s ease"};
 
   &:hover {
     box-shadow:
@@ -199,7 +202,13 @@ export const StyledVolumeDialShadow = styled.div`
     0 2px 3px rgba(0, 0, 0, 0.3);
 `;
 
-export const StyledVolumeDial = styled.div<{ $rotation?: number }>`
+export const StyledVolumeDial = styled.div.attrs<{ $rotation?: number }>(
+  ({ $rotation }) => ({
+    style: {
+      transform: `translate(-50%, -50%) rotate(${($rotation || 0) + 270}deg)`,
+    },
+  }),
+)<{ $rotation?: number }>`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -218,8 +227,6 @@ export const StyledVolumeDial = styled.div<{ $rotation?: number }>`
     inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.35),
     inset -1px -1px 2px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(0, 0, 0, 0.2);
-  transform: translate(-50%, -50%)
-    rotate(${(props) => (props.$rotation || 0) + 270}deg);
   cursor: grab;
   user-select: none;
   transition: transform 0.08s ease-out;
@@ -304,7 +311,13 @@ export const StyledVolumeDialWrapper = styled.div`
   flex-shrink: 0;
 `;
 
-export const StyledDialTick = styled.div<{ $angle: number }>`
+export const StyledDialTick = styled.div.attrs<{ $angle: number }>(
+  ({ $angle }) => ({
+    style: {
+      transform: `translateX(-50%) rotate(${$angle}deg)`,
+    },
+  }),
+)<{ $angle: number }>`
   position: absolute;
   width: 2px;
   height: 7px;
@@ -312,12 +325,17 @@ export const StyledDialTick = styled.div<{ $angle: number }>`
   top: 3px;
   left: 50%;
   transform-origin: center 47px;
-  transform: translateX(-50%) rotate(${(props) => props.$angle}deg);
   border-radius: 0.5px;
   box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.5);
 `;
 
-export const StyledModeDial = styled.div<{ $rotation?: number }>`
+export const StyledModeDial = styled.div.attrs<{ $rotation?: number }>(
+  ({ $rotation }) => ({
+    style: {
+      transform: `translate(-50%, -50%) rotate(${($rotation || 0) + 270}deg)`,
+    },
+  }),
+)<{ $rotation?: number }>`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -336,8 +354,6 @@ export const StyledModeDial = styled.div<{ $rotation?: number }>`
     inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.35),
     inset -1px -1px 2px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(0, 0, 0, 0.2);
-  transform: translate(-50%, -50%)
-    rotate(${(props) => (props.$rotation || 0) + 270}deg);
   cursor: grab;
   user-select: none;
   transition: transform 0.15s ease-out;
@@ -410,7 +426,14 @@ export const StyledModeDialShadow = styled.div`
     0 2px 3px rgba(0, 0, 0, 0.3);
 `;
 
-export const StyledDialLabel = styled.div<{ $angle: number; $active: boolean }>`
+export const StyledDialLabel = styled.div.attrs<{
+  $angle: number;
+  $active: boolean;
+}>(({ $angle }) => ({
+  style: {
+    transform: `translate(-50%, -50%) rotate(${$angle}deg) translate(0, -42px) rotate(${-$angle}deg)`,
+  },
+}))<{ $angle: number; $active: boolean }>`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -421,8 +444,6 @@ export const StyledDialLabel = styled.div<{ $angle: number; $active: boolean }>`
   color: #2a2a2a;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  transform: translate(-50%, -50%) rotate(${(props) => props.$angle}deg)
-    translate(0, -42px) rotate(${(props) => -props.$angle}deg);
   pointer-events: none;
   user-select: none;
 `;
@@ -450,15 +471,19 @@ export const StyledButtonIcon = styled.div`
   justify-content: center;
 `;
 
-export const StyledButtonLED = styled.div<{ $active?: boolean }>`
+export const StyledButtonLED = styled.div.attrs<{ $active?: boolean }>(
+  ({ $active }) => ({
+    style: {
+      background: $active ? "#ff3333" : "#3a0000",
+      boxShadow: $active
+        ? "0 0 8px #ff3333, 0 0 3px #ff0000, inset 0 0.5px 1px rgba(255, 255, 255, 0.6)"
+        : "inset 0 1px 2px rgba(0, 0, 0, 0.9)",
+    },
+  }),
+)<{ $active?: boolean }>`
   width: 30px;
   height: 3px;
   border-radius: 1px;
-  background: ${(props) => (props.$active ? "#ff3333" : "#3a0000")};
-  box-shadow: ${(props) =>
-    props.$active
-      ? "0 0 8px #ff3333, 0 0 3px #ff0000, inset 0 0.5px 1px rgba(255, 255, 255, 0.6)"
-      : "inset 0 1px 2px rgba(0, 0, 0, 0.9)"};
   border: 0.5px solid rgba(0, 0, 0, 0.5);
   transition: all 0.15s ease;
 `;

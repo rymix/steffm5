@@ -40,18 +40,28 @@ interface MiniPlayerProps {
   onToggleVisibility?: () => void;
 }
 
-const MiniPlayer: React.FC<MiniPlayerProps> = ({
+// Display component without dynamic props to prevent styled-components recalculation
+const DisplayContent = React.memo(() => {
+  return (
+    <StyledDisplay>
+      <StyledDisplayText data-display-text />
+      <StyledDisplayProgress data-display-progress />
+    </StyledDisplay>
+  );
+});
+
+DisplayContent.displayName = "DisplayContent";
+
+const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
   isVisible = true,
   onToggleVisibility: _onToggleVisibility,
 }) => {
   const { state, actions } = useMixcloud();
 
-  if (!isVisible) return null;
-
-  // Draggable player position
-  const [position, setPosition] = useState({
-    x: window.innerWidth - 520,
-    y: window.innerHeight - 360,
+  // Draggable player position (direct DOM manipulation for performance)
+  const positionRef = useRef({
+    x: 0,
+    y: 0,
   });
   const [isDraggingPlayer, setIsDraggingPlayer] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -73,6 +83,12 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({
   const currentRotationRef = useRef(-volumeMaxAngle);
   const volumeDialRef = useRef<HTMLDivElement>(null);
   const modeDialRef = useRef<HTMLDivElement>(null);
+  const displayTextRef = useRef<HTMLDivElement | null>(null);
+  const displayProgressRef = useRef<HTMLDivElement | null>(null);
+  const scrollPositionRef = useRef(0);
+  const animationFrameRef = useRef<number | null>(null);
+  const statePositionRef = useRef(state.position);
+  const stateDurationRef = useRef(state.duration);
 
   // Convert volume (0-1) to dial rotation (-150 to 150)
   const volumeRotation = (state.volume * 2 - 1) * volumeMaxAngle;
@@ -82,11 +98,24 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({
   const modeTotalRange = modeMaxAngle * 2; // 180 degrees
   const modeStepAngle = modeTotalRange / 4; // 5 steps across range (4 intervals)
 
+  // Update refs without triggering re-render
+  useEffect(() => {
+    statePositionRef.current = state.position;
+    stateDurationRef.current = state.duration;
+  }, [state.position, state.duration]);
+
   // Get current mix and track
   const currentMix = actions.getCurrentMix();
 
-  const currentTrack = useMemo(() => {
-    if (!currentMix?.tracks || state.position <= 0) return null;
+  // Store current track in ref and update independently
+  const [currentTrack, setCurrentTrack] = useState<any>(null);
+
+  // Update current track based on position changes (throttled to avoid re-renders)
+  useEffect(() => {
+    if (!currentMix?.tracks || state.position <= 0) {
+      setCurrentTrack(null);
+      return;
+    }
 
     const timeToSeconds = (timeString: string): number => {
       const parts = timeString.split(":");
@@ -122,11 +151,18 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({
         state.position >= trackStartSeconds - tolerance &&
         state.position < nextTrackStartSeconds - tolerance
       ) {
-        return track;
+        // Only update if track changed to avoid unnecessary re-renders
+        setCurrentTrack((prev: any) => {
+          if (prev?.trackName !== track.trackName) {
+            return track;
+          }
+          return prev;
+        });
+        return;
       }
     }
 
-    return null;
+    setCurrentTrack(null);
   }, [currentMix, state.position, state.duration]);
 
   // Scrolling text configuration - memoized to prevent null artifacts
@@ -140,22 +176,8 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({
     return text.toUpperCase().replace(/ /g, "!");
   }, [currentTrack?.artistName, currentTrack?.trackName, currentMix?.name]);
 
-  const [scrollPosition, setScrollPosition] = useState<number>(0);
-
   // Prepare scrolling text with padding
   const scrollText = useMemo(() => trackName + PADDING, [trackName]);
-
-  // Mix progress (0-100%)
-  const mixProgress =
-    state.duration > 0 ? (state.position / state.duration) * 100 : 0;
-
-  // Generate progress bar string
-  const getProgressBar = () => {
-    const progressChars = Math.floor((mixProgress / 100) * DISPLAY_WIDTH);
-    const playedPortion = "=".repeat(progressChars);
-    const unplayedPortion = "_".repeat(DISPLAY_WIDTH - progressChars);
-    return playedPortion + unplayedPortion;
-  };
 
   // Player drag handlers
   const handlePlayerMouseDown = (e: React.MouseEvent) => {
@@ -167,7 +189,7 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({
     e.preventDefault();
     setIsDraggingPlayer(true);
     setDragStart({ x: e.clientX, y: e.clientY });
-    setElementStart({ x: position.x, y: position.y });
+    setElementStart({ x: positionRef.current.x, y: positionRef.current.y });
   };
 
   const handleVolumeMouseDown = (e: React.MouseEvent) => {
@@ -284,7 +306,7 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({
     };
   }, []);
 
-  // Player drag effect
+  // Player drag effect - direct DOM manipulation for performance
   useEffect(() => {
     if (!isDraggingPlayer) return;
 
@@ -301,7 +323,11 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({
         Math.min(window.innerHeight - 320, elementStart.y + deltaY),
       );
 
-      setPosition({ x: newX, y: newY });
+      // Direct DOM manipulation to avoid React re-render and styled-components recalculation
+      positionRef.current = { x: newX, y: newY };
+      if (playerRef.current) {
+        playerRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0)`;
+      }
     };
 
     const handlePlayerMouseUp = () => {
@@ -317,26 +343,85 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({
     };
   }, [isDraggingPlayer, dragStart, elementStart]);
 
-  // Scrolling text effect
+  // Initialize position on client side only (avoid SSR window error)
   useEffect(() => {
-    const interval = setInterval(() => {
-      setScrollPosition((prev) => {
-        const next = prev + 1;
-        return next >= scrollText.length ? 0 : next;
-      });
-    }, SCROLL_SPEED);
+    if (!isVisible) return;
 
-    return () => clearInterval(interval);
-  }, [scrollText.length]);
+    positionRef.current = {
+      x: window.innerWidth - 520,
+      y: window.innerHeight - 360,
+    };
+    if (playerRef.current) {
+      playerRef.current.style.transform = `translate3d(${positionRef.current.x}px, ${positionRef.current.y}px, 0)`;
+    }
+  }, [isVisible]);
 
-  // Get visible portion of scrolling text
-  const getVisibleText = () => {
-    const doubledText = scrollText + scrollText; // Double for seamless loop
-    return doubledText.substring(
-      scrollPosition,
-      scrollPosition + DISPLAY_WIDTH,
-    );
-  };
+  // Direct DOM manipulation for display updates to avoid React re-renders and FOUC
+  useEffect(() => {
+    // Don't run if not visible
+    if (!isVisible) return;
+
+    // Capture display element refs
+    displayTextRef.current = document.querySelector(
+      "[data-display-text]",
+    ) as HTMLDivElement;
+    displayProgressRef.current = document.querySelector(
+      "[data-display-progress]",
+    ) as HTMLDivElement;
+
+    // Wait for refs to be found
+    if (!displayTextRef.current || !displayProgressRef.current) {
+      console.warn("[MiniPlayer] Display refs not found");
+      return;
+    }
+
+    let lastUpdateTime = 0;
+
+    const updateDisplay = (timestamp: number) => {
+      // Update scroll position every SCROLL_SPEED ms
+      if (timestamp - lastUpdateTime >= SCROLL_SPEED) {
+        scrollPositionRef.current =
+          (scrollPositionRef.current + 1) % scrollText.length;
+        lastUpdateTime = timestamp;
+      }
+
+      // Get visible text
+      const doubledText = scrollText + scrollText;
+      const visibleText = doubledText.substring(
+        scrollPositionRef.current,
+        scrollPositionRef.current + DISPLAY_WIDTH,
+      );
+
+      // Calculate mix progress from refs (no re-render)
+      const mixProgress =
+        stateDurationRef.current > 0
+          ? (statePositionRef.current / stateDurationRef.current) * 100
+          : 0;
+
+      // Generate progress bar
+      const progressChars = Math.floor((mixProgress / 100) * DISPLAY_WIDTH);
+      const progressBar =
+        "=".repeat(progressChars) + "_".repeat(DISPLAY_WIDTH - progressChars);
+
+      // Update DOM directly
+      if (displayTextRef.current) {
+        displayTextRef.current.textContent = visibleText;
+      }
+      if (displayProgressRef.current) {
+        displayProgressRef.current.textContent = progressBar;
+      }
+
+      animationFrameRef.current = requestAnimationFrame(updateDisplay);
+    };
+
+    animationFrameRef.current = requestAnimationFrame(updateDisplay);
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [scrollText, isVisible]);
 
   React.useEffect(() => {
     const moveHandler = (e: MouseEvent) => {
@@ -357,13 +442,17 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({
     };
   }, [modeStep]);
 
+  // Early return after all hooks to avoid Rules of Hooks violation
+  if (!isVisible) return null;
+
   return (
     <>
       <GlobalFonts />
       <StyledPlayerPrototype
         ref={playerRef}
-        $x={position.x}
-        $y={position.y}
+        style={{
+          transform: `translate3d(${positionRef.current.x}px, ${positionRef.current.y}px, 0)`,
+        }}
         $isDragging={isDraggingPlayer}
         onMouseDown={handlePlayerMouseDown}
       >
@@ -375,10 +464,7 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({
             </StyledLogoPlate>
           </StyledSlats>
           <StyledMainPanel>
-            <StyledDisplay>
-              <StyledDisplayText>{getVisibleText()}</StyledDisplayText>
-              <StyledDisplayProgress>{getProgressBar()}</StyledDisplayProgress>
-            </StyledDisplay>
+            <DisplayContent />
           </StyledMainPanel>
         </StyledWoodPanel>
         <StyledControls>
@@ -456,5 +542,8 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({
     </>
   );
 };
+
+// Memoize to prevent unnecessary re-renders from parent
+const MiniPlayer = React.memo(MiniPlayerInner);
 
 export default MiniPlayer;
