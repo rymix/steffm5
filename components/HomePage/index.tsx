@@ -2,34 +2,41 @@ import { useMixcloud } from "contexts/mixcloud";
 import React, { useCallback, useEffect, useRef } from "react";
 
 import BurgerMenu from "@/components/BurgerMenu";
-import CompactPlayer from "@/components/CompactPlayer";
+import CompactControls from "@/components/CompactPlayer/CompactControls";
+import CompactDisplay from "@/components/CompactPlayer/CompactDisplay";
 import DisplayDevice from "@/components/DisplayDevice";
-import Wallpaper from "@/components/Wallpaper";
 import {
+  StyledMixCard,
+  StyledMixImage,
+  StyledMixInfo,
+  StyledMixName,
+  StyledNoMix,
+  StyledNoTracks,
   StyledTrackArtist,
   StyledTrackHeader,
   StyledTrackItem,
   StyledTrackList,
+  StyledTrackListHeader,
+  StyledTrackListSection,
   StyledTrackName,
   StyledTrackNumber,
   StyledTrackRemix,
   StyledTrackTime,
-} from "components/DisplayDevice/styles";
+} from "@/components/DisplayDevice/styles";
+import Wallpaper from "@/components/Wallpaper";
 import MainPlayer from "components/MainPlayer";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 import { useWallpaperManager } from "hooks/useWallpaperManager";
 
 import {
   StyledDevicesContainer,
-  StyledMobileContent,
+  StyledMobileControlsContainer,
+  StyledMobileDevice,
+  StyledMobileDisplayContainer,
   StyledMobileLayout,
-  StyledMobileMixCard,
-  StyledMobileMixImage,
-  StyledMobileMixInfo,
-  StyledMobileMixName,
-  StyledMobilePlayerContainer,
-  StyledMobileTrackListHeader,
-  StyledNoMix,
+  StyledMobileLogoPanel,
+  StyledMobileScreen,
+  StyledMobileWoodSlats,
   StyledPlayerPage,
 } from "./styles";
 
@@ -198,62 +205,71 @@ const HomePage: React.FC = () => {
 
         {/* Mobile Layout */}
         <StyledMobileLayout>
-          <StyledMobilePlayerContainer>
-            <CompactPlayer />
-          </StyledMobilePlayerContainer>
+          <StyledMobileDevice>
+            <StyledMobileWoodSlats>
+              <StyledMobileLogoPanel>STEF.FM</StyledMobileLogoPanel>
+            </StyledMobileWoodSlats>
 
-          <StyledMobileContent>
-            {currentMix ? (
-              <>
-                <StyledMobileMixCard>
+            <StyledMobileDisplayContainer>
+              <CompactDisplay />
+            </StyledMobileDisplayContainer>
+
+            <StyledMobileScreen>
+              {currentMix ? (
+                <StyledMixCard>
                   {currentMix.pictures?.large && (
-                    <StyledMobileMixImage
+                    <StyledMixImage
                       src={currentMix.pictures.large}
                       alt={currentMix.name}
                     />
                   )}
 
-                  <StyledMobileMixName>{currentMix.name}</StyledMobileMixName>
+                  <StyledMixName>{currentMix.name}</StyledMixName>
 
                   {currentMix.user?.name && (
-                    <StyledMobileMixInfo>
+                    <StyledMixInfo>
                       <strong>DJ:</strong> {currentMix.user.name}
-                    </StyledMobileMixInfo>
+                    </StyledMixInfo>
                   )}
 
                   {currentMix.created_time && (
-                    <StyledMobileMixInfo>
+                    <StyledMixInfo>
                       <strong>Date:</strong>{" "}
                       {new Date(currentMix.created_time).toLocaleDateString()}
-                    </StyledMobileMixInfo>
+                    </StyledMixInfo>
                   )}
 
                   {currentMix.audio_length && (
-                    <StyledMobileMixInfo>
+                    <StyledMixInfo>
                       <strong>Duration:</strong>{" "}
                       {Math.floor(currentMix.audio_length / 60)} minutes
-                    </StyledMobileMixInfo>
+                    </StyledMixInfo>
                   )}
 
                   {currentMix.play_count !== undefined && (
-                    <StyledMobileMixInfo>
+                    <StyledMixInfo>
                       <strong>Plays:</strong>{" "}
                       {currentMix.play_count.toLocaleString()}
-                    </StyledMobileMixInfo>
+                    </StyledMixInfo>
                   )}
 
                   {currentMix.tags && currentMix.tags.length > 0 && (
-                    <StyledMobileMixInfo>
+                    <StyledMixInfo>
                       <strong>Tags:</strong> {currentMix.tags.join(", ")}
-                    </StyledMobileMixInfo>
+                    </StyledMixInfo>
                   )}
-                </StyledMobileMixCard>
+                </StyledMixCard>
+              ) : (
+                <StyledNoMix>No mix currently playing</StyledNoMix>
+              )}
 
-                {sortedTracks.length > 0 && (
-                  <>
-                    <StyledMobileTrackListHeader>
-                      Track List ({sortedTracks.length})
-                    </StyledMobileTrackListHeader>
+              {currentMix && (
+                <StyledTrackListSection>
+                  <StyledTrackListHeader>
+                    Track List{" "}
+                    {sortedTracks.length > 0 && `(${sortedTracks.length})`}
+                  </StyledTrackListHeader>
+                  {sortedTracks.length > 0 ? (
                     <StyledTrackList>
                       {sortedTracks.map((track, index) => {
                         const isPlaying = index === currentTrackIndex;
@@ -286,13 +302,19 @@ const HomePage: React.FC = () => {
                         );
                       })}
                     </StyledTrackList>
-                  </>
-                )}
-              </>
-            ) : (
-              <StyledNoMix>No mix currently playing</StyledNoMix>
-            )}
-          </StyledMobileContent>
+                  ) : (
+                    <StyledNoTracks>
+                      No track information available
+                    </StyledNoTracks>
+                  )}
+                </StyledTrackListSection>
+              )}
+            </StyledMobileScreen>
+
+            <StyledMobileControlsContainer>
+              <CompactControls />
+            </StyledMobileControlsContainer>
+          </StyledMobileDevice>
         </StyledMobileLayout>
       </StyledPlayerPage>
     </>

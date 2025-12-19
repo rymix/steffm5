@@ -11,10 +11,12 @@ export const StyledPlayerPage = styled.div`
   z-index: 1;
 
   @media (max-width: 1024px) {
+    position: fixed;
+    top: 0;
+    left: 0;
     flex-direction: column;
     align-items: stretch;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
   }
 `;
 
@@ -34,17 +36,29 @@ export const StyledMobileLayout = styled.div`
 
   @media (max-width: 1024px) {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
+    padding: 10px 20px 20px 20px;
+    overflow: hidden;
   }
 `;
 
-export const StyledMobilePlayerContainer = styled.div`
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background:
+export const StyledMobileDevice = styled.div`
+  width: 100%;
+  max-width: 500px;
+  height: calc(100vh - 30px);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+`;
+
+export const StyledMobileWoodSlats = styled.div`
+  position: relative;
+  height: 40px;
+  background-image:
     linear-gradient(
       135deg,
       rgba(255, 255, 255, 0.15) 0%,
@@ -52,7 +66,96 @@ export const StyledMobilePlayerContainer = styled.div`
     ),
     url("/textures/dark-walnut.jpg");
   background-size: cover;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.2),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-left: 20px;
+  padding-top: 8px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 45%,
+      rgba(0, 0, 0, 0.8) 45%,
+      rgba(0, 0, 0, 0.8) 100%
+    );
+    background-size: 100% 12px;
+    pointer-events: none;
+  }
+`;
+
+export const StyledMobileLogoPanel = styled.div`
+  position: relative;
+  width: 90px;
+  height: 24px;
+  background: #c8c8c8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+  border-radius: 1px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Helvetica Neue", "Arial", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #2a2a2a;
+  letter-spacing: 1.2px;
+  z-index: 1;
+`;
+
+export const StyledMobileDisplayContainer = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+export const StyledMobileScreen = styled.div`
+  flex: 1;
+  background: #1a1a1a;
+  padding: 30px;
+  overflow-y: auto;
+  position: relative;
+
+  /* Custom scrollbar */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+`;
+
+export const StyledMobileControlsContainer = styled.div`
+  width: 100%;
+  position: relative;
 `;
 
 export const StyledMobileContent = styled.div`
