@@ -492,7 +492,6 @@ const MainPlayer: React.FC = () => {
                   onClick={handlePrevClick}
                   disabled={state.keys.length <= 1}
                 />
-                <StyledButtonLabel>Prev</StyledButtonLabel>
               </StyledButtonWrapper>
 
               <StyledButtonWrapper>
@@ -502,7 +501,6 @@ const MainPlayer: React.FC = () => {
                   onClick={actions.toggle}
                   disabled={state.isLoading}
                 />
-                <StyledButtonLabel>Play / Pause</StyledButtonLabel>
               </StyledButtonWrapper>
 
               <StyledButtonWrapper>
@@ -512,30 +510,26 @@ const MainPlayer: React.FC = () => {
                   onClick={handleNextClick}
                   disabled={state.keys.length <= 1}
                 />
-                <StyledButtonLabel>Next</StyledButtonLabel>
               </StyledButtonWrapper>
             </StyledButtonsContainer>
 
             <StyledButtonsContainer>
               <StyledButtonWrapper>
                 <StyledButtonLED $active={shuffleLEDActive} />
-                <StyledButtonIcon>🔀</StyledButtonIcon>
-                <StyledButton onClick={handleShuffleClick} />
                 <StyledButtonLabel>Shuffle</StyledButtonLabel>
+                <StyledButton onClick={handleShuffleClick} />
               </StyledButtonWrapper>
 
               <StyledButtonWrapper>
                 <StyledButtonLED $active={false} />
-                <StyledButtonIcon>🎲</StyledButtonIcon>
-                <StyledButton onClick={handleRandomClick} />
                 <StyledButtonLabel>Random</StyledButtonLabel>
+                <StyledButton onClick={handleRandomClick} />
               </StyledButtonWrapper>
 
               <StyledButtonWrapper>
                 <StyledButtonLED $active={false} />
-                <StyledButtonIcon>🔗</StyledButtonIcon>
-                <StyledButton onClick={handleShareClick} />
                 <StyledButtonLabel>Share</StyledButtonLabel>
+                <StyledButton onClick={handleShareClick} />
               </StyledButtonWrapper>
             </StyledButtonsContainer>
           </StyledButtonRowsWrapper>
