@@ -363,12 +363,12 @@ export const StyledDialTick = styled.div.attrs<{ $angle: number }>(
   position: absolute;
   width: 2px;
   height: 7px;
-  background: #2a2a2a;
-  top: 3px;
+  background: #7a7a7a;
+  top: 7px;
   left: 50%;
-  transform-origin: center 47px;
+  transform-origin: center 43px;
   border-radius: 0.5px;
-  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.3);
 `;
 
 export const StyledModeDial = styled.div.attrs<{ $rotation?: number }>(
@@ -473,7 +473,7 @@ export const StyledDialLabel = styled.div.attrs<{
   $active: boolean;
 }>(({ $angle }) => ({
   style: {
-    transform: `translate(-50%, -50%) rotate(${$angle}deg) translate(0, -42px) rotate(${-$angle}deg)`,
+    transform: `translate(-50%, -50%) rotate(${$angle}deg) translate(0, -50px) rotate(${-$angle}deg)`,
   },
 }))<{ $angle: number; $active: boolean }>`
   position: absolute;

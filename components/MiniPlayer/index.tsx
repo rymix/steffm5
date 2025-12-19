@@ -68,7 +68,7 @@ const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
   const playerRef = useRef<HTMLDivElement>(null);
 
   const volumeMaxAngle = 150; // Volume dial: 150° from vertical (300° total range)
-  const modeMaxAngle = 90; // Mode dial: 90° from vertical (180° total range)
+  const modeMaxAngle = 115; // Mode dial: 135° from vertical (270° total range)
 
   // Momentary button LED timers
   const [prevLEDActive, setPrevLEDActive] = useState<boolean>(false);
@@ -88,20 +88,68 @@ const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
   const animationFrameRef = useRef<number | null>(null);
   const statePositionRef = useRef(state.position);
   const stateDurationRef = useRef(state.duration);
+  const isUserChangingDialRef = useRef(false);
 
   // Convert volume (0-1) to dial rotation (-150 to 150)
   const volumeRotation = (state.volume * 2 - 1) * volumeMaxAngle;
 
-  const [modeStep, setModeStep] = useState<number>(0); // 0-4 for 5 steps
-  const modeLabels = ["Off", "Low", "Med", "High", "Max"];
+  const [modeStep, setModeStep] = useState<number>(0); // 0-5 for 6 steps
+  const modeLabels = ["All", "Adv", "Shoes", "Cock", "Spec", "Fav"];
+  const categoryValues = ["", "aidm", "mpos", "cocksoup", "special", "fav"];
   const modeTotalRange = modeMaxAngle * 2; // 180 degrees
-  const modeStepAngle = modeTotalRange / 4; // 5 steps across range (4 intervals)
+  const modeStepAngle = modeTotalRange / 5; // 6 steps across range (5 intervals)
 
   // Update refs without triggering re-render
   useEffect(() => {
     statePositionRef.current = state.position;
     stateDurationRef.current = state.duration;
   }, [state.position, state.duration]);
+
+  // Initialize dial position to match current category on mount
+  useEffect(() => {
+    const currentCategory = state.filters.category || "";
+    const categoryIndex = categoryValues.indexOf(currentCategory);
+    if (categoryIndex !== -1) {
+      setModeStep(categoryIndex);
+    }
+  }, []); // Only run on mount
+
+  // Sync mode dial with current category filter (only when changed externally)
+  useEffect(() => {
+    if (isUserChangingDialRef.current) return;
+
+    const currentCategory = state.filters.category || "";
+    const categoryIndex = categoryValues.indexOf(currentCategory);
+    if (categoryIndex !== -1 && categoryIndex !== modeStep) {
+      setModeStep(categoryIndex);
+    }
+  }, [state.filters.category, categoryValues, modeStep]);
+
+  // Apply category filter when mode dial changes
+  useEffect(() => {
+    if (!isUserChangingDialRef.current) return;
+
+    const categoryValue = categoryValues[modeStep];
+    const currentCategory = state.filters.category || "";
+
+    if (categoryValue !== currentCategory) {
+      // Update filter and apply
+      actions.updateFilter("category", categoryValue);
+      const filtersWithCategory = {
+        ...state.filters,
+        category: categoryValue,
+      };
+      const cleanFilters = Object.fromEntries(
+        Object.entries(filtersWithCategory).filter(
+          ([_, value]) => value?.trim() !== "",
+        ),
+      );
+      actions.applyFilters(cleanFilters);
+    }
+
+    // Reset flag after applying
+    isUserChangingDialRef.current = false;
+  }, [modeStep, categoryValues, state.filters, actions]);
 
   // Get current mix and track
   const currentMix = actions.getCurrentMix();
@@ -269,7 +317,8 @@ const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
     // Determine if we should change step (every 30 pixels)
     if (Math.abs(deltaY) >= 30) {
       const direction = deltaY > 0 ? 1 : -1;
-      const newStep = Math.max(0, Math.min(4, modeStep + direction));
+      const newStep = Math.max(0, Math.min(5, modeStep + direction));
+      isUserChangingDialRef.current = true;
       setModeStep(newStep);
       lastYRef.current = e.clientY;
     }
@@ -294,7 +343,8 @@ const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
   const handleModeWheel = (e: React.WheelEvent) => {
     e.preventDefault();
     const direction = e.deltaY < 0 ? 1 : -1;
-    const newStep = Math.max(0, Math.min(4, modeStep + direction));
+    const newStep = Math.max(0, Math.min(5, modeStep + direction));
+    isUserChangingDialRef.current = true;
     setModeStep(newStep);
   };
 
