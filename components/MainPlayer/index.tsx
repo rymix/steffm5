@@ -11,7 +11,9 @@ import {
   StyledButtonsContainer,
   StyledButtonWrapper,
   StyledControls,
+  StyledDialContainer,
   StyledDialLabel,
+  StyledDialLabelText,
   StyledDialTick,
   StyledDisplay,
   StyledDisplayProgress,
@@ -447,41 +449,47 @@ const MainPlayer: React.FC = () => {
           </StyledMainPanel>
         </StyledWoodPanel>
         <StyledControls>
-          <StyledVolumeDialWrapper>
-            {Array.from({ length: 11 }).map((_, i) => {
-              const angle = -volumeMaxAngle + (i * (volumeMaxAngle * 2)) / 10;
-              return <StyledDialTick key={i} $angle={angle} />;
-            })}
-            <StyledVolumeDialShadow />
-            <StyledVolumeDial
-              ref={volumeDialRef}
-              $rotation={volumeRotation}
-              onMouseDown={handleVolumeMouseDown}
-              onWheel={handleVolumeWheel}
-            />
-          </StyledVolumeDialWrapper>
+          <StyledDialContainer>
+            <StyledVolumeDialWrapper>
+              {Array.from({ length: 11 }).map((_, i) => {
+                const angle = -volumeMaxAngle + (i * (volumeMaxAngle * 2)) / 10;
+                return <StyledDialTick key={i} $angle={angle} />;
+              })}
+              <StyledVolumeDialShadow />
+              <StyledVolumeDial
+                ref={volumeDialRef}
+                $rotation={volumeRotation}
+                onMouseDown={handleVolumeMouseDown}
+                onWheel={handleVolumeWheel}
+              />
+            </StyledVolumeDialWrapper>
+            <StyledDialLabelText>Volume</StyledDialLabelText>
+          </StyledDialContainer>
 
-          <StyledModeDialWrapper>
-            {modeLabels.map((label, i) => {
-              const angle = -modeMaxAngle + i * modeStepAngle;
-              return (
-                <StyledDialLabel
-                  key={i}
-                  $angle={angle}
-                  $active={modeStep === i}
-                >
-                  {label}
-                </StyledDialLabel>
-              );
-            })}
-            <StyledModeDialShadow />
-            <StyledModeDial
-              ref={modeDialRef}
-              $rotation={-modeMaxAngle + modeStep * modeStepAngle}
-              onMouseDown={handleModeMouseDown}
-              onWheel={handleModeWheel}
-            />
-          </StyledModeDialWrapper>
+          <StyledDialContainer>
+            <StyledModeDialWrapper>
+              {modeLabels.map((label, i) => {
+                const angle = -modeMaxAngle + i * modeStepAngle;
+                return (
+                  <StyledDialLabel
+                    key={i}
+                    $angle={angle}
+                    $active={modeStep === i}
+                  >
+                    {label}
+                  </StyledDialLabel>
+                );
+              })}
+              <StyledModeDialShadow />
+              <StyledModeDial
+                ref={modeDialRef}
+                $rotation={-modeMaxAngle + modeStep * modeStepAngle}
+                onMouseDown={handleModeMouseDown}
+                onWheel={handleModeWheel}
+              />
+            </StyledModeDialWrapper>
+            <StyledDialLabelText>Category</StyledDialLabelText>
+          </StyledDialContainer>
 
           <StyledButtonRowsWrapper>
             <StyledButtonsContainer>

@@ -20,7 +20,7 @@ export const StyledWallpaper = styled.div<{
     switch ($tileType) {
       case "stretch":
         return `
-          background-size: 100% 100%;
+          background-size: cover;
           background-position: center center;
           background-repeat: no-repeat;
         `;

@@ -346,6 +346,28 @@ export const StyledDialMarker = styled.div`
   z-index: 3;
 `;
 
+export const StyledDialContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 120px;
+  flex-shrink: 0;
+`;
+
+export const StyledDialLabelText = styled.div`
+  font-family: "Helvetica Neue", "Arial", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #2a2a2a;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 6px;
+  height: 13px;
+  line-height: 13px;
+`;
+
 export const StyledVolumeDialWrapper = styled.div`
   position: relative;
   width: 100px;

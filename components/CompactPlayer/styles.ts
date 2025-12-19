@@ -135,6 +135,28 @@ export const StyledControls = styled.div`
   padding: 0 20px;
 `;
 
+export const StyledDialContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 94px;
+  flex-shrink: 0;
+`;
+
+export const StyledDialLabelText = styled.div`
+  font-family: "Helvetica Neue", "Arial", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #2a2a2a;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 6px;
+  height: 12px;
+  line-height: 12px;
+`;
+
 export const StyledVolumeDialWrapper = styled.div`
   position: relative;
   width: 70px;
