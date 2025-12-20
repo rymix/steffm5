@@ -37,6 +37,8 @@ import {
   StyledMobileLayout,
   StyledMobileLogoPanel,
   StyledMobileScreen,
+  StyledMobileScreenToggle,
+  StyledMobileScreenWrapper,
   StyledMobileWoodSlats,
   StyledPlayerPage,
 } from "./styles";
@@ -45,6 +47,7 @@ const HomePage: React.FC = () => {
   const { state, actions } = useMixcloud();
   const { wallpaperState, changeWallpaper } = useWallpaperManager();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isMobileInfoCollapsed, setIsMobileInfoCollapsed] = useState(false);
 
   // Track previous values to detect changes
   const prevCurrentKey = useRef<string | null>(null);
@@ -189,6 +192,8 @@ const HomePage: React.FC = () => {
   ]);
 
   const togglePanel = () => setIsPanelOpen(!isPanelOpen);
+  const toggleMobileInfo = () =>
+    setIsMobileInfoCollapsed(!isMobileInfoCollapsed);
 
   return (
     <>
@@ -218,102 +223,114 @@ const HomePage: React.FC = () => {
                 <CompactDisplay />
               </StyledMobileDisplayContainer>
 
-              <StyledMobileScreen>
-                {currentMix ? (
-                  <StyledMixCard>
-                    {currentMix.pictures?.large && (
-                      <StyledMixImage
-                        src={currentMix.pictures.large}
-                        alt={currentMix.name}
-                      />
-                    )}
+              <StyledMobileScreenWrapper>
+                <StyledMobileScreenToggle
+                  $collapsed={isMobileInfoCollapsed}
+                  onClick={toggleMobileInfo}
+                />
 
-                    <StyledMixName>{currentMix.name}</StyledMixName>
+                <StyledMobileScreen $collapsed={isMobileInfoCollapsed}>
+                  {currentMix ? (
+                    <StyledMixCard>
+                      {currentMix.pictures?.large && (
+                        <StyledMixImage
+                          src={currentMix.pictures.large}
+                          alt={currentMix.name}
+                        />
+                      )}
 
-                    {currentMix.user?.name && (
-                      <StyledMixInfo>
-                        <strong>DJ:</strong> {currentMix.user.name}
-                      </StyledMixInfo>
-                    )}
+                      <StyledMixName>{currentMix.name}</StyledMixName>
 
-                    {currentMix.created_time && (
-                      <StyledMixInfo>
-                        <strong>Date:</strong>{" "}
-                        {new Date(currentMix.created_time).toLocaleDateString()}
-                      </StyledMixInfo>
-                    )}
+                      {currentMix.user?.name && (
+                        <StyledMixInfo>
+                          <strong>DJ:</strong> {currentMix.user.name}
+                        </StyledMixInfo>
+                      )}
 
-                    {currentMix.audio_length && (
-                      <StyledMixInfo>
-                        <strong>Duration:</strong>{" "}
-                        {Math.floor(currentMix.audio_length / 60)} minutes
-                      </StyledMixInfo>
-                    )}
+                      {currentMix.created_time && (
+                        <StyledMixInfo>
+                          <strong>Date:</strong>{" "}
+                          {new Date(
+                            currentMix.created_time,
+                          ).toLocaleDateString()}
+                        </StyledMixInfo>
+                      )}
 
-                    {currentMix.play_count !== undefined && (
-                      <StyledMixInfo>
-                        <strong>Plays:</strong>{" "}
-                        {currentMix.play_count.toLocaleString()}
-                      </StyledMixInfo>
-                    )}
+                      {currentMix.audio_length && (
+                        <StyledMixInfo>
+                          <strong>Duration:</strong>{" "}
+                          {Math.floor(currentMix.audio_length / 60)} minutes
+                        </StyledMixInfo>
+                      )}
 
-                    {currentMix.tags && currentMix.tags.length > 0 && (
-                      <StyledMixInfo>
-                        <strong>Tags:</strong> {currentMix.tags.join(", ")}
-                      </StyledMixInfo>
-                    )}
-                  </StyledMixCard>
-                ) : (
-                  <StyledNoMix>No mix currently playing</StyledNoMix>
-                )}
+                      {currentMix.play_count !== undefined && (
+                        <StyledMixInfo>
+                          <strong>Plays:</strong>{" "}
+                          {currentMix.play_count.toLocaleString()}
+                        </StyledMixInfo>
+                      )}
 
-                {currentMix && (
-                  <StyledTrackListSection>
-                    <StyledTrackListHeader>
-                      Track List{" "}
-                      {sortedTracks.length > 0 && `(${sortedTracks.length})`}
-                    </StyledTrackListHeader>
-                    {sortedTracks.length > 0 ? (
-                      <StyledTrackList>
-                        {sortedTracks.map((track, index) => {
-                          const isPlaying = index === currentTrackIndex;
-                          return (
-                            <StyledTrackItem key={index} $isPlaying={isPlaying}>
-                              <StyledTrackHeader>
-                                <StyledTrackNumber $isPlaying={isPlaying}>
-                                  {track.sectionNumber || index + 1}
-                                </StyledTrackNumber>
-                                <StyledTrackTime $isPlaying={isPlaying}>
-                                  {track.startTime}
-                                </StyledTrackTime>
-                              </StyledTrackHeader>
-                              {track.trackName && (
-                                <StyledTrackName $isPlaying={isPlaying}>
-                                  {track.trackName}
-                                </StyledTrackName>
-                              )}
-                              {track.artistName && (
-                                <StyledTrackArtist $isPlaying={isPlaying}>
-                                  {track.artistName}
-                                </StyledTrackArtist>
-                              )}
-                              {track.remixArtist && (
-                                <StyledTrackRemix $isPlaying={isPlaying}>
-                                  {track.remixArtist}
-                                </StyledTrackRemix>
-                              )}
-                            </StyledTrackItem>
-                          );
-                        })}
-                      </StyledTrackList>
-                    ) : (
-                      <StyledNoTracks>
-                        No track information available
-                      </StyledNoTracks>
-                    )}
-                  </StyledTrackListSection>
-                )}
-              </StyledMobileScreen>
+                      {currentMix.tags && currentMix.tags.length > 0 && (
+                        <StyledMixInfo>
+                          <strong>Tags:</strong> {currentMix.tags.join(", ")}
+                        </StyledMixInfo>
+                      )}
+                    </StyledMixCard>
+                  ) : (
+                    <StyledNoMix>No mix currently playing</StyledNoMix>
+                  )}
+
+                  {currentMix && (
+                    <StyledTrackListSection>
+                      <StyledTrackListHeader>
+                        Track List{" "}
+                        {sortedTracks.length > 0 && `(${sortedTracks.length})`}
+                      </StyledTrackListHeader>
+                      {sortedTracks.length > 0 ? (
+                        <StyledTrackList>
+                          {sortedTracks.map((track, index) => {
+                            const isPlaying = index === currentTrackIndex;
+                            return (
+                              <StyledTrackItem
+                                key={index}
+                                $isPlaying={isPlaying}
+                              >
+                                <StyledTrackHeader>
+                                  <StyledTrackNumber $isPlaying={isPlaying}>
+                                    {track.sectionNumber || index + 1}
+                                  </StyledTrackNumber>
+                                  <StyledTrackTime $isPlaying={isPlaying}>
+                                    {track.startTime}
+                                  </StyledTrackTime>
+                                </StyledTrackHeader>
+                                {track.trackName && (
+                                  <StyledTrackName $isPlaying={isPlaying}>
+                                    {track.trackName}
+                                  </StyledTrackName>
+                                )}
+                                {track.artistName && (
+                                  <StyledTrackArtist $isPlaying={isPlaying}>
+                                    {track.artistName}
+                                  </StyledTrackArtist>
+                                )}
+                                {track.remixArtist && (
+                                  <StyledTrackRemix $isPlaying={isPlaying}>
+                                    {track.remixArtist}
+                                  </StyledTrackRemix>
+                                )}
+                              </StyledTrackItem>
+                            );
+                          })}
+                        </StyledTrackList>
+                      ) : (
+                        <StyledNoTracks>
+                          No track information available
+                        </StyledNoTracks>
+                      )}
+                    </StyledTrackListSection>
+                  )}
+                </StyledMobileScreen>
+              </StyledMobileScreenWrapper>
 
               <StyledMobileControlsContainer>
                 <CompactControls />

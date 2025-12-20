@@ -61,7 +61,7 @@ export const StyledMobileLayout = styled.div`
 export const StyledMobileDevice = styled.div`
   width: 100%;
   max-width: 500px;
-  height: calc(100vh - 30px);
+  max-height: calc(100vh - 30px);
   display: flex;
   flex-direction: column;
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
@@ -71,6 +71,7 @@ export const StyledMobileDevice = styled.div`
 export const StyledMobileWoodSlats = styled.div`
   position: relative;
   height: 40px;
+  flex-shrink: 0;
   background-image:
     linear-gradient(
       135deg,
@@ -140,14 +141,69 @@ export const StyledMobileLogoPanel = styled.div`
 export const StyledMobileDisplayContainer = styled.div`
   width: 100%;
   position: relative;
+  flex-shrink: 0;
 `;
 
-export const StyledMobileScreen = styled.div`
+export const StyledMobileScreenWrapper = styled.div`
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #1a1a1a;
+`;
+
+export const StyledMobileScreenToggle = styled.button<{ $collapsed: boolean }>`
+  width: 100%;
+  height: 16px;
+  background: linear-gradient(180deg, #3a3a3a 0%, #454545 50%, #4a4a4a 100%);
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.8);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+
+  &:hover {
+    background: linear-gradient(180deg, #454545 0%, #505050 50%, #555555 100%);
+  }
+
+  &:active {
+    background: linear-gradient(180deg, #2a2a2a 0%, #353535 50%, #3a3a3a 100%);
+  }
+
+  &::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: ${({ $collapsed }) =>
+      $collapsed ? "none" : "5px solid rgba(255, 255, 255, 0.4)"};
+    border-bottom: ${({ $collapsed }) =>
+      $collapsed ? "5px solid rgba(255, 255, 255, 0.4)" : "none"};
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+  }
+`;
+
+export const StyledMobileScreen = styled.div<{ $collapsed: boolean }>`
   flex: 1;
   background: #1a1a1a;
-  padding: 30px;
-  overflow-y: auto;
+  padding: ${({ $collapsed }) => ($collapsed ? "0 30px" : "30px")};
+  overflow-y: ${({ $collapsed }) => ($collapsed ? "hidden" : "auto")};
   position: relative;
+  max-height: ${({ $collapsed }) => ($collapsed ? "0" : "100%")};
+  opacity: ${({ $collapsed }) => ($collapsed ? "0" : "1")};
+  transition:
+    max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease 0.1s,
+    padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Custom scrollbar */
   &::-webkit-scrollbar {
@@ -171,6 +227,7 @@ export const StyledMobileScreen = styled.div`
 export const StyledMobileControlsContainer = styled.div`
   width: 100%;
   position: relative;
+  flex-shrink: 0;
 `;
 
 export const StyledMobileContent = styled.div`
