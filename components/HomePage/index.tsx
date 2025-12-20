@@ -1,5 +1,5 @@
 import { useMixcloud } from "contexts/mixcloud";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import BurgerMenu from "@/components/BurgerMenu";
 import CompactControls from "@/components/CompactPlayer/CompactControls";
@@ -30,6 +30,7 @@ import { useWallpaperManager } from "hooks/useWallpaperManager";
 
 import {
   StyledDevicesContainer,
+  StyledLayoutWrapper,
   StyledMobileControlsContainer,
   StyledMobileDevice,
   StyledMobileDisplayContainer,
@@ -43,6 +44,7 @@ import {
 const HomePage: React.FC = () => {
   const { state, actions } = useMixcloud();
   const { wallpaperState, changeWallpaper } = useWallpaperManager();
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   // Track previous values to detect changes
   const prevCurrentKey = useRef<string | null>(null);
@@ -186,6 +188,8 @@ const HomePage: React.FC = () => {
     changeWallpaper,
   ]);
 
+  const togglePanel = () => setIsPanelOpen(!isPanelOpen);
+
   return (
     <>
       <Wallpaper
@@ -194,129 +198,132 @@ const HomePage: React.FC = () => {
         isLoading={wallpaperState.isLoading}
       />
       <BurgerMenu />
-      <DisplayDevice />
       <MixcloudPlayerWrapper autoPlay={true} />
 
-      <StyledPlayerPage>
-        {/* Desktop Layout */}
-        <StyledDevicesContainer>
-          <MainPlayer />
-        </StyledDevicesContainer>
+      <StyledLayoutWrapper>
+        <StyledPlayerPage $panelOpen={isPanelOpen}>
+          {/* Desktop Layout */}
+          <StyledDevicesContainer>
+            <MainPlayer />
+          </StyledDevicesContainer>
 
-        {/* Mobile Layout */}
-        <StyledMobileLayout>
-          <StyledMobileDevice>
-            <StyledMobileWoodSlats>
-              <StyledMobileLogoPanel>STEF.FM</StyledMobileLogoPanel>
-            </StyledMobileWoodSlats>
+          {/* Mobile Layout */}
+          <StyledMobileLayout>
+            <StyledMobileDevice>
+              <StyledMobileWoodSlats>
+                <StyledMobileLogoPanel>STEF.FM</StyledMobileLogoPanel>
+              </StyledMobileWoodSlats>
 
-            <StyledMobileDisplayContainer>
-              <CompactDisplay />
-            </StyledMobileDisplayContainer>
+              <StyledMobileDisplayContainer>
+                <CompactDisplay />
+              </StyledMobileDisplayContainer>
 
-            <StyledMobileScreen>
-              {currentMix ? (
-                <StyledMixCard>
-                  {currentMix.pictures?.large && (
-                    <StyledMixImage
-                      src={currentMix.pictures.large}
-                      alt={currentMix.name}
-                    />
-                  )}
+              <StyledMobileScreen>
+                {currentMix ? (
+                  <StyledMixCard>
+                    {currentMix.pictures?.large && (
+                      <StyledMixImage
+                        src={currentMix.pictures.large}
+                        alt={currentMix.name}
+                      />
+                    )}
 
-                  <StyledMixName>{currentMix.name}</StyledMixName>
+                    <StyledMixName>{currentMix.name}</StyledMixName>
 
-                  {currentMix.user?.name && (
-                    <StyledMixInfo>
-                      <strong>DJ:</strong> {currentMix.user.name}
-                    </StyledMixInfo>
-                  )}
+                    {currentMix.user?.name && (
+                      <StyledMixInfo>
+                        <strong>DJ:</strong> {currentMix.user.name}
+                      </StyledMixInfo>
+                    )}
 
-                  {currentMix.created_time && (
-                    <StyledMixInfo>
-                      <strong>Date:</strong>{" "}
-                      {new Date(currentMix.created_time).toLocaleDateString()}
-                    </StyledMixInfo>
-                  )}
+                    {currentMix.created_time && (
+                      <StyledMixInfo>
+                        <strong>Date:</strong>{" "}
+                        {new Date(currentMix.created_time).toLocaleDateString()}
+                      </StyledMixInfo>
+                    )}
 
-                  {currentMix.audio_length && (
-                    <StyledMixInfo>
-                      <strong>Duration:</strong>{" "}
-                      {Math.floor(currentMix.audio_length / 60)} minutes
-                    </StyledMixInfo>
-                  )}
+                    {currentMix.audio_length && (
+                      <StyledMixInfo>
+                        <strong>Duration:</strong>{" "}
+                        {Math.floor(currentMix.audio_length / 60)} minutes
+                      </StyledMixInfo>
+                    )}
 
-                  {currentMix.play_count !== undefined && (
-                    <StyledMixInfo>
-                      <strong>Plays:</strong>{" "}
-                      {currentMix.play_count.toLocaleString()}
-                    </StyledMixInfo>
-                  )}
+                    {currentMix.play_count !== undefined && (
+                      <StyledMixInfo>
+                        <strong>Plays:</strong>{" "}
+                        {currentMix.play_count.toLocaleString()}
+                      </StyledMixInfo>
+                    )}
 
-                  {currentMix.tags && currentMix.tags.length > 0 && (
-                    <StyledMixInfo>
-                      <strong>Tags:</strong> {currentMix.tags.join(", ")}
-                    </StyledMixInfo>
-                  )}
-                </StyledMixCard>
-              ) : (
-                <StyledNoMix>No mix currently playing</StyledNoMix>
-              )}
+                    {currentMix.tags && currentMix.tags.length > 0 && (
+                      <StyledMixInfo>
+                        <strong>Tags:</strong> {currentMix.tags.join(", ")}
+                      </StyledMixInfo>
+                    )}
+                  </StyledMixCard>
+                ) : (
+                  <StyledNoMix>No mix currently playing</StyledNoMix>
+                )}
 
-              {currentMix && (
-                <StyledTrackListSection>
-                  <StyledTrackListHeader>
-                    Track List{" "}
-                    {sortedTracks.length > 0 && `(${sortedTracks.length})`}
-                  </StyledTrackListHeader>
-                  {sortedTracks.length > 0 ? (
-                    <StyledTrackList>
-                      {sortedTracks.map((track, index) => {
-                        const isPlaying = index === currentTrackIndex;
-                        return (
-                          <StyledTrackItem key={index} $isPlaying={isPlaying}>
-                            <StyledTrackHeader>
-                              <StyledTrackNumber $isPlaying={isPlaying}>
-                                {track.sectionNumber || index + 1}
-                              </StyledTrackNumber>
-                              <StyledTrackTime $isPlaying={isPlaying}>
-                                {track.startTime}
-                              </StyledTrackTime>
-                            </StyledTrackHeader>
-                            {track.trackName && (
-                              <StyledTrackName $isPlaying={isPlaying}>
-                                {track.trackName}
-                              </StyledTrackName>
-                            )}
-                            {track.artistName && (
-                              <StyledTrackArtist $isPlaying={isPlaying}>
-                                {track.artistName}
-                              </StyledTrackArtist>
-                            )}
-                            {track.remixArtist && (
-                              <StyledTrackRemix $isPlaying={isPlaying}>
-                                {track.remixArtist}
-                              </StyledTrackRemix>
-                            )}
-                          </StyledTrackItem>
-                        );
-                      })}
-                    </StyledTrackList>
-                  ) : (
-                    <StyledNoTracks>
-                      No track information available
-                    </StyledNoTracks>
-                  )}
-                </StyledTrackListSection>
-              )}
-            </StyledMobileScreen>
+                {currentMix && (
+                  <StyledTrackListSection>
+                    <StyledTrackListHeader>
+                      Track List{" "}
+                      {sortedTracks.length > 0 && `(${sortedTracks.length})`}
+                    </StyledTrackListHeader>
+                    {sortedTracks.length > 0 ? (
+                      <StyledTrackList>
+                        {sortedTracks.map((track, index) => {
+                          const isPlaying = index === currentTrackIndex;
+                          return (
+                            <StyledTrackItem key={index} $isPlaying={isPlaying}>
+                              <StyledTrackHeader>
+                                <StyledTrackNumber $isPlaying={isPlaying}>
+                                  {track.sectionNumber || index + 1}
+                                </StyledTrackNumber>
+                                <StyledTrackTime $isPlaying={isPlaying}>
+                                  {track.startTime}
+                                </StyledTrackTime>
+                              </StyledTrackHeader>
+                              {track.trackName && (
+                                <StyledTrackName $isPlaying={isPlaying}>
+                                  {track.trackName}
+                                </StyledTrackName>
+                              )}
+                              {track.artistName && (
+                                <StyledTrackArtist $isPlaying={isPlaying}>
+                                  {track.artistName}
+                                </StyledTrackArtist>
+                              )}
+                              {track.remixArtist && (
+                                <StyledTrackRemix $isPlaying={isPlaying}>
+                                  {track.remixArtist}
+                                </StyledTrackRemix>
+                              )}
+                            </StyledTrackItem>
+                          );
+                        })}
+                      </StyledTrackList>
+                    ) : (
+                      <StyledNoTracks>
+                        No track information available
+                      </StyledNoTracks>
+                    )}
+                  </StyledTrackListSection>
+                )}
+              </StyledMobileScreen>
 
-            <StyledMobileControlsContainer>
-              <CompactControls />
-            </StyledMobileControlsContainer>
-          </StyledMobileDevice>
-        </StyledMobileLayout>
-      </StyledPlayerPage>
+              <StyledMobileControlsContainer>
+                <CompactControls />
+              </StyledMobileControlsContainer>
+            </StyledMobileDevice>
+          </StyledMobileLayout>
+        </StyledPlayerPage>
+
+        <DisplayDevice isOpen={isPanelOpen} onToggle={togglePanel} />
+      </StyledLayoutWrapper>
     </>
   );
 };

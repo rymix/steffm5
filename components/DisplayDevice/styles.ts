@@ -1,21 +1,24 @@
 import styled from "styled-components";
 
-export const StyledDisplayDevice = styled.div<{ $isOpen: boolean }>`
-  position: fixed;
-  top: 0;
-  right: ${({ $isOpen }) => ($isOpen ? "0" : "-420px")};
-  width: 420px;
-  height: 100vh;
-  z-index: 1000;
-  box-shadow: ${({ $isOpen }) =>
-    $isOpen ? "-4px 0 24px rgba(0, 0, 0, 0.5)" : "none"};
-  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
+export const StyledDisplayDeviceWrapper = styled.div`
+  position: relative;
+  flex-shrink: 0;
 
   @media (max-width: 1024px) {
     display: none;
   }
+`;
+
+export const StyledDisplayDevice = styled.div<{ $isOpen: boolean }>`
+  width: ${({ $isOpen }) => ($isOpen ? "420px" : "0")};
+  height: 100vh;
+  z-index: 1000;
+  box-shadow: ${({ $isOpen }) =>
+    $isOpen ? "-4px 0 24px rgba(0, 0, 0, 0.5)" : "none"};
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `;
 
 export const StyledWoodSlats = styled.div`
@@ -96,9 +99,9 @@ export const StyledMetalPanel = styled.div`
 `;
 
 export const StyledToggleButton = styled.button<{ $isOpen: boolean }>`
-  position: fixed;
+  position: absolute;
   top: 50%;
-  right: ${({ $isOpen }) => ($isOpen ? "420px" : "0")};
+  left: -40px;
   transform: translateY(-50%);
   width: 40px;
   height: 80px;
@@ -121,8 +124,7 @@ export const StyledToggleButton = styled.button<{ $isOpen: boolean }>`
   justify-content: center;
   font-size: 20px;
   color: #2a2a2a;
-  z-index: 999;
-  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1001;
   user-select: none;
 
   &:hover {

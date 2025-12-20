@@ -1,22 +1,32 @@
 import styled from "styled-components";
 
-export const StyledPlayerPage = styled.div`
+export const StyledLayoutWrapper = styled.div`
   width: 100vw;
   height: 100vh;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
+`;
+
+export const StyledPlayerPage = styled.div<{ $panelOpen?: boolean }>`
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   position: relative;
   z-index: 1;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  width: ${({ $panelOpen }) => ($panelOpen ? "calc(100vw - 420px)" : "100vw")};
 
   @media (max-width: 1024px) {
-    position: fixed;
-    top: 0;
-    left: 0;
+    width: 100vw;
     flex-direction: column;
     align-items: stretch;
-    overflow: hidden;
   }
 `;
 

@@ -5,6 +5,7 @@ import PlaybackButtons from "@/components/PlaybackButtons";
 
 import {
   StyledDisplayDevice,
+  StyledDisplayDeviceWrapper,
   StyledMetalPanel,
   StyledMixCard,
   StyledMixImage,
@@ -27,15 +28,23 @@ import {
   StyledWoodSlats,
 } from "./styles";
 
-const DisplayDevice: React.FC = () => {
+interface DisplayDeviceProps {
+  isOpen?: boolean;
+  onToggle?: () => void;
+}
+
+const DisplayDevice: React.FC<DisplayDeviceProps> = ({
+  isOpen: isOpenProp,
+  onToggle: onToggleProp,
+}) => {
   const { state, actions } = useMixcloud();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenInternal, setIsOpenInternal] = useState(false);
+
+  const isOpen = isOpenProp !== undefined ? isOpenProp : isOpenInternal;
+  const toggleDisplay =
+    onToggleProp || (() => setIsOpenInternal(!isOpenInternal));
 
   const currentMix = actions.getCurrentMix();
-
-  const toggleDisplay = () => {
-    setIsOpen(!isOpen);
-  };
 
   // Helper to convert time string to seconds
   const timeToSeconds = (timeString: string): number => {
@@ -83,7 +92,7 @@ const DisplayDevice: React.FC = () => {
   }, [sortedTracks, state.position, state.duration]);
 
   return (
-    <>
+    <StyledDisplayDeviceWrapper>
       <StyledToggleButton $isOpen={isOpen} onClick={toggleDisplay}>
         {isOpen ? "▶" : "◀"}
       </StyledToggleButton>
@@ -190,7 +199,7 @@ const DisplayDevice: React.FC = () => {
           <PlaybackButtons showLabels={false} />
         </StyledMetalPanel>
       </StyledDisplayDevice>
-    </>
+    </StyledDisplayDeviceWrapper>
   );
 };
 
