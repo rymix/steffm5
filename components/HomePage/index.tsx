@@ -1,5 +1,7 @@
 import { useMixcloud } from "contexts/mixcloud";
+import { useTheme } from "contexts/theme";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { getPanelThemeMode } from "utils/themeHelpers";
 
 import BurgerMenu from "@/components/BurgerMenu";
 import CompactControls from "@/components/CompactPlayer/CompactControls";
@@ -49,6 +51,8 @@ import {
 
 const HomePage: React.FC = () => {
   const { state, actions } = useMixcloud();
+  const theme = useTheme();
+  const panelThemeMode = getPanelThemeMode(theme.state.mode);
   const { wallpaperState, changeWallpaper } = useWallpaperManager();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isMobileInfoCollapsed, setIsMobileInfoCollapsed] = useState(false);
@@ -248,15 +252,18 @@ const HomePage: React.FC = () => {
                 <CompactDisplay />
               </StyledMobileDisplayContainer>
 
-              <StyledMobileScreenWrapper>
+              <StyledMobileScreenWrapper $themeMode={panelThemeMode}>
                 <StyledMobileScreenToggle
                   $collapsed={isMobileInfoCollapsed}
                   onClick={toggleMobileInfo}
                 />
 
-                <StyledMobileScreen $collapsed={isMobileInfoCollapsed}>
+                <StyledMobileScreen
+                  $collapsed={isMobileInfoCollapsed}
+                  $themeMode={panelThemeMode}
+                >
                   {currentMix ? (
-                    <StyledMixCard>
+                    <StyledMixCard $themeMode={panelThemeMode}>
                       {currentMix.coverArtLarge && (
                         <StyledMixCoverArt
                           src={currentMix.coverArtLarge}
@@ -264,16 +271,18 @@ const HomePage: React.FC = () => {
                         />
                       )}
 
-                      <StyledMixName>{currentMix.name}</StyledMixName>
+                      <StyledMixName $themeMode={panelThemeMode}>
+                        {currentMix.name}
+                      </StyledMixName>
 
                       {currentMix.user?.name && (
-                        <StyledMixInfo>
+                        <StyledMixInfo $themeMode={panelThemeMode}>
                           <strong>DJ:</strong> {currentMix.user.name}
                         </StyledMixInfo>
                       )}
 
                       {currentMix.created_time && (
-                        <StyledMixInfo>
+                        <StyledMixInfo $themeMode={panelThemeMode}>
                           <strong>Date:</strong>{" "}
                           {new Date(
                             currentMix.created_time,
@@ -282,32 +291,34 @@ const HomePage: React.FC = () => {
                       )}
 
                       {currentMix.audio_length && (
-                        <StyledMixInfo>
+                        <StyledMixInfo $themeMode={panelThemeMode}>
                           <strong>Duration:</strong>{" "}
                           {Math.floor(currentMix.audio_length / 60)} minutes
                         </StyledMixInfo>
                       )}
 
                       {currentMix.play_count !== undefined && (
-                        <StyledMixInfo>
+                        <StyledMixInfo $themeMode={panelThemeMode}>
                           <strong>Plays:</strong>{" "}
                           {currentMix.play_count.toLocaleString()}
                         </StyledMixInfo>
                       )}
 
                       {currentMix.tags && currentMix.tags.length > 0 && (
-                        <StyledMixInfo>
+                        <StyledMixInfo $themeMode={panelThemeMode}>
                           <strong>Tags:</strong> {currentMix.tags.join(", ")}
                         </StyledMixInfo>
                       )}
                     </StyledMixCard>
                   ) : (
-                    <StyledNoMix>No mix currently playing</StyledNoMix>
+                    <StyledNoMix $themeMode={panelThemeMode}>
+                      No mix currently playing
+                    </StyledNoMix>
                   )}
 
                   {currentMix && (
                     <StyledTrackListSection>
-                      <StyledTrackListHeader>
+                      <StyledTrackListHeader $themeMode={panelThemeMode}>
                         Track List{" "}
                         {sortedTracks.length > 0 && `(${sortedTracks.length})`}
                       </StyledTrackListHeader>
@@ -322,6 +333,7 @@ const HomePage: React.FC = () => {
                                 key={index}
                                 $isPlaying={isPlaying}
                                 $isExpanded={isExpanded}
+                                $themeMode={panelThemeMode}
                                 onClick={() => toggleTrackExpanded(index)}
                               >
                                 {track.coverArtLarge && (
@@ -334,34 +346,51 @@ const HomePage: React.FC = () => {
                                 )}
                                 <StyledTrackContent>
                                   <StyledTrackHeader>
-                                    <StyledTrackNumber $isPlaying={isPlaying}>
+                                    <StyledTrackNumber
+                                      $isPlaying={isPlaying}
+                                      $themeMode={panelThemeMode}
+                                    >
                                       {track.sectionNumber || index + 1}
                                     </StyledTrackNumber>
-                                    <StyledTrackTime $isPlaying={isPlaying}>
+                                    <StyledTrackTime
+                                      $isPlaying={isPlaying}
+                                      $themeMode={panelThemeMode}
+                                    >
                                       {track.startTime}
                                     </StyledTrackTime>
                                   </StyledTrackHeader>
                                   {track.trackName && (
-                                    <StyledTrackName $isPlaying={isPlaying}>
+                                    <StyledTrackName
+                                      $isPlaying={isPlaying}
+                                      $themeMode={panelThemeMode}
+                                    >
                                       {track.trackName}
                                     </StyledTrackName>
                                   )}
                                   {track.artistName && (
-                                    <StyledTrackArtist $isPlaying={isPlaying}>
+                                    <StyledTrackArtist
+                                      $isPlaying={isPlaying}
+                                      $themeMode={panelThemeMode}
+                                    >
                                       {track.artistName}
                                     </StyledTrackArtist>
                                   )}
                                   {track.remixArtist && (
-                                    <StyledTrackRemix $isPlaying={isPlaying}>
+                                    <StyledTrackRemix
+                                      $isPlaying={isPlaying}
+                                      $themeMode={panelThemeMode}
+                                    >
                                       {track.remixArtist}
                                     </StyledTrackRemix>
                                   )}
                                   <StyledTrackExpandedInfo
                                     $isExpanded={isExpanded}
+                                    $themeMode={panelThemeMode}
                                   >
                                     {duration && (
                                       <StyledTrackExtraInfo
                                         $isPlaying={isPlaying}
+                                        $themeMode={panelThemeMode}
                                       >
                                         <strong>Length:</strong>
                                         {duration}
@@ -370,6 +399,7 @@ const HomePage: React.FC = () => {
                                     {track.publisher && (
                                       <StyledTrackExtraInfo
                                         $isPlaying={isPlaying}
+                                        $themeMode={panelThemeMode}
                                       >
                                         <strong>Publisher:</strong>
                                         {track.publisher}
@@ -382,7 +412,7 @@ const HomePage: React.FC = () => {
                           })}
                         </StyledTrackList>
                       ) : (
-                        <StyledNoTracks>
+                        <StyledNoTracks $themeMode={panelThemeMode}>
                           No track information available
                         </StyledNoTracks>
                       )}

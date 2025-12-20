@@ -1,6 +1,8 @@
 import { useModal } from "contexts/modal";
 import { useOverlay } from "contexts/overlay";
+import { useTheme } from "contexts/theme";
 import React, { useEffect, useRef, useState } from "react";
+import { getModalThemeMode } from "utils/themeHelpers";
 
 import MixListPage from "components/MixListPage";
 
@@ -14,6 +16,9 @@ import {
   StyledMenuFooter,
   StyledMenuItem,
   StyledMenuSection,
+  StyledThemeButton,
+  StyledThemeButtonInner,
+  StyledThemeToggleContainer,
 } from "./styles";
 
 interface BurgerMenuProps {
@@ -25,6 +30,8 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
   const [prevModalOpen, setPrevModalOpen] = useState(false);
   const modal = useModal();
   const overlay = useOverlay();
+  const theme = useTheme();
+  const menuThemeMode = getModalThemeMode(theme.state.mode);
   const justOpenedMenuRef = useRef(false);
 
   const toggleMenu = () => {
@@ -101,18 +108,36 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
         onClick={toggleMenu}
         className={className}
         $isOpen={isOpen}
+        $themeMode={menuThemeMode}
         aria-label={isOpen ? "Close menu" : "Open menu"}
       >
-        <StyledBurgerLine $isOpen={isOpen} $line="top" />
-        <StyledBurgerLine $isOpen={isOpen} $line="middle" />
-        <StyledBurgerLine $isOpen={isOpen} $line="bottom" />
+        <StyledBurgerLine
+          $isOpen={isOpen}
+          $line="top"
+          $themeMode={menuThemeMode}
+        />
+        <StyledBurgerLine
+          $isOpen={isOpen}
+          $line="middle"
+          $themeMode={menuThemeMode}
+        />
+        <StyledBurgerLine
+          $isOpen={isOpen}
+          $line="bottom"
+          $themeMode={menuThemeMode}
+        />
       </StyledBurgerButton>
 
       {isOpen && (
-        <StyledMenu $isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
-          <StyledMenuContent>
-            <StyledMenuSection>
+        <StyledMenu
+          $isOpen={isOpen}
+          $themeMode={menuThemeMode}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <StyledMenuContent $themeMode={theme.state.mode}>
+            <StyledMenuSection $themeMode={theme.state.mode}>
               <StyledMenuItem
+                $themeMode={menuThemeMode}
                 onClick={() =>
                   handleModalDemo(
                     "about-modal",
@@ -125,6 +150,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
                 About
               </StyledMenuItem>
               <StyledMenuItem
+                $themeMode={menuThemeMode}
                 onClick={() =>
                   handleModalDemo(
                     "statistics-modal",
@@ -137,6 +163,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
                 Statistics
               </StyledMenuItem>
               <StyledMenuItem
+                $themeMode={menuThemeMode}
                 onClick={() =>
                   handleModalDemo(
                     "mix-list-modal",
@@ -151,7 +178,37 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
             </StyledMenuSection>
           </StyledMenuContent>
 
-          <StyledMenuFooter>
+          <StyledThemeToggleContainer $themeMode={theme.state.mode}>
+            <StyledThemeButton
+              $themeMode={menuThemeMode}
+              $isActive={theme.state.mode === "light"}
+              onClick={() => theme.actions.setTheme("light")}
+              aria-label="Light mode"
+              title="Light mode"
+            >
+              <StyledThemeButtonInner>☀</StyledThemeButtonInner>
+            </StyledThemeButton>
+            <StyledThemeButton
+              $themeMode={menuThemeMode}
+              $isActive={theme.state.mode === "dark"}
+              onClick={() => theme.actions.setTheme("dark")}
+              aria-label="Dark mode"
+              title="Dark mode"
+            >
+              <StyledThemeButtonInner>☾</StyledThemeButtonInner>
+            </StyledThemeButton>
+            <StyledThemeButton
+              $themeMode={menuThemeMode}
+              $isActive={theme.state.mode === "mixed"}
+              onClick={() => theme.actions.setTheme("mixed")}
+              aria-label="Mixed mode"
+              title="Mixed mode"
+            >
+              <StyledThemeButtonInner $isMixed>☀☾</StyledThemeButtonInner>
+            </StyledThemeButton>
+          </StyledThemeToggleContainer>
+
+          <StyledMenuFooter $themeMode={menuThemeMode}>
             <p>Stef.FM v5.0</p>
             <p>Funky House Coming In Your Ears</p>
           </StyledMenuFooter>

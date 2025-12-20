@@ -1,5 +1,7 @@
 import { useMixcloud } from "contexts/mixcloud";
+import { useTheme } from "contexts/theme";
 import React, { useCallback, useState } from "react";
+import { getModalThemeMode } from "utils/themeHelpers";
 
 import type { Track } from "db/types";
 
@@ -37,6 +39,8 @@ type MixItemState = {
 
 const MixList: React.FC = () => {
   const { state, actions } = useMixcloud();
+  const theme = useTheme();
+  const modalThemeMode = getModalThemeMode(theme.state.mode);
   const [mixStates, setMixStates] = useState<Record<string, MixItemState>>({});
 
   // Early return if context is not properly initialized
@@ -139,7 +143,7 @@ const MixList: React.FC = () => {
   // Show loading state while mixes are being loaded
   if (state.isLoadingMixes) {
     return (
-      <StyledMixList>
+      <StyledMixList $themeMode={modalThemeMode}>
         <h4>Mix List</h4>
         <div>Loading mixes...</div>
       </StyledMixList>
@@ -149,7 +153,7 @@ const MixList: React.FC = () => {
   // Don't render if no keys are available after loading
   if (!state.keys || state.keys.length === 0) {
     return (
-      <StyledMixList>
+      <StyledMixList $themeMode={modalThemeMode}>
         <h4>Mix List</h4>
         <div>No mixes available</div>
       </StyledMixList>
@@ -157,7 +161,7 @@ const MixList: React.FC = () => {
   }
 
   return (
-    <StyledMixList>
+    <StyledMixList $themeMode={modalThemeMode}>
       <h4>Mix List</h4>
       <ul>
         {state.keys.map((key, index) => {
@@ -180,6 +184,7 @@ const MixList: React.FC = () => {
               key={key}
               $isCurrent={index === state.currentIndex}
               $isExpanded={isExpanded}
+              $themeMode={modalThemeMode}
             >
               <StyledMixHeader
                 onClick={(e: React.MouseEvent) => {
@@ -191,16 +196,19 @@ const MixList: React.FC = () => {
               >
                 <StyledMixListItemContent>
                   <StyledMixListItemInfo>
-                    <StyledMixListStatusDot $status={progress.status} />
+                    <StyledMixListStatusDot
+                      $status={progress.status}
+                      $themeMode={modalThemeMode}
+                    />
                     <div>
-                      <StyledMixTitle>
+                      <StyledMixTitle $themeMode={modalThemeMode}>
                         {index + 1}. {mix?.name || key}
                         {index === state.currentIndex && state.isPlaying && (
                           <StyledPlayingIcon>🔊</StyledPlayingIcon>
                         )}
                       </StyledMixTitle>
                       {mix && (
-                        <StyledMixMetadata>
+                        <StyledMixMetadata $themeMode={modalThemeMode}>
                           {mix.category} • {formatDate(mix.releaseDate)} •{" "}
                           {formatDuration(mix.duration)} •{" "}
                           {mix.tracks?.length || 0} tracks
@@ -261,16 +269,21 @@ const MixList: React.FC = () => {
                           </StyledControlButton>
                         )}
                         {!state.isPlaying && state.isLoading && (
-                          <StyledLoadingText>Loading...</StyledLoadingText>
+                          <StyledLoadingText $themeMode={modalThemeMode}>
+                            Loading...
+                          </StyledLoadingText>
                         )}
                         {!state.isPlaying && !state.isLoading && (
-                          <StyledPausedText>Paused</StyledPausedText>
+                          <StyledPausedText $themeMode={modalThemeMode}>
+                            Paused
+                          </StyledPausedText>
                         )}
                       </StyledCurrentMixStatus>
                     )}
 
                     {/* Toggle icon - changed from arrow to plus/minus */}
                     <StyledToggleIcon
+                      $themeMode={modalThemeMode}
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleExpanded(key, e);
@@ -281,58 +294,78 @@ const MixList: React.FC = () => {
                     </StyledToggleIcon>
                   </StyledControlsContainer>
                 </StyledMixListItemContent>
-                <StyledMixListProgressBarContainer>
-                  <StyledMixListProgressBar $progress={progressPercentage} />
+                <StyledMixListProgressBarContainer $themeMode={modalThemeMode}>
+                  <StyledMixListProgressBar
+                    $progress={progressPercentage}
+                    $themeMode={modalThemeMode}
+                  />
                 </StyledMixListProgressBarContainer>
               </StyledMixHeader>
 
               {isExpanded && mix && (
-                <StyledMixDetails>
-                  <StyledDetailRow>
+                <StyledMixDetails $themeMode={modalThemeMode}>
+                  <StyledDetailRow $themeMode={modalThemeMode}>
                     <strong>Category:</strong> {mix.category}
                   </StyledDetailRow>
-                  <StyledDetailRow>
+                  <StyledDetailRow $themeMode={modalThemeMode}>
                     <strong>Release Date:</strong> {formatDate(mix.releaseDate)}
                   </StyledDetailRow>
-                  <StyledDetailRow>
+                  <StyledDetailRow $themeMode={modalThemeMode}>
                     <strong>Duration:</strong> {formatDuration(mix.duration)}
                   </StyledDetailRow>
-                  <StyledDetailRow>
+                  <StyledDetailRow $themeMode={modalThemeMode}>
                     <strong>Tracks:</strong> {mix.tracks?.length || 0}
                   </StyledDetailRow>
                   {mix.tags && mix.tags.length > 0 && (
-                    <StyledDetailRow>
+                    <StyledDetailRow $themeMode={modalThemeMode}>
                       <strong>Tags:</strong> {mix.tags.join(", ")}
                     </StyledDetailRow>
                   )}
                   {mix.notes && (
-                    <StyledDetailRow>
+                    <StyledDetailRow $themeMode={modalThemeMode}>
                       <strong>Notes:</strong> {mix.notes}
                     </StyledDetailRow>
                   )}
 
                   <div style={{ marginTop: "12px" }}>
                     {mixState?.loadingTracks && (
-                      <div style={{ fontSize: "12px", color: "#666" }}>
+                      <div
+                        style={{
+                          fontSize: "12px",
+                          color:
+                            modalThemeMode === "dark" ? "#a8a8a8" : "#5a5a5a",
+                        }}
+                      >
                         Loading tracks...
                       </div>
                     )}
 
                     {mixState?.tracksLoaded && mixState.tracks.length > 0 && (
-                      <StyledTrackList>
+                      <StyledTrackList $themeMode={modalThemeMode}>
                         <div
                           style={{ fontWeight: "bold", marginBottom: "8px" }}
                         >
                           Track List:
                         </div>
                         {mixState.tracks.map((track, trackIndex) => (
-                          <StyledTrackItem key={trackIndex}>
+                          <StyledTrackItem
+                            key={trackIndex}
+                            $themeMode={modalThemeMode}
+                          >
                             <div
                               style={{ fontSize: "12px", fontWeight: "bold" }}
                             >
                               {track.startTime} - {track.trackName}
                             </div>
-                            <div style={{ fontSize: "11px", color: "#666" }}>
+                            <div
+                              style={{
+                                fontSize: "11px",
+                                color:
+                                  modalThemeMode === "dark"
+                                    ? "#a8a8a8"
+                                    : "#5a5a5a",
+                              }}
+                            >
                               by {track.artistName}
                               {track.remixArtistName &&
                                 ` (${track.remixArtistName} Remix)`}
@@ -347,7 +380,8 @@ const MixList: React.FC = () => {
                       <div
                         style={{
                           fontSize: "12px",
-                          color: "#888",
+                          color:
+                            modalThemeMode === "dark" ? "#888888" : "#888888",
                           fontStyle: "italic",
                         }}
                       >

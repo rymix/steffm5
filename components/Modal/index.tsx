@@ -1,4 +1,5 @@
 import { useOverlay } from "contexts/overlay";
+import { useTheme } from "contexts/theme";
 import React, { useEffect, useRef, useState } from "react";
 
 import {
@@ -27,6 +28,11 @@ const Modal: React.FC<ModalProps> = ({
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const { actions: overlayActions } = useOverlay();
+  const theme = useTheme();
+
+  // For mixed mode, modal is always light
+  const modalThemeMode =
+    theme.state.mode === "mixed" ? "light" : theme.state.mode;
 
   // Handle auto-close timeout
   useEffect(() => {
@@ -81,14 +87,20 @@ const Modal: React.FC<ModalProps> = ({
   }
 
   return (
-    <StyledModal ref={modalRef} $isOpen={isOpen}>
-      <StyledModalHeader>
+    <StyledModal ref={modalRef} $isOpen={isOpen} $themeMode={modalThemeMode}>
+      <StyledModalHeader $themeMode={modalThemeMode}>
         {title && <h2>{title}</h2>}
-        <StyledModalCloseButton onClick={onClose} aria-label="Close modal">
+        <StyledModalCloseButton
+          onClick={onClose}
+          aria-label="Close modal"
+          $themeMode={modalThemeMode}
+        >
           ×
         </StyledModalCloseButton>
       </StyledModalHeader>
-      <StyledModalContent>{children}</StyledModalContent>
+      <StyledModalContent $themeMode={modalThemeMode}>
+        {children}
+      </StyledModalContent>
     </StyledModal>
   );
 };

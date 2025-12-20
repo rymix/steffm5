@@ -219,13 +219,17 @@ export const StyledVolumeDialShadow = styled.div`
     0 3px 4px rgba(0, 0, 0, 0.3);
 `;
 
-export const StyledVolumeDial = styled.div.attrs<{ $rotation?: number }>(
+interface StyledVolumeDialProps {
+  $rotation?: number;
+}
+
+export const StyledVolumeDial = styled.div.attrs<StyledVolumeDialProps>(
   ({ $rotation }) => ({
     style: {
       transform: `translate(-50%, -50%) rotate(${($rotation || 0) + 270}deg)`,
     },
   }),
-)<{ $rotation?: number }>`
+)<StyledVolumeDialProps>`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -350,13 +354,17 @@ export const StyledVolumeDialWrapper = styled.div`
   flex-shrink: 0;
 `;
 
-export const StyledDialTick = styled.div.attrs<{ $angle: number }>(
+interface StyledDialTickProps {
+  $angle: number;
+}
+
+export const StyledDialTick = styled.div.attrs<StyledDialTickProps>(
   ({ $angle }) => ({
     style: {
       transform: `translateX(-50%) rotate(${$angle}deg)`,
     },
   }),
-)<{ $angle: number }>`
+)<StyledDialTickProps>`
   position: absolute;
   width: 2.5px;
   height: 9px;
@@ -368,13 +376,17 @@ export const StyledDialTick = styled.div.attrs<{ $angle: number }>(
   box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.3);
 `;
 
-export const StyledModeDial = styled.div.attrs<{ $rotation?: number }>(
+interface StyledModeDialProps {
+  $rotation?: number;
+}
+
+export const StyledModeDial = styled.div.attrs<StyledModeDialProps>(
   ({ $rotation }) => ({
     style: {
       transform: `translate(-50%, -50%) rotate(${($rotation || 0) + 270}deg)`,
     },
   }),
-)<{ $rotation?: number }>`
+)<StyledModeDialProps>`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -465,14 +477,18 @@ export const StyledModeDialShadow = styled.div`
     0 3px 4px rgba(0, 0, 0, 0.3);
 `;
 
-export const StyledDialLabel = styled.div.attrs<{
+interface StyledDialLabelProps {
   $angle: number;
   $active: boolean;
-}>(({ $angle }) => ({
-  style: {
-    transform: `translate(-50%, -50%) rotate(${$angle}deg) translate(0, -62px) rotate(${-$angle}deg)`,
-  },
-}))<{ $angle: number; $active: boolean }>`
+}
+
+export const StyledDialLabel = styled.div.attrs<StyledDialLabelProps>(
+  ({ $angle }) => ({
+    style: {
+      transform: `translate(-50%, -50%) rotate(${$angle}deg) translate(0, -62px) rotate(${-$angle}deg)`,
+    },
+  }),
+)<StyledDialLabelProps>`
   position: absolute;
   top: 50%;
   left: 50%;

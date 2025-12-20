@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+interface ThemeProps {
+  $themeMode: "light" | "dark";
+}
+
 export const StyledDisplayDeviceWrapper = styled.div`
   position: relative;
   flex-shrink: 0;
@@ -93,9 +97,10 @@ export const StyledLogoText = styled.div`
   letter-spacing: 1.2px;
 `;
 
-export const StyledScreen = styled.div`
+export const StyledScreen = styled.div<ThemeProps>`
   flex: 1;
-  background: #1a1a1a;
+  background: ${(props) =>
+    props.$themeMode === "dark" ? "#1a1a1a" : "#f5f5f5"};
   padding: 30px;
   overflow-y: auto;
   position: relative;
@@ -106,15 +111,24 @@ export const StyledScreen = styled.div`
   }
 
   &::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
+    background: ${(props) =>
+      props.$themeMode === "dark"
+        ? "rgba(0, 0, 0, 0.3)"
+        : "rgba(0, 0, 0, 0.1)"};
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: ${(props) =>
+      props.$themeMode === "dark"
+        ? "rgba(255, 255, 255, 0.2)"
+        : "rgba(0, 0, 0, 0.2)"};
     border-radius: 4px;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: ${(props) =>
+        props.$themeMode === "dark"
+          ? "rgba(255, 255, 255, 0.3)"
+          : "rgba(0, 0, 0, 0.3)"};
     }
   }
 `;
@@ -196,12 +210,19 @@ export const StyledMixCoverArt = styled.img`
   pointer-events: none;
 `;
 
-export const StyledMixCard = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+export const StyledMixCard = styled.div<ThemeProps>`
+  background: ${(props) =>
+    props.$themeMode === "dark"
+      ? "rgba(255, 255, 255, 0.05)"
+      : "rgba(0, 0, 0, 0.03)"};
+  border: 1px solid
+    ${(props) =>
+      props.$themeMode === "dark"
+        ? "rgba(255, 255, 255, 0.1)"
+        : "rgba(0, 0, 0, 0.1)"};
   border-radius: 8px;
   padding: 20px;
-  color: #ffffff;
+  color: ${(props) => (props.$themeMode === "dark" ? "#ffffff" : "#2a2a2a")};
   position: relative;
   overflow: hidden;
 
@@ -221,19 +242,22 @@ export const StyledMixImage = styled.img`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 `;
 
-export const StyledMixName = styled.h2`
+export const StyledMixName = styled.h2<ThemeProps>`
   font-size: 18px;
   font-weight: 600;
   margin: 0 0 12px 0;
-  color: #ffffff;
+  color: ${(props) => (props.$themeMode === "dark" ? "#ffffff" : "#2a2a2a")};
   line-height: 1.4;
   position: relative;
   z-index: 1;
 `;
 
-export const StyledMixInfo = styled.div`
+export const StyledMixInfo = styled.div<ThemeProps>`
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: ${(props) =>
+    props.$themeMode === "dark"
+      ? "rgba(255, 255, 255, 0.7)"
+      : "rgba(0, 0, 0, 0.6)"};
   margin-bottom: 8px;
   position: relative;
   z-index: 1;
@@ -241,11 +265,21 @@ export const StyledMixInfo = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+
+  strong {
+    color: ${(props) =>
+      props.$themeMode === "dark"
+        ? "rgba(255, 255, 255, 0.9)"
+        : "rgba(0, 0, 0, 0.8)"};
+  }
 `;
 
-export const StyledNoMix = styled.div`
+export const StyledNoMix = styled.div<ThemeProps>`
   text-align: center;
-  color: rgba(255, 255, 255, 0.5);
+  color: ${(props) =>
+    props.$themeMode === "dark"
+      ? "rgba(255, 255, 255, 0.5)"
+      : "rgba(0, 0, 0, 0.5)"};
   font-size: 16px;
   padding: 40px 20px;
 `;
@@ -254,13 +288,17 @@ export const StyledTrackListSection = styled.div`
   margin-top: 24px;
 `;
 
-export const StyledTrackListHeader = styled.h3`
+export const StyledTrackListHeader = styled.h3<ThemeProps>`
   font-size: 16px;
   font-weight: 600;
-  color: #ffffff;
+  color: ${(props) => (props.$themeMode === "dark" ? "#ffffff" : "#2a2a2a")};
   margin: 0 0 16px 0;
   padding-bottom: 8px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid
+    ${(props) =>
+      props.$themeMode === "dark"
+        ? "rgba(255, 255, 255, 0.1)"
+        : "rgba(0, 0, 0, 0.1)"};
 `;
 
 export const StyledTrackList = styled.div`
@@ -290,15 +328,29 @@ export const StyledTrackCoverArt = styled.img<{
   pointer-events: none;
 `;
 
-export const StyledTrackItem = styled.div<{
+interface StyledTrackItemProps extends ThemeProps {
   $isPlaying: boolean;
   $isExpanded?: boolean;
-}>`
-  background: ${({ $isPlaying }) =>
-    $isPlaying ? "rgba(159, 223, 159, 0.15)" : "rgba(255, 255, 255, 0.03)"};
+}
+
+export const StyledTrackItem = styled.div<StyledTrackItemProps>`
+  background: ${({ $isPlaying, $themeMode }) =>
+    $isPlaying
+      ? $themeMode === "dark"
+        ? "rgba(159, 223, 159, 0.15)"
+        : "rgba(74, 159, 74, 0.25)"
+      : $themeMode === "dark"
+        ? "rgba(255, 255, 255, 0.03)"
+        : "rgba(0, 0, 0, 0.03)"};
   border: 1px solid
-    ${({ $isPlaying }) =>
-      $isPlaying ? "rgba(159, 223, 159, 0.3)" : "rgba(255, 255, 255, 0.08)"};
+    ${({ $isPlaying, $themeMode }) =>
+      $isPlaying
+        ? $themeMode === "dark"
+          ? "rgba(159, 223, 159, 0.3)"
+          : "rgba(74, 159, 74, 0.4)"
+        : $themeMode === "dark"
+          ? "rgba(255, 255, 255, 0.08)"
+          : "rgba(0, 0, 0, 0.08)"};
   border-radius: 6px;
   padding: 12px;
   transition: all 0.2s ease;
@@ -307,10 +359,22 @@ export const StyledTrackItem = styled.div<{
   overflow: hidden;
 
   &:hover {
-    background: ${({ $isPlaying }) =>
-      $isPlaying ? "rgba(159, 223, 159, 0.2)" : "rgba(255, 255, 255, 0.08)"};
-    border-color: ${({ $isPlaying }) =>
-      $isPlaying ? "rgba(159, 223, 159, 0.4)" : "rgba(255, 255, 255, 0.15)"};
+    background: ${({ $isPlaying, $themeMode }) =>
+      $isPlaying
+        ? $themeMode === "dark"
+          ? "rgba(159, 223, 159, 0.2)"
+          : "rgba(74, 159, 74, 0.3)"
+        : $themeMode === "dark"
+          ? "rgba(255, 255, 255, 0.08)"
+          : "rgba(0, 0, 0, 0.06)"};
+    border-color: ${({ $isPlaying, $themeMode }) =>
+      $isPlaying
+        ? $themeMode === "dark"
+          ? "rgba(159, 223, 159, 0.4)"
+          : "rgba(74, 159, 74, 0.5)"
+        : $themeMode === "dark"
+          ? "rgba(255, 255, 255, 0.15)"
+          : "rgba(0, 0, 0, 0.15)"};
 
     ${StyledTrackCoverArt} {
       filter: ${({ $isPlaying, $isExpanded }) =>
@@ -329,47 +393,55 @@ export const StyledTrackHeader = styled.div`
   gap: 8px;
 `;
 
-export const StyledTrackNumber = styled.div<{ $isPlaying: boolean }>`
+interface StyledTrackTextProps extends ThemeProps {
+  $isPlaying: boolean;
+}
+
+export const StyledTrackNumber = styled.div<StyledTrackTextProps>`
   font-size: 11px;
   font-weight: 600;
-  color: ${({ $isPlaying }) =>
-    $isPlaying ? "#9fdf9f" : "rgba(255, 255, 255, 0.5)"};
+  color: ${({ $themeMode }) =>
+    $themeMode === "dark" ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)"};
   min-width: 28px;
   text-align: center;
-  background: ${({ $isPlaying }) =>
-    $isPlaying ? "rgba(159, 223, 159, 0.15)" : "rgba(255, 255, 255, 0.05)"};
+  background: ${({ $isPlaying, $themeMode }) =>
+    $isPlaying
+      ? "rgba(159, 223, 159, 0.15)"
+      : $themeMode === "dark"
+        ? "rgba(255, 255, 255, 0.05)"
+        : "rgba(0, 0, 0, 0.05)"};
   padding: 4px 6px;
   border-radius: 4px;
 `;
 
-export const StyledTrackTime = styled.div<{ $isPlaying: boolean }>`
+export const StyledTrackTime = styled.div<StyledTrackTextProps>`
   font-size: 11px;
   font-weight: 500;
-  color: ${({ $isPlaying }) =>
-    $isPlaying ? "#9fdf9f" : "rgba(255, 255, 255, 0.5)"};
+  color: ${({ $themeMode }) =>
+    $themeMode === "dark" ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)"};
   font-family: "DSEG14Classic", monospace;
   letter-spacing: 0.5px;
 `;
 
-export const StyledTrackName = styled.div<{ $isPlaying: boolean }>`
+export const StyledTrackName = styled.div<StyledTrackTextProps>`
   font-size: 14px;
   font-weight: 600;
-  color: ${({ $isPlaying }) => ($isPlaying ? "#9fdf9f" : "#ffffff")};
+  color: ${({ $themeMode }) => ($themeMode === "dark" ? "#ffffff" : "#2a2a2a")};
   margin-bottom: 4px;
   line-height: 1.3;
 `;
 
-export const StyledTrackArtist = styled.div<{ $isPlaying: boolean }>`
+export const StyledTrackArtist = styled.div<StyledTrackTextProps>`
   font-size: 13px;
-  color: ${({ $isPlaying }) =>
-    $isPlaying ? "rgba(159, 223, 159, 0.8)" : "rgba(255, 255, 255, 0.7)"};
+  color: ${({ $themeMode }) =>
+    $themeMode === "dark" ? "rgba(255, 255, 255, 0.7)" : "rgba(0, 0, 0, 0.6)"};
   line-height: 1.3;
 `;
 
-export const StyledTrackRemix = styled.div<{ $isPlaying: boolean }>`
+export const StyledTrackRemix = styled.div<StyledTrackTextProps>`
   font-size: 12px;
-  color: ${({ $isPlaying }) =>
-    $isPlaying ? "rgba(159, 223, 159, 0.6)" : "rgba(255, 255, 255, 0.5)"};
+  color: ${({ $themeMode }) =>
+    $themeMode === "dark" ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)"};
   font-style: italic;
   margin-top: 2px;
 `;
@@ -379,33 +451,46 @@ export const StyledTrackContent = styled.div`
   z-index: 1;
 `;
 
-export const StyledTrackExpandedInfo = styled.div<{ $isExpanded: boolean }>`
+interface StyledTrackExpandedInfoProps extends ThemeProps {
+  $isExpanded: boolean;
+}
+
+export const StyledTrackExpandedInfo = styled.div<StyledTrackExpandedInfoProps>`
   max-height: ${({ $isExpanded }) => ($isExpanded ? "100px" : "0")};
   overflow: hidden;
   transition: max-height 0.3s ease;
   margin-top: ${({ $isExpanded }) => ($isExpanded ? "8px" : "0")};
   padding-top: ${({ $isExpanded }) => ($isExpanded ? "8px" : "0")};
-  border-top: ${({ $isExpanded }) =>
-    $isExpanded ? "1px solid rgba(255, 255, 255, 0.1)" : "none"};
+  border-top: ${({ $isExpanded, $themeMode }) =>
+    $isExpanded
+      ? $themeMode === "dark"
+        ? "1px solid rgba(255, 255, 255, 0.1)"
+        : "1px solid rgba(0, 0, 0, 0.1)"
+      : "none"};
 `;
 
-export const StyledTrackExtraInfo = styled.div<{ $isPlaying: boolean }>`
+export const StyledTrackExtraInfo = styled.div<StyledTrackTextProps>`
   font-size: 12px;
-  color: ${({ $isPlaying }) =>
-    $isPlaying ? "rgba(159, 223, 159, 0.7)" : "rgba(255, 255, 255, 0.6)"};
+  color: ${({ $themeMode }) =>
+    $themeMode === "dark" ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6)"};
   margin-bottom: 4px;
   line-height: 1.4;
 
   strong {
-    color: ${({ $isPlaying }) =>
-      $isPlaying ? "rgba(159, 223, 159, 0.9)" : "rgba(255, 255, 255, 0.8)"};
+    color: ${({ $themeMode }) =>
+      $themeMode === "dark"
+        ? "rgba(255, 255, 255, 0.8)"
+        : "rgba(0, 0, 0, 0.8)"};
     margin-right: 4px;
   }
 `;
 
-export const StyledNoTracks = styled.div`
+export const StyledNoTracks = styled.div<ThemeProps>`
   text-align: center;
-  color: rgba(255, 255, 255, 0.4);
+  color: ${(props) =>
+    props.$themeMode === "dark"
+      ? "rgba(255, 255, 255, 0.4)"
+      : "rgba(0, 0, 0, 0.4)"};
   font-size: 13px;
   padding: 20px;
   font-style: italic;

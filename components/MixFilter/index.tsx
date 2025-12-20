@@ -1,5 +1,7 @@
 import { useMixcloud } from "contexts/mixcloud";
+import { useTheme } from "contexts/theme";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { getModalThemeMode } from "utils/themeHelpers";
 
 import {
   StyledMixFilter,
@@ -13,6 +15,8 @@ import {
 
 const MixFilter: React.FC = () => {
   const { state, actions } = useMixcloud();
+  const theme = useTheme();
+  const modalThemeMode = getModalThemeMode(theme.state.mode);
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [availableTags, setAvailableTags] = useState<string[]>([]);
   const [selectedTag, setSelectedTag] = useState<string>("");
@@ -120,13 +124,19 @@ const MixFilter: React.FC = () => {
   }, []);
 
   return (
-    <StyledMixFilter>
-      <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#495057" }}>
+    <StyledMixFilter $themeMode={modalThemeMode}>
+      <h4
+        style={{
+          margin: "0 0 8px 0",
+          fontSize: "14px",
+          color: modalThemeMode === "dark" ? "#a8a8a8" : "#495057",
+        }}
+      >
         Filter Mixes
       </h4>
 
       <StyledMixFilterForm>
-        <StyledMixFilterFormElements>
+        <StyledMixFilterFormElements $themeMode={modalThemeMode}>
           <div>
             <label>Category:</label>
             <select
@@ -160,11 +170,15 @@ const MixFilter: React.FC = () => {
                 onClick={() => setShowTags(!showTags)}
                 style={{
                   background: "none",
-                  border: "1px solid #ccc",
+                  border:
+                    modalThemeMode === "dark"
+                      ? "1px solid #404040"
+                      : "1px solid #ccc",
                   borderRadius: "4px",
                   padding: "2px 8px",
                   fontSize: "11px",
                   cursor: "pointer",
+                  color: modalThemeMode === "dark" ? "#c8c8c8" : "inherit",
                 }}
               >
                 {showTags ? "Hide" : "Show"}
@@ -173,19 +187,20 @@ const MixFilter: React.FC = () => {
                 <span
                   style={{
                     fontSize: "12px",
-                    color: "#007bff",
+                    color: "#4a9f4a",
                     fontWeight: "bold",
                   }}
                 ></span>
               )}
             </div>
             {showTags && (
-              <StyledTagContainer>
+              <StyledTagContainer $themeMode={modalThemeMode}>
                 {availableTags.map((tag) => (
                   <StyledTagLozenge
                     key={tag}
                     type="button"
                     $isSelected={selectedTag === tag}
+                    $themeMode={modalThemeMode}
                     onClick={() => handleTagSelect(tag)}
                   >
                     {tag}
@@ -202,6 +217,7 @@ const MixFilter: React.FC = () => {
             onClick={handleClearFilters}
             disabled={state.isLoadingMixes}
             $isLoadingMixes={state.isLoadingMixes}
+            $themeMode={modalThemeMode}
           >
             Clear Filters
           </StyledMixFilterFormButton>

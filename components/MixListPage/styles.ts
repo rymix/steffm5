@@ -1,10 +1,15 @@
 import styled from "styled-components";
 
-export const StyledMixListPage = styled.div`
+interface ThemeProps {
+  $themeMode: "light" | "dark";
+}
+
+export const StyledMixListPage = styled.div<ThemeProps>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  background: #f5f5f5;
+  background: ${(props) =>
+    props.$themeMode === "dark" ? "#1a1a1a" : "#f5f5f5"};
   padding: 20px;
   max-height: 70vh;
   overflow-y: auto;
@@ -15,43 +20,48 @@ export const StyledMixListPage = styled.div`
   }
 
   &::-webkit-scrollbar-track {
-    background: #e0e0e0;
+    background: ${(props) =>
+      props.$themeMode === "dark" ? "#2a2a2a" : "#e0e0e0"};
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #b0b0b0;
+    background: ${(props) =>
+      props.$themeMode === "dark" ? "#404040" : "#b0b0b0"};
     border-radius: 4px;
 
     &:hover {
-      background: #909090;
+      background: ${(props) =>
+        props.$themeMode === "dark" ? "#505050" : "#909090"};
     }
   }
 `;
 
-export const StyledMixListPageHeader = styled.div`
+export const StyledMixListPageHeader = styled.div<ThemeProps>`
   margin-bottom: 16px;
   flex-shrink: 0;
 
   h2 {
     margin: 0 0 8px 0;
-    color: #2a2a2a;
+    color: ${(props) => (props.$themeMode === "dark" ? "#e8e8e8" : "#2a2a2a")};
     font-size: 1.25rem;
     font-weight: 600;
   }
 
   p {
     margin: 0;
-    color: #5a5a5a;
+    color: ${(props) => (props.$themeMode === "dark" ? "#a8a8a8" : "#5a5a5a")};
     font-size: 0.875rem;
   }
 `;
 
-export const StyledMixListPageFilters = styled.div`
+export const StyledMixListPageFilters = styled.div<ThemeProps>`
   position: sticky;
   top: -20px;
   z-index: 10;
-  background: #f5f5f5;
-  border-bottom: 2px solid #d0d0d0;
+  background: ${(props) =>
+    props.$themeMode === "dark" ? "#1a1a1a" : "#f5f5f5"};
+  border-bottom: 2px solid
+    ${(props) => (props.$themeMode === "dark" ? "#3a3a3a" : "#d0d0d0")};
   margin-bottom: 16px;
   padding-bottom: 12px;
   flex-shrink: 0;

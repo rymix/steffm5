@@ -144,13 +144,18 @@ export const StyledMobileDisplayContainer = styled.div`
   flex-shrink: 0;
 `;
 
-export const StyledMobileScreenWrapper = styled.div`
+interface ThemeProps {
+  $themeMode?: "light" | "dark";
+}
+
+export const StyledMobileScreenWrapper = styled.div<ThemeProps>`
   flex: 2;
   min-height: 0;
   position: relative;
   display: flex;
   flex-direction: column;
-  background: #1a1a1a;
+  background: ${(props) =>
+    props.$themeMode === "dark" ? "#1a1a1a" : "#f5f5f5"};
 `;
 
 export const StyledMobileScreenToggle = styled.button<{ $collapsed: boolean }>`
@@ -192,9 +197,14 @@ export const StyledMobileScreenToggle = styled.button<{ $collapsed: boolean }>`
   }
 `;
 
-export const StyledMobileScreen = styled.div<{ $collapsed: boolean }>`
+interface StyledMobileScreenProps extends ThemeProps {
+  $collapsed: boolean;
+}
+
+export const StyledMobileScreen = styled.div<StyledMobileScreenProps>`
   flex: 1;
-  background: #1a1a1a;
+  background: ${(props) =>
+    props.$themeMode === "dark" ? "#1a1a1a" : "#f5f5f5"};
   padding: ${({ $collapsed }) => ($collapsed ? "0 30px" : "30px")};
   overflow-y: ${({ $collapsed }) => ($collapsed ? "hidden" : "auto")};
   position: relative;
@@ -211,15 +221,24 @@ export const StyledMobileScreen = styled.div<{ $collapsed: boolean }>`
   }
 
   &::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
+    background: ${(props) =>
+      props.$themeMode === "dark"
+        ? "rgba(0, 0, 0, 0.3)"
+        : "rgba(0, 0, 0, 0.1)"};
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: ${(props) =>
+      props.$themeMode === "dark"
+        ? "rgba(255, 255, 255, 0.2)"
+        : "rgba(0, 0, 0, 0.3)"};
     border-radius: 4px;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: ${(props) =>
+        props.$themeMode === "dark"
+          ? "rgba(255, 255, 255, 0.3)"
+          : "rgba(0, 0, 0, 0.4)"};
     }
   }
 `;

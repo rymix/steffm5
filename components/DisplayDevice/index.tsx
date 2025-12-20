@@ -1,5 +1,7 @@
 import { useMixcloud } from "contexts/mixcloud";
+import { useTheme } from "contexts/theme";
 import React, { useMemo, useState } from "react";
+import { getPanelThemeMode } from "utils/themeHelpers";
 
 import {
   StyledDisplayDevice,
@@ -41,6 +43,8 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
   onToggle: onToggleProp,
 }) => {
   const { state, actions } = useMixcloud();
+  const theme = useTheme();
+  const panelThemeMode = getPanelThemeMode(theme.state.mode);
   const [isOpenInternal, setIsOpenInternal] = useState(false);
   const [expandedTrackIndex, setExpandedTrackIndex] = useState<number | null>(
     null,
@@ -129,9 +133,9 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
           </StyledLogoPlate>
         </StyledWoodSlats>
 
-        <StyledScreen>
+        <StyledScreen $themeMode={panelThemeMode}>
           {currentMix ? (
-            <StyledMixCard>
+            <StyledMixCard $themeMode={panelThemeMode}>
               {currentMix.coverArtLarge && (
                 <StyledMixCoverArt
                   src={currentMix.coverArtLarge}
@@ -139,48 +143,52 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
                 />
               )}
 
-              <StyledMixName>{currentMix.name}</StyledMixName>
+              <StyledMixName $themeMode={panelThemeMode}>
+                {currentMix.name}
+              </StyledMixName>
 
               {currentMix.user?.name && (
-                <StyledMixInfo>
+                <StyledMixInfo $themeMode={panelThemeMode}>
                   <strong>DJ:</strong> {currentMix.user.name}
                 </StyledMixInfo>
               )}
 
               {currentMix.created_time && (
-                <StyledMixInfo>
+                <StyledMixInfo $themeMode={panelThemeMode}>
                   <strong>Date:</strong>{" "}
                   {new Date(currentMix.created_time).toLocaleDateString()}
                 </StyledMixInfo>
               )}
 
               {currentMix.audio_length && (
-                <StyledMixInfo>
+                <StyledMixInfo $themeMode={panelThemeMode}>
                   <strong>Duration:</strong>{" "}
                   {Math.floor(currentMix.audio_length / 60)} minutes
                 </StyledMixInfo>
               )}
 
               {currentMix.play_count !== undefined && (
-                <StyledMixInfo>
+                <StyledMixInfo $themeMode={panelThemeMode}>
                   <strong>Plays:</strong>{" "}
                   {currentMix.play_count.toLocaleString()}
                 </StyledMixInfo>
               )}
 
               {currentMix.tags && currentMix.tags.length > 0 && (
-                <StyledMixInfo>
+                <StyledMixInfo $themeMode={panelThemeMode}>
                   <strong>Tags:</strong> {currentMix.tags.join(", ")}
                 </StyledMixInfo>
               )}
             </StyledMixCard>
           ) : (
-            <StyledNoMix>No mix currently playing</StyledNoMix>
+            <StyledNoMix $themeMode={panelThemeMode}>
+              No mix currently playing
+            </StyledNoMix>
           )}
 
           {currentMix && (
             <StyledTrackListSection>
-              <StyledTrackListHeader>
+              <StyledTrackListHeader $themeMode={panelThemeMode}>
                 Track List{" "}
                 {sortedTracks.length > 0 && `(${sortedTracks.length})`}
               </StyledTrackListHeader>
@@ -195,6 +203,7 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
                         key={index}
                         $isPlaying={isPlaying}
                         $isExpanded={isExpanded}
+                        $themeMode={panelThemeMode}
                         onClick={() => toggleTrackExpanded(index)}
                       >
                         {track.coverArtLarge && (
@@ -207,37 +216,61 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
                         )}
                         <StyledTrackContent>
                           <StyledTrackHeader>
-                            <StyledTrackNumber $isPlaying={isPlaying}>
+                            <StyledTrackNumber
+                              $isPlaying={isPlaying}
+                              $themeMode={panelThemeMode}
+                            >
                               {track.sectionNumber || index + 1}
                             </StyledTrackNumber>
-                            <StyledTrackTime $isPlaying={isPlaying}>
+                            <StyledTrackTime
+                              $isPlaying={isPlaying}
+                              $themeMode={panelThemeMode}
+                            >
                               {track.startTime}
                             </StyledTrackTime>
                           </StyledTrackHeader>
                           {track.trackName && (
-                            <StyledTrackName $isPlaying={isPlaying}>
+                            <StyledTrackName
+                              $isPlaying={isPlaying}
+                              $themeMode={panelThemeMode}
+                            >
                               {track.trackName}
                             </StyledTrackName>
                           )}
                           {track.artistName && (
-                            <StyledTrackArtist $isPlaying={isPlaying}>
+                            <StyledTrackArtist
+                              $isPlaying={isPlaying}
+                              $themeMode={panelThemeMode}
+                            >
                               {track.artistName}
                             </StyledTrackArtist>
                           )}
                           {track.remixArtist && (
-                            <StyledTrackRemix $isPlaying={isPlaying}>
+                            <StyledTrackRemix
+                              $isPlaying={isPlaying}
+                              $themeMode={panelThemeMode}
+                            >
                               {track.remixArtist}
                             </StyledTrackRemix>
                           )}
-                          <StyledTrackExpandedInfo $isExpanded={isExpanded}>
+                          <StyledTrackExpandedInfo
+                            $isExpanded={isExpanded}
+                            $themeMode={panelThemeMode}
+                          >
                             {duration && (
-                              <StyledTrackExtraInfo $isPlaying={isPlaying}>
+                              <StyledTrackExtraInfo
+                                $isPlaying={isPlaying}
+                                $themeMode={panelThemeMode}
+                              >
                                 <strong>Length:</strong>
                                 {duration}
                               </StyledTrackExtraInfo>
                             )}
                             {track.publisher && (
-                              <StyledTrackExtraInfo $isPlaying={isPlaying}>
+                              <StyledTrackExtraInfo
+                                $isPlaying={isPlaying}
+                                $themeMode={panelThemeMode}
+                              >
                                 <strong>Publisher:</strong>
                                 {track.publisher}
                               </StyledTrackExtraInfo>
@@ -249,7 +282,9 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
                   })}
                 </StyledTrackList>
               ) : (
-                <StyledNoTracks>No track information available</StyledNoTracks>
+                <StyledNoTracks $themeMode={panelThemeMode}>
+                  No track information available
+                </StyledNoTracks>
               )}
             </StyledTrackListSection>
           )}

@@ -6,7 +6,17 @@ import type {
   StyledMixListStatusDotProps,
 } from "./types";
 
-export const StyledMixList = styled.div`
+interface ThemeProps {
+  $themeMode: "light" | "dark";
+}
+
+export const StyledMixList = styled.div<ThemeProps>`
+  color: ${(props) => (props.$themeMode === "dark" ? "#e8e8e8" : "#2a2a2a")};
+
+  h4 {
+    color: ${(props) => (props.$themeMode === "dark" ? "#c8c8c8" : "#3a3a3a")};
+  }
+
   ul {
     list-style: none;
     padding: 0;
@@ -14,10 +24,25 @@ export const StyledMixList = styled.div`
   }
 `;
 
-export const StyledMixListItem = styled.li<StyledMixListItemProps>`
+interface StyledMixListItemAllProps
+  extends StyledMixListItemProps,
+    ThemeProps {}
+
+export const StyledMixListItem = styled.li<StyledMixListItemAllProps>`
   margin: 8px 0;
-  background-color: ${(props) => (props.$isCurrent ? "#d8d8d8" : "#e8e8e8")};
-  border: 1px solid ${(props) => (props.$isCurrent ? "#b0b0b0" : "#c0c0c0")};
+  background-color: ${(props) => {
+    if (props.$themeMode === "dark") {
+      return props.$isCurrent ? "#3a3a3a" : "#2a2a2a";
+    }
+    return props.$isCurrent ? "#d8d8d8" : "#e8e8e8";
+  }};
+  border: 1px solid
+    ${(props) => {
+      if (props.$themeMode === "dark") {
+        return props.$isCurrent ? "#505050" : "#404040";
+      }
+      return props.$isCurrent ? "#b0b0b0" : "#c0c0c0";
+    }};
   border-radius: 6px;
   position: relative;
   overflow: hidden;
@@ -26,12 +51,33 @@ export const StyledMixListItem = styled.li<StyledMixListItemProps>`
   ${(props) =>
     props.$isExpanded &&
     `
-    background-color: ${props.$isCurrent ? "#d0d0d0" : "#e0e0e0"};
-    border-color: ${props.$isCurrent ? "#a0a0a0" : "#b0b0b0"};
+    background-color: ${
+      props.$themeMode === "dark"
+        ? props.$isCurrent
+          ? "#424242"
+          : "#343434"
+        : props.$isCurrent
+          ? "#d0d0d0"
+          : "#e0e0e0"
+    };
+    border-color: ${
+      props.$themeMode === "dark"
+        ? props.$isCurrent
+          ? "#585858"
+          : "#4a4a4a"
+        : props.$isCurrent
+          ? "#a0a0a0"
+          : "#b0b0b0"
+    };
   `}
 
   &:hover {
-    border-color: ${(props) => (props.$isCurrent ? "#9a9a9a" : "#a8a8a8")};
+    border-color: ${(props) => {
+      if (props.$themeMode === "dark") {
+        return props.$isCurrent ? "#606060" : "#505050";
+      }
+      return props.$isCurrent ? "#9a9a9a" : "#a8a8a8";
+    }};
   }
 `;
 
@@ -48,7 +94,11 @@ export const StyledMixListItemInfo = styled.div`
   gap: 10px;
 `;
 
-export const StyledMixListStatusDot = styled.div<StyledMixListStatusDotProps>`
+interface StyledMixListStatusDotAllProps
+  extends StyledMixListStatusDotProps,
+    ThemeProps {}
+
+export const StyledMixListStatusDot = styled.div<StyledMixListStatusDotAllProps>`
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -61,7 +111,7 @@ export const StyledMixListStatusDot = styled.div<StyledMixListStatusDotProps>`
       case "complete":
         return "#4a9f4a"; // Green (matching accent)
       default:
-        return "#888888"; // Gray
+        return props.$themeMode === "dark" ? "#707070" : "#888888"; // Gray
     }
   }};
   flex-shrink: 0;
@@ -75,20 +125,25 @@ export const StyledMixListStatusDot = styled.div<StyledMixListStatusDotProps>`
         case "complete":
           return "#3a8f3a";
         default:
-          return "#787878";
+          return props.$themeMode === "dark" ? "#606060" : "#787878";
       }
     }};
 `;
 
-export const StyledMixListProgressBarContainer = styled.div`
+export const StyledMixListProgressBarContainer = styled.div<ThemeProps>`
   width: 100%;
   height: 5px;
-  background-color: #c0c0c0;
+  background-color: ${(props) =>
+    props.$themeMode === "dark" ? "#505050" : "#c0c0c0"};
   border-radius: 3px;
   overflow: hidden;
 `;
 
-export const StyledMixListProgressBar = styled.div<StyledMixListProgressBarProps>`
+interface StyledMixListProgressBarAllProps
+  extends StyledMixListProgressBarProps,
+    ThemeProps {}
+
+export const StyledMixListProgressBar = styled.div<StyledMixListProgressBarAllProps>`
   height: 100%;
   background-color: #4a9f4a;
   border-radius: 3px;
@@ -113,28 +168,34 @@ export const StyledMixHeader = styled.div`
   }
 `;
 
-export const StyledExpandButton = styled.button`
-  background: #d0d0d0;
-  border: 1px solid #b0b0b0;
+export const StyledExpandButton = styled.button<ThemeProps>`
+  background: ${(props) =>
+    props.$themeMode === "dark" ? "#3a3a3a" : "#d0d0d0"};
+  border: 1px solid
+    ${(props) => (props.$themeMode === "dark" ? "#505050" : "#b0b0b0")};
   cursor: pointer;
   font-size: 11px;
   padding: 5px 10px;
   border-radius: 4px;
-  color: #3a3a3a;
+  color: ${(props) => (props.$themeMode === "dark" ? "#c8c8c8" : "#3a3a3a")};
   font-weight: 500;
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: #c0c0c0;
-    border-color: #a0a0a0;
-    color: #2a2a2a;
+    background-color: ${(props) =>
+      props.$themeMode === "dark" ? "#424242" : "#c0c0c0"};
+    border-color: ${(props) =>
+      props.$themeMode === "dark" ? "#585858" : "#a0a0a0"};
+    color: ${(props) => (props.$themeMode === "dark" ? "#d8d8d8" : "#2a2a2a")};
   }
 `;
 
-export const StyledMixDetails = styled.div`
+export const StyledMixDetails = styled.div<ThemeProps>`
   padding: 0 12px 16px 12px;
-  background-color: #d8d8d8;
-  border-top: 1px solid #b0b0b0;
+  background-color: ${(props) =>
+    props.$themeMode === "dark" ? "#343434" : "#d8d8d8"};
+  border-top: 1px solid
+    ${(props) => (props.$themeMode === "dark" ? "#4a4a4a" : "#b0b0b0")};
   animation: slideDown 0.2s ease;
 
   @keyframes slideDown {
@@ -150,20 +211,21 @@ export const StyledMixDetails = styled.div`
   }
 `;
 
-export const StyledDetailRow = styled.div`
+export const StyledDetailRow = styled.div<ThemeProps>`
   margin: 8px 0;
   font-size: 13px;
   display: flex;
   gap: 10px;
+  color: ${(props) => (props.$themeMode === "dark" ? "#c8c8c8" : "#4a4a4a")};
 
   strong {
     min-width: 90px;
-    color: #2a2a2a;
+    color: ${(props) => (props.$themeMode === "dark" ? "#d8d8d8" : "#2a2a2a")};
     font-weight: 600;
   }
 
   span {
-    color: #4a4a4a;
+    color: ${(props) => (props.$themeMode === "dark" ? "#c8c8c8" : "#4a4a4a")};
   }
 `;
 
@@ -187,14 +249,17 @@ export const StyledLoadTracksButton = styled.button`
   }
 `;
 
-export const StyledTrackList = styled.div`
+export const StyledTrackList = styled.div<ThemeProps>`
   margin-top: 12px;
   max-height: 300px;
   overflow-y: auto;
-  border: 1px solid #b0b0b0;
+  border: 1px solid
+    ${(props) => (props.$themeMode === "dark" ? "#4a4a4a" : "#b0b0b0")};
   border-radius: 4px;
   padding: 10px;
-  background-color: #f5f5f5;
+  background-color: ${(props) =>
+    props.$themeMode === "dark" ? "#2a2a2a" : "#f5f5f5"};
+  color: ${(props) => (props.$themeMode === "dark" ? "#d8d8d8" : "#3a3a3a")};
 
   /* Custom scrollbar */
   &::-webkit-scrollbar {
@@ -202,38 +267,42 @@ export const StyledTrackList = styled.div`
   }
 
   &::-webkit-scrollbar-track {
-    background: #e0e0e0;
+    background: ${(props) =>
+      props.$themeMode === "dark" ? "#1a1a1a" : "#e0e0e0"};
     border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #b0b0b0;
+    background: ${(props) =>
+      props.$themeMode === "dark" ? "#505050" : "#b0b0b0"};
     border-radius: 4px;
 
     &:hover {
-      background: #909090;
+      background: ${(props) =>
+        props.$themeMode === "dark" ? "#606060" : "#909090"};
     }
   }
 `;
 
-export const StyledTrackItem = styled.div`
+export const StyledTrackItem = styled.div<ThemeProps>`
   padding: 8px 0;
-  border-bottom: 1px solid #d0d0d0;
+  border-bottom: 1px solid
+    ${(props) => (props.$themeMode === "dark" ? "#404040" : "#d0d0d0")};
   font-size: 13px;
-  color: #3a3a3a;
+  color: ${(props) => (props.$themeMode === "dark" ? "#c8c8c8" : "#3a3a3a")};
 
   &:last-child {
     border-bottom: none;
   }
 `;
 
-export const StyledMixTitle = styled.div`
+export const StyledMixTitle = styled.div<ThemeProps>`
   font-weight: 600;
   font-size: 14px;
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #2a2a2a;
+  color: ${(props) => (props.$themeMode === "dark" ? "#d8d8d8" : "#2a2a2a")};
 `;
 
 export const StyledPlayingIcon = styled.span`
@@ -241,9 +310,9 @@ export const StyledPlayingIcon = styled.span`
   color: #4a9f4a;
 `;
 
-export const StyledMixMetadata = styled.div`
+export const StyledMixMetadata = styled.div<ThemeProps>`
   font-size: 12px;
-  color: #5a5a5a;
+  color: ${(props) => (props.$themeMode === "dark" ? "#a8a8a8" : "#5a5a5a")};
   margin-top: 4px;
 `;
 
@@ -303,27 +372,27 @@ export const StyledCurrentMixStatus = styled.div`
   gap: 6px;
 `;
 
-export const StyledPausedText = styled.span`
+export const StyledPausedText = styled.span<ThemeProps>`
   font-size: 12px;
-  color: #5a5a5a;
+  color: ${(props) => (props.$themeMode === "dark" ? "#a8a8a8" : "#5a5a5a")};
 `;
 
-export const StyledLoadingText = styled.span`
+export const StyledLoadingText = styled.span<ThemeProps>`
   font-size: 12px;
   color: #4a8fc4;
   font-weight: 500;
 `;
 
-export const StyledToggleIcon = styled.span`
+export const StyledToggleIcon = styled.span<ThemeProps>`
   font-size: 18px;
   cursor: pointer;
   user-select: none;
   min-width: 22px;
   text-align: center;
-  color: #5a5a5a;
+  color: ${(props) => (props.$themeMode === "dark" ? "#a8a8a8" : "#5a5a5a")};
   transition: color 0.2s ease;
 
   &:hover {
-    color: #2a2a2a;
+    color: ${(props) => (props.$themeMode === "dark" ? "#d8d8d8" : "#2a2a2a")};
   }
 `;

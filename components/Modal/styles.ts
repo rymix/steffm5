@@ -1,7 +1,9 @@
+import type { ThemeMode } from "contexts/theme/types";
 import styled from "styled-components";
 
 interface StyledModalProps {
   $isOpen: boolean;
+  $themeMode: ThemeMode;
 }
 
 export const StyledModal = styled.div<StyledModalProps>`
@@ -11,8 +13,10 @@ export const StyledModal = styled.div<StyledModalProps>`
   transform: translate(-50%, -50%)
     ${(props) => (props.$isOpen ? "scale(1)" : "scale(0.9) translateY(-20px)")};
   z-index: 1000; /* Above shared overlay, below menu */
-  background: #f5f5f5;
-  border: 1px solid #d0d0d0;
+  background: ${(props) =>
+    props.$themeMode === "dark" ? "#1a1a1a" : "#f5f5f5"};
+  border: 1px solid
+    ${(props) => (props.$themeMode === "dark" ? "#3a3a3a" : "#d0d0d0")};
   border-radius: 8px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   max-width: 95vw;
@@ -25,7 +29,11 @@ export const StyledModal = styled.div<StyledModalProps>`
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};
 `;
 
-export const StyledModalHeader = styled.div`
+interface StyledModalHeaderProps {
+  $themeMode: ThemeMode;
+}
+
+export const StyledModalHeader = styled.div<StyledModalHeaderProps>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -36,16 +44,20 @@ export const StyledModalHeader = styled.div`
     margin: 0;
     font-size: 1.25rem;
     font-weight: 600;
-    color: #2a2a2a;
+    color: ${(props) => (props.$themeMode === "dark" ? "#e8e8e8" : "#2a2a2a")};
   }
 `;
 
-export const StyledModalCloseButton = styled.button`
+interface StyledModalCloseButtonProps {
+  $themeMode: ThemeMode;
+}
+
+export const StyledModalCloseButton = styled.button<StyledModalCloseButtonProps>`
   background: none;
   border: none;
   font-size: 28px;
   font-weight: bold;
-  color: #7a7a7a;
+  color: ${(props) => (props.$themeMode === "dark" ? "#a8a8a8" : "#7a7a7a")};
   cursor: pointer;
   padding: 0;
   width: 32px;
@@ -57,8 +69,9 @@ export const StyledModalCloseButton = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    color: #2a2a2a;
-    background-color: #e0e0e0;
+    color: ${(props) => (props.$themeMode === "dark" ? "#ffffff" : "#2a2a2a")};
+    background-color: ${(props) =>
+      props.$themeMode === "dark" ? "#2a2a2a" : "#e0e0e0"};
   }
 
   &:focus {
@@ -67,7 +80,11 @@ export const StyledModalCloseButton = styled.button`
   }
 `;
 
-export const StyledModalContent = styled.div`
+interface StyledModalContentProps {
+  $themeMode: ThemeMode;
+}
+
+export const StyledModalContent = styled.div<StyledModalContentProps>`
   padding: 0;
   overflow-y: auto;
   flex: 1;
@@ -79,16 +96,19 @@ export const StyledModalContent = styled.div`
   }
 
   &::-webkit-scrollbar-track {
-    background: #e0e0e0;
+    background: ${(props) =>
+      props.$themeMode === "dark" ? "#2a2a2a" : "#e0e0e0"};
     border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #b0b0b0;
+    background: ${(props) =>
+      props.$themeMode === "dark" ? "#404040" : "#b0b0b0"};
     border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: #909090;
+    background: ${(props) =>
+      props.$themeMode === "dark" ? "#505050" : "#909090"};
   }
 `;

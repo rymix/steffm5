@@ -1,4 +1,6 @@
+import { useTheme } from "contexts/theme";
 import React from "react";
+import { getModalThemeMode } from "utils/themeHelpers";
 
 import FilterStatus from "@/components/FilterStatus";
 import MixFilter from "@/components/MixFilter";
@@ -12,13 +14,16 @@ import {
 } from "./styles";
 
 const MixListPage: React.FC = () => {
+  const theme = useTheme();
+  const modalThemeMode = getModalThemeMode(theme.state.mode);
+
   return (
-    <StyledMixListPage>
-      <StyledMixListPageHeader>
+    <StyledMixListPage $themeMode={modalThemeMode}>
+      <StyledMixListPageHeader $themeMode={modalThemeMode}>
         <p>Browse and explore your music collection</p>
       </StyledMixListPageHeader>
 
-      <StyledMixListPageFilters>
+      <StyledMixListPageFilters $themeMode={modalThemeMode}>
         <MixFilter />
         <FilterStatus />
       </StyledMixListPageFilters>

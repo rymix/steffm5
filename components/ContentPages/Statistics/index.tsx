@@ -1,5 +1,7 @@
+import { useTheme } from "contexts/theme";
 import React, { useEffect, useState } from "react";
 import { convertTimeToHumanReadable } from "utils/functions";
+import { getModalThemeMode } from "utils/themeHelpers";
 
 import {
   StyledArrowDropDown,
@@ -28,6 +30,8 @@ import type {
 } from "./types";
 
 export const Statistics: React.FC = () => {
+  const theme = useTheme();
+  const modalThemeMode = getModalThemeMode(theme.state.mode);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,15 +61,27 @@ export const Statistics: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <StyledLoadingSpinner>Loading statistics...</StyledLoadingSpinner>;
+    return (
+      <StyledLoadingSpinner $themeMode={modalThemeMode}>
+        Loading statistics...
+      </StyledLoadingSpinner>
+    );
   }
 
   if (error) {
-    return <StyledErrorMessage>Error: {error}</StyledErrorMessage>;
+    return (
+      <StyledErrorMessage $themeMode={modalThemeMode}>
+        Error: {error}
+      </StyledErrorMessage>
+    );
   }
 
   if (!stats) {
-    return <StyledErrorMessage>No data available</StyledErrorMessage>;
+    return (
+      <StyledErrorMessage $themeMode={modalThemeMode}>
+        No data available
+      </StyledErrorMessage>
+    );
   }
 
   const renderCategoryMixCounts = (
@@ -74,9 +90,16 @@ export const Statistics: React.FC = () => {
     categoryMixCounts
       .filter((item) => item.count > 0)
       .map((item) => (
-        <StyledStatisticsListItem key={item.category}>
-          <StyledStatisticsLabel>{item.category}</StyledStatisticsLabel>
-          <StyledStatisticsValue>{item.count}</StyledStatisticsValue>
+        <StyledStatisticsListItem
+          key={item.category}
+          $themeMode={modalThemeMode}
+        >
+          <StyledStatisticsLabel $themeMode={modalThemeMode}>
+            {item.category}
+          </StyledStatisticsLabel>
+          <StyledStatisticsValue $themeMode={modalThemeMode}>
+            {item.count}
+          </StyledStatisticsValue>
         </StyledStatisticsListItem>
       ));
 
@@ -84,9 +107,16 @@ export const Statistics: React.FC = () => {
     artistCounts: ArtistTrackCount[],
   ): React.ReactNode[] =>
     artistCounts.map((item) => (
-      <StyledStatisticsListItem key={item.artistName}>
-        <StyledStatisticsLabel>{item.artistName}</StyledStatisticsLabel>
-        <StyledStatisticsValue>{item.count}</StyledStatisticsValue>
+      <StyledStatisticsListItem
+        key={item.artistName}
+        $themeMode={modalThemeMode}
+      >
+        <StyledStatisticsLabel $themeMode={modalThemeMode}>
+          {item.artistName}
+        </StyledStatisticsLabel>
+        <StyledStatisticsValue $themeMode={modalThemeMode}>
+          {item.count}
+        </StyledStatisticsValue>
       </StyledStatisticsListItem>
     ));
 
@@ -94,9 +124,16 @@ export const Statistics: React.FC = () => {
     remixArtistCounts: RemixArtistTrackCount[],
   ): React.ReactNode[] =>
     remixArtistCounts.map((item) => (
-      <StyledStatisticsListItem key={item.remixArtistName}>
-        <StyledStatisticsLabel>{item.remixArtistName}</StyledStatisticsLabel>
-        <StyledStatisticsValue>{item.count}</StyledStatisticsValue>
+      <StyledStatisticsListItem
+        key={item.remixArtistName}
+        $themeMode={modalThemeMode}
+      >
+        <StyledStatisticsLabel $themeMode={modalThemeMode}>
+          {item.remixArtistName}
+        </StyledStatisticsLabel>
+        <StyledStatisticsValue $themeMode={modalThemeMode}>
+          {item.count}
+        </StyledStatisticsValue>
       </StyledStatisticsListItem>
     ));
 
@@ -104,43 +141,68 @@ export const Statistics: React.FC = () => {
     publisherCounts: PublisherCount[],
   ): React.ReactNode[] =>
     publisherCounts.map((item) => (
-      <StyledStatisticsListItem key={item.publisher}>
-        <StyledStatisticsLabel>{item.publisher}</StyledStatisticsLabel>
-        <StyledStatisticsValue>{item.count}</StyledStatisticsValue>
+      <StyledStatisticsListItem
+        key={item.publisher}
+        $themeMode={modalThemeMode}
+      >
+        <StyledStatisticsLabel $themeMode={modalThemeMode}>
+          {item.publisher}
+        </StyledStatisticsLabel>
+        <StyledStatisticsValue $themeMode={modalThemeMode}>
+          {item.count}
+        </StyledStatisticsValue>
       </StyledStatisticsListItem>
     ));
 
   const renderTagCounts = (tagCounts: TagCount[]): React.ReactNode[] =>
     tagCounts.map((item) => (
-      <StyledStatisticsListItem key={item.tag}>
-        <StyledStatisticsLabel>{item.tag}</StyledStatisticsLabel>
-        <StyledStatisticsValue>{item.count}</StyledStatisticsValue>
+      <StyledStatisticsListItem key={item.tag} $themeMode={modalThemeMode}>
+        <StyledStatisticsLabel $themeMode={modalThemeMode}>
+          {item.tag}
+        </StyledStatisticsLabel>
+        <StyledStatisticsValue $themeMode={modalThemeMode}>
+          {item.count}
+        </StyledStatisticsValue>
       </StyledStatisticsListItem>
     ));
 
   return (
-    <StyledStatisticsContainer>
-      <StyledStatisticsTitle>Overview</StyledStatisticsTitle>
+    <StyledStatisticsContainer $themeMode={modalThemeMode}>
+      <StyledStatisticsTitle $themeMode={modalThemeMode}>
+        Overview
+      </StyledStatisticsTitle>
 
       <StyledStatisticsSection>
         <StyledSummaryList>
-          <StyledStatisticsListItem>
-            <StyledStatisticsLabel>Mixes</StyledStatisticsLabel>
-            <StyledStatisticsValue>{stats.mixCount}</StyledStatisticsValue>
+          <StyledStatisticsListItem $themeMode={modalThemeMode}>
+            <StyledStatisticsLabel $themeMode={modalThemeMode}>
+              Mixes
+            </StyledStatisticsLabel>
+            <StyledStatisticsValue $themeMode={modalThemeMode}>
+              {stats.mixCount}
+            </StyledStatisticsValue>
           </StyledStatisticsListItem>
-          <StyledStatisticsListItem>
-            <StyledStatisticsLabel>Tracks</StyledStatisticsLabel>
-            <StyledStatisticsValue>{stats.trackCount}</StyledStatisticsValue>
+          <StyledStatisticsListItem $themeMode={modalThemeMode}>
+            <StyledStatisticsLabel $themeMode={modalThemeMode}>
+              Tracks
+            </StyledStatisticsLabel>
+            <StyledStatisticsValue $themeMode={modalThemeMode}>
+              {stats.trackCount}
+            </StyledStatisticsValue>
           </StyledStatisticsListItem>
-          <StyledStatisticsListItem>
-            <StyledStatisticsLabel>Total Duration</StyledStatisticsLabel>
-            <StyledDurationValue>
+          <StyledStatisticsListItem $themeMode={modalThemeMode}>
+            <StyledStatisticsLabel $themeMode={modalThemeMode}>
+              Total Duration
+            </StyledStatisticsLabel>
+            <StyledDurationValue $themeMode={modalThemeMode}>
               {convertTimeToHumanReadable(stats.totalDuration)}
             </StyledDurationValue>
           </StyledStatisticsListItem>
-          <StyledStatisticsListItem>
-            <StyledStatisticsLabel>Average Mix</StyledStatisticsLabel>
-            <StyledDurationValue>
+          <StyledStatisticsListItem $themeMode={modalThemeMode}>
+            <StyledStatisticsLabel $themeMode={modalThemeMode}>
+              Average Mix
+            </StyledStatisticsLabel>
+            <StyledDurationValue $themeMode={modalThemeMode}>
               {convertTimeToHumanReadable(stats.averageMixDuration)}
             </StyledDurationValue>
           </StyledStatisticsListItem>
@@ -148,14 +210,16 @@ export const Statistics: React.FC = () => {
       </StyledStatisticsSection>
 
       <StyledStatisticsSection>
-        <StyledStatisticsSubTitle>Categories</StyledStatisticsSubTitle>
+        <StyledStatisticsSubTitle $themeMode={modalThemeMode}>
+          Categories
+        </StyledStatisticsSubTitle>
         <StyledStatisticsList>
           {renderCategoryMixCounts(stats.categoryMixCounts)}
         </StyledStatisticsList>
       </StyledStatisticsSection>
 
       <StyledStatisticsSection>
-        <StyledStatisticsSubTitle>
+        <StyledStatisticsSubTitle $themeMode={modalThemeMode}>
           {showAllTags ? "All Tags" : "Top 10 Tags"}
         </StyledStatisticsSubTitle>
         <StyledStatisticsList>
@@ -163,7 +227,10 @@ export const Statistics: React.FC = () => {
             showAllTags ? stats.tagCounts : stats.top10TagCounts,
           )}
         </StyledStatisticsList>
-        <StyledShowHideBlock onClick={() => setShowAllTags(!showAllTags)}>
+        <StyledShowHideBlock
+          $themeMode={modalThemeMode}
+          onClick={() => setShowAllTags(!showAllTags)}
+        >
           {showAllTags ? (
             <>
               Reduce to top 10 tags <StyledArrowDropUp />
@@ -177,7 +244,7 @@ export const Statistics: React.FC = () => {
       </StyledStatisticsSection>
 
       <StyledStatisticsSection>
-        <StyledStatisticsSubTitle>
+        <StyledStatisticsSubTitle $themeMode={modalThemeMode}>
           {showAllArtists ? "All Artists" : "Top 10 Artists"}
         </StyledStatisticsSubTitle>
         <StyledStatisticsList>
@@ -187,7 +254,10 @@ export const Statistics: React.FC = () => {
               : stats.top10ArtistTrackCounts,
           )}
         </StyledStatisticsList>
-        <StyledShowHideBlock onClick={() => setShowAllArtists(!showAllArtists)}>
+        <StyledShowHideBlock
+          $themeMode={modalThemeMode}
+          onClick={() => setShowAllArtists(!showAllArtists)}
+        >
           {showAllArtists ? (
             <>
               Reduce to top 10 artists <StyledArrowDropUp />
@@ -201,7 +271,7 @@ export const Statistics: React.FC = () => {
       </StyledStatisticsSection>
 
       <StyledStatisticsSection>
-        <StyledStatisticsSubTitle>
+        <StyledStatisticsSubTitle $themeMode={modalThemeMode}>
           {showAllRemixArtists ? "All Remix Artists" : "Top 10 Remix Artists"}
         </StyledStatisticsSubTitle>
         <StyledStatisticsList>
@@ -212,6 +282,7 @@ export const Statistics: React.FC = () => {
           )}
         </StyledStatisticsList>
         <StyledShowHideBlock
+          $themeMode={modalThemeMode}
           onClick={() => setShowAllRemixArtists(!showAllRemixArtists)}
         >
           {showAllRemixArtists ? (
@@ -227,7 +298,7 @@ export const Statistics: React.FC = () => {
       </StyledStatisticsSection>
 
       <StyledStatisticsSection>
-        <StyledStatisticsSubTitle>
+        <StyledStatisticsSubTitle $themeMode={modalThemeMode}>
           {showAllPublishers ? "All Publishers" : "Top 10 Publishers"}
         </StyledStatisticsSubTitle>
         <StyledStatisticsList>
@@ -238,6 +309,7 @@ export const Statistics: React.FC = () => {
           )}
         </StyledStatisticsList>
         <StyledShowHideBlock
+          $themeMode={modalThemeMode}
           onClick={() => setShowAllPublishers(!showAllPublishers)}
         >
           {showAllPublishers ? (

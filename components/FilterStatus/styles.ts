@@ -1,22 +1,28 @@
 import styled from "styled-components";
 
-export const StyledFilterStatus = styled.div`
+interface ThemeProps {
+  $themeMode: "light" | "dark";
+}
+
+export const StyledFilterStatus = styled.div<ThemeProps>`
   padding: 16px;
-  background-color: #e8e8e8;
-  border: 1px solid #c0c0c0;
+  background-color: ${(props) =>
+    props.$themeMode === "dark" ? "#2a2a2a" : "#e8e8e8"};
+  border: 1px solid
+    ${(props) => (props.$themeMode === "dark" ? "#404040" : "#c0c0c0")};
   border-radius: 6px;
   margin-bottom: 16px;
   border-left: 4px solid #4a9f4a;
 
   h4 {
     margin: 0 0 12px 0;
-    color: #3a3a3a;
+    color: ${(props) => (props.$themeMode === "dark" ? "#c8c8c8" : "#3a3a3a")};
     font-size: 14px;
     font-weight: 600;
   }
 `;
 
-export const StyledFilterStatusItem = styled.div`
+export const StyledFilterStatusItem = styled.div<ThemeProps>`
   display: inline-block;
   margin: 3px 8px 3px 0;
   padding: 6px 12px;
