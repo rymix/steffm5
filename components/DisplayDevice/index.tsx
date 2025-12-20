@@ -1,14 +1,11 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useMemo, useState } from "react";
 
-import PlaybackButtons from "@/components/PlaybackButtons";
-
 import {
   StyledDisplayDevice,
   StyledDisplayDeviceWrapper,
   StyledLogoPlate,
   StyledLogoText,
-  StyledMetalPanel,
   StyledMixCard,
   StyledMixCoverArt,
   StyledMixInfo,
@@ -258,9 +255,9 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
           )}
         </StyledScreen>
 
-        <StyledMetalPanel>
+        {/* <StyledMetalPanel>
           <PlaybackButtons showLabels={false} />
-        </StyledMetalPanel>
+        </StyledMetalPanel> */}
       </StyledDisplayDevice>
     </StyledDisplayDeviceWrapper>
   );
