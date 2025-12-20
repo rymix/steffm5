@@ -1,7 +1,7 @@
 import { useMixcloud } from "contexts/mixcloud";
 import { useTheme } from "contexts/theme";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { getPanelThemeMode } from "utils/themeHelpers";
+import { getCategoryName, getPanelThemeMode } from "utils/themeHelpers";
 
 import BurgerMenu from "@/components/BurgerMenu";
 import CompactControls from "@/components/CompactPlayer/CompactControls";
@@ -281,9 +281,29 @@ const HomePage: React.FC = () => {
                         </StyledMixInfo>
                       )}
 
+                      {currentMix.category && (
+                        <StyledMixInfo $themeMode={panelThemeMode}>
+                          <strong>Category:</strong>{" "}
+                          {getCategoryName(currentMix.category)}
+                        </StyledMixInfo>
+                      )}
+
+                      {currentMix.duration && (
+                        <StyledMixInfo $themeMode={panelThemeMode}>
+                          <strong>Duration:</strong> {currentMix.duration}
+                        </StyledMixInfo>
+                      )}
+
+                      {currentMix.releaseDate && (
+                        <StyledMixInfo $themeMode={panelThemeMode}>
+                          <strong>Release Date:</strong>{" "}
+                          {currentMix.releaseDate}
+                        </StyledMixInfo>
+                      )}
+
                       {currentMix.created_time && (
                         <StyledMixInfo $themeMode={panelThemeMode}>
-                          <strong>Date:</strong>{" "}
+                          <strong>Uploaded:</strong>{" "}
                           {new Date(
                             currentMix.created_time,
                           ).toLocaleDateString()}
@@ -292,7 +312,7 @@ const HomePage: React.FC = () => {
 
                       {currentMix.audio_length && (
                         <StyledMixInfo $themeMode={panelThemeMode}>
-                          <strong>Duration:</strong>{" "}
+                          <strong>Length:</strong>{" "}
                           {Math.floor(currentMix.audio_length / 60)} minutes
                         </StyledMixInfo>
                       )}
@@ -307,6 +327,12 @@ const HomePage: React.FC = () => {
                       {currentMix.tags && currentMix.tags.length > 0 && (
                         <StyledMixInfo $themeMode={panelThemeMode}>
                           <strong>Tags:</strong> {currentMix.tags.join(", ")}
+                        </StyledMixInfo>
+                      )}
+
+                      {currentMix.notes && (
+                        <StyledMixInfo $themeMode={panelThemeMode}>
+                          <strong>Notes:</strong> {currentMix.notes}
                         </StyledMixInfo>
                       )}
                     </StyledMixCard>

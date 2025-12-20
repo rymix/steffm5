@@ -15,3 +15,19 @@ export const getModalThemeMode = (themeMode: ThemeMode): "light" | "dark" => {
 export const getPanelThemeMode = (themeMode: ThemeMode): "light" | "dark" => {
   return themeMode === "light" ? "light" : "dark";
 };
+
+/**
+ * Get the display name for a category code
+ */
+export const getCategoryName = (categoryCode: string): string => {
+  const categoryMap: Record<string, string> = {
+    "": "All Mixes",
+    aidm: "Adventures in Decent Music",
+    mpos: "My Pair of Shoes",
+    cocksoup: "Cock Soup",
+    special: "Special",
+    fav: "Favourites",
+  };
+
+  return categoryMap[categoryCode] || categoryCode;
+};
