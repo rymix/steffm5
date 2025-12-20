@@ -20,8 +20,8 @@ export const StyledBurgerButton = styled.button<StyledBurgerButtonProps>`
   z-index: 1002; /* Above shared overlay and menu */
   width: 48px;
   height: 48px;
-  background: rgba(0, 0, 0, 0.8);
-  border: none;
+  background: #e8e8e8;
+  border: 1px solid #b0b0b0;
   border-radius: 8px;
   cursor: pointer;
   display: flex;
@@ -30,14 +30,16 @@ export const StyledBurgerButton = styled.button<StyledBurgerButtonProps>`
   align-items: center;
   gap: 4px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 
   &:hover {
-    background: rgba(0, 0, 0, 0.9);
+    background: #d8d8d8;
+    border-color: #a0a0a0;
     transform: scale(1.05);
   }
 
   &:focus {
-    outline: 2px solid #007bff;
+    outline: 2px solid #4a9f4a;
     outline-offset: 2px;
   }
 
@@ -52,7 +54,7 @@ export const StyledBurgerButton = styled.button<StyledBurgerButtonProps>`
 export const StyledBurgerLine = styled.div<StyledBurgerLineProps>`
   width: 24px;
   height: 3px;
-  background: white;
+  background: #3a3a3a;
   border-radius: 2px;
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transform-origin: center;
@@ -87,7 +89,7 @@ export const StyledMenu = styled.div<StyledMenuProps>`
   height: 100vh;
   width: 320px;
   max-width: 80vw;
-  background: white;
+  background: #f5f5f5;
   box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
   z-index: 1001; /* Above shared overlay, below burger button */
   transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -105,7 +107,7 @@ export const StyledMenu = styled.div<StyledMenuProps>`
 export const StyledMenuContent = styled.div`
   flex: 1;
   overflow-y: auto;
-  padding: 80px 0 20px 0;
+  padding: 80px 20px 20px 20px;
 
   /* Custom scrollbar */
   &::-webkit-scrollbar {
@@ -113,16 +115,16 @@ export const StyledMenuContent = styled.div`
   }
 
   &::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #e0e0e0;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
+    background: #b0b0b0;
     border-radius: 3px;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+    background: #909090;
   }
 `;
 
@@ -131,20 +133,19 @@ export const StyledMenuTitle = styled.h1`
   padding: 0 24px;
   font-size: 1.8rem;
   font-weight: 700;
-  color: #2c3e50;
-  border-bottom: 2px solid #ecf0f1;
+  color: #2a2a2a;
+  border-bottom: 2px solid #d0d0d0;
   padding-bottom: 20px;
 `;
 
 export const StyledMenuSection = styled.section`
   margin-bottom: 24px;
-  padding: 0 24px;
 
   h3 {
     margin: 0 0 12px 0;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #7f8c8d;
+    color: #5a5a5a;
     text-transform: uppercase;
     letter-spacing: 1px;
   }
@@ -152,48 +153,51 @@ export const StyledMenuSection = styled.section`
 
 export const StyledMenuItem = styled.button`
   width: 100%;
-  padding: 12px 0;
-  background: none;
-  border: none;
+  padding: 18px 16px;
+  background: #e8e8e8;
+  border: 2px solid #c0c0c0;
   text-align: left;
-  font-size: 1rem;
-  color: #34495e;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2a2a2a;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: all 0.2s ease;
-  margin-bottom: 4px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 
   &:hover {
-    background: #f8f9fa;
-    color: #2c3e50;
-    padding-left: 8px;
+    background: #b8b8b8;
+    border-color: #989898;
+    color: #1a1a1a;
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 
   &:focus {
-    outline: 2px solid #007bff;
+    outline: 2px solid #4a9f4a;
     outline-offset: 2px;
-    background: #e3f2fd;
   }
 
   &:active {
-    transform: translateY(1px);
+    transform: scale(0.98);
   }
 `;
 
 export const StyledMenuFooter = styled.footer`
   padding: 20px 24px;
-  border-top: 1px solid #ecf0f1;
-  background: #f8f9fa;
+  border-top: 1px solid #d0d0d0;
+  background: #e8e8e8;
 
   p {
     margin: 0;
     font-size: 0.8rem;
-    color: #95a5a6;
+    color: #5a5a5a;
     text-align: center;
 
     &:first-child {
       font-weight: 600;
-      color: #7f8c8d;
+      color: #3a3a3a;
       margin-bottom: 4px;
     }
   }

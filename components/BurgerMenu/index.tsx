@@ -14,7 +14,6 @@ import {
   StyledMenuFooter,
   StyledMenuItem,
   StyledMenuSection,
-  StyledMenuTitle,
 } from "./styles";
 
 interface BurgerMenuProps {
@@ -112,10 +111,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
       {isOpen && (
         <StyledMenu $isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
           <StyledMenuContent>
-            <StyledMenuTitle>Menu</StyledMenuTitle>
-
             <StyledMenuSection>
-              <h3>Navigation</h3>
               <StyledMenuItem
                 onClick={() =>
                   handleModalDemo(
@@ -126,7 +122,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
                   )
                 }
               >
-                ℹ️ About{" "}
+                About
               </StyledMenuItem>
               <StyledMenuItem
                 onClick={() =>
@@ -138,12 +134,8 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
                   )
                 }
               >
-                📊 Satistics{" "}
+                Statistics
               </StyledMenuItem>
-            </StyledMenuSection>
-
-            <StyledMenuSection>
-              <h3>Music</h3>
               <StyledMenuItem
                 onClick={() =>
                   handleModalDemo(
@@ -154,21 +146,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
                   )
                 }
               >
-                🎵 Mix List
-              </StyledMenuItem>
-              <StyledMenuItem
-                onClick={() => {
-                  /* TODO: Implement Browse functionality */
-                }}
-              >
-                🔍 Browse
-              </StyledMenuItem>
-              <StyledMenuItem
-                onClick={() => {
-                  /* TODO: Implement Favorites functionality */
-                }}
-              >
-                ❤️ Favorites
+                Mix List
               </StyledMenuItem>
             </StyledMenuSection>
           </StyledMenuContent>
