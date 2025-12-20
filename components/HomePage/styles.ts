@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
 export const StyledLayoutWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   display: flex;
-  position: relative;
+  align-items: stretch;
   overflow: hidden;
 
   @media (max-width: 1024px) {
@@ -124,9 +127,11 @@ export const StyledMobileLogoPanel = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Helvetica Neue", "Arial", sans-serif;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 700;
+  font-style: normal;
   color: #2a2a2a;
   letter-spacing: 1.2px;
   z-index: 1;

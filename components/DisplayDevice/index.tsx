@@ -6,6 +6,8 @@ import PlaybackButtons from "@/components/PlaybackButtons";
 import {
   StyledDisplayDevice,
   StyledDisplayDeviceWrapper,
+  StyledLogoPlate,
+  StyledLogoText,
   StyledMetalPanel,
   StyledMixCard,
   StyledMixImage,
@@ -98,7 +100,11 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
       </StyledToggleButton>
 
       <StyledDisplayDevice $isOpen={isOpen}>
-        <StyledWoodSlats />
+        <StyledWoodSlats>
+          <StyledLogoPlate>
+            <StyledLogoText>INFO</StyledLogoText>
+          </StyledLogoPlate>
+        </StyledWoodSlats>
 
         <StyledScreen>
           {currentMix ? (

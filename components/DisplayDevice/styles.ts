@@ -11,7 +11,7 @@ export const StyledDisplayDeviceWrapper = styled.div`
 
 export const StyledDisplayDevice = styled.div<{ $isOpen: boolean }>`
   width: ${({ $isOpen }) => ($isOpen ? "420px" : "0")};
-  height: 100vh;
+  height: 100%;
   z-index: 1000;
   box-shadow: ${({ $isOpen }) =>
     $isOpen ? "-4px 0 24px rgba(0, 0, 0, 0.5)" : "none"};
@@ -35,6 +35,11 @@ export const StyledWoodSlats = styled.div`
   box-shadow:
     inset 2px 2px 4px rgba(255, 255, 255, 0.2),
     inset -1px -1px 3px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-right: 26px;
+  padding-top: 17px;
 
   &::before {
     content: "";
@@ -51,7 +56,41 @@ export const StyledWoodSlats = styled.div`
       rgba(0, 0, 0, 0.8) 100%
     );
     background-size: 100% 10px;
+    pointer-events: none;
   }
+`;
+
+export const StyledLogoPlate = styled.div`
+  width: 80px;
+  height: 26px;
+  background: #c8c8c8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+  border-radius: 1px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+`;
+
+export const StyledLogoText = styled.div`
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-size: 16px;
+  font-weight: 700;
+  font-style: normal;
+  color: #2a2a2a;
+  letter-spacing: 1.2px;
 `;
 
 export const StyledScreen = styled.div`
