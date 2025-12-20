@@ -26,7 +26,7 @@ const Modal: React.FC<ModalProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const overlay = useOverlay();
+  const { actions: overlayActions } = useOverlay();
 
   // Handle auto-close timeout
   useEffect(() => {
@@ -48,16 +48,16 @@ const Modal: React.FC<ModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
-      overlay.actions.setModalOpen(true);
+      overlayActions.setModalOpen(true);
     } else {
-      overlay.actions.setModalOpen(false);
+      overlayActions.setModalOpen(false);
       // Delay hiding to allow fade out
       const timer = setTimeout(() => {
         setIsVisible(false);
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [isOpen, overlay]);
+  }, [isOpen, overlayActions]);
 
   // Handle ESC key press
   useEffect(() => {
