@@ -44,6 +44,10 @@ export const StyledDisplay = styled.div`
     inset 0 -1px 2px rgba(0, 0, 0, 0.3),
     0 1px 0 rgba(255, 255, 255, 0.1);
   padding: 8px 12px;
+
+  @media (max-width: 1024px) {
+    padding: 16px 16px;
+  }
 `;
 
 export const StyledDisplayText = styled.div`
@@ -60,6 +64,12 @@ export const StyledDisplayText = styled.div`
   overflow: hidden;
   margin-bottom: 4px;
   position: relative;
+
+  @media (max-width: 1024px) {
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
 
   &::after {
     content: "~~~~~~~~~~~~~~~~~~~~"; /* 20 tildes for unlit segments */
@@ -92,6 +102,11 @@ export const StyledDisplayProgress = styled.div`
   white-space: nowrap;
   overflow: hidden;
   position: relative;
+
+  @media (max-width: 1024px) {
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
 
   &::after {
     content: "===================="; /* 20 equals signs for unlit segments */
