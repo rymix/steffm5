@@ -11,9 +11,10 @@ export const StyledModal = styled.div<StyledModalProps>`
   transform: translate(-50%, -50%)
     ${(props) => (props.$isOpen ? "scale(1)" : "scale(0.9) translateY(-20px)")};
   z-index: 1000; /* Above shared overlay, below menu */
-  background: white;
+  background: #f5f5f5;
+  border: 1px solid #d0d0d0;
   border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   max-width: 95vw;
   max-height: 90vh;
   width: 800px;
@@ -35,7 +36,7 @@ export const StyledModalHeader = styled.div`
     margin: 0;
     font-size: 1.25rem;
     font-weight: 600;
-    color: #333;
+    color: #2a2a2a;
   }
 `;
 
@@ -44,7 +45,7 @@ export const StyledModalCloseButton = styled.button`
   border: none;
   font-size: 28px;
   font-weight: bold;
-  color: #999;
+  color: #7a7a7a;
   cursor: pointer;
   padding: 0;
   width: 32px;
@@ -56,18 +57,18 @@ export const StyledModalCloseButton = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    color: #333;
-    background-color: #f0f0f0;
+    color: #2a2a2a;
+    background-color: #e0e0e0;
   }
 
   &:focus {
-    outline: 2px solid #007bff;
+    outline: 2px solid #4a9f4a;
     outline-offset: 2px;
   }
 `;
 
 export const StyledModalContent = styled.div`
-  padding: 20px 24px 24px 24px;
+  padding: 0;
   overflow-y: auto;
   flex: 1;
   min-height: 0;
@@ -78,16 +79,16 @@ export const StyledModalContent = styled.div`
   }
 
   &::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #e0e0e0;
     border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
+    background: #b0b0b0;
     border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+    background: #909090;
   }
 `;

@@ -4,6 +4,7 @@ import { convertTimeToHumanReadable } from "utils/functions";
 import {
   StyledArrowDropDown,
   StyledArrowDropUp,
+  StyledDurationValue,
   StyledErrorMessage,
   StyledLoadingSpinner,
   StyledShowHideBlock,
@@ -119,7 +120,7 @@ export const Statistics: React.FC = () => {
 
   return (
     <StyledStatisticsContainer>
-      <StyledStatisticsTitle>Statistics</StyledStatisticsTitle>
+      <StyledStatisticsTitle>Overview</StyledStatisticsTitle>
 
       <StyledStatisticsSection>
         <StyledSummaryList>
@@ -133,15 +134,15 @@ export const Statistics: React.FC = () => {
           </StyledStatisticsListItem>
           <StyledStatisticsListItem>
             <StyledStatisticsLabel>Total Duration</StyledStatisticsLabel>
-            <StyledStatisticsValue>
+            <StyledDurationValue>
               {convertTimeToHumanReadable(stats.totalDuration)}
-            </StyledStatisticsValue>
+            </StyledDurationValue>
           </StyledStatisticsListItem>
           <StyledStatisticsListItem>
             <StyledStatisticsLabel>Average Mix</StyledStatisticsLabel>
-            <StyledStatisticsValue>
+            <StyledDurationValue>
               {convertTimeToHumanReadable(stats.averageMixDuration)}
-            </StyledStatisticsValue>
+            </StyledDurationValue>
           </StyledStatisticsListItem>
         </StyledSummaryList>
       </StyledStatisticsSection>
