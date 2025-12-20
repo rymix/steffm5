@@ -101,6 +101,14 @@ const CompactControls: React.FC = () => {
     currentRotationRef.current = volumeRotation;
   };
 
+  const handleVolumeTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    isDraggingVolumeRef.current = true;
+    lastYRef.current = e.touches[0].clientY;
+    currentRotationRef.current = volumeRotation;
+  };
+
   const handleVolumeMouseMove = (e: MouseEvent) => {
     if (!isDraggingVolumeRef.current) return;
 
@@ -119,7 +127,29 @@ const CompactControls: React.FC = () => {
     actions.setVolume(newVolume);
   };
 
+  const handleVolumeTouchMove = (e: TouchEvent) => {
+    if (!isDraggingVolumeRef.current) return;
+
+    const deltaY = lastYRef.current - e.touches[0].clientY;
+    lastYRef.current = e.touches[0].clientY;
+
+    const newRotation = currentRotationRef.current + deltaY;
+
+    const constrainedDegrees = Math.max(
+      -volumeMaxAngle,
+      Math.min(volumeMaxAngle, newRotation),
+    );
+    currentRotationRef.current = constrainedDegrees;
+
+    const newVolume = (constrainedDegrees / volumeMaxAngle + 1) / 2;
+    actions.setVolume(newVolume);
+  };
+
   const handleVolumeMouseUp = () => {
+    isDraggingVolumeRef.current = false;
+  };
+
+  const handleVolumeTouchEnd = () => {
     isDraggingVolumeRef.current = false;
   };
 
@@ -129,6 +159,13 @@ const CompactControls: React.FC = () => {
     e.stopPropagation();
     isDraggingModeRef.current = true;
     lastYRef.current = e.clientY;
+  };
+
+  const handleModeTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    isDraggingModeRef.current = true;
+    lastYRef.current = e.touches[0].clientY;
   };
 
   const handleModeMouseMove = (e: MouseEvent) => {
@@ -145,7 +182,25 @@ const CompactControls: React.FC = () => {
     }
   };
 
+  const handleModeTouchMove = (e: TouchEvent) => {
+    if (!isDraggingModeRef.current) return;
+
+    const deltaY = lastYRef.current - e.touches[0].clientY;
+
+    if (Math.abs(deltaY) >= 30) {
+      const direction = deltaY > 0 ? 1 : -1;
+      const newStep = Math.max(0, Math.min(5, modeStep + direction));
+      isUserChangingDialRef.current = true;
+      setModeStep(newStep);
+      lastYRef.current = e.touches[0].clientY;
+    }
+  };
+
   const handleModeMouseUp = () => {
+    isDraggingModeRef.current = false;
+  };
+
+  const handleModeTouchEnd = () => {
     isDraggingModeRef.current = false;
   };
 
@@ -169,7 +224,7 @@ const CompactControls: React.FC = () => {
     setModeStep(newStep);
   };
 
-  // Mouse move listeners
+  // Mouse and touch move listeners
   useEffect(() => {
     const moveHandler = (e: MouseEvent) => {
       handleVolumeMouseMove(e);
@@ -179,13 +234,27 @@ const CompactControls: React.FC = () => {
       handleVolumeMouseUp();
       handleModeMouseUp();
     };
+    const touchMoveHandler = (e: TouchEvent) => {
+      handleVolumeTouchMove(e);
+      handleModeTouchMove(e);
+    };
+    const touchEndHandler = () => {
+      handleVolumeTouchEnd();
+      handleModeTouchEnd();
+    };
 
     document.addEventListener("mousemove", moveHandler);
     document.addEventListener("mouseup", upHandler);
+    document.addEventListener("touchmove", touchMoveHandler, {
+      passive: false,
+    });
+    document.addEventListener("touchend", touchEndHandler);
 
     return () => {
       document.removeEventListener("mousemove", moveHandler);
       document.removeEventListener("mouseup", upHandler);
+      document.removeEventListener("touchmove", touchMoveHandler);
+      document.removeEventListener("touchend", touchEndHandler);
     };
   }, [modeStep]);
 
@@ -203,6 +272,7 @@ const CompactControls: React.FC = () => {
               ref={volumeDialRef}
               $rotation={volumeRotation}
               onMouseDown={handleVolumeMouseDown}
+              onTouchStart={handleVolumeTouchStart}
               onWheel={handleVolumeWheel}
             />
           </StyledVolumeDialWrapper>
@@ -228,6 +298,7 @@ const CompactControls: React.FC = () => {
               ref={modeDialRef}
               $rotation={-modeMaxAngle + modeStep * modeStepAngle}
               onMouseDown={handleModeMouseDown}
+              onTouchStart={handleModeTouchStart}
               onWheel={handleModeWheel}
             />
           </StyledModeDialWrapper>

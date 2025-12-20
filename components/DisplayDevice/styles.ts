@@ -181,12 +181,35 @@ export const StyledToggleButton = styled.button<{ $isOpen: boolean }>`
   }
 `;
 
+export const StyledMixCoverArt = styled.img`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+  filter: grayscale(50%) saturate(0.9);
+  transition: all 0.4s ease;
+  mask-image: linear-gradient(to right, transparent 0%, black 40%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);
+  pointer-events: none;
+`;
+
 export const StyledMixCard = styled.div`
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 20px;
   color: #ffffff;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    ${StyledMixCoverArt} {
+      filter: grayscale(10%) saturate(1.2) brightness(1.05);
+    }
+  }
 `;
 
 export const StyledMixImage = styled.img`
@@ -204,12 +227,16 @@ export const StyledMixName = styled.h2`
   margin: 0 0 12px 0;
   color: #ffffff;
   line-height: 1.4;
+  position: relative;
+  z-index: 1;
 `;
 
 export const StyledMixInfo = styled.div`
   font-size: 14px;
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
 
   &:last-child {
     margin-bottom: 0;
@@ -242,7 +269,31 @@ export const StyledTrackList = styled.div`
   gap: 8px;
 `;
 
-export const StyledTrackItem = styled.div<{ $isPlaying: boolean }>`
+export const StyledTrackCoverArt = styled.img<{
+  $isPlaying: boolean;
+  $isExpanded: boolean;
+}>`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+  filter: ${({ $isPlaying, $isExpanded }) =>
+    $isPlaying || $isExpanded
+      ? "grayscale(0%) saturate(1.3) brightness(1.05)"
+      : "grayscale(100%)"};
+  transition: all 0.4s ease;
+  mask-image: linear-gradient(to right, transparent 0%, black 40%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);
+  pointer-events: none;
+`;
+
+export const StyledTrackItem = styled.div<{
+  $isPlaying: boolean;
+  $isExpanded?: boolean;
+}>`
   background: ${({ $isPlaying }) =>
     $isPlaying ? "rgba(159, 223, 159, 0.15)" : "rgba(255, 255, 255, 0.03)"};
   border: 1px solid
@@ -251,12 +302,22 @@ export const StyledTrackItem = styled.div<{ $isPlaying: boolean }>`
   border-radius: 6px;
   padding: 12px;
   transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
     background: ${({ $isPlaying }) =>
       $isPlaying ? "rgba(159, 223, 159, 0.2)" : "rgba(255, 255, 255, 0.08)"};
     border-color: ${({ $isPlaying }) =>
       $isPlaying ? "rgba(159, 223, 159, 0.4)" : "rgba(255, 255, 255, 0.15)"};
+
+    ${StyledTrackCoverArt} {
+      filter: ${({ $isPlaying, $isExpanded }) =>
+        $isPlaying || $isExpanded
+          ? "grayscale(0%) saturate(1.3) brightness(1.05)"
+          : "grayscale(20%) saturate(1.1)"};
+    }
   }
 `;
 
@@ -311,6 +372,35 @@ export const StyledTrackRemix = styled.div<{ $isPlaying: boolean }>`
     $isPlaying ? "rgba(159, 223, 159, 0.6)" : "rgba(255, 255, 255, 0.5)"};
   font-style: italic;
   margin-top: 2px;
+`;
+
+export const StyledTrackContent = styled.div`
+  position: relative;
+  z-index: 1;
+`;
+
+export const StyledTrackExpandedInfo = styled.div<{ $isExpanded: boolean }>`
+  max-height: ${({ $isExpanded }) => ($isExpanded ? "100px" : "0")};
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  margin-top: ${({ $isExpanded }) => ($isExpanded ? "8px" : "0")};
+  padding-top: ${({ $isExpanded }) => ($isExpanded ? "8px" : "0")};
+  border-top: ${({ $isExpanded }) =>
+    $isExpanded ? "1px solid rgba(255, 255, 255, 0.1)" : "none"};
+`;
+
+export const StyledTrackExtraInfo = styled.div<{ $isPlaying: boolean }>`
+  font-size: 12px;
+  color: ${({ $isPlaying }) =>
+    $isPlaying ? "rgba(159, 223, 159, 0.7)" : "rgba(255, 255, 255, 0.6)"};
+  margin-bottom: 4px;
+  line-height: 1.4;
+
+  strong {
+    color: ${({ $isPlaying }) =>
+      $isPlaying ? "rgba(159, 223, 159, 0.9)" : "rgba(255, 255, 255, 0.8)"};
+    margin-right: 4px;
+  }
 `;
 
 export const StyledNoTracks = styled.div`

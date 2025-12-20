@@ -10,7 +10,7 @@ import {
   StyledLogoText,
   StyledMetalPanel,
   StyledMixCard,
-  StyledMixImage,
+  StyledMixCoverArt,
   StyledMixInfo,
   StyledMixName,
   StyledNoMix,
@@ -18,6 +18,10 @@ import {
   StyledScreen,
   StyledToggleButton,
   StyledTrackArtist,
+  StyledTrackContent,
+  StyledTrackCoverArt,
+  StyledTrackExpandedInfo,
+  StyledTrackExtraInfo,
   StyledTrackHeader,
   StyledTrackItem,
   StyledTrackList,
@@ -41,12 +45,34 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
 }) => {
   const { state, actions } = useMixcloud();
   const [isOpenInternal, setIsOpenInternal] = useState(false);
+  const [expandedTrackIndex, setExpandedTrackIndex] = useState<number | null>(
+    null,
+  );
 
   const isOpen = isOpenProp !== undefined ? isOpenProp : isOpenInternal;
   const toggleDisplay =
     onToggleProp || (() => setIsOpenInternal(!isOpenInternal));
 
   const currentMix = actions.getCurrentMix();
+
+  const toggleTrackExpanded = (index: number) => {
+    setExpandedTrackIndex(expandedTrackIndex === index ? null : index);
+  };
+
+  // Helper to calculate track duration
+  const getTrackDuration = (index: number): string => {
+    if (!sortedTracks[index]) {
+      return "";
+    }
+    const currentStart = timeToSeconds(sortedTracks[index].startTime);
+    const nextStart = sortedTracks[index + 1]
+      ? timeToSeconds(sortedTracks[index + 1].startTime)
+      : state.duration;
+    const durationSeconds = nextStart - currentStart;
+    const minutes = Math.floor(durationSeconds / 60);
+    const seconds = Math.floor(durationSeconds % 60);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
 
   // Helper to convert time string to seconds
   const timeToSeconds = (timeString: string): number => {
@@ -109,9 +135,9 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
         <StyledScreen>
           {currentMix ? (
             <StyledMixCard>
-              {currentMix.pictures?.large && (
-                <StyledMixImage
-                  src={currentMix.pictures.large}
+              {currentMix.coverArtLarge && (
+                <StyledMixCoverArt
+                  src={currentMix.coverArtLarge}
                   alt={currentMix.name}
                 />
               )}
@@ -165,31 +191,62 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
                 <StyledTrackList>
                   {sortedTracks.map((track, index) => {
                     const isPlaying = index === currentTrackIndex;
+                    const isExpanded = expandedTrackIndex === index;
+                    const duration = getTrackDuration(index);
                     return (
-                      <StyledTrackItem key={index} $isPlaying={isPlaying}>
-                        <StyledTrackHeader>
-                          <StyledTrackNumber $isPlaying={isPlaying}>
-                            {track.sectionNumber || index + 1}
-                          </StyledTrackNumber>
-                          <StyledTrackTime $isPlaying={isPlaying}>
-                            {track.startTime}
-                          </StyledTrackTime>
-                        </StyledTrackHeader>
-                        {track.trackName && (
-                          <StyledTrackName $isPlaying={isPlaying}>
-                            {track.trackName}
-                          </StyledTrackName>
+                      <StyledTrackItem
+                        key={index}
+                        $isPlaying={isPlaying}
+                        $isExpanded={isExpanded}
+                        onClick={() => toggleTrackExpanded(index)}
+                      >
+                        {track.coverArtLarge && (
+                          <StyledTrackCoverArt
+                            src={track.coverArtLarge}
+                            alt={track.trackName}
+                            $isPlaying={isPlaying}
+                            $isExpanded={isExpanded}
+                          />
                         )}
-                        {track.artistName && (
-                          <StyledTrackArtist $isPlaying={isPlaying}>
-                            {track.artistName}
-                          </StyledTrackArtist>
-                        )}
-                        {track.remixArtist && (
-                          <StyledTrackRemix $isPlaying={isPlaying}>
-                            {track.remixArtist}
-                          </StyledTrackRemix>
-                        )}
+                        <StyledTrackContent>
+                          <StyledTrackHeader>
+                            <StyledTrackNumber $isPlaying={isPlaying}>
+                              {track.sectionNumber || index + 1}
+                            </StyledTrackNumber>
+                            <StyledTrackTime $isPlaying={isPlaying}>
+                              {track.startTime}
+                            </StyledTrackTime>
+                          </StyledTrackHeader>
+                          {track.trackName && (
+                            <StyledTrackName $isPlaying={isPlaying}>
+                              {track.trackName}
+                            </StyledTrackName>
+                          )}
+                          {track.artistName && (
+                            <StyledTrackArtist $isPlaying={isPlaying}>
+                              {track.artistName}
+                            </StyledTrackArtist>
+                          )}
+                          {track.remixArtist && (
+                            <StyledTrackRemix $isPlaying={isPlaying}>
+                              {track.remixArtist}
+                            </StyledTrackRemix>
+                          )}
+                          <StyledTrackExpandedInfo $isExpanded={isExpanded}>
+                            {duration && (
+                              <StyledTrackExtraInfo $isPlaying={isPlaying}>
+                                <strong>Length:</strong>
+                                {duration}
+                              </StyledTrackExtraInfo>
+                            )}
+                            {track.publisher && (
+                              <StyledTrackExtraInfo $isPlaying={isPlaying}>
+                                <strong>Publisher:</strong>
+                                {track.publisher}
+                              </StyledTrackExtraInfo>
+                            )}
+                          </StyledTrackExpandedInfo>
+                        </StyledTrackContent>
                       </StyledTrackItem>
                     );
                   })}

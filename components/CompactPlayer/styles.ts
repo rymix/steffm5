@@ -130,9 +130,16 @@ export const StyledControlsPanel = styled.div`
 export const StyledControls = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
   padding: 0 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  @media (min-width: 520px) {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
 `;
 
 export const StyledDialContainer = styled.div`
@@ -142,6 +149,11 @@ export const StyledDialContainer = styled.div`
   justify-content: flex-end;
   height: 94px;
   flex-shrink: 0;
+  order: 2;
+
+  @media (min-width: 520px) {
+    order: 0;
+  }
 `;
 
 export const StyledDialLabelText = styled.div`
@@ -397,6 +409,15 @@ export const StyledButtonsContainer = styled.div`
   gap: 8px;
   align-items: center;
   flex-shrink: 0;
+  order: 1;
+  width: 100%;
+  justify-content: center;
+
+  @media (min-width: 520px) {
+    order: 3;
+    width: auto;
+    justify-content: flex-start;
+  }
 `;
 
 export const StyledButton = styled.button<{ $pressed?: boolean }>`

@@ -145,7 +145,7 @@ export const StyledMobileDisplayContainer = styled.div`
 `;
 
 export const StyledMobileScreenWrapper = styled.div`
-  flex: 1;
+  flex: 2;
   min-height: 0;
   position: relative;
   display: flex;

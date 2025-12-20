@@ -7,12 +7,16 @@ import CompactDisplay from "@/components/CompactPlayer/CompactDisplay";
 import DisplayDevice from "@/components/DisplayDevice";
 import {
   StyledMixCard,
-  StyledMixImage,
+  StyledMixCoverArt,
   StyledMixInfo,
   StyledMixName,
   StyledNoMix,
   StyledNoTracks,
   StyledTrackArtist,
+  StyledTrackContent,
+  StyledTrackCoverArt,
+  StyledTrackExpandedInfo,
+  StyledTrackExtraInfo,
   StyledTrackHeader,
   StyledTrackItem,
   StyledTrackList,
@@ -48,6 +52,9 @@ const HomePage: React.FC = () => {
   const { wallpaperState, changeWallpaper } = useWallpaperManager();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isMobileInfoCollapsed, setIsMobileInfoCollapsed] = useState(false);
+  const [expandedTrackIndex, setExpandedTrackIndex] = useState<number | null>(
+    null,
+  );
 
   // Track previous values to detect changes
   const prevCurrentKey = useRef<string | null>(null);
@@ -194,6 +201,24 @@ const HomePage: React.FC = () => {
   const togglePanel = () => setIsPanelOpen(!isPanelOpen);
   const toggleMobileInfo = () =>
     setIsMobileInfoCollapsed(!isMobileInfoCollapsed);
+  const toggleTrackExpanded = (index: number) => {
+    setExpandedTrackIndex(expandedTrackIndex === index ? null : index);
+  };
+
+  // Helper to calculate track duration
+  const getTrackDuration = (index: number): string => {
+    if (!sortedTracks[index]) {
+      return "";
+    }
+    const currentStart = timeToSeconds(sortedTracks[index].startTime);
+    const nextStart = sortedTracks[index + 1]
+      ? timeToSeconds(sortedTracks[index + 1].startTime)
+      : state.duration;
+    const durationSeconds = nextStart - currentStart;
+    const minutes = Math.floor(durationSeconds / 60);
+    const seconds = Math.floor(durationSeconds % 60);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
 
   return (
     <>
@@ -232,9 +257,9 @@ const HomePage: React.FC = () => {
                 <StyledMobileScreen $collapsed={isMobileInfoCollapsed}>
                   {currentMix ? (
                     <StyledMixCard>
-                      {currentMix.pictures?.large && (
-                        <StyledMixImage
-                          src={currentMix.pictures.large}
+                      {currentMix.coverArtLarge && (
+                        <StyledMixCoverArt
+                          src={currentMix.coverArtLarge}
                           alt={currentMix.name}
                         />
                       )}
@@ -290,34 +315,68 @@ const HomePage: React.FC = () => {
                         <StyledTrackList>
                           {sortedTracks.map((track, index) => {
                             const isPlaying = index === currentTrackIndex;
+                            const isExpanded = expandedTrackIndex === index;
+                            const duration = getTrackDuration(index);
                             return (
                               <StyledTrackItem
                                 key={index}
                                 $isPlaying={isPlaying}
+                                $isExpanded={isExpanded}
+                                onClick={() => toggleTrackExpanded(index)}
                               >
-                                <StyledTrackHeader>
-                                  <StyledTrackNumber $isPlaying={isPlaying}>
-                                    {track.sectionNumber || index + 1}
-                                  </StyledTrackNumber>
-                                  <StyledTrackTime $isPlaying={isPlaying}>
-                                    {track.startTime}
-                                  </StyledTrackTime>
-                                </StyledTrackHeader>
-                                {track.trackName && (
-                                  <StyledTrackName $isPlaying={isPlaying}>
-                                    {track.trackName}
-                                  </StyledTrackName>
+                                {track.coverArtLarge && (
+                                  <StyledTrackCoverArt
+                                    src={track.coverArtLarge}
+                                    alt={track.trackName}
+                                    $isPlaying={isPlaying}
+                                    $isExpanded={isExpanded}
+                                  />
                                 )}
-                                {track.artistName && (
-                                  <StyledTrackArtist $isPlaying={isPlaying}>
-                                    {track.artistName}
-                                  </StyledTrackArtist>
-                                )}
-                                {track.remixArtist && (
-                                  <StyledTrackRemix $isPlaying={isPlaying}>
-                                    {track.remixArtist}
-                                  </StyledTrackRemix>
-                                )}
+                                <StyledTrackContent>
+                                  <StyledTrackHeader>
+                                    <StyledTrackNumber $isPlaying={isPlaying}>
+                                      {track.sectionNumber || index + 1}
+                                    </StyledTrackNumber>
+                                    <StyledTrackTime $isPlaying={isPlaying}>
+                                      {track.startTime}
+                                    </StyledTrackTime>
+                                  </StyledTrackHeader>
+                                  {track.trackName && (
+                                    <StyledTrackName $isPlaying={isPlaying}>
+                                      {track.trackName}
+                                    </StyledTrackName>
+                                  )}
+                                  {track.artistName && (
+                                    <StyledTrackArtist $isPlaying={isPlaying}>
+                                      {track.artistName}
+                                    </StyledTrackArtist>
+                                  )}
+                                  {track.remixArtist && (
+                                    <StyledTrackRemix $isPlaying={isPlaying}>
+                                      {track.remixArtist}
+                                    </StyledTrackRemix>
+                                  )}
+                                  <StyledTrackExpandedInfo
+                                    $isExpanded={isExpanded}
+                                  >
+                                    {duration && (
+                                      <StyledTrackExtraInfo
+                                        $isPlaying={isPlaying}
+                                      >
+                                        <strong>Length:</strong>
+                                        {duration}
+                                      </StyledTrackExtraInfo>
+                                    )}
+                                    {track.publisher && (
+                                      <StyledTrackExtraInfo
+                                        $isPlaying={isPlaying}
+                                      >
+                                        <strong>Publisher:</strong>
+                                        {track.publisher}
+                                      </StyledTrackExtraInfo>
+                                    )}
+                                  </StyledTrackExpandedInfo>
+                                </StyledTrackContent>
                               </StyledTrackItem>
                             );
                           })}
