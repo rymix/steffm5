@@ -1,14 +1,10 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
+import PlaybackButtons from "@/components/PlaybackButtons";
+
 import {
   GlobalFonts,
-  StyledButton,
-  StyledButtonIcon,
-  StyledButtonLabel,
-  StyledButtonLED,
-  StyledButtonsContainer,
-  StyledButtonWrapper,
   StyledControls,
   StyledDialContainer,
   StyledDialLabel,
@@ -71,12 +67,6 @@ const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
 
   const volumeMaxAngle = 150; // Volume dial: 150° from vertical (300° total range)
   const modeMaxAngle = 115; // Mode dial: 135° from vertical (270° total range)
-
-  // Momentary button LED timers
-  const [prevLEDActive, setPrevLEDActive] = useState<boolean>(false);
-  const [nextLEDActive, setNextLEDActive] = useState<boolean>(false);
-  const prevTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const nextTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const isDraggingVolumeRef = useRef(false);
   const isDraggingModeRef = useRef(false);
@@ -350,41 +340,6 @@ const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
     setModeStep(newStep);
   };
 
-  // Momentary button handlers
-  const handlePrevClick = () => {
-    actions.previous();
-    setPrevLEDActive(true);
-    if (prevTimeoutRef.current) {
-      clearTimeout(prevTimeoutRef.current);
-    }
-    prevTimeoutRef.current = setTimeout(() => {
-      setPrevLEDActive(false);
-    }, 1000);
-  };
-
-  const handleNextClick = () => {
-    actions.next();
-    setNextLEDActive(true);
-    if (nextTimeoutRef.current) {
-      clearTimeout(nextTimeoutRef.current);
-    }
-    nextTimeoutRef.current = setTimeout(() => {
-      setNextLEDActive(false);
-    }, 1000);
-  };
-
-  // Cleanup timeouts
-  useEffect(() => {
-    return () => {
-      if (prevTimeoutRef.current) {
-        clearTimeout(prevTimeoutRef.current);
-      }
-      if (nextTimeoutRef.current) {
-        clearTimeout(nextTimeoutRef.current);
-      }
-    };
-  }, []);
-
   // Player drag effect - direct DOM manipulation for performance
   useEffect(() => {
     if (!isDraggingPlayer) return;
@@ -628,37 +583,7 @@ const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
             <StyledDialLabelText>Category</StyledDialLabelText>
           </StyledDialContainer>
 
-          <StyledButtonsContainer>
-            <StyledButtonWrapper>
-              <StyledButtonLED $active={prevLEDActive} />
-              <StyledButtonIcon>⏮</StyledButtonIcon>
-              <StyledButton
-                onClick={handlePrevClick}
-                disabled={state.keys.length <= 1}
-              />
-              <StyledButtonLabel>Prev</StyledButtonLabel>
-            </StyledButtonWrapper>
-
-            <StyledButtonWrapper>
-              <StyledButtonLED $active={state.isPlaying} />
-              <StyledButtonIcon>▶ ⏸</StyledButtonIcon>
-              <StyledButton
-                onClick={actions.toggle}
-                disabled={state.isLoading}
-              />
-              <StyledButtonLabel>Play / Pause</StyledButtonLabel>
-            </StyledButtonWrapper>
-
-            <StyledButtonWrapper>
-              <StyledButtonLED $active={nextLEDActive} />
-              <StyledButtonIcon>⏭</StyledButtonIcon>
-              <StyledButton
-                onClick={handleNextClick}
-                disabled={state.keys.length <= 1}
-              />
-              <StyledButtonLabel>Next</StyledButtonLabel>
-            </StyledButtonWrapper>
-          </StyledButtonsContainer>
+          <PlaybackButtons showLabels={true} />
         </StyledControls>
       </StyledPlayerPrototype>
     </>

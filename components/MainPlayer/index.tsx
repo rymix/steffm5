@@ -1,10 +1,11 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
+import PlaybackButtons from "@/components/PlaybackButtons";
+
 import {
   GlobalFonts,
   StyledButton,
-  StyledButtonIcon,
   StyledButtonLabel,
   StyledButtonLED,
   StyledButtonRowsWrapper,
@@ -56,11 +57,7 @@ const MainPlayer: React.FC = () => {
   const modeMaxAngle = 115;
 
   // Button LED states
-  const [prevLEDActive, setPrevLEDActive] = useState<boolean>(false);
-  const [nextLEDActive, setNextLEDActive] = useState<boolean>(false);
   const [shuffleLEDActive, setShuffleLEDActive] = useState<boolean>(false);
-  const prevTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const nextTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Dial refs
   const isDraggingVolumeRef = useRef(false);
@@ -309,27 +306,6 @@ const MainPlayer: React.FC = () => {
   };
 
   // Button handlers
-  const handlePrevClick = () => {
-    actions.previous();
-    setPrevLEDActive(true);
-    if (prevTimeoutRef.current) {
-      clearTimeout(prevTimeoutRef.current);
-    }
-    prevTimeoutRef.current = setTimeout(() => {
-      setPrevLEDActive(false);
-    }, 1000);
-  };
-
-  const handleNextClick = () => {
-    actions.next();
-    setNextLEDActive(true);
-    if (nextTimeoutRef.current) {
-      clearTimeout(nextTimeoutRef.current);
-    }
-    nextTimeoutRef.current = setTimeout(() => {
-      setNextLEDActive(false);
-    }, 1000);
-  };
 
   const handleShuffleClick = () => {
     // TODO: Implement shuffle
@@ -345,18 +321,6 @@ const MainPlayer: React.FC = () => {
     // TODO: Implement share
     console.log("Share clicked");
   };
-
-  // Cleanup timeouts
-  useEffect(() => {
-    return () => {
-      if (prevTimeoutRef.current) {
-        clearTimeout(prevTimeoutRef.current);
-      }
-      if (nextTimeoutRef.current) {
-        clearTimeout(nextTimeoutRef.current);
-      }
-    };
-  }, []);
 
   // Direct DOM manipulation for display
   useEffect(() => {
@@ -492,34 +456,7 @@ const MainPlayer: React.FC = () => {
           </StyledDialContainer>
 
           <StyledButtonRowsWrapper>
-            <StyledButtonsContainer>
-              <StyledButtonWrapper>
-                <StyledButtonLED $active={prevLEDActive} />
-                <StyledButtonIcon>⏮</StyledButtonIcon>
-                <StyledButton
-                  onClick={handlePrevClick}
-                  disabled={state.keys.length <= 1}
-                />
-              </StyledButtonWrapper>
-
-              <StyledButtonWrapper>
-                <StyledButtonLED $active={state.isPlaying} />
-                <StyledButtonIcon>▶ ⏸</StyledButtonIcon>
-                <StyledButton
-                  onClick={actions.toggle}
-                  disabled={state.isLoading}
-                />
-              </StyledButtonWrapper>
-
-              <StyledButtonWrapper>
-                <StyledButtonLED $active={nextLEDActive} />
-                <StyledButtonIcon>⏭</StyledButtonIcon>
-                <StyledButton
-                  onClick={handleNextClick}
-                  disabled={state.keys.length <= 1}
-                />
-              </StyledButtonWrapper>
-            </StyledButtonsContainer>
+            <PlaybackButtons showLabels={false} />
 
             <StyledButtonsContainer>
               <StyledButtonWrapper>

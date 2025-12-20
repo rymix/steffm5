@@ -1,6 +1,8 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useMemo, useState } from "react";
 
+import PlaybackButtons from "@/components/PlaybackButtons";
+
 import {
   StyledDisplayDevice,
   StyledMetalPanel,
@@ -184,7 +186,9 @@ const DisplayDevice: React.FC = () => {
           )}
         </StyledScreen>
 
-        <StyledMetalPanel>{/* Empty metal panel for now */}</StyledMetalPanel>
+        <StyledMetalPanel>
+          <PlaybackButtons showLabels={false} />
+        </StyledMetalPanel>
       </StyledDisplayDevice>
     </>
   );
