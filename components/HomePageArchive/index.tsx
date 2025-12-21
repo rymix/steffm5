@@ -82,24 +82,13 @@ const HomePage: React.FC = () => {
     const currentKey = state.currentKey;
     const currentTrack = getCurrentPlayingTrack();
 
-    console.log(
-      `🎵 Track change detection - Key: ${currentKey}, Track: ${currentTrack}`,
-    );
-    console.log(
-      `🎵 Previous - Key: ${prevCurrentKey.current}, Track: ${prevCurrentTrack.current}`,
-    );
-
     // Skip if no mix is loaded
     if (!currentKey) {
-      console.log("🎵 No mix loaded, skipping");
       return;
     }
 
     // Mark that we've had our first mix load, but don't skip wallpaper change after this
     if (!hasMadeInitialMixLoad.current) {
-      console.log(
-        "🎵 First mix load detected - allowing wallpaper changes from now on",
-      );
       hasMadeInitialMixLoad.current = true;
       prevCurrentKey.current = currentKey;
       prevCurrentTrack.current = currentTrack;
@@ -115,13 +104,8 @@ const HomePage: React.FC = () => {
       prevCurrentTrack.current !== currentTrack &&
       currentTrack !== null;
 
-    console.log(
-      `🎵 Mix changed: ${mixChanged}, Track changed: ${trackChanged}`,
-    );
-
     // Change wallpaper on either mix change or track change
     if (mixChanged || trackChanged) {
-      console.log("🎵 Triggering wallpaper change");
       changeWallpaper();
     }
 

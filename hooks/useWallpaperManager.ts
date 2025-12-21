@@ -53,12 +53,6 @@ export const useWallpaperManager = () => {
 
       const backgroundData: BackgroundExtended = await response.json();
 
-      // Construct the wallpaper URL
-      const wallpaperUrl = `/wallpapers/${backgroundData.backgroundCategoryObject.folder.replace("wallpapers/", "")}/${backgroundData.fileName}`;
-
-      console.log("🖼️ Loading wallpaper:", wallpaperUrl);
-      console.log("Background data:", backgroundData);
-
       // Update mixcloud context with the new background
       // The wallpaperState will auto-sync via the useEffect above
       actions.setBackground(backgroundData);
@@ -75,14 +69,12 @@ export const useWallpaperManager = () => {
   }, [actions]);
 
   const changeWallpaper = useCallback(() => {
-    console.log("🖼️ Changing wallpaper due to track/mix change");
     fetchRandomWallpaper();
   }, [fetchRandomWallpaper]);
 
   // Load initial wallpaper immediately
   useEffect(() => {
     if (!hasLoadedInitially.current) {
-      console.log("🖼️ Initial wallpaper load");
       hasLoadedInitially.current = true;
       fetchRandomWallpaper();
     }

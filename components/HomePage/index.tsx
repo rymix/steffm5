@@ -171,9 +171,6 @@ const HomePage: React.FC = () => {
     }
 
     if (!hasMadeInitialMixLoad.current) {
-      console.log(
-        "🎵 First mix load detected - allowing wallpaper changes from now on",
-      );
       hasMadeInitialMixLoad.current = true;
       prevCurrentKey.current = currentKey;
       prevCurrentTrack.current = currentTrack;
@@ -183,12 +180,7 @@ const HomePage: React.FC = () => {
     const mixChanged = currentKey !== prevCurrentKey.current;
     const trackChanged = currentTrack !== prevCurrentTrack.current;
 
-    console.log(
-      `🎵 Mix changed: ${mixChanged}, Track changed: ${trackChanged}`,
-    );
-
     if (trackChanged || mixChanged) {
-      console.log("🎵 Track or mix changed - triggering wallpaper change");
       changeWallpaper();
     }
 

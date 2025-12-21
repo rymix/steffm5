@@ -324,8 +324,7 @@ const MainPlayer: React.FC = () => {
   const handleShareClick = () => {
     setSharePressed(true);
     setTimeout(() => setSharePressed(false), MOMENTARY_LED_DURATION);
-    // TODO: Implement share
-    console.log("Share clicked");
+    // TODO: Implement share functionality
   };
 
   // Direct DOM manipulation for display
