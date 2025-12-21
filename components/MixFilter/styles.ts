@@ -176,3 +176,41 @@ export const StyledTagLozenge = styled.button<StyledTagLozengeProps>`
     outline-offset: 1px;
   }
 `;
+
+export const StyledFilterTitle = styled.h4<ThemeProps>`
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: ${(props) => (props.$themeMode === "dark" ? "#a8a8a8" : "#495057")};
+`;
+
+export const StyledTagsFlexContainer = styled.div`
+  flex: 1 1 100%;
+`;
+
+export const StyledTagsHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const StyledToggleTagsButton = styled.button<ThemeProps>`
+  background: none;
+  border: 1px solid
+    ${(props) => (props.$themeMode === "dark" ? "#404040" : "#ccc")};
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  color: ${(props) => (props.$themeMode === "dark" ? "#c8c8c8" : "inherit")};
+
+  &:hover {
+    background: ${(props) =>
+      props.$themeMode === "dark" ? "#3a3a3a" : "#f0f0f0"};
+  }
+`;
+
+export const StyledSelectedTagIndicator = styled.span`
+  font-size: 12px;
+  color: #4a9f4a;
+  font-weight: bold;
+`;

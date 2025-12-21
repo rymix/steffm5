@@ -26,8 +26,14 @@ import {
   StyledPausedText,
   StyledPlayingIcon,
   StyledToggleIcon,
+  StyledTrackArtist,
   StyledTrackItem,
   StyledTrackList,
+  StyledTrackListHeader,
+  StyledTrackLoadingText,
+  StyledTrackName,
+  StyledTrackPlaceholder,
+  StyledTracksContainer,
 } from "./styles";
 
 type MixItemState = {
@@ -327,68 +333,43 @@ const MixList: React.FC = () => {
                     </StyledDetailRow>
                   )}
 
-                  <div style={{ marginTop: "12px" }}>
+                  <StyledTracksContainer>
                     {mixState?.loadingTracks && (
-                      <div
-                        style={{
-                          fontSize: "12px",
-                          color:
-                            modalThemeMode === "dark" ? "#a8a8a8" : "#5a5a5a",
-                        }}
-                      >
+                      <StyledTrackLoadingText $themeMode={modalThemeMode}>
                         Loading tracks...
-                      </div>
+                      </StyledTrackLoadingText>
                     )}
 
                     {mixState?.tracksLoaded && mixState.tracks.length > 0 && (
                       <StyledTrackList $themeMode={modalThemeMode}>
-                        <div
-                          style={{ fontWeight: "bold", marginBottom: "8px" }}
-                        >
+                        <StyledTrackListHeader>
                           Track List:
-                        </div>
+                        </StyledTrackListHeader>
                         {mixState.tracks.map((track, trackIndex) => (
                           <StyledTrackItem
                             key={trackIndex}
                             $themeMode={modalThemeMode}
                           >
-                            <div
-                              style={{ fontSize: "12px", fontWeight: "bold" }}
-                            >
+                            <StyledTrackName>
                               {track.startTime} - {track.trackName}
-                            </div>
-                            <div
-                              style={{
-                                fontSize: "11px",
-                                color:
-                                  modalThemeMode === "dark"
-                                    ? "#a8a8a8"
-                                    : "#5a5a5a",
-                              }}
-                            >
+                            </StyledTrackName>
+                            <StyledTrackArtist $themeMode={modalThemeMode}>
                               by {track.artistName}
                               {track.remixArtistName &&
                                 ` (${track.remixArtistName} Remix)`}
                               {track.publisher && ` • ${track.publisher}`}
-                            </div>
+                            </StyledTrackArtist>
                           </StyledTrackItem>
                         ))}
                       </StyledTrackList>
                     )}
 
                     {!mixState?.tracksLoaded && !mixState?.loadingTracks && (
-                      <div
-                        style={{
-                          fontSize: "12px",
-                          color:
-                            modalThemeMode === "dark" ? "#888888" : "#888888",
-                          fontStyle: "italic",
-                        }}
-                      >
+                      <StyledTrackPlaceholder>
                         Track details will load automatically
-                      </div>
+                      </StyledTrackPlaceholder>
                     )}
-                  </div>
+                  </StyledTracksContainer>
                 </StyledMixDetails>
               )}
             </StyledMixListItem>

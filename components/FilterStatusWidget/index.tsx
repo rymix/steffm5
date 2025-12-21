@@ -5,11 +5,14 @@ import React from "react";
 import MixListPage from "components/MixListPage";
 
 import {
+  StyledButtonGroup,
   StyledClearButton,
   StyledFilterItem,
+  StyledFilterLabel,
   StyledFiltersContainer,
   StyledFilterStatusWidget,
   StyledHeaderRow,
+  StyledNoFiltersText,
   StyledOpenModalButton,
   StyledTagLozenge,
   StyledTitle,
@@ -56,9 +59,9 @@ const FilterStatusWidget: React.FC = () => {
             🔍 Browse & Filter
           </StyledOpenModalButton>
         </StyledHeaderRow>
-        <div style={{ fontSize: "12px", color: "#666", fontStyle: "italic" }}>
+        <StyledNoFiltersText>
           No filters applied - showing all mixes
-        </div>
+        </StyledNoFiltersText>
       </StyledFilterStatusWidget>
     );
   }
@@ -67,34 +70,34 @@ const FilterStatusWidget: React.FC = () => {
     <StyledFilterStatusWidget>
       <StyledHeaderRow>
         <StyledTitle>Active Filters</StyledTitle>
-        <div style={{ display: "flex", gap: "8px" }}>
+        <StyledButtonGroup>
           <StyledClearButton onClick={handleClearFilters}>
             Clear All
           </StyledClearButton>
           <StyledOpenModalButton onClick={handleOpenModal}>
             🔍 Manage
           </StyledOpenModalButton>
-        </div>
+        </StyledButtonGroup>
       </StyledHeaderRow>
 
       <StyledFiltersContainer>
         {state.filters.category && (
           <StyledFilterItem>
-            <span style={{ fontWeight: "500" }}>Category:</span>
+            <StyledFilterLabel>Category:</StyledFilterLabel>
             <span>{getCategoryDisplayName(state.filters.category)}</span>
           </StyledFilterItem>
         )}
 
         {state.filters.name && (
           <StyledFilterItem>
-            <span style={{ fontWeight: "500" }}>Name:</span>
+            <StyledFilterLabel>Name:</StyledFilterLabel>
             <span>"{state.filters.name}"</span>
           </StyledFilterItem>
         )}
 
         {state.filters.tags && (
           <StyledFilterItem>
-            <span style={{ fontWeight: "500" }}>Tag:</span>
+            <StyledFilterLabel>Tag:</StyledFilterLabel>
             <StyledTagLozenge>{state.filters.tags}</StyledTagLozenge>
           </StyledFilterItem>
         )}

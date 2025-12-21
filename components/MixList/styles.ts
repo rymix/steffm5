@@ -396,3 +396,33 @@ export const StyledToggleIcon = styled.span<ThemeProps>`
     color: ${(props) => (props.$themeMode === "dark" ? "#d8d8d8" : "#2a2a2a")};
   }
 `;
+
+export const StyledTracksContainer = styled.div`
+  margin-top: 12px;
+`;
+
+export const StyledTrackListHeader = styled.div`
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+
+export const StyledTrackName = styled.div`
+  font-size: 12px;
+  font-weight: bold;
+`;
+
+export const StyledTrackArtist = styled.div<ThemeProps>`
+  font-size: 11px;
+  color: ${(props) => (props.$themeMode === "dark" ? "#a8a8a8" : "#5a5a5a")};
+`;
+
+export const StyledTrackLoadingText = styled.div<ThemeProps>`
+  font-size: 12px;
+  color: ${(props) => (props.$themeMode === "dark" ? "#a8a8a8" : "#5a5a5a")};
+`;
+
+export const StyledTrackPlaceholder = styled.div`
+  font-size: 12px;
+  color: #888888;
+  font-style: italic;
+`;

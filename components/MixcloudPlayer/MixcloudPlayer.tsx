@@ -1,7 +1,13 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useRef } from "react";
 
-import { StyledMixcloudPlayer, StyledMixcloudPlayerWidget } from "./styles";
+import {
+  StyledErrorMessage,
+  StyledMixcloudPlayer,
+  StyledMixcloudPlayerWidget,
+  StyledPlayerIframe,
+  StyledRetryButton,
+} from "./styles";
 import { MixcloudPlayerProps } from "./types";
 
 const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
@@ -61,15 +67,12 @@ const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
 
   if (state.error) {
     return (
-      <div style={{ color: "red" }}>
+      <StyledErrorMessage>
         Error loading mixes: {state.error}
-        <button
-          onClick={() => actions.clearFilters()}
-          style={{ marginLeft: "10px" }}
-        >
+        <StyledRetryButton onClick={() => actions.clearFilters()}>
           Retry
-        </button>
-      </div>
+        </StyledRetryButton>
+      </StyledErrorMessage>
     );
   }
 
@@ -82,13 +85,12 @@ const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
       {/* Mixcloud Widget */}
       {widgetUrl && (
         <StyledMixcloudPlayerWidget>
-          <iframe
+          <StyledPlayerIframe
             key={state.currentKey} // Force re-render when track changes
             ref={iframeRef}
             width="100%"
             height="120"
             src={widgetUrl}
-            style={{ border: "none" }}
             allow="autoplay; encrypted-media"
           />
         </StyledMixcloudPlayerWidget>

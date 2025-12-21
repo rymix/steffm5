@@ -89,3 +89,18 @@ export const StyledOpenModalButton = styled.button`
     background: #0056b3;
   }
 `;
+
+export const StyledNoFiltersText = styled.div`
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+`;
+
+export const StyledButtonGroup = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+export const StyledFilterLabel = styled.span`
+  font-weight: 500;
+`;

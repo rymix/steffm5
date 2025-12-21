@@ -4,13 +4,18 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { getModalThemeMode } from "utils/themeHelpers";
 
 import {
+  StyledFilterTitle,
   StyledMixFilter,
   StyledMixFilterForm,
   StyledMixFilterFormButton,
   StyledMixFilterFormButtons,
   StyledMixFilterFormElements,
+  StyledSelectedTagIndicator,
   StyledTagContainer,
   StyledTagLozenge,
+  StyledTagsFlexContainer,
+  StyledTagsHeader,
+  StyledToggleTagsButton,
 } from "./styles";
 
 const MixFilter: React.FC = () => {
@@ -125,15 +130,9 @@ const MixFilter: React.FC = () => {
 
   return (
     <StyledMixFilter $themeMode={modalThemeMode}>
-      <h4
-        style={{
-          margin: "0 0 8px 0",
-          fontSize: "14px",
-          color: modalThemeMode === "dark" ? "#a8a8a8" : "#495057",
-        }}
-      >
+      <StyledFilterTitle $themeMode={modalThemeMode}>
         Filter Mixes
-      </h4>
+      </StyledFilterTitle>
 
       <StyledMixFilterForm>
         <StyledMixFilterFormElements $themeMode={modalThemeMode}>
@@ -162,37 +161,20 @@ const MixFilter: React.FC = () => {
             />
           </div>
 
-          <div style={{ flex: "1 1 100%" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <StyledTagsFlexContainer>
+            <StyledTagsHeader>
               <label>Tags:</label>
-              <button
+              <StyledToggleTagsButton
                 type="button"
                 onClick={() => setShowTags(!showTags)}
-                style={{
-                  background: "none",
-                  border:
-                    modalThemeMode === "dark"
-                      ? "1px solid #404040"
-                      : "1px solid #ccc",
-                  borderRadius: "4px",
-                  padding: "2px 8px",
-                  fontSize: "11px",
-                  cursor: "pointer",
-                  color: modalThemeMode === "dark" ? "#c8c8c8" : "inherit",
-                }}
+                $themeMode={modalThemeMode}
               >
                 {showTags ? "Hide" : "Show"}
-              </button>
+              </StyledToggleTagsButton>
               {selectedTag && (
-                <span
-                  style={{
-                    fontSize: "12px",
-                    color: "#4a9f4a",
-                    fontWeight: "bold",
-                  }}
-                ></span>
+                <StyledSelectedTagIndicator></StyledSelectedTagIndicator>
               )}
-            </div>
+            </StyledTagsHeader>
             {showTags && (
               <StyledTagContainer $themeMode={modalThemeMode}>
                 {availableTags.map((tag) => (
@@ -208,7 +190,7 @@ const MixFilter: React.FC = () => {
                 ))}
               </StyledTagContainer>
             )}
-          </div>
+          </StyledTagsFlexContainer>
         </StyledMixFilterFormElements>
 
         <StyledMixFilterFormButtons>

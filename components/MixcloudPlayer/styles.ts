@@ -12,3 +12,15 @@ export const StyledMixcloudPlayerWidget = styled.div`
   bottom: -500px;
   left: 0;
 `;
+
+export const StyledErrorMessage = styled.div`
+  color: red;
+`;
+
+export const StyledRetryButton = styled.button`
+  margin-left: 10px;
+`;
+
+export const StyledPlayerIframe = styled.iframe`
+  border: none;
+`;
