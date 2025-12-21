@@ -1,3 +1,4 @@
+import { useMixcloud } from "contexts/mixcloud";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { BackgroundExtended } from "db/types";
@@ -10,6 +11,7 @@ type WallpaperState = {
 };
 
 export const useWallpaperManager = () => {
+  const { actions, session } = useMixcloud();
   const [wallpaperState, setWallpaperState] = useState<WallpaperState>({
     currentWallpaper: null,
     isLoading: false,
@@ -19,6 +21,19 @@ export const useWallpaperManager = () => {
   const hasLoadedInitially = useRef(false);
   const lastChangeTime = useRef<number>(0);
   const CHANGE_COOLDOWN = 1000; // 1 second cooldown between changes
+
+  // Sync wallpaper state from session.background
+  useEffect(() => {
+    if (session.background) {
+      const wallpaperUrl = `/${session.background.backgroundCategoryObject?.folder}/${session.background.fileName}`;
+      setWallpaperState({
+        currentWallpaper: wallpaperUrl,
+        tileType: session.background.tileType,
+        isLoading: false,
+        error: null,
+      });
+    }
+  }, [session.background]);
 
   const fetchRandomWallpaper = useCallback(async () => {
     const now = Date.now();
@@ -44,12 +59,9 @@ export const useWallpaperManager = () => {
       console.log("🖼️ Loading wallpaper:", wallpaperUrl);
       console.log("Background data:", backgroundData);
 
-      setWallpaperState({
-        currentWallpaper: wallpaperUrl,
-        tileType: backgroundData.tileType,
-        isLoading: false,
-        error: null,
-      });
+      // Update mixcloud context with the new background
+      // The wallpaperState will auto-sync via the useEffect above
+      actions.setBackground(backgroundData);
 
       lastChangeTime.current = now;
     } catch (error) {
@@ -60,7 +72,7 @@ export const useWallpaperManager = () => {
           error instanceof Error ? error.message : "Unknown error occurred",
       }));
     }
-  }, []);
+  }, [actions]);
 
   const changeWallpaper = useCallback(() => {
     console.log("🖼️ Changing wallpaper due to track/mix change");

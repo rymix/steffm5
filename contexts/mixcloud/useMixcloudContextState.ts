@@ -49,6 +49,7 @@ const useMixcloudContextState = (
   const [session, setSession] = useState<SessionState>({
     scale: { x: 1 },
     background: null,
+    manualMode: false,
   });
 
   const [state, setState] = useState<MixcloudState>({
@@ -882,6 +883,10 @@ const useMixcloudContextState = (
     setSession((prev) => ({ ...prev, scale }));
   }, []);
 
+  const setManualMode = useCallback((manualMode: boolean) => {
+    setSession((prev) => ({ ...prev, manualMode }));
+  }, []);
+
   const actions: MixcloudActions = useMemo(
     () => ({
       play,
@@ -913,6 +918,7 @@ const useMixcloudContextState = (
       toggleShuffle,
       setBackground,
       setScale,
+      setManualMode,
     }),
     [
       play,
@@ -944,6 +950,7 @@ const useMixcloudContextState = (
       toggleShuffle,
       setBackground,
       setScale,
+      setManualMode,
     ],
   );
 

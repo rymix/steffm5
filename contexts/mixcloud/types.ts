@@ -37,6 +37,7 @@ export type Scale = {
 export type SessionState = {
   scale: Scale;
   background: BackgroundExtended | null;
+  manualMode: boolean;
 };
 
 export type MixcloudState = {
@@ -93,6 +94,7 @@ export type MixcloudActions = {
   toggleShuffle: () => void;
   setBackground: (_background: BackgroundExtended | null) => void;
   setScale: (_scale: Scale) => void;
+  setManualMode: (_manualMode: boolean) => void;
 };
 
 export type MixcloudContextState = {

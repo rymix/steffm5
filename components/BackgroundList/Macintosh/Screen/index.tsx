@@ -12,7 +12,10 @@ export const Screen: React.FC = () => {
   } = useMixcloud();
 
   return (
-    <StyledScreen $background={background}>
+    <StyledScreen
+      key={background?.fileName || "default"}
+      $background={background}
+    >
       <StyledScreenBanner>
         {background?.name || ""}{" "}
         {background?.backgroundCategoryObject?.name || ""}
