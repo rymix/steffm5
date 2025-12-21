@@ -1,5 +1,7 @@
 import { useMixcloud } from "contexts/mixcloud";
+import { useTheme } from "contexts/theme";
 import React, { useEffect, useState } from "react";
+import { getModalThemeMode } from "utils/themeHelpers";
 
 import type {
   Background,
@@ -9,22 +11,14 @@ import type {
 import Macintosh from "components/BackgroundList/Macintosh";
 import RetroPC from "components/BackgroundList/RetroPC";
 
-// Constants
-const MOMENTARY_LED_DURATION = 300; // Duration in ms for momentary button LED flash
-
 import {
   StyledButton,
-  StyledButtonIcon,
-  StyledButtonLabel,
-  StyledButtonLED,
-  StyledButtonWrapper,
   StyledControlsContainer,
   StyledLabel,
   StyledLoadingContainer,
   StyledLoadingText,
   StyledMonitorDisplay,
   StyledNavigationButtons,
-  StyledRandomButtonWrapper,
   StyledSelect,
   StyledSelectContainer,
   StyledWallpapersContainer,
@@ -32,6 +26,8 @@ import {
 
 export const Wallpapers: React.FC = () => {
   const { actions } = useMixcloud();
+  const theme = useTheme();
+  const modalThemeMode = getModalThemeMode(theme.state.mode);
   const [background, setBackground] = useState<BackgroundExtended | null>(null);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<BackgroundCategory[]>([]);
@@ -43,9 +39,6 @@ export const Wallpapers: React.FC = () => {
   const [loadingBackgrounds, setLoadingBackgrounds] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectLastBackground, setSelectLastBackground] = useState(false);
-  const [prevPressed, setPrevPressed] = useState(false);
-  const [nextPressed, setNextPressed] = useState(false);
-  const [randomPressed, setRandomPressed] = useState(false);
 
   // Fetch categories on mount
   useEffect(() => {
@@ -186,8 +179,6 @@ export const Wallpapers: React.FC = () => {
   }, [selectedCategory]); // Only depend on selectedCategory to avoid loop
 
   const handleRandomBackground = async () => {
-    setRandomPressed(true);
-    setTimeout(() => setRandomPressed(false), MOMENTARY_LED_DURATION);
     setLoading(true);
     try {
       const response = await fetch("/api/background/randomBackground");
@@ -206,9 +197,6 @@ export const Wallpapers: React.FC = () => {
   };
 
   const handleNext = () => {
-    setNextPressed(true);
-    setTimeout(() => setNextPressed(false), MOMENTARY_LED_DURATION);
-
     // If category is selected, step through backgrounds in that category
     if (selectedCategory && backgrounds.length > 0) {
       const currentBgIndex = backgrounds.findIndex(
@@ -247,9 +235,6 @@ export const Wallpapers: React.FC = () => {
   };
 
   const handlePrevious = () => {
-    setPrevPressed(true);
-    setTimeout(() => setPrevPressed(false), MOMENTARY_LED_DURATION);
-
     // If category is selected, step through backgrounds in that category
     if (selectedCategory && backgrounds.length > 0) {
       const currentBgIndex = backgrounds.findIndex(
@@ -298,7 +283,9 @@ export const Wallpapers: React.FC = () => {
   if (loading) {
     return (
       <StyledLoadingContainer>
-        <StyledLoadingText>Loading...</StyledLoadingText>
+        <StyledLoadingText $themeMode={modalThemeMode}>
+          Loading...
+        </StyledLoadingText>
       </StyledLoadingContainer>
     );
   }
@@ -306,7 +293,9 @@ export const Wallpapers: React.FC = () => {
   if (!background) {
     return (
       <StyledLoadingContainer>
-        <StyledLoadingText>No background found</StyledLoadingText>
+        <StyledLoadingText $themeMode={modalThemeMode}>
+          No background found
+        </StyledLoadingText>
       </StyledLoadingContainer>
     );
   }
@@ -319,36 +308,28 @@ export const Wallpapers: React.FC = () => {
         {monitorType === "Macintosh" ? <Macintosh /> : <RetroPC />}
       </StyledMonitorDisplay>
 
-      <StyledControlsContainer>
+      <StyledControlsContainer $themeMode={modalThemeMode}>
         <StyledNavigationButtons>
-          <StyledButtonWrapper>
-            <StyledButtonLED $active={prevPressed} />
-            <StyledButtonIcon>⏮</StyledButtonIcon>
-            <StyledButton $pressed={prevPressed} onClick={handlePrevious} />
-            <StyledButtonLabel>Previous</StyledButtonLabel>
-          </StyledButtonWrapper>
-
-          <StyledButtonWrapper>
-            <StyledButtonLED $active={nextPressed} />
-            <StyledButtonIcon>⏭</StyledButtonIcon>
-            <StyledButton $pressed={nextPressed} onClick={handleNext} />
-            <StyledButtonLabel>Next</StyledButtonLabel>
-          </StyledButtonWrapper>
-
-          <StyledRandomButtonWrapper>
-            <StyledButtonLED $active={randomPressed} />
-            <StyledButtonIcon>🎲</StyledButtonIcon>
-            <StyledButton
-              $pressed={randomPressed}
-              onClick={handleRandomBackground}
-            />
-            <StyledButtonLabel>Random</StyledButtonLabel>
-          </StyledRandomButtonWrapper>
+          <StyledButton $themeMode={modalThemeMode} onClick={handlePrevious}>
+            Previous
+          </StyledButton>
+          <StyledButton $themeMode={modalThemeMode} onClick={handleNext}>
+            Next
+          </StyledButton>
+          <StyledButton
+            $themeMode={modalThemeMode}
+            onClick={handleRandomBackground}
+          >
+            Random
+          </StyledButton>
         </StyledNavigationButtons>
 
         <StyledSelectContainer>
-          <StyledLabel htmlFor="category-select">Category:</StyledLabel>
+          <StyledLabel $themeMode={modalThemeMode} htmlFor="category-select">
+            Category:
+          </StyledLabel>
           <StyledSelect
+            $themeMode={modalThemeMode}
             id="category-select"
             value={selectedCategory}
             onChange={(e) => handleCategoryChange(e.target.value)}
@@ -364,11 +345,19 @@ export const Wallpapers: React.FC = () => {
 
         {selectedCategory && (
           <StyledSelectContainer>
-            <StyledLabel htmlFor="background-select">Background:</StyledLabel>
+            <StyledLabel
+              $themeMode={modalThemeMode}
+              htmlFor="background-select"
+            >
+              Background:
+            </StyledLabel>
             {loadingBackgrounds ? (
-              <StyledLoadingText>Loading backgrounds...</StyledLoadingText>
+              <StyledLoadingText $themeMode={modalThemeMode}>
+                Loading backgrounds...
+              </StyledLoadingText>
             ) : (
               <StyledSelect
+                $themeMode={modalThemeMode}
                 id="background-select"
                 value={background?.fileName || ""}
                 onChange={(e) => {
