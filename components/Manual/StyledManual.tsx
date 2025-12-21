@@ -1,6 +1,5 @@
+import React from "react";
 import styled from "styled-components";
-
-import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 
 export const StyledManual = styled.div`
   color: rgba(0, 0, 0, 0.8);
@@ -84,10 +83,40 @@ export const StyledManualSectionTitle = styled.div`
   margin-top: 40px;
 `;
 
-export const StyledWarningIcon = styled(WarningAmberOutlinedIcon)`
+export const StyledWarningIcon = styled.span`
   display: inline-block;
-  font-size: 64px;
+  width: 48px;
+  height: 48px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `;
+
+export const CautionIcon: React.FC = () => (
+  <StyledWarningIcon>
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M24 4L44 40H4L24 4Z"
+        stroke="rgba(0, 0, 0, 0.8)"
+        strokeWidth="2.5"
+        strokeLinejoin="miter"
+        fill="none"
+      />
+      <line
+        x1="24"
+        y1="16"
+        x2="24"
+        y2="28"
+        stroke="rgba(0, 0, 0, 0.8)"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+      <circle cx="24" cy="34" r="1.5" fill="rgba(0, 0, 0, 0.8)" />
+    </svg>
+  </StyledWarningIcon>
+);
 
 export const StyledIconSection = styled.p`
   align-items: center;

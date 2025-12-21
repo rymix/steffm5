@@ -1,41 +1,36 @@
 import styled from "styled-components";
 
-import {
-  StyledJupiterButtonProps,
-  StyledJupiterLedProps,
-} from "components/Jupiter/Button/types";
-
-export const StyledManualButton = styled.button<StyledJupiterButtonProps>`
-  background: transparent;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    transparent 30%,
-    rgba(0, 0, 0, 0.7) 31%,
-    rgba(0, 0, 0, 0.7) 35%,
-    transparent 36%,
-    transparent 100%
-  );
-  border: 3px solid rgba(0, 0, 0, 0.7);
-  border-radius: 5px;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.7);
-  height: 72px;
-  width: 42px;
-  overflow: hidden;
-  position: relative;
-  transition:
-    background-color 0.1s ease-in-out,
-    box-shadow 0.1s ease-in-out,
-    transform 0.1s ease-in-out;
+export const StyledManualButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 `;
 
-export const StyledManualLed = styled.div<StyledJupiterLedProps>`
-  background: transparent;
-  border: 3px solid rgba(0, 0, 0, 0.7);
-  border-radius: 50%;
-  height: 12px;
-  left: 12px;
-  position: absolute;
-  top: 4px;
-  width: 12px;
+export const StyledManualButton = styled.div`
+  position: relative;
+  width: 60px;
+  height: 26px;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+  border-radius: 2px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const StyledManualLed = styled.div`
+  width: 36px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 1px;
+`;
+
+export const StyledManualButtonLabel = styled.div`
+  font-size: 8px;
+  font-weight: bold;
+  color: #2a2a2a;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  text-align: center;
 `;

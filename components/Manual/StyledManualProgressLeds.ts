@@ -1,18 +1,21 @@
 import styled from "styled-components";
 
-import type {
-  StyledJupiterProgressLedProps,
-  StyledJupiterProgressLedsItemsWrapperProps,
-} from "components/Jupiter/ProgressLeds/types";
+interface StyledManualProgressLedsItemsWrapperProps {
+  $displayLength: number;
+}
+
+interface StyledManualProgressLedProps {
+  $on?: boolean;
+}
 
 export const StyledManualProgressLedsWrapper = styled.div``;
 
-export const StyledManualProgressLedsItemsWrapper = styled.div<StyledJupiterProgressLedsItemsWrapperProps>`
+export const StyledManualProgressLedsItemsWrapper = styled.div<StyledManualProgressLedsItemsWrapperProps>`
   display: flex;
   gap: 10px;
 `;
 
-export const StyledManualProgressLed = styled.div<StyledJupiterProgressLedProps>`
+export const StyledManualProgressLed = styled.div<StyledManualProgressLedProps>`
   background: ${(props) => (props.$on ? "rgba(0, 0, 0, 0.8)" : "transparent")};
   border: 2px solid rgba(0, 0, 0, 0.8);
   border-radius: 50%;

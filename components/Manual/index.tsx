@@ -1,8 +1,8 @@
-import { useMixcloud } from "contexts/mixcloud";
 import React from "react";
 import { VOLUME_AVAILABLE } from "utils/constants";
 
 import {
+  CautionIcon,
   StyledControl,
   StyledGrid,
   StyledGridDetail,
@@ -13,15 +13,18 @@ import {
   StyledManualSectionTitle,
   StyledManualSubTitle,
   StyledManualTitle,
-  StyledWarningIcon,
 } from "components/Manual/StyledManual";
 import {
   StyledManualButton,
+  StyledManualButtonLabel,
+  StyledManualButtonWrapper,
   StyledManualLed,
 } from "components/Manual/StyledManualButton";
 import {
+  StyledManualDialTick,
   StyledManualGrip,
   StyledManualInnerKnob,
+  StyledManualKnobLabel,
   StyledManualKnobMarker,
   StyledManualKnobWrapper,
   StyledManualOuterKnob,
@@ -30,39 +33,23 @@ import {
 import {
   StyledManualProgressLed,
   StyledManualProgressLedsItemsWrapper,
-  StyledManualProgressLedsLabels,
   StyledManualProgressLedsWrapper,
 } from "components/Manual/StyledManualProgressLeds";
 import {
+  StyledManualProgress,
   StyledManualScreen,
   StyledManualScreenWrapper,
 } from "components/Manual/StyledManualScreen";
-import {
-  StyledManualSlider,
-  StyledManualSliderWrapper,
-} from "components/Manual/StyledManualSlider";
-
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import FilterAlt from "@mui/icons-material/FilterAlt";
-import FilterAltOff from "@mui/icons-material/FilterAltOff";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import Search from "@mui/icons-material/Search";
-import SearchOff from "@mui/icons-material/SearchOff";
-import Update from "@mui/icons-material/Update";
-import UpdateDisabled from "@mui/icons-material/UpdateDisabled";
 
 export const Manual: React.FC = () => {
-  const {
-    filters: { categories = [] },
-  } = useMixcloud();
-  const size = 92;
-  const deg = 290;
-  const outerStyle = { width: size, height: size };
-  const innerStyle = {
-    width: size,
-    height: size,
-    transform: `rotate(${deg}deg)`,
-  };
+  // Static categories for display in manual (same angles as real dial)
+  const modeMaxAngle = 115;
+  const modeStepAngle = (modeMaxAngle * 2) / 5; // 46 degrees per step
+  const modeLabels = ["All", "Adv", "Shoes", "Cock", "Spec", "Fav"];
+  const categories = modeLabels.map((label, i) => ({
+    shortName: label,
+    angle: -modeMaxAngle + i * modeStepAngle,
+  }));
 
   return (
     <StyledManual>
@@ -82,7 +69,7 @@ export const Manual: React.FC = () => {
         <strong>Stef.FM</strong> experience.
       </p>
       <StyledIconSection>
-        <StyledWarningIcon /> Warning! The funk is strong. Proceed with caution.
+        <CautionIcon /> Warning! The funk is strong. Proceed with caution.
       </StyledIconSection>
       <StyledManualSectionTitle>
         Mixcloud Status Indicator
@@ -106,6 +93,9 @@ export const Manual: React.FC = () => {
       <StyledControl>
         <StyledManualScreenWrapper $displayLength={8}>
           <StyledManualScreen $displayLength={8}>ADVENTUR</StyledManualScreen>
+          <StyledManualProgress $displayLength={8}>
+            ==______
+          </StyledManualProgress>
         </StyledManualScreenWrapper>
       </StyledControl>
       <p>
@@ -117,25 +107,16 @@ export const Manual: React.FC = () => {
       <StyledManualSectionTitle>Progress Indicator</StyledManualSectionTitle>
       <hr />
       <StyledControl>
-        <StyledManualProgressLedsWrapper>
-          <StyledManualProgressLedsItemsWrapper $displayLength={11}>
-            {Array.from({ length: 11 }, (_, i) => (
-              <StyledManualProgressLed key={i} $on={i < 4} />
-            ))}
-          </StyledManualProgressLedsItemsWrapper>
-          <StyledManualProgressLedsLabels>
-            <div>0</div>
-            <div>25</div>
-            <div>50</div>
-            <div>75</div>
-            <div>100</div>
-          </StyledManualProgressLedsLabels>
-        </StyledManualProgressLedsWrapper>
+        <StyledManualScreenWrapper $displayLength={8}>
+          <StyledManualProgress $displayLength={8}>
+            ==______
+          </StyledManualProgress>
+        </StyledManualScreenWrapper>
       </StyledControl>
       <p>
         The <strong>PROGRESS INDICATOR</strong> shows the playback progress of
-        the current mix. The LEDs light up in sequence to indicate the current
-        playhead position proportional to the overall length of the mix.
+        the current mix. The progress bar fills in sequence to indicate the
+        current playhead position proportional to the overall length of the mix.
       </p>
       <StyledManualSectionTitle>Select</StyledManualSectionTitle>
       <hr />
@@ -149,26 +130,28 @@ export const Manual: React.FC = () => {
             {categories.map((category) => (
               <StyledManualKnobMarker
                 key={category.shortName}
-                $x={category.x}
-                $y={category.y}
+                $angle={category.angle}
               >
                 {category.shortName}
               </StyledManualKnobMarker>
             ))}
-            <StyledManualOuterKnob style={outerStyle} $margin={9}>
-              <StyledManualInnerKnob
-                style={innerStyle}
-                $deg={deg}
-                // $snap={steps ? 1 : 0}
-                $snap={1}
-              >
+            <StyledManualOuterKnob>
+              <StyledManualInnerKnob $deg={-45} $snap={1}>
                 <StyledManualGrip />
               </StyledManualInnerKnob>
             </StyledManualOuterKnob>
           </StyledManualOuterKnobWrapper>
+          <StyledManualKnobLabel>Category</StyledManualKnobLabel>
         </StyledManualKnobWrapper>
       </StyledControl>
       <StyledGrid>
+        <StyledGridHeader>ALL</StyledGridHeader>
+        <StyledGridDetail>
+          <strong>ALL THE MUSIC</strong>
+          <br />
+          No filters, no holds barred. This is what you came here for. Dial up{" "}
+          <strong>EVERYTHING</strong> and listen until tomorrow.
+        </StyledGridDetail>
         <StyledGridHeader>ADV</StyledGridHeader>
         <StyledGridDetail>
           <strong>ADVENTURES IN DECENT MUSIC</strong>
@@ -184,13 +167,6 @@ export const Manual: React.FC = () => {
           It's always <strong>HOUSE</strong> and them shoes, they be{" "}
           <strong>COMFY</strong>.
         </StyledGridDetail>
-        <StyledGridHeader>SPEC</StyledGridHeader>
-        <StyledGridDetail>
-          <strong>SPECIAL MIXES</strong>
-          <br />
-          It's different, it's exceptional, it's <strong>SPECIAL</strong>. You
-          won't guess what's coming next and that's why you love it.
-        </StyledGridDetail>
         <StyledGridHeader>COCK</StyledGridHeader>
         <StyledGridDetail>
           <strong>COCKSOUP DJ COLLECTIVE</strong>
@@ -199,18 +175,18 @@ export const Manual: React.FC = () => {
           loafers, run your fingers through your flowing mullett and relax to
           some soothing, beautiful <strong>JAZZ FUSION</strong>.
         </StyledGridDetail>
+        <StyledGridHeader>SPEC</StyledGridHeader>
+        <StyledGridDetail>
+          <strong>SPECIAL MIXES</strong>
+          <br />
+          It's different, it's exceptional, it's <strong>SPECIAL</strong>. You
+          won't guess what's coming next and that's why you love it.
+        </StyledGridDetail>
         <StyledGridHeader>FAV</StyledGridHeader>
         <StyledGridDetail>
           <strong>FAVOURITES</strong>
           <br />
           All your favourite mixes all in one place.
-        </StyledGridDetail>
-        <StyledGridHeader>ALL</StyledGridHeader>
-        <StyledGridDetail>
-          <strong>ALL THE MUSIC</strong>
-          <br />
-          No filters, no holds barred. This is what you came here for. Dial up{" "}
-          <strong>EVERYTHING</strong> and listen until tomorrow.
         </StyledGridDetail>
       </StyledGrid>
       <StyledManualSectionTitle>Control</StyledManualSectionTitle>
@@ -220,26 +196,21 @@ export const Manual: React.FC = () => {
         described below.
       </p>
       <StyledControl>
-        <StyledManualButton>
-          <StyledManualLed $down={false} $on />
-        </StyledManualButton>
+        <StyledManualButtonWrapper>
+          <StyledManualLed />
+          <StyledManualButton />
+          <StyledManualButtonLabel>Button</StyledManualButtonLabel>
+        </StyledManualButtonWrapper>
       </StyledControl>
       <StyledGrid>
-        <StyledGridHeader>STOP</StyledGridHeader>
-        <StyledGridDetail>
-          <strong>CEASE THE MUSIC</strong>
-          <br />
-          <strong>NEVER</strong> press this button. If you press this, sadness
-          will ensue. You have been warned.
-          <br />
-          <em>Keypress K, Spacebar</em>
-        </StyledGridDetail>
-        <StyledGridHeader>PLAY</StyledGridHeader>
+        <StyledGridHeader>PLAY / PAUSE</StyledGridHeader>
         <StyledGridDetail>
           <strong>MAKE BEAUTIFUL MUSIC</strong>
           <br />
           Press this button to make the music begin. You will not be
-          disappointed.
+          disappointed. Pressing it again will make the music cease.
+          <strong>NEVER</strong> cease the music. If you press cease the music,
+          sadness will ensue. You have been warned.
           <br />
           <em>Keypress K, Spacebar</em>
         </StyledGridDetail>
@@ -259,7 +230,7 @@ export const Manual: React.FC = () => {
           <br />
           <em>Keypress L</em>
         </StyledGridDetail>
-        <StyledGridHeader>RAND</StyledGridHeader>
+        <StyledGridHeader>RANDOM</StyledGridHeader>
         <StyledGridDetail>
           <strong>RANDOM MIX</strong>
           <br />
@@ -267,31 +238,17 @@ export const Manual: React.FC = () => {
           <br />
           <em>Keypress R</em>
         </StyledGridDetail>
-        <StyledGridHeader>LATEST</StyledGridHeader>
+        <StyledGridHeader>SHUFFLE</StyledGridHeader>
         <StyledGridDetail>
-          <strong>LATEST MIX</strong>
+          <strong>SHUFFLE</strong>
           <br />
-          Play the mix most recently uploaded to <strong>Stef.FM</strong>. Use
-          this to keep up to date with the newest music.
+          Play a random mix in the current selection when the current one
+          finishes.
           <br />
           <strong>NOTE:</strong> This button ignores the current selection.
           <br />
           <em>Keypress N</em>
         </StyledGridDetail>
-      </StyledGrid>
-      <StyledManualSectionTitle>Option</StyledManualSectionTitle>
-      <hr />
-      <p>
-        These are also buttons which you can click to make things happen. The
-        things that happen when you click these buttons are different than the
-        things that happen when you press the other buttons.
-      </p>
-      <StyledControl>
-        <StyledManualButton>
-          <StyledManualLed $down={false} $on />
-        </StyledManualButton>
-      </StyledControl>
-      <StyledGrid>
         <StyledGridHeader>FAV</StyledGridHeader>
         <StyledGridDetail>
           <strong>ADD MIX TO FAVOURITES</strong>
@@ -316,54 +273,24 @@ export const Manual: React.FC = () => {
           <br />
           <em>Keypress S</em>
         </StyledGridDetail>
-        <StyledGridHeader>INFO</StyledGridHeader>
-        <StyledGridDetail>
-          <strong>SEE CURRENT MIX INFORMATION</strong>
-          <br />
-          Pressing the <strong>INFO</strong> button brings up a panel showing
-          you detailed information about the current mix including:
-          <ul>
-            <li>Category</li>
-            <li>Original release date</li>
-            <li>Mix duration</li>
-            <li>Information about the mix</li>
-            <li>The options to favourite and share the mix</li>
-          </ul>
-          The track details are shown in full detail including:
-          <ul>
-            <li>Track name</li>
-            <li>Artist</li>
-            <li>Remix artist</li>
-            <li>Publisher</li>
-            <li>Start time within the mix</li>
-          </ul>
-        </StyledGridDetail>
-        <StyledGridHeader>LIST</StyledGridHeader>
-        <StyledGridDetail>
-          <strong>SEE LISTS OF ALL MIXES</strong>
-          <br />
-          See the List Mode section below for a full description.
-        </StyledGridDetail>
-        <StyledGridHeader>ABOUT</StyledGridHeader>
-        <StyledGridDetail>
-          <strong>BACKGROUND INFORMATION ABOUT STEF.FM</strong>
-          <br />
-          <strong>Stef.FM</strong> has more to it than meets the eye. Read about
-          the origins of the project, its genius original author and its future.
-        </StyledGridDetail>
       </StyledGrid>
       {VOLUME_AVAILABLE && (
         <StyledControl>
-          <StyledManualSliderWrapper>
-            <StyledManualSlider
-              aria-label="Volume"
-              orientation="vertical"
-              value={70}
-              min={0}
-              max={100}
-              $lineColor="black"
-            />
-          </StyledManualSliderWrapper>
+          <StyledManualKnobWrapper>
+            <StyledManualOuterKnobWrapper>
+              {Array.from({ length: 11 }).map((_, i) => {
+                const volumeMaxAngle = 150;
+                const angle = -volumeMaxAngle + (i * (volumeMaxAngle * 2)) / 10;
+                return <StyledManualDialTick key={i} $angle={angle} />;
+              })}
+              <StyledManualOuterKnob>
+                <StyledManualInnerKnob $deg={150} $snap={0}>
+                  <StyledManualGrip />
+                </StyledManualInnerKnob>
+              </StyledManualOuterKnob>
+            </StyledManualOuterKnobWrapper>
+            <StyledManualKnobLabel>Volume</StyledManualKnobLabel>
+          </StyledManualKnobWrapper>
         </StyledControl>
       )}
       <StyledGrid>
@@ -381,8 +308,8 @@ export const Manual: React.FC = () => {
           <br />
           <br />
           <StyledIconSection>
-            <StyledWarningIcon /> Moving the slider towards the bottom may make
-            the music too quiet. Do not do this.
+            <CautionIcon /> Moving the slider towards the bottom may make the
+            music too quiet. Do not do this.
           </StyledIconSection>
         </StyledGridDetail>
       </StyledGrid>
@@ -396,10 +323,7 @@ export const Manual: React.FC = () => {
         <strong>Stef.FM</strong>.
       </p>
       <StyledGrid>
-        <StyledGridHeader>
-          <FilterAlt />
-          <FilterAltOff />
-        </StyledGridHeader>
+        <StyledGridHeader>FILTER</StyledGridHeader>
         <StyledGridDetail>
           <strong>FILTER MIXES</strong>
           <br />
@@ -416,10 +340,7 @@ export const Manual: React.FC = () => {
             </li>
           </ul>
         </StyledGridDetail>
-        <StyledGridHeader>
-          <Search />
-          <SearchOff />
-        </StyledGridHeader>
+        <StyledGridHeader>SEARCH</StyledGridHeader>
         <StyledGridDetail>
           <strong>SEARCH MIXES AND TRACKS</strong>
           <br />
@@ -428,10 +349,7 @@ export const Manual: React.FC = () => {
           box, if matches were found. If no matches were found, no matches will
           be shown.
         </StyledGridDetail>
-        <StyledGridHeader>
-          <Update />
-          <UpdateDisabled />
-        </StyledGridHeader>
+        <StyledGridHeader>LATEST</StyledGridHeader>
         <StyledGridDetail>
           <strong>SEE THE LATEST MIXES</strong>
           <br />
@@ -461,16 +379,12 @@ export const Manual: React.FC = () => {
           <strong>HOW TO CONTACT THE MAKERS OF STEF.FM</strong>
         </StyledGridDetail>
 
-        <StyledGridHeader>
-          <AlternateEmailIcon />
-        </StyledGridHeader>
+        <StyledGridHeader>EMAIL</StyledGridHeader>
         <StyledGridDetail>
           An electronic mail reference, enabling you to send digital messages
           via your favourite electronic mail client.
         </StyledGridDetail>
-        <StyledGridHeader>
-          <InstagramIcon />
-        </StyledGridHeader>
+        <StyledGridHeader>INSTAGRAM</StyledGridHeader>
         <StyledGridDetail>
           Instagram is a social media network where some humans share electronic
           photographs of themselves as well as the occasional moving digital

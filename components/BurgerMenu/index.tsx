@@ -8,6 +8,7 @@ import MixListPage from "components/MixListPage";
 
 import About from "../ContentPages/About";
 import Statistics from "../ContentPages/Statistics";
+import Manual from "../Manual";
 import {
   StyledBurgerButton,
   StyledBurgerLine,
@@ -161,6 +162,19 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
                 }
               >
                 Statistics
+              </StyledMenuItem>
+              <StyledMenuItem
+                $themeMode={menuThemeMode}
+                onClick={() =>
+                  handleModalDemo(
+                    "manual-modal",
+                    "User Manual",
+                    <Manual />,
+                    undefined,
+                  )
+                }
+              >
+                Manual
               </StyledMenuItem>
               <StyledMenuItem
                 $themeMode={menuThemeMode}
