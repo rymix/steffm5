@@ -39,7 +39,7 @@ export const UserManualCover: React.FC = () => {
       onMouseLeave={handleStopHover}
       $rotation={rotation}
     >
-      <StyledUserManualCoverTitle>Stef.fM</StyledUserManualCoverTitle>
+      <StyledUserManualCoverTitle>STEF.FM</StyledUserManualCoverTitle>
       <hr />
       <StyledUserManualCoverSubTitle>User Manual</StyledUserManualCoverSubTitle>
       <hr />

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Stef.FM uses a three-mode theme system with centralized color management for consistent styling across the application.
+STEF.FM uses a three-mode theme system with centralized color management for consistent styling across the application.
 
 ## Theme Modes
 

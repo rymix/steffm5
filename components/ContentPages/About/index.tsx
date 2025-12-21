@@ -15,13 +15,13 @@ export const About: React.FC = () => {
       <h2>A Passion Project of Digital Preservation and Archaeology</h2>
       <h4>First posted: June 26 2021</h4>
       <p>
-        I've been working on a new project in my evenings. Stef.FM. It's a
+        I've been working on a new project in my evenings. STEF.FM. It's a
         project that's really important to me personally, but also shines a
         light on some technical and philosophical issues regarding a life lived
         online. Let me explain...
       </p>
-      <StyledImage src="/about/always-stef-fm.png" alt="Always Stef.FM" />
-      <h3>Welcome to Stef.FM</h3>
+      <StyledImage src="/about/always-stef-fm.png" alt="Always STEF.FM" />
+      <h3>Welcome to STEF.FM</h3>
       <p>
         This my new, heavily-work-in-progress, retro-themed music streaming
         service. It exclusively features mixes from my hugely talented friend
@@ -51,7 +51,7 @@ export const About: React.FC = () => {
         deserve. Mixcloud properly licenses all tracks, which as a hobbyist
         musician myself, is literally music to my ears. Also, they have a great
         API to get stuff out of their platform and into something custom-built,
-        like Stef.FM.
+        like STEF.FM.
       </p>
       <StyledImage src="/about/mixcloud.jpeg" alt="Mixcloud" />
       <p>
@@ -78,7 +78,7 @@ export const About: React.FC = () => {
         thought no more about our relationship than this - and rightly so; I
         brought very little to the table. But for me, Stef was a genius. A
         curator not just of music, but of an entire community. I felt compelled
-        to do *something* for him. And building Stef.FM is the best I can do.
+        to do *something* for him. And building STEF.FM is the best I can do.
       </p>
       <p>
         Earlier this year another of my internet friends died. Jonas Neubauer,
@@ -139,12 +139,12 @@ export const About: React.FC = () => {
         continue to collate this online museum for Stef. It's something I am
         very interested in, and would like this to be a part of my daily work
         going forward. In the mean time, I'm just going to enjoy some banging
-        tunes, and hope beyond hope that Stef.FM becomes popular and his late
+        tunes, and hope beyond hope that STEF.FM becomes popular and his late
         genius achieves the audience it deserves.
       </p>
       <StyledImage
         src="/about/inimitable-stef-fm.png"
-        alt="The Inimitable Stef.FM"
+        alt="The Inimitable STEF.FM"
       />
       <h3>Credits and Thanks</h3>
       <ul>

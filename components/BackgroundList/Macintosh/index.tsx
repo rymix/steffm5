@@ -31,7 +31,7 @@ export const Macintosh: React.FC = () => {
           </StyledScreenCutout>
           <StyledLogo>
             <StyledLogoText>
-              <StyledBadge src="/favicon-32x32.png" alt="Stef.FM" />
+              <StyledBadge src="/favicon-32x32.png" alt="STEF.FM" />
             </StyledLogoText>
           </StyledLogo>
           <StyledOpening>

@@ -1,5 +1,5 @@
 /**
- * Centralized theme colors for the Stef.FM application
+ * Centralized theme colors for the STEF.FM application
  *
  * This file provides a single source of truth for all theme-related colors.
  * Instead of inline color values throughout styled components, import these

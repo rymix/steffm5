@@ -143,7 +143,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
                 onClick={() =>
                   handleModalDemo(
                     "about-modal",
-                    "About Stef.FM",
+                    "About STEF.FM",
                     <About />,
                     undefined,
                   )
@@ -237,7 +237,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
           </StyledThemeToggleContainer>
 
           <StyledMenuFooter $themeMode={menuThemeMode}>
-            <p>Stef.FM v5.0</p>
+            <p>STEF.FM v5.0</p>
             <p>Funky House Coming In Your Ears</p>
           </StyledMenuFooter>
         </StyledMenu>
