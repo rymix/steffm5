@@ -264,8 +264,8 @@ const CompactPlayer: React.FC = () => {
       parts.push(currentTrack.artistName);
     }
 
-    if (currentTrack?.remixArtist) {
-      parts.push(currentTrack.remixArtist);
+    if (currentTrack?.remixArtistName) {
+      parts.push(currentTrack.remixArtistName);
     }
 
     if (currentMix?.name) {
@@ -279,7 +279,7 @@ const CompactPlayer: React.FC = () => {
   }, [
     currentTrack?.trackName,
     currentTrack?.artistName,
-    currentTrack?.remixArtist,
+    currentTrack?.remixArtistName,
     currentMix?.name,
   ]);
 

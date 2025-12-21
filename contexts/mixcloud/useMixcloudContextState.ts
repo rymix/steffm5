@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { mcKeyFormatter } from "utils/functions";
 
-import type { Mix } from "db/types";
+import type { BackgroundExtended, Mix } from "db/types";
 import usePersistedState from "hooks/usePersistedState";
 
 import type {
@@ -12,6 +12,8 @@ import type {
   MixProgress,
   MixProgressMap,
   MixProgressStatus,
+  Scale,
+  SessionState,
   UseMixcloudContextStateOptions,
 } from "./types";
 
@@ -44,6 +46,10 @@ const useMixcloudContextState = (
     "mix-progress",
     {},
   );
+  const [session, setSession] = useState<SessionState>({
+    scale: { x: 1 },
+    background: null,
+  });
 
   const [state, setState] = useState<MixcloudState>({
     isPlaying: false,
@@ -868,6 +874,14 @@ const useMixcloudContextState = (
     setState((prev) => ({ ...prev, shuffleMode: !prev.shuffleMode }));
   }, []);
 
+  const setBackground = useCallback((background: BackgroundExtended | null) => {
+    setSession((prev) => ({ ...prev, background }));
+  }, []);
+
+  const setScale = useCallback((scale: Scale) => {
+    setSession((prev) => ({ ...prev, scale }));
+  }, []);
+
   const actions: MixcloudActions = useMemo(
     () => ({
       play,
@@ -897,6 +911,8 @@ const useMixcloudContextState = (
       getCurrentMix,
       playRandomFromCurrentList,
       toggleShuffle,
+      setBackground,
+      setScale,
     }),
     [
       play,
@@ -926,6 +942,8 @@ const useMixcloudContextState = (
       getCurrentMix,
       playRandomFromCurrentList,
       toggleShuffle,
+      setBackground,
+      setScale,
     ],
   );
 
@@ -935,6 +953,7 @@ const useMixcloudContextState = (
     iframeRef,
     widgetUrl,
     autoPlay,
+    session,
   };
 };
 

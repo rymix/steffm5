@@ -1,4 +1,4 @@
-import type { Mix } from "db/types";
+import type { BackgroundExtended, Mix } from "db/types";
 
 export type UseMixcloudContextStateOptions = {
   initialKeys?: string[];
@@ -29,6 +29,15 @@ export type MixProgress = {
 };
 
 export type MixProgressMap = Record<string, MixProgress>;
+
+export type Scale = {
+  x: number;
+};
+
+export type SessionState = {
+  scale: Scale;
+  background: BackgroundExtended | null;
+};
 
 export type MixcloudState = {
   isPlaying: boolean;
@@ -82,6 +91,8 @@ export type MixcloudActions = {
   getCurrentMix: () => Mix | null;
   playRandomFromCurrentList: () => void;
   toggleShuffle: () => void;
+  setBackground: (_background: BackgroundExtended | null) => void;
+  setScale: (_scale: Scale) => void;
 };
 
 export type MixcloudContextState = {
@@ -90,6 +101,7 @@ export type MixcloudContextState = {
   iframeRef: React.RefObject<HTMLIFrameElement>;
   widgetUrl: string | null;
   autoPlay: boolean;
+  session: SessionState;
 };
 
 export type MixcloudProviderProps = {

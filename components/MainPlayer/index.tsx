@@ -204,8 +204,8 @@ const MainPlayer: React.FC = () => {
       parts.push(currentTrack.artistName);
     }
 
-    if (currentTrack?.remixArtist) {
-      parts.push(currentTrack.remixArtist);
+    if (currentTrack?.remixArtistName) {
+      parts.push(currentTrack.remixArtistName);
     }
 
     if (currentMix?.name) {
@@ -219,7 +219,7 @@ const MainPlayer: React.FC = () => {
   }, [
     currentTrack?.trackName,
     currentTrack?.artistName,
-    currentTrack?.remixArtist,
+    currentTrack?.remixArtistName,
     currentMix?.name,
   ]);
 

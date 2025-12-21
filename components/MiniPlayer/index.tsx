@@ -217,8 +217,8 @@ const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
     }
 
     // Add remix artist if present
-    if (currentTrack?.remixArtist) {
-      parts.push(currentTrack.remixArtist);
+    if (currentTrack?.remixArtistName) {
+      parts.push(currentTrack.remixArtistName);
     }
 
     if (currentMix?.name) {
@@ -236,7 +236,7 @@ const MiniPlayerInner: React.FC<MiniPlayerProps> = ({
   }, [
     currentTrack?.trackName,
     currentTrack?.artistName,
-    currentTrack?.remixArtist,
+    currentTrack?.remixArtistName,
     currentMix?.name,
   ]);
 

@@ -37,6 +37,12 @@ export type Mix = {
   shortName: string;
   tags: string[];
   tracks: Track[];
+  user?: {
+    name: string;
+  };
+  created_time?: string;
+  audio_length?: number;
+  play_count?: number;
 };
 
 export type BackgroundCategory = {

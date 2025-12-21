@@ -1,7 +1,5 @@
-import { useMixcloud } from "contexts/mixcloud";
+import { useModal } from "contexts/modal";
 import { useEffect, useState } from "react";
-import ReactGA from "react-ga4";
-import { GA4 } from "utils/constants";
 
 import Manual from "components/Manual";
 import {
@@ -11,9 +9,7 @@ import {
 } from "components/Manual/StyledUserManualCover";
 
 export const UserManualCover: React.FC = () => {
-  const {
-    session: { openModal },
-  } = useMixcloud();
+  const { actions: modalActions } = useModal();
   const [rotation, setRotation] = useState<number>(0);
 
   const handleNotebookClick = (
@@ -22,15 +18,11 @@ export const UserManualCover: React.FC = () => {
       | React.KeyboardEvent<HTMLDivElement>,
   ): void => {
     event.preventDefault();
-    openModal(<Manual />);
-
-    if (GA4) {
-      ReactGA.event({
-        category: "2SPA",
-        action: "Interact",
-        label: "Open User Manual",
-      });
-    }
+    modalActions.openModal({
+      id: "user-manual",
+      title: "User Manual",
+      component: <Manual />,
+    });
   };
 
   const handleStopHover = (): void => {

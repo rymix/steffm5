@@ -401,12 +401,12 @@ const HomePage: React.FC = () => {
                                       {track.artistName}
                                     </StyledTrackArtist>
                                   )}
-                                  {track.remixArtist && (
+                                  {track.remixArtistName && (
                                     <StyledTrackRemix
                                       $isPlaying={isPlaying}
                                       $themeMode={panelThemeMode}
                                     >
-                                      {track.remixArtist}
+                                      {track.remixArtistName}
                                     </StyledTrackRemix>
                                   )}
                                   <StyledTrackExpandedInfo
