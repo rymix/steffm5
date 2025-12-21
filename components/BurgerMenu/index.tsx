@@ -155,19 +155,6 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
                 $themeMode={menuThemeMode}
                 onClick={() =>
                   handleModalDemo(
-                    "statistics-modal",
-                    "Statistics",
-                    <Statistics />,
-                    undefined,
-                  )
-                }
-              >
-                Statistics
-              </StyledMenuItem>
-              <StyledMenuItem
-                $themeMode={menuThemeMode}
-                onClick={() =>
-                  handleModalDemo(
                     "manual-modal",
                     "User Manual",
                     <Manual />,
@@ -176,6 +163,19 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
                 }
               >
                 Manual
+              </StyledMenuItem>
+              <StyledMenuItem
+                $themeMode={menuThemeMode}
+                onClick={() =>
+                  handleModalDemo(
+                    "mix-list-modal",
+                    "Mix Library",
+                    <MixListPage />,
+                    undefined,
+                  )
+                }
+              >
+                Mix List
               </StyledMenuItem>
               <StyledMenuItem
                 $themeMode={menuThemeMode}
@@ -194,14 +194,14 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
                 $themeMode={menuThemeMode}
                 onClick={() =>
                   handleModalDemo(
-                    "mix-list-modal",
-                    "Mix Library",
-                    <MixListPage />,
+                    "statistics-modal",
+                    "Statistics",
+                    <Statistics />,
                     undefined,
                   )
                 }
               >
-                Mix List
+                Statistics
               </StyledMenuItem>
             </StyledMenuSection>
           </StyledMenuContent>

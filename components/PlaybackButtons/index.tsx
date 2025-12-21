@@ -10,6 +10,9 @@ import {
   StyledButtonWrapper,
 } from "./styles";
 
+// Constants
+const MOMENTARY_LED_DURATION = 300; // Duration in ms for momentary button LED flash
+
 interface PlaybackButtonsProps {
   showLabels?: boolean;
 }
@@ -24,19 +27,19 @@ const PlaybackButtons: React.FC<PlaybackButtonsProps> = ({
 
   const handlePrevClick = () => {
     setPrevPressed(true);
-    setTimeout(() => setPrevPressed(false), 100);
+    setTimeout(() => setPrevPressed(false), MOMENTARY_LED_DURATION);
     actions.previous();
   };
 
   const handlePlayClick = () => {
     setPlayPressed(true);
-    setTimeout(() => setPlayPressed(false), 100);
+    setTimeout(() => setPlayPressed(false), MOMENTARY_LED_DURATION);
     actions.toggle();
   };
 
   const handleNextClick = () => {
     setNextPressed(true);
-    setTimeout(() => setNextPressed(false), 100);
+    setTimeout(() => setNextPressed(false), MOMENTARY_LED_DURATION);
     actions.next();
   };
 

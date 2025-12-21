@@ -9,15 +9,22 @@ import type {
 import Macintosh from "components/BackgroundList/Macintosh";
 import RetroPC from "components/BackgroundList/RetroPC";
 
+// Constants
+const MOMENTARY_LED_DURATION = 300; // Duration in ms for momentary button LED flash
+
 import {
   StyledButton,
+  StyledButtonIcon,
+  StyledButtonLabel,
+  StyledButtonLED,
+  StyledButtonWrapper,
   StyledControlsContainer,
   StyledLabel,
   StyledLoadingContainer,
   StyledLoadingText,
   StyledMonitorDisplay,
   StyledNavigationButtons,
-  StyledRandomButton,
+  StyledRandomButtonWrapper,
   StyledSelect,
   StyledSelectContainer,
   StyledWallpapersContainer,
@@ -36,6 +43,9 @@ export const Wallpapers: React.FC = () => {
   const [loadingBackgrounds, setLoadingBackgrounds] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectLastBackground, setSelectLastBackground] = useState(false);
+  const [prevPressed, setPrevPressed] = useState(false);
+  const [nextPressed, setNextPressed] = useState(false);
+  const [randomPressed, setRandomPressed] = useState(false);
 
   // Fetch categories on mount
   useEffect(() => {
@@ -176,6 +186,8 @@ export const Wallpapers: React.FC = () => {
   }, [selectedCategory]); // Only depend on selectedCategory to avoid loop
 
   const handleRandomBackground = async () => {
+    setRandomPressed(true);
+    setTimeout(() => setRandomPressed(false), MOMENTARY_LED_DURATION);
     setLoading(true);
     try {
       const response = await fetch("/api/background/randomBackground");
@@ -194,6 +206,9 @@ export const Wallpapers: React.FC = () => {
   };
 
   const handleNext = () => {
+    setNextPressed(true);
+    setTimeout(() => setNextPressed(false), MOMENTARY_LED_DURATION);
+
     // If category is selected, step through backgrounds in that category
     if (selectedCategory && backgrounds.length > 0) {
       const currentBgIndex = backgrounds.findIndex(
@@ -232,6 +247,9 @@ export const Wallpapers: React.FC = () => {
   };
 
   const handlePrevious = () => {
+    setPrevPressed(true);
+    setTimeout(() => setPrevPressed(false), MOMENTARY_LED_DURATION);
+
     // If category is selected, step through backgrounds in that category
     if (selectedCategory && backgrounds.length > 0) {
       const currentBgIndex = backgrounds.findIndex(
@@ -303,11 +321,29 @@ export const Wallpapers: React.FC = () => {
 
       <StyledControlsContainer>
         <StyledNavigationButtons>
-          <StyledButton onClick={handlePrevious}>← Previous</StyledButton>
-          <StyledButton onClick={handleNext}>Next →</StyledButton>
-          <StyledRandomButton onClick={handleRandomBackground}>
-            Random
-          </StyledRandomButton>
+          <StyledButtonWrapper>
+            <StyledButtonLED $active={prevPressed} />
+            <StyledButtonIcon>⏮</StyledButtonIcon>
+            <StyledButton $pressed={prevPressed} onClick={handlePrevious} />
+            <StyledButtonLabel>Previous</StyledButtonLabel>
+          </StyledButtonWrapper>
+
+          <StyledButtonWrapper>
+            <StyledButtonLED $active={nextPressed} />
+            <StyledButtonIcon>⏭</StyledButtonIcon>
+            <StyledButton $pressed={nextPressed} onClick={handleNext} />
+            <StyledButtonLabel>Next</StyledButtonLabel>
+          </StyledButtonWrapper>
+
+          <StyledRandomButtonWrapper>
+            <StyledButtonLED $active={randomPressed} />
+            <StyledButtonIcon>🎲</StyledButtonIcon>
+            <StyledButton
+              $pressed={randomPressed}
+              onClick={handleRandomBackground}
+            />
+            <StyledButtonLabel>Random</StyledButtonLabel>
+          </StyledRandomButtonWrapper>
         </StyledNavigationButtons>
 
         <StyledSelectContainer>

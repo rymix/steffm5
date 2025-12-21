@@ -37,6 +37,7 @@ import {
 // Constants
 const DISPLAY_WIDTH = 30; // Larger display
 const SCROLL_SPEED = 300;
+const MOMENTARY_LED_DURATION = 300; // Duration in ms for momentary button LED flash
 
 // Display component
 const DisplayContent = React.memo(() => {
@@ -58,6 +59,8 @@ const MainPlayer: React.FC = () => {
 
   // Button LED states
   const [shuffleLEDActive, setShuffleLEDActive] = useState<boolean>(false);
+  const [randomPressed, setRandomPressed] = useState<boolean>(false);
+  const [sharePressed, setSharePressed] = useState<boolean>(false);
 
   // Dial refs
   const isDraggingVolumeRef = useRef(false);
@@ -313,11 +316,14 @@ const MainPlayer: React.FC = () => {
   };
 
   const handleRandomClick = () => {
-    // TODO: Implement random
+    setRandomPressed(true);
+    setTimeout(() => setRandomPressed(false), MOMENTARY_LED_DURATION);
     actions.next();
   };
 
   const handleShareClick = () => {
+    setSharePressed(true);
+    setTimeout(() => setSharePressed(false), MOMENTARY_LED_DURATION);
     // TODO: Implement share
     console.log("Share clicked");
   };
@@ -466,13 +472,13 @@ const MainPlayer: React.FC = () => {
               </StyledButtonWrapper>
 
               <StyledButtonWrapper>
-                <StyledButtonLED $active={false} />
+                <StyledButtonLED $active={randomPressed} />
                 <StyledButtonLabel>Random</StyledButtonLabel>
                 <StyledButton onClick={handleRandomClick} />
               </StyledButtonWrapper>
 
               <StyledButtonWrapper>
-                <StyledButtonLED $active={false} />
+                <StyledButtonLED $active={sharePressed} />
                 <StyledButtonLabel>Share</StyledButtonLabel>
                 <StyledButton onClick={handleShareClick} />
               </StyledButtonWrapper>
