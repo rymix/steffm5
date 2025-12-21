@@ -9,7 +9,7 @@ import MixListPage from "components/MixListPage";
 import About from "../ContentPages/About";
 import Statistics from "../ContentPages/Statistics";
 import Manual from "../Manual";
-import RandomBackground from "../RandomBackground";
+import Wallpapers from "../Wallpapers";
 import {
   StyledBurgerButton,
   StyledBurgerLine,
@@ -181,14 +181,14 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
                 $themeMode={menuThemeMode}
                 onClick={() =>
                   handleModalDemo(
-                    "random-background-modal",
-                    "Random Background",
-                    <RandomBackground />,
+                    "wallpapers-modal",
+                    "Wallpapers",
+                    <Wallpapers />,
                     undefined,
                   )
                 }
               >
-                Random Background
+                Wallpapers
               </StyledMenuItem>
               <StyledMenuItem
                 $themeMode={menuThemeMode}

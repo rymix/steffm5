@@ -9,7 +9,7 @@ import type {
 import Macintosh from "components/BackgroundList/Macintosh";
 import RetroPC from "components/BackgroundList/RetroPC";
 
-export const RandomBackground: React.FC = () => {
+export const Wallpapers: React.FC = () => {
   const { actions } = useMixcloud();
   const [background, setBackground] = useState<BackgroundExtended | null>(null);
   const [loading, setLoading] = useState(true);
@@ -59,13 +59,15 @@ export const RandomBackground: React.FC = () => {
 
   // Fetch random background on mount (only once)
   useEffect(() => {
-    const fetchRandomBackground = async () => {
+    const fetchWallpapers = async () => {
       try {
         const response = await fetch("/api/background/randomBackground");
         if (response.ok) {
           const data = await response.json();
           setBackground(data);
           actions.setBackground(data);
+          // Set the category and load backgrounds for that category
+          setSelectedCategory(data.backgroundCategory);
         }
       } catch (error) {
         console.error("Failed to fetch random background:", error);
@@ -75,7 +77,7 @@ export const RandomBackground: React.FC = () => {
     };
 
     // Only fetch on initial mount
-    fetchRandomBackground();
+    fetchWallpapers();
   }, []); // Empty dependency array - only run once on mount
 
   const handleSelectBackground = React.useCallback(
@@ -159,15 +161,16 @@ export const RandomBackground: React.FC = () => {
     fetchBackgrounds();
   }, [selectedCategory]); // Only depend on selectedCategory to avoid loop
 
-  const handleRandomBackground = async () => {
+  const handleWallpapers = async () => {
     setLoading(true);
-    setSelectedCategory(""); // Clear manual selection mode
     try {
       const response = await fetch("/api/background/randomBackground");
       if (response.ok) {
         const data = await response.json();
         setBackground(data);
         actions.setBackground(data);
+        // Set the category and it will auto-load backgrounds for that category
+        setSelectedCategory(data.backgroundCategory);
       }
     } catch (error) {
       console.error("Failed to fetch random background:", error);
@@ -348,7 +351,7 @@ export const RandomBackground: React.FC = () => {
             Next →
           </button>
           <button
-            onClick={handleRandomBackground}
+            onClick={handleWallpapers}
             style={{
               padding: "10px 20px",
               fontSize: "14px",
@@ -435,4 +438,4 @@ export const RandomBackground: React.FC = () => {
   );
 };
 
-export default RandomBackground;
+export default Wallpapers;
