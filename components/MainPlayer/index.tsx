@@ -318,7 +318,7 @@ const MainPlayer: React.FC = () => {
   const handleRandomClick = () => {
     setRandomPressed(true);
     setTimeout(() => setRandomPressed(false), MOMENTARY_LED_DURATION);
-    actions.next();
+    actions.playRandomFromCurrentList();
   };
 
   const handleShareClick = () => {

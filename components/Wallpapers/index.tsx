@@ -181,13 +181,38 @@ export const Wallpapers: React.FC = () => {
   const handleRandomBackground = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/background/randomBackground");
+      // If a category is selected, get a random background from that category
+      const url = selectedCategory
+        ? `/api/background/randomBackground?backgroundCategory=${selectedCategory}`
+        : "/api/background/randomBackground";
+
+      console.log("Fetching random background from:", url);
+      console.log("Current background:", background?.fileName);
+
+      const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
+        console.log("Random background received:", data.fileName);
+
         setBackground(data);
         actions.setBackground(data);
-        // Set the category and it will auto-load backgrounds for that category
-        setSelectedCategory(data.backgroundCategory);
+
+        // Update the current index to match the randomly selected background
+        const index = allBackgrounds.findIndex(
+          (b) =>
+            b.fileName === data.fileName &&
+            b.backgroundCategory === data.backgroundCategory,
+        );
+        console.log("Setting index to:", index);
+        if (index !== -1) {
+          setCurrentIndex(index);
+        }
+
+        // Update category if it changed (when no category filter was applied)
+        // The category will remain the same if already selected, preventing useEffect from overriding
+        if (!selectedCategory && data.backgroundCategory !== selectedCategory) {
+          setSelectedCategory(data.backgroundCategory);
+        }
       }
     } catch (error) {
       console.error("Failed to fetch random background:", error);
