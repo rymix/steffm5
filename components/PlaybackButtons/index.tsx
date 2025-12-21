@@ -54,7 +54,7 @@ const PlaybackButtons: React.FC<PlaybackButtonsProps> = ({
       </StyledButtonWrapper>
 
       <StyledButtonWrapper>
-        <StyledButtonLED $active={state.isPlaying} />
+        <StyledButtonLED $active={state.isPlaying} $isPlayButton={true} />
         <StyledButtonIcon>▶ ⏸</StyledButtonIcon>
         <StyledButton
           $pressed={playPressed}

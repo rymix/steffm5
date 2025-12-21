@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
 export const StyledButtonsContainer = styled.div`
   display: flex;
@@ -23,21 +23,58 @@ export const StyledButtonIcon = styled.div`
   justify-content: center;
 `;
 
-export const StyledButtonLED = styled.div.attrs<{ $active?: boolean }>(
-  ({ $active }) => ({
+const slowFlash = keyframes`
+  0%, 100% {
+    background: #ff3333;
+    box-shadow: 0 0 8px #ff3333, 0 0 3px #ff0000, inset 0 0.5px 1px rgba(255, 255, 255, 0.6);
+  }
+  50% {
+    background: #8a0000;
+    box-shadow: 0 0 4px #8a0000, 0 0 2px #660000, inset 0 0.5px 1px rgba(255, 255, 255, 0.3);
+  }
+`;
+
+export const StyledButtonLED = styled.div.attrs<{
+  $active?: boolean;
+  $isPlayButton?: boolean;
+}>(({ $active, $isPlayButton }) => {
+  // Play button: green when playing, flashing red when paused/stopped
+  if ($isPlayButton) {
+    if ($active) {
+      return {
+        style: {
+          background: "#33ff33",
+          boxShadow:
+            "0 0 8px #33ff33, 0 0 3px #00ff00, inset 0 0.5px 1px rgba(255, 255, 255, 0.6)",
+        },
+      };
+    }
+    // Not playing - will use animation
+    return { style: {} };
+  }
+
+  // Other buttons: red when active, dark when inactive
+  return {
     style: {
       background: $active ? "#ff3333" : "#3a0000",
       boxShadow: $active
         ? "0 0 8px #ff3333, 0 0 3px #ff0000, inset 0 0.5px 1px rgba(255, 255, 255, 0.6)"
         : "inset 0 1px 2px rgba(0, 0, 0, 0.9)",
     },
-  }),
-)<{ $active?: boolean }>`
+  };
+})<{ $active?: boolean; $isPlayButton?: boolean }>`
   width: 36px;
   height: 4px;
   border-radius: 1px;
   border: 0.5px solid rgba(0, 0, 0, 0.5);
   transition: all 0.15s ease;
+
+  ${({ $isPlayButton, $active }) =>
+    $isPlayButton &&
+    !$active &&
+    css`
+      animation: ${slowFlash} 2s ease-in-out infinite;
+    `}
 `;
 
 export const StyledButtonLabel = styled.div`
