@@ -6,6 +6,7 @@ import { getModalThemeMode } from "utils/themeHelpers";
 
 import MixListPage from "components/MixListPage";
 
+import Contact from "../Contact";
 import About from "../ContentPages/About";
 import Statistics from "../ContentPages/Statistics";
 import Manual from "../Manual";
@@ -202,6 +203,19 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
                 }
               >
                 Statistics
+              </StyledMenuItem>
+              <StyledMenuItem
+                $themeMode={menuThemeMode}
+                onClick={() =>
+                  handleModalDemo(
+                    "contact-modal",
+                    "Contact",
+                    <Contact />,
+                    undefined,
+                  )
+                }
+              >
+                Contact
               </StyledMenuItem>
             </StyledMenuSection>
           </StyledMenuContent>
