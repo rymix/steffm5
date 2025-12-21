@@ -9,6 +9,20 @@ import type {
 import Macintosh from "components/BackgroundList/Macintosh";
 import RetroPC from "components/BackgroundList/RetroPC";
 
+import {
+  StyledButton,
+  StyledControlsContainer,
+  StyledLabel,
+  StyledLoadingContainer,
+  StyledLoadingText,
+  StyledMonitorDisplay,
+  StyledNavigationButtons,
+  StyledRandomButton,
+  StyledSelect,
+  StyledSelectContainer,
+  StyledWallpapersContainer,
+} from "./styles";
+
 export const Wallpapers: React.FC = () => {
   const { actions } = useMixcloud();
   const [background, setBackground] = useState<BackgroundExtended | null>(null);
@@ -161,7 +175,7 @@ export const Wallpapers: React.FC = () => {
     fetchBackgrounds();
   }, [selectedCategory]); // Only depend on selectedCategory to avoid loop
 
-  const handleWallpapers = async () => {
+  const handleRandomBackground = async () => {
     setLoading(true);
     try {
       const response = await fetch("/api/background/randomBackground");
@@ -265,126 +279,43 @@ export const Wallpapers: React.FC = () => {
 
   if (loading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "455px",
-        }}
-      >
-        Loading...
-      </div>
+      <StyledLoadingContainer>
+        <StyledLoadingText>Loading...</StyledLoadingText>
+      </StyledLoadingContainer>
     );
   }
 
   if (!background) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "455px",
-        }}
-      >
-        No background found
-      </div>
+      <StyledLoadingContainer>
+        <StyledLoadingText>No background found</StyledLoadingText>
+      </StyledLoadingContainer>
     );
   }
 
   const monitorType = background.backgroundCategoryObject?.type;
 
   return (
-    <div style={{ width: "100%" }}>
-      {/* Monitor Display */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "100%",
-          overflow: "hidden",
-        }}
-      >
+    <StyledWallpapersContainer>
+      <StyledMonitorDisplay>
         {monitorType === "Macintosh" ? <Macintosh /> : <RetroPC />}
-      </div>
+      </StyledMonitorDisplay>
 
-      {/* Controls */}
-      <div
-        style={{
-          padding: "20px",
-          borderTop: "1px solid #ddd",
-          display: "flex",
-          flexDirection: "column",
-          gap: "15px",
-        }}
-      >
-        {/* Navigation Buttons */}
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <button
-            onClick={handlePrevious}
-            style={{
-              padding: "10px 20px",
-              fontSize: "14px",
-              backgroundColor: "#6c757d",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
-          >
-            ← Previous
-          </button>
-          <button
-            onClick={handleNext}
-            style={{
-              padding: "10px 20px",
-              fontSize: "14px",
-              backgroundColor: "#6c757d",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
-          >
-            Next →
-          </button>
-          <button
-            onClick={handleWallpapers}
-            style={{
-              padding: "10px 20px",
-              fontSize: "14px",
-              backgroundColor: "#007bff",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              marginLeft: "auto",
-            }}
-          >
+      <StyledControlsContainer>
+        <StyledNavigationButtons>
+          <StyledButton onClick={handlePrevious}>← Previous</StyledButton>
+          <StyledButton onClick={handleNext}>Next →</StyledButton>
+          <StyledRandomButton onClick={handleRandomBackground}>
             Random
-          </button>
-        </div>
+          </StyledRandomButton>
+        </StyledNavigationButtons>
 
-        {/* Category Selection */}
-        <div>
-          <label
-            htmlFor="category-select"
-            style={{ marginRight: "10px", fontWeight: "bold" }}
-          >
-            Category:
-          </label>
-          <select
+        <StyledSelectContainer>
+          <StyledLabel htmlFor="category-select">Category:</StyledLabel>
+          <StyledSelect
             id="category-select"
             value={selectedCategory}
             onChange={(e) => handleCategoryChange(e.target.value)}
-            style={{
-              padding: "8px 12px",
-              fontSize: "14px",
-              borderRadius: "4px",
-              border: "1px solid #ccc",
-            }}
           >
             <option value="">-- Select Category --</option>
             {categories.map((cat) => (
@@ -392,22 +323,16 @@ export const Wallpapers: React.FC = () => {
                 {cat.name}
               </option>
             ))}
-          </select>
-        </div>
+          </StyledSelect>
+        </StyledSelectContainer>
 
-        {/* Background Selection */}
         {selectedCategory && (
-          <div>
-            <label
-              htmlFor="background-select"
-              style={{ marginRight: "10px", fontWeight: "bold" }}
-            >
-              Background:
-            </label>
+          <StyledSelectContainer>
+            <StyledLabel htmlFor="background-select">Background:</StyledLabel>
             {loadingBackgrounds ? (
-              <span>Loading backgrounds...</span>
+              <StyledLoadingText>Loading backgrounds...</StyledLoadingText>
             ) : (
-              <select
+              <StyledSelect
                 id="background-select"
                 value={background?.fileName || ""}
                 onChange={(e) => {
@@ -416,25 +341,18 @@ export const Wallpapers: React.FC = () => {
                   );
                   if (bg) handleSelectBackground(bg);
                 }}
-                style={{
-                  padding: "8px 12px",
-                  fontSize: "14px",
-                  borderRadius: "4px",
-                  border: "1px solid #ccc",
-                  minWidth: "200px",
-                }}
               >
                 {backgrounds.map((bg) => (
                   <option key={bg.fileName} value={bg.fileName}>
                     {bg.name}
                   </option>
                 ))}
-              </select>
+              </StyledSelect>
             )}
-          </div>
+          </StyledSelectContainer>
         )}
-      </div>
-    </div>
+      </StyledControlsContainer>
+    </StyledWallpapersContainer>
   );
 };
 
