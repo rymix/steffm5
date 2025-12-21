@@ -1,5 +1,7 @@
+import { useTheme } from "contexts/theme";
 import React from "react";
 import { VOLUME_AVAILABLE } from "utils/constants";
+import { getModalThemeMode } from "utils/themeHelpers";
 
 import {
   CautionIcon,
@@ -42,6 +44,9 @@ import {
 } from "components/Manual/StyledManualScreen";
 
 export const Manual: React.FC = () => {
+  const theme = useTheme();
+  const modalThemeMode = getModalThemeMode(theme.state.mode);
+
   // Static categories for display in manual (same angles as real dial)
   const modeMaxAngle = 115;
   const modeStepAngle = (modeMaxAngle * 2) / 5; // 46 degrees per step
@@ -52,24 +57,25 @@ export const Manual: React.FC = () => {
   }));
 
   return (
-    <StyledManual>
-      <StyledManualTitle>Stef.fM</StyledManualTitle>
+    <StyledManual $themeMode={modalThemeMode}>
+      <StyledManualTitle>STEF.FM</StyledManualTitle>
       <hr />
       <StyledManualSubTitle>User Manual</StyledManualSubTitle>
       <StyledManualSectionTitle>Introduction</StyledManualSectionTitle>
       <hr />
       <p>
-        The <strong>Stef.FM</strong> funky, funky house music player is
+        The <strong>STEF.FM</strong> funky, funky house music player is
         polyphonic streaming audio virtual device built for your listening
         pleasure. Press buttons, rotate knobs and move sliders to make the music
         happen.
       </p>
       <p>
         This manual explains how to make the most of your{" "}
-        <strong>Stef.FM</strong> experience.
+        <strong>STEF.FM</strong> experience.
       </p>
       <StyledIconSection>
-        <CautionIcon /> Warning! The funk is strong. Proceed with caution.
+        <CautionIcon $themeMode={modalThemeMode} /> Warning! The funk is strong.
+        Proceed with caution.
       </StyledIconSection>
       <StyledManualSectionTitle>
         Mixcloud Status Indicator
@@ -131,6 +137,7 @@ export const Manual: React.FC = () => {
               <StyledManualKnobMarker
                 key={category.shortName}
                 $angle={category.angle}
+                $themeMode={modalThemeMode}
               >
                 {category.shortName}
               </StyledManualKnobMarker>
@@ -141,7 +148,9 @@ export const Manual: React.FC = () => {
               </StyledManualInnerKnob>
             </StyledManualOuterKnob>
           </StyledManualOuterKnobWrapper>
-          <StyledManualKnobLabel>Category</StyledManualKnobLabel>
+          <StyledManualKnobLabel $themeMode={modalThemeMode}>
+            Category
+          </StyledManualKnobLabel>
         </StyledManualKnobWrapper>
       </StyledControl>
       <StyledGrid>
@@ -197,9 +206,11 @@ export const Manual: React.FC = () => {
       </p>
       <StyledControl>
         <StyledManualButtonWrapper>
-          <StyledManualLed />
-          <StyledManualButton />
-          <StyledManualButtonLabel>Button</StyledManualButtonLabel>
+          <StyledManualLed $themeMode={modalThemeMode} />
+          <StyledManualButton $themeMode={modalThemeMode} />
+          <StyledManualButtonLabel $themeMode={modalThemeMode}>
+            Button
+          </StyledManualButtonLabel>
         </StyledManualButtonWrapper>
       </StyledControl>
       <StyledGrid>
@@ -256,7 +267,7 @@ export const Manual: React.FC = () => {
           Keep track of your favourite mixes. Click the <strong>
             FAV
           </strong>{" "}
-          button and <strong>Stef.FM</strong> will remember how much you love
+          button and <strong>STEF.FM</strong> will remember how much you love
           this mix. Your favourited mixes will appear under the{" "}
           <strong>FAV</strong> selection as well as in the{" "}
           <strong>Favourites</strong> section of the <strong>LIST</strong> mode.
@@ -281,7 +292,13 @@ export const Manual: React.FC = () => {
               {Array.from({ length: 11 }).map((_, i) => {
                 const volumeMaxAngle = 150;
                 const angle = -volumeMaxAngle + (i * (volumeMaxAngle * 2)) / 10;
-                return <StyledManualDialTick key={i} $angle={angle} />;
+                return (
+                  <StyledManualDialTick
+                    key={i}
+                    $angle={angle}
+                    $themeMode={modalThemeMode}
+                  />
+                );
               })}
               <StyledManualOuterKnob>
                 <StyledManualInnerKnob $deg={150} $snap={0}>
@@ -289,7 +306,9 @@ export const Manual: React.FC = () => {
                 </StyledManualInnerKnob>
               </StyledManualOuterKnob>
             </StyledManualOuterKnobWrapper>
-            <StyledManualKnobLabel>Volume</StyledManualKnobLabel>
+            <StyledManualKnobLabel $themeMode={modalThemeMode}>
+              Volume
+            </StyledManualKnobLabel>
           </StyledManualKnobWrapper>
         </StyledControl>
       )}
@@ -308,8 +327,8 @@ export const Manual: React.FC = () => {
           <br />
           <br />
           <StyledIconSection>
-            <CautionIcon /> Moving the slider towards the bottom may make the
-            music too quiet. Do not do this.
+            <CautionIcon $themeMode={modalThemeMode} /> Moving the slider
+            towards the bottom may make the music too quiet. Do not do this.
           </StyledIconSection>
         </StyledGridDetail>
       </StyledGrid>
@@ -320,7 +339,7 @@ export const Manual: React.FC = () => {
         mixes and tracks. You can filter and search the list to finx your
         favourite music. List Mode also shows the most recently uploaded mixes
         so you can always keep up to date with the new sounds features on{" "}
-        <strong>Stef.FM</strong>.
+        <strong>STEF.FM</strong>.
       </p>
       <StyledGrid>
         <StyledGridHeader>FILTER</StyledGridHeader>
@@ -395,7 +414,7 @@ export const Manual: React.FC = () => {
           <strong>VIEW THIS USER MANUAL</strong>
           <br />
           The <strong>USER MANUAL</strong> is a document which explains how to
-          user the <strong>Stef.FM</strong> digital audio device. The guide is
+          user the <strong>STEF.FM</strong> digital audio device. The guide is
           thorough and detailed and invaluable to aiding your listening
           experience.
         </StyledGridDetail>
@@ -403,7 +422,7 @@ export const Manual: React.FC = () => {
         <StyledGridDetail>
           <strong>STATISTICS ANS OTHER VITAL INFORMATION</strong>
           <br />
-          View important information about the <strong>Stef.FM</strong> digital
+          View important information about the <strong>STEF.FM</strong> digital
           audio device including:
           <ul>
             <li>The total number of mixes</li>
@@ -414,12 +433,6 @@ export const Manual: React.FC = () => {
             </li>
           </ul>
         </StyledGridDetail>
-      </StyledGrid>
-      <StyledControl>
-        <img src="/svg/crt-monitor.svg" alt="Retro PC" width="40%" />
-        <img src="/svg/mac.svg" alt="Mac Classic" width="30%" />
-      </StyledControl>
-      <StyledGrid>
         <StyledGridHeader>WALLPAPER</StyledGridHeader>
         <StyledGridDetail>
           <strong>CHANGE THE BACKGROUND IMAGE</strong>
@@ -427,7 +440,7 @@ export const Manual: React.FC = () => {
           An often overlooked aspect of the visual user interfaces experience is
           enabling users to customise their experience to their preference. The{" "}
           <strong>WALLPAPER</strong> menu item allows you to change the
-          background image of the <strong>Stef.FM</strong> digital audio device
+          background image of the <strong>STEF.FM</strong> digital audio device
           to a number of historically significant images from computing history,
           including:
           <ul>
@@ -536,7 +549,7 @@ export const Manual: React.FC = () => {
         <br />
         Some rights reserved
       </p>
-      <StyledManualFooter>Stef.fM</StyledManualFooter>
+      <StyledManualFooter>STEF.FM</StyledManualFooter>
     </StyledManual>
   );
 };

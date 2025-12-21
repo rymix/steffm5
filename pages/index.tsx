@@ -22,7 +22,7 @@ const IndexPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Stef.FM - Funky House and Soul Music</title>
+        <title>STEF.FM - Funky House and Soul Music</title>
         <meta
           name="description"
           content="Adventures in Decent Music - Funky House and Soul Music"

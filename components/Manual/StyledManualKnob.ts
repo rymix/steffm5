@@ -1,5 +1,9 @@
 import styled, { css } from "styled-components";
 
+interface ThemeProps {
+  $themeMode?: "light" | "dark";
+}
+
 interface StyledManualOuterKnobProps {
   $margin?: number;
 }
@@ -28,7 +32,7 @@ export const StyledManualOuterKnobWrapper = styled.div`
   justify-content: center;
 `;
 
-interface StyledManualKnobMarkerWithAngleProps {
+interface StyledManualKnobMarkerWithAngleProps extends ThemeProps {
   $angle: number;
 }
 
@@ -46,7 +50,7 @@ export const StyledManualKnobMarker = styled.div.attrs<StyledManualKnobMarkerWit
   text-align: center;
   font-size: 10px;
   font-weight: bold;
-  color: #2a2a2a;
+  color: ${(props) => (props.$themeMode === "dark" ? "#e8e8e8" : "#2a2a2a")};
   text-transform: uppercase;
   letter-spacing: 0.4px;
 `;
@@ -94,11 +98,11 @@ export const StyledManualGrip = styled.div`
   background: rgba(0, 0, 0, 0.8);
 `;
 
-export const StyledManualKnobLabel = styled.div`
+export const StyledManualKnobLabel = styled.div<ThemeProps>`
   font-family: "Helvetica Neue", "Arial", sans-serif;
   font-size: 12px;
   font-weight: 600;
-  color: #2a2a2a;
+  color: ${(props) => (props.$themeMode === "dark" ? "#e8e8e8" : "#2a2a2a")};
   letter-spacing: 0.5px;
   text-transform: uppercase;
   text-align: center;
@@ -107,7 +111,7 @@ export const StyledManualKnobLabel = styled.div`
   line-height: 14px;
 `;
 
-interface StyledManualDialTickProps {
+interface StyledManualDialTickProps extends ThemeProps {
   $angle: number;
 }
 
@@ -121,7 +125,8 @@ export const StyledManualDialTick = styled.div.attrs<StyledManualDialTickProps>(
   position: absolute;
   width: 3px;
   height: 12px;
-  background: rgba(0, 0, 0, 0.8);
+  background: ${(props) =>
+    props.$themeMode === "dark" ? "#e8e8e8" : "rgba(0, 0, 0, 0.8)"};
   top: 64px;
   left: 50%;
   transform-origin: center 60px;

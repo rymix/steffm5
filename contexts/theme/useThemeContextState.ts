@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type {
   ThemeActions,
@@ -10,8 +10,11 @@ import type {
 const THEME_STORAGE_KEY = "stef-fm-theme";
 
 const useThemeContextState = (): ThemeContextState => {
-  const [state, setState] = useState<ThemeState>(() => {
-    // Load theme from localStorage or default to mixed
+  // Always start with default to ensure SSR matches client initial render
+  const [state, setState] = useState<ThemeState>({ mode: "mixed" });
+
+  // Load theme from localStorage after hydration
+  useEffect(() => {
     if (typeof window !== "undefined") {
       const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
       if (
@@ -19,11 +22,10 @@ const useThemeContextState = (): ThemeContextState => {
         savedTheme === "light" ||
         savedTheme === "mixed"
       ) {
-        return { mode: savedTheme };
+        setState({ mode: savedTheme });
       }
     }
-    return { mode: "mixed" };
-  });
+  }, []);
 
   const setTheme = useCallback((mode: ThemeMode) => {
     setState({ mode });
