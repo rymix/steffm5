@@ -12,7 +12,7 @@ import PlaybackButtons from "@/components/PlaybackButtons";
 import {
   GlobalFonts,
   StyledButton,
-  StyledButtonLabel,
+  StyledButtonIcon,
   StyledButtonLED,
   StyledButtonRowsWrapper,
   StyledButtonsContainer,
@@ -41,7 +41,10 @@ import {
   StyledWoodPanel,
 } from "./styles";
 
+import CasinoIcon from "@mui/icons-material/Casino";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import ShareIcon from "@mui/icons-material/Share";
+import ShuffleIcon from "@mui/icons-material/Shuffle";
 
 // Constants
 const DISPLAY_WIDTH = 30; // Larger display
@@ -742,7 +745,7 @@ const MainPlayer: React.FC = () => {
             onClick={handleResetPosition}
             title="Reset position and size"
           >
-            <RestartAltIcon />
+            <RestartAltIcon style={{ fontSize: "16px" }} />
           </StyledResetButton>
           <StyledDialContainer>
             <StyledVolumeDialWrapper>
@@ -792,19 +795,25 @@ const MainPlayer: React.FC = () => {
             <StyledButtonsContainer>
               <StyledButtonWrapper>
                 <StyledButtonLED $active={shuffleLEDActive} />
-                <StyledButtonLabel>Shuffle</StyledButtonLabel>
+                <StyledButtonIcon>
+                  <ShuffleIcon />
+                </StyledButtonIcon>
                 <StyledButton onClick={handleShuffleClick} />
               </StyledButtonWrapper>
 
               <StyledButtonWrapper>
                 <StyledButtonLED $active={randomPressed} />
-                <StyledButtonLabel>Random</StyledButtonLabel>
+                <StyledButtonIcon>
+                  <CasinoIcon />
+                </StyledButtonIcon>
                 <StyledButton onClick={handleRandomClick} />
               </StyledButtonWrapper>
 
               <StyledButtonWrapper>
                 <StyledButtonLED $active={sharePressed} />
-                <StyledButtonLabel>Share</StyledButtonLabel>
+                <StyledButtonIcon>
+                  <ShareIcon />
+                </StyledButtonIcon>
                 <StyledButton onClick={handleShareClick} />
               </StyledButtonWrapper>
             </StyledButtonsContainer>
