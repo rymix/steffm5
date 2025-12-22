@@ -12,7 +12,7 @@ import PlaybackButtons from "@/components/PlaybackButtons";
 import {
   GlobalFonts,
   StyledButton,
-  StyledButtonIcon,
+  StyledButtonLabel,
   StyledButtonLED,
   StyledButtonRowsWrapper,
   StyledButtonsContainer,
@@ -41,10 +41,7 @@ import {
   StyledWoodPanel,
 } from "./styles";
 
-import CasinoIcon from "@mui/icons-material/Casino";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import ShareIcon from "@mui/icons-material/Share";
-import ShuffleIcon from "@mui/icons-material/Shuffle";
 
 // Constants
 const DISPLAY_WIDTH = 30; // Larger display
@@ -795,25 +792,19 @@ const MainPlayer: React.FC = () => {
             <StyledButtonsContainer>
               <StyledButtonWrapper>
                 <StyledButtonLED $active={shuffleLEDActive} />
-                <StyledButtonIcon>
-                  <ShuffleIcon />
-                </StyledButtonIcon>
+                <StyledButtonLabel>Shuffle</StyledButtonLabel>
                 <StyledButton onClick={handleShuffleClick} />
               </StyledButtonWrapper>
 
               <StyledButtonWrapper>
                 <StyledButtonLED $active={randomPressed} />
-                <StyledButtonIcon>
-                  <CasinoIcon />
-                </StyledButtonIcon>
+                <StyledButtonLabel>Random</StyledButtonLabel>
                 <StyledButton onClick={handleRandomClick} />
               </StyledButtonWrapper>
 
               <StyledButtonWrapper>
                 <StyledButtonLED $active={sharePressed} />
-                <StyledButtonIcon>
-                  <ShareIcon />
-                </StyledButtonIcon>
+                <StyledButtonLabel>Share</StyledButtonLabel>
                 <StyledButton onClick={handleShareClick} />
               </StyledButtonWrapper>
             </StyledButtonsContainer>
