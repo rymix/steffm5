@@ -10,6 +10,11 @@ import {
   StyledButtonWrapper,
 } from "./styles";
 
+import PauseIcon from "@mui/icons-material/Pause";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import SkipNextIcon from "@mui/icons-material/SkipNext";
+import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
+
 // Constants
 const MOMENTARY_LED_DURATION = 300; // Duration in ms for momentary button LED flash
 
@@ -47,7 +52,9 @@ const PlaybackButtons: React.FC<PlaybackButtonsProps> = ({
     <StyledButtonsContainer>
       <StyledButtonWrapper>
         <StyledButtonLED $active={prevPressed} />
-        <StyledButtonIcon>⏮</StyledButtonIcon>
+        <StyledButtonIcon>
+          <SkipPreviousIcon />
+        </StyledButtonIcon>
         <StyledButton
           $pressed={prevPressed}
           onClick={handlePrevClick}
@@ -58,7 +65,9 @@ const PlaybackButtons: React.FC<PlaybackButtonsProps> = ({
 
       <StyledButtonWrapper>
         <StyledButtonLED $active={state.isPlaying} $isPlayButton={true} />
-        <StyledButtonIcon>▶ ⏸</StyledButtonIcon>
+        <StyledButtonIcon>
+          {state.isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+        </StyledButtonIcon>
         <StyledButton
           $pressed={playPressed}
           onClick={handlePlayClick}
@@ -69,7 +78,9 @@ const PlaybackButtons: React.FC<PlaybackButtonsProps> = ({
 
       <StyledButtonWrapper>
         <StyledButtonLED $active={nextPressed} />
-        <StyledButtonIcon>⏭</StyledButtonIcon>
+        <StyledButtonIcon>
+          <SkipNextIcon />
+        </StyledButtonIcon>
         <StyledButton
           $pressed={nextPressed}
           onClick={handleNextClick}

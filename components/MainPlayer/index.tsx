@@ -41,6 +41,8 @@ import {
   StyledWoodPanel,
 } from "./styles";
 
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+
 // Constants
 const DISPLAY_WIDTH = 30; // Larger display
 const SCROLL_SPEED = 300;
@@ -740,7 +742,7 @@ const MainPlayer: React.FC = () => {
             onClick={handleResetPosition}
             title="Reset position and size"
           >
-            ⟲
+            <RestartAltIcon style={{ fontSize: "16px" }} />
           </StyledResetButton>
           <StyledDialContainer>
             <StyledVolumeDialWrapper>
