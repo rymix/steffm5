@@ -29,6 +29,7 @@ export const StyledMainPlayer = styled.div`
 `;
 
 export const StyledWoodPanel = styled.div`
+  position: relative;
   background-image:
     linear-gradient(
       135deg,
@@ -52,33 +53,51 @@ export const StyledHeader = styled.div`
 `;
 
 export const StyledResetButton = styled.button`
-  width: 20px;
-  height: 12px;
-  background: #4a4a4a;
-  border: 1px solid #2a2a2a;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 26px;
+  height: 26px;
+  background: #5a5a5a;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 45%,
+    rgba(0, 0, 0, 0.05) 55%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  border: 1px solid rgba(0, 0, 0, 0.4);
   border-radius: 2px;
   cursor: pointer;
-  font-size: 8px;
-  color: #c8c8c8;
+  font-size: 18px;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.1),
-    0 1px 2px rgba(0, 0, 0, 0.3);
-  transition: all 0.1s ease;
+    0 0 0 1px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.4),
+    0 2px 2px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: all 0.04s ease;
+  z-index: 20;
 
   &:hover {
-    background: #5a5a5a;
+    background: #6a6a6a;
     box-shadow:
-      inset 0 1px 1px rgba(255, 255, 255, 0.15),
-      0 1px 3px rgba(0, 0, 0, 0.4);
+      0 0 0 1px rgba(0, 0, 0, 0.3),
+      0 1px 0 rgba(255, 255, 255, 0.5),
+      0 3px 4px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
   }
 
   &:active {
-    background: #3a3a3a;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+    background: #4a4a4a;
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.3),
+      inset 0 1px 2px rgba(0, 0, 0, 0.4);
+    transform: translateY(0.5px);
   }
 `;
 
@@ -86,35 +105,74 @@ export const StyledResizeHandle = styled.div`
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 20px;
-  height: 20px;
-  background: #4a4a4a;
-  border-top: 1px solid #2a2a2a;
-  border-left: 1px solid #2a2a2a;
+  width: 16px;
+  height: 16px;
   cursor: nwse-resize;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  color: #888;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 2px;
   user-select: none;
   z-index: 10;
-  box-shadow:
-    inset 1px 1px 1px rgba(255, 255, 255, 0.1),
-    -1px -1px 2px rgba(0, 0, 0, 0.3);
-
-  &:hover {
-    background: #5a5a5a;
-    color: #aaa;
-  }
-
-  &:active {
-    background: #3a3a3a;
-  }
 
   &::before {
-    content: "⋰";
-    transform: rotate(90deg);
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(
+        135deg,
+        transparent 0%,
+        transparent 28%,
+        #888 28%,
+        #888 35%,
+        transparent 35%
+      ),
+      linear-gradient(
+        135deg,
+        transparent 0%,
+        transparent 48%,
+        #888 48%,
+        #888 55%,
+        transparent 55%
+      ),
+      linear-gradient(
+        135deg,
+        transparent 0%,
+        transparent 68%,
+        #888 68%,
+        #888 75%,
+        transparent 75%
+      );
+    background-repeat: no-repeat;
+  }
+
+  &:hover::before {
+    background-image:
+      linear-gradient(
+        135deg,
+        transparent 0%,
+        transparent 28%,
+        #666 28%,
+        #666 35%,
+        transparent 35%
+      ),
+      linear-gradient(
+        135deg,
+        transparent 0%,
+        transparent 48%,
+        #666 48%,
+        #666 55%,
+        transparent 55%
+      ),
+      linear-gradient(
+        135deg,
+        transparent 0%,
+        transparent 68%,
+        #666 68%,
+        #666 75%,
+        transparent 75%
+      );
   }
 `;
 
@@ -263,6 +321,7 @@ export const StyledDisplayProgress = styled.div`
 `;
 
 export const StyledControls = styled.div`
+  position: relative;
   height: 220px;
   background: #c8c8c8;
   background-image:

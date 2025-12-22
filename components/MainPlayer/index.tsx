@@ -25,7 +25,6 @@ import {
   StyledDisplay,
   StyledDisplayProgress,
   StyledDisplayText,
-  StyledHeader,
   StyledLogoPlate,
   StyledLogoText,
   StyledMainPanel,
@@ -637,14 +636,6 @@ const MainPlayer: React.FC = () => {
         }}
       >
         <StyledWoodPanel data-draggable="true">
-          <StyledHeader>
-            <StyledResetButton
-              onClick={handleResetPosition}
-              title="Reset position"
-            >
-              ⟲
-            </StyledResetButton>
-          </StyledHeader>
           <StyledSlats>
             <StyledLogoPlate>
               <StyledLogoText>STEF.FM</StyledLogoText>
@@ -655,6 +646,12 @@ const MainPlayer: React.FC = () => {
           </StyledMainPanel>
         </StyledWoodPanel>
         <StyledControls>
+          <StyledResetButton
+            onClick={handleResetPosition}
+            title="Reset position and size"
+          >
+            ⟲
+          </StyledResetButton>
           <StyledDialContainer>
             <StyledVolumeDialWrapper>
               {Array.from({ length: 11 }).map((_, i) => {

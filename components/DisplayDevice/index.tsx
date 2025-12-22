@@ -1,6 +1,6 @@
 import { useMixcloud } from "contexts/mixcloud";
 import { useTheme } from "contexts/theme";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { getCategoryName, getPanelThemeMode } from "utils/themeHelpers";
 
 import {
@@ -49,6 +49,9 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
   const [expandedTrackIndex, setExpandedTrackIndex] = useState<number | null>(
     null,
   );
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartXRef = useRef(0);
+  const didDragRef = useRef(false);
 
   const isOpen = isOpenProp !== undefined ? isOpenProp : isOpenInternal;
   const toggleDisplay =
@@ -59,6 +62,86 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
   const toggleTrackExpanded = (index: number) => {
     setExpandedTrackIndex(expandedTrackIndex === index ? null : index);
   };
+
+  // Drag handlers for toggle button
+  const handleDragStart = (clientX: number) => {
+    setIsDragging(true);
+    dragStartXRef.current = clientX;
+    didDragRef.current = false;
+  };
+
+  const handleDragMove = (clientX: number) => {
+    if (!isDragging) return;
+
+    const dragDistance = clientX - dragStartXRef.current;
+    const threshold = 50; // pixels to trigger toggle
+
+    if (isOpen && dragDistance > threshold) {
+      // Dragging right while open -> close
+      didDragRef.current = true;
+      toggleDisplay();
+      setIsDragging(false);
+    } else if (!isOpen && dragDistance < -threshold) {
+      // Dragging left while closed -> open
+      didDragRef.current = true;
+      toggleDisplay();
+      setIsDragging(false);
+    }
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    // Reset didDrag after a short delay to allow click handler to check it
+    setTimeout(() => {
+      didDragRef.current = false;
+    }, 100);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleDragStart(e.clientX);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      handleDragStart(e.touches[0].clientX);
+    }
+  };
+
+  // Mouse and touch event listeners
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      handleDragMove(e.clientX);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        handleDragMove(e.touches[0].clientX);
+      }
+    };
+
+    const handleMouseUp = () => {
+      handleDragEnd();
+    };
+
+    const handleTouchEnd = () => {
+      handleDragEnd();
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("touchmove", handleTouchMove);
+    document.addEventListener("touchend", handleTouchEnd);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [isDragging, isOpen]);
 
   // Helper to calculate track duration
   const getTrackDuration = (index: number): string => {
@@ -120,9 +203,21 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
     return -1;
   }, [sortedTracks, state.position, state.duration]);
 
+  // Handle click - only toggle if we didn't drag
+  const handleClick = () => {
+    if (!didDragRef.current) {
+      toggleDisplay();
+    }
+  };
+
   return (
     <StyledDisplayDeviceWrapper>
-      <StyledToggleButton $isOpen={isOpen} onClick={toggleDisplay}>
+      <StyledToggleButton
+        $isOpen={isOpen}
+        onClick={handleClick}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+      >
         {isOpen ? "▶" : "◀"}
       </StyledToggleButton>
 
