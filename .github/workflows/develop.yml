@@ -1,0 +1,23 @@
+name: Main Build, Test and Deploy
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Modules
+        run: yarn install
+
+      - name: Run Build
+        run: yarn run build
+
+      - name: Run Tests
+        run: yarn test
