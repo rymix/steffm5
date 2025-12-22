@@ -20,6 +20,11 @@ import {
   StyledVolumeDialWrapper,
 } from "./styles";
 
+import PauseIcon from "@mui/icons-material/Pause";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import SkipNextIcon from "@mui/icons-material/SkipNext";
+import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
+
 const CompactControls: React.FC = () => {
   const { state, actions } = useMixcloud();
 
@@ -314,15 +319,18 @@ const CompactControls: React.FC = () => {
             onClick={actions.previous}
             disabled={state.keys.length <= 1}
           >
-            <StyledButtonIcon $active={prevPressed}>⏮</StyledButtonIcon>
+            <StyledButtonIcon $active={prevPressed}>
+              <SkipPreviousIcon />
+            </StyledButtonIcon>
           </StyledButton>
 
           <StyledPlayPauseButton
             onClick={actions.toggle}
             disabled={state.isLoading}
           >
-            <StyledButtonIcon $active={!state.isPlaying}>▶</StyledButtonIcon>
-            <StyledButtonIcon $active={state.isPlaying}>⏸</StyledButtonIcon>
+            <StyledButtonIcon>
+              <PlayArrowIcon /> <PauseIcon />
+            </StyledButtonIcon>
           </StyledPlayPauseButton>
 
           <StyledButton
@@ -333,7 +341,9 @@ const CompactControls: React.FC = () => {
             onClick={actions.next}
             disabled={state.keys.length <= 1}
           >
-            <StyledButtonIcon $active={nextPressed}>⏭</StyledButtonIcon>
+            <StyledButtonIcon $active={nextPressed}>
+              <SkipNextIcon />
+            </StyledButtonIcon>
           </StyledButton>
         </StyledButtonsContainer>
       </StyledControls>
