@@ -1,364 +1,262 @@
-<h1 align='center'>
-  Mixmotion Player
-</h1>
+# STEF.FM
 
-<p align='center'>
-  <a href='https://www.npmjs.com/package/mixmotion-player' target="_blank">
-    <img src='https://img.shields.io/npm/v/mixmotion-player.svg' alt='Latest npm version'>
-  </a>
-    <a href='https://github.com/lewhunt/mixmotion/blob/main/LICENSE' target="_blank">
-      <img src='https://img.shields.io/badge/License-GPLv3-yellow.svg' alt='GPLv3 License'>
-  </a>
-    <a href='https://www.npmjs.com/package/mixmotion-player' target="_blank">
-    <img src='https://img.shields.io/npm/dm/mixmotion-player.svg' alt='Monthly npm downloads'>
-  </a>
+A Next.js-based immersive music player application with Mixcloud integration, dynamic visual effects, and retro-style hardware UI.
 
-</p>
+## Overview
 
-<p align='center'>
-An immersive music player with Mixcloud integration and dynamic visual effects</p>
+STEF.FM is a full-stack web application that provides an immersive music playback experience with a unique retro hardware-inspired interface. Built with Next.js 15, TypeScript, and styled-components, it features a draggable and resizable player, category filtering, mix tracking, and comprehensive touch/mouse/keyboard controls.
 
-[![https://lewhunt.github.io/mixmotion/](https://lewhunt.github.io/assets/readme/mm-player-example.jpg)](https://lewhunt.github.io/mixmotion/)
+## Features
 
-<p align='center'><i>Click the image to try out the app</i>
+### 🎛️ Hardware-Style Player Interface
+- **Draggable & Resizable Player**: Desktop player with touch and mouse support for positioning and scaling
+- **Retro Wood & Metal Design**: Authentic hardware aesthetic with wood panels, metal controls, and LED indicators
+- **Physical Controls**:
+  - Volume dial with mouse wheel and drag support
+  - Category dial with 6 positions (All, Adventures in Decent Music, My Pair of Shoes, Cock Soup, Special, Favourites)
+  - Playback buttons with LED indicators
+  - Shuffle, Random Mix, and Share functionality
 
-## How to use
+### 📱 Responsive Design
+- **Desktop Mode**: Full draggable player with side panel for mix information
+- **Mobile/Tablet Mode**: Optimized compact player with collapsible info panel
+- **Landscape Support**: Adaptive layouts for landscape orientation
+- **Touch-Optimized**: Full touch support for all controls including drag, resize, and dial manipulation
 
-For casual users who just want to discover some new music with fullscreen visuals, hit the image above or link below to launch the Mixmotion web app on your mobile, desktop or TV device.
+### 🎨 Theme System
+- **Three Theme Modes**:
+  - Light: All UI elements use light theme
+  - Dark: All UI elements use dark theme
+  - Mixed: Panels use dark theme, modals/menus use light theme
+- **Theme Persistence**: User preferences saved to localStorage
+- **Themed Components**: Contextual theming across panels, modals, menus, and content areas
 
-### [:point_right: Try out the App :point_left:](https://lewhunt.github.io/mixmotion/)
+### 🎵 Music Features
+- **Mixcloud Integration**: Full API integration for mixes, tracks, and metadata
+- **Category Filtering**: Filter mixes by predefined categories
+- **Track Display**: Real-time track information with scrolling text display
+- **Mix Information Panel**: Detailed mix metadata, DJ info, track lists, and cover art
+- **Progress Tracking**: Visual progress bars and position indicators
+- **Random Mix**: Play random mixes from filtered categories
 
-**https://lewhunt.github.io/mixmotion**
+### 🖥️ Technical Features
+- **Server-Side Rendering**: Next.js with API routes
+- **Database Integration**: SQLite with better-sqlite3 for mix and track storage
+- **State Management**: React Context API for Mixcloud, Theme, and Modal state
+- **TypeScript**: Full type safety throughout the application
+- **Styled Components**: CSS-in-JS with transient props for optimal performance
+- **Modal System**: Global modal management with auto-close, content switching, and smooth transitions
 
-On playback, you'll enter an immersive lean-back mode, with the ability to toggle on/off a vast selection of dynamic background visuals. Below is a quick video of the app transitioning between playback modes:
+## Technology Stack
 
-https://github.com/lewhunt/mixmotion/assets/9886284/95a2116f-5e4c-47fc-af65-6e65a53a0048
+### Frontend
+- **Next.js 15**: React framework with App Router
+- **React 18**: UI library with hooks and context
+- **TypeScript**: Type-safe JavaScript
+- **Styled Components**: CSS-in-JS styling solution
+- **React Context**: Global state management
 
-More screenshots and videos at the end of this doc.
+### Backend
+- **Next.js API Routes**: Server-side API endpoints
+- **better-sqlite3**: SQLite database for data persistence
+- **Node.js**: Runtime environment
 
-<hr>
+### Development Tools
+- **ESLint**: Code linting with Prettier integration
+- **Jest**: Unit testing framework
+- **Testing Library**: React component testing
+- **Vite**: Fast build tooling
 
-## Installation
+## Project Structure
 
-Developers can also install Mixmotion Player as an open source component to use in React apps. Quickest install method is via the npm i command below. Alternatively, integrate it manually by grabbing the lib folder in this repo along with the associated dependencies.
+```
+steffm5/
+├── components/          # React components
+│   ├── BurgerMenu/     # Navigation menu with theme controls
+│   ├── CompactPlayer/  # Mobile-optimized player
+│   ├── DisplayDevice/  # Side panel for mix information
+│   ├── HomePage/       # Main page layout
+│   ├── MainPlayer/     # Desktop player with dials and controls
+│   ├── MixFilter/      # Category and tag filtering
+│   ├── MixList/        # Mix list with playback controls
+│   └── PlaybackButtons/ # Playback control buttons
+├── contexts/           # React contexts
+│   ├── mixcloud/       # Mixcloud state and actions
+│   ├── modal/          # Global modal management
+│   └── theme/          # Theme state and persistence
+├── db/                 # Database files and migrations
+├── pages/              # Next.js pages
+│   ├── api/            # API routes
+│   └── player.tsx      # Main player page
+├── public/             # Static assets
+├── styles/             # Global styles
+└── utils/              # Utility functions
+
+```
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18+ or npm 9+
+- Git
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd steffm5
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Run the development server:
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+### Building for Production
 
 ```bash
-npm install mixmotion-player
+npm run build
+npm start
 ```
 
-### Basic Usage
+## Scripts
+
+- `npm run dev` - Start development server (Vite)
+- `npm start` - Start dev server on port 3000 with host access
+- `npm run build` - Build for production
+- `npm test` - Run Jest test suite
+- `npm run eslint` - Run ESLint
+- `npm run eslint:fix` - Run ESLint with auto-fix
+- `npm run format:check` - Check Prettier formatting
+
+## API Routes
 
-Import the player and render MixmotionPlayer in your own app with a Mixcloud URL. It will use default settings for the other non declared props.
+### Mixes
+- `GET /api/mixes` - Get filtered mixes
+- `GET /api/mix/[mixcloudKey]` - Get specific mix details
+- `GET /api/latestMixes` - Get latest mixes
+- `GET /api/randomMix/[[...category]]` - Get random mix by category
 
-```jsx
-import { useEffect, useState } from "react";
-import { MixmotionPlayer } from "mixmotion-player";
+### Categories & Tags
+- `GET /api/categories` - Get all categories
+- `GET /api/category/[code]` - Get category details
+- `GET /api/tags` - Get all tags
 
-function Demo() {
-  const [url, setUrl] = useState("");
+### Tracks
+- `GET /api/tracks/[mixcloudKey]` - Get tracks for a mix
+- `GET /api/unknownTracks` - Get tracks without metadata
 
-  useEffect(() => {
-    setUrl("https://www.mixcloud.com/discover/trance/?order=latest");
-  }, []);
+### Statistics
+- `GET /api/stats` - Get playback statistics
 
-  return <MixmotionPlayer url={url} />;
-}
+### Search
+- `GET /api/search` - Search mixes
 
-export default Demo;
-```
+### Background
+- `GET /api/background/backgrounds` - Get available backgrounds
+- `GET /api/background/categories` - Get background categories
+- `GET /api/background/randomBackground` - Get random background
 
-### Advanced Usage
+## Theme Helper Functions
 
-The <a href='https://github.com/lewhunt/mixmotion/blob/main/src/DemoAdvanced.tsx'>advanced demo</a> and official <a href='https://lewhunt.github.io/mixmotion/'>web app</a> illustrate how the component can be customised further. Props are specified for custom buttons, video backgrounds and local data (saved items). A complete list of props are detailed further down this page.
+The application uses utility functions for consistent theming:
 
-```jsx
-<MixmotionPlayer
-  url={url}
-  showsData={getSavedData}
-  customButtons={customButtons}
-  backdropVideoList={backdropVideoList}
-  enableBackdropVideo={true}
-></MixmotionPlayer>
-```
-
-<hr>
-
-## Why Another Music Player?
-
-There are plenty of web players and widgets already available from the likes of Soundcloud and Mixcloud that you can integrate into your app.
+### `getPanelThemeMode(themeMode)`
+Returns theme mode for main panels (mix/track display areas).
+- Returns `"light"` only when theme is `"light"`
+- Returns `"dark"` for both `"dark"` and `"mixed"` modes
 
-Mixmotion offers something different; an immersive, full-screen playback experience with unique visual effects, while still providing free access to Mixcloud's vast music catalogue.
+### `getModalThemeMode(themeMode)`
+Returns theme mode for modals and menus.
+- Returns `"light"` when theme is `"mixed"` or `"light"`
+- Returns `"dark"` only when theme is `"dark"`
 
-## What Sets It Apart?
+### `getCategoryName(categoryCode)`
+Maps category codes to display names:
+- `""` → "All Mixes"
+- `"aidm"` → "Adventures in Decent Music"
+- `"mpos"` → "My Pair of Shoes"
+- `"cocksoup"` → "Cock Soup"
+- `"special"` → "Special"
+- `"fav"` → "Favourites"
 
-- <b>Mixcloud Integration</b>: Simple yet versatile access to Mixcloud content that goes beyond their official widget. Access playlists, user sets, genres, tags and individual shows, with the ability to privately save favourites via local storage and share mixes.
-- <b>Dynamic Visuals</b>: Artwork combined with canvas effects and video motion backgrounds generate a captivating blend of imagery within a rich, immersive music player.
-- <b>Broad Device Support</b>: Designed for mobile, desktop and TV devices. Touch, cursor and arrow-key navigation help make the user experience smooth across platforms.
-- <b>Future Considerations</b>: Integration with local file paths, audio streams and other music services like Soundcloud. Real-time audio visualizations and beat detection are also being considered.
-
-## How Does It Work?
+## Database Schema
 
-Under the hood, the component is built on top of the official <a href="https://www.mixcloud.com/developers/" target="_blank">Mixcloud API</a> and <a href="https://www.mixcloud.com/developers/widget/" target="_blank">Mixcloud Widget</a>.
-
-It also utilises another custom component of mine - Dynamic Backdrop - to create a blend of videos layered with css and canvas animation effects. Videos are given random 'blend modes' so they merge with the canvas background to give various colour effects.
-
-<hr>
-
-## Props
-
-| Prop                  | Description                                                                                                                                                                                                             | Default |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `url`                 | The Mixcloud URL of the content to play <br />◦ Most URLs are supported such as playlists, users, genres, tags and individual shows/sets <br />◦ This can be a full URL or a partial Mixcloud key                       | null    |
-| `showsData`           | An array of locally stored shows data that can be used instead of a URL. <br />◦ The app utilises this for local-storage saved shows.                                                                                   | null    |
-| `backdropVideoList`   | A string array of background video URLs which appear in a random sequence during playback mode when there is no user activity                                                                                           | null    |
-| `enableBackdropVideo` | Set to `true` to show the above background videos when there is no user activity. <br />◦ The video toggle button in the UI (and local storage flag) will override this                                                 | `false` |
-| `enableUserLink`      | Set to `true` to turn the user/artist sub-title into a react-router link. (used in the deployed app)                                                                                                                    | `false` |
-| `collapsed`           | Set to `true` to minimise the player metadata and controls, in order to make space for other content. <br />◦ Used in the app for home and search page content.                                                         | `false` |
-| `activityTimeout`     | Override the timeout period of user inactivity, which then triggers an 'innactive mode' during playback to show full dynamic visuals <br/>◦ Used in the app to provide longer timeout periods in home and search pages. | `4000`  |
-| `showWidget`          | Display the official Mixcloud widget at bottom of page - with its own controls and progress bar - instead of the custom progress bar. <br />◦ The official widget does not support arrow-key navigation for TV devices. | `false` |
-| `width`               | Override the width of the player. <br/>◦ Note: full-screen is the intended user experience, with content layered over <br/>◦ You may need to modify the CSS if you override width                                       | `100%`  |
-| `height`              | Override the height of the player. <br/>◦ Note: full-screen is the intended user experience, with content layered over <br/>◦ You may need to modify the CSS if you override height                                     | `100%`  |
-| `customButtons`       | Specify a collection of [custom buttons](#custom-buttons) for the player UI <br />&nbsp; ◦ &nbsp;A set of default buttons will be used if none are specified.                                                           | `null`  |
-| `autoplay`            | Set to `false` to disable the attempt to auto-play content                                                                                                                                                              | `true`  |
-| `withExclusives`      | Set to `true` to include exclusive content from the Mixcloud API. <br />◦ Note: exclusive content is unlikely to play without further development to support Mixcloud user sign-in authentication                       | `false` |
-| `listIndex`           | Set the initial media index `number` if you have multiple shows/sets in the requested URL or local showData array                                                                                                       | `0`     |
-| `style`               | add inline CSS styles to the player                                                                                                                                                                                     | `null`  |
+### Mixes Table
+Stores mix metadata including name, category, DJ info, duration, and timestamps.
 
-<hr>
+### Tracks Table
+Stores track information including track name, artist, remix artist, start time, and timestamps.
 
-## Callback Props
+### Mix_Track_Link Table
+Links mixes to their tracks with ordering information.
 
-Callback props get fired on various player events, so you can take further actions when they occur:
+## Deployment
 
-| Prop          | Description                                                            |
-| ------------- | ---------------------------------------------------------------------- |
-| `onReady`     | Called when media is loaded and ready to play                          |
-| `onPlay`      | Called when media starts or resumes playing after pausing or buffering |
-| `onPause`     | Called when media is paused                                            |
-| `onBuffering` | Called when media starts buffering                                     |
-| `onEnded`     | Called when media finishes playing<br />&nbsp                          |
-| `onError`     | Called when an error occurs whilst attempting to play media            |
+The application is configured for deployment to Azure Web App using GitHub Actions. See `.github/workflows/main.yml` for the CI/CD pipeline configuration.
 
-<hr>
-
-## Custom Buttons
+### Build Process
+1. Install dependencies with Yarn
+2. Run build (`next build`)
+3. Run tests (Jest)
+4. Create deployment package
+5. Deploy to Azure
 
-As illustrated in the advanced demo, the player can be overridden with custom buttons. There is a selection of pre-built action types with their own icons and behaviours or you can add your own with the "custom" action type.
+### Environment Variables
+Configure the following in Azure Key Vault:
+- `NEXT_PUBLIC_DISCOGS_API_TOKEN`
+- `JWT_SECRET`
+- `NEXT_PUBLIC_API_URL`
 
-```jsx
-import { MixmotionPlayer, ButtonProps } from "mixmotion-player";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-
-const customButtons: ButtonProps[] = [
-  { action: "save", align: "right" },
-  { action: "previous", align: "center" },
-  { action: "playpause", align: "center" },
-  { action: "next", align: "center" },
-  {
-    action: "custom",
-    align: "right",
-    label: "Queue",
-    faIcon: faBars,
-    onPress: () => {
-      console.log("my custom button pressed");
-    },
-  },
-];
-
-function Demo() {
-  return <MixmotionPlayer url={url} customButtons={customButtons} />;
-}
-```
-
-| Button Props     | Description                                                                                                                                       |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `action`         | Choose from `custom` or one of the pre-built actions: `collapse`, `github`, `mixcloud`, `mute`, `next`, `playpause`, `previous`, `save`, `videos` |
-| `align`          | Alignment of the button. Choose from `left`,`center`, `right`                                                                                     |
-| `label`          | A hint text label to appear below the current button in focus. Pre-built button actions use relevent labels.                                      |
-| `faIcon`         | A font-awesome icon. Pre-built button actions use relevent icons.                                                                                 |
-| `onPress`        | Called when a button is pressed. Pre-built button actions have their own behaviours.                                                              |
-| `onRelease`      | Called when a button is released. Currently unused.                                                                                               |
-| `isSelectedFill` | Allows support of toggle behaviour (in the form of a button fill) when set to true.                                                               |
-| `disable`        | Prevents button action when set to true.                                                                                                          |
-
-<hr>
-
-## useSavedItems Hook
-
-This custom hook is used to update and retrieve shows that are favourited/liked by the user. The below snippet from the advanced demo illustrates how to load the player with local saved data.
-
-```jsx
-import { MixmotionPlayer,
-  useSavedItems,
-  ShowsDataType
-} from "./lib/MixmotionPlayer";
-
-function Demo() {
-  const { getSavedItems } = useSavedItems();
-
-  const getSavedData = useMemo(() => {
-    const savedItems = getSavedItems();
-    if (savedItems.length)
-      return {
-        label: "Saved Sets",
-        shows: savedItems.reverse(),
-      } as ShowsDataType;
-  }, [getSavedItems]);
-
-  return (
-    <MixmotionPlayer
-      showsData={getSavedData}
-    />
-  );
-}
-
-```
-
-<hr>
-
-## Modal System
-
-The project includes a powerful modal system with global state management, auto-close functionality, and smooth transitions. The modal system uses React Context and supports content switching without closing/reopening.
-
-### Basic Modal Usage
-
-```tsx
-import { useModal } from "contexts/modal";
-
-function MyComponent() {
-  const modal = useModal();
-
-  const handleOpenModal = () => {
-    modal.actions.openModal({
-      id: "notification",
-      title: "Success!",
-      component: <SuccessMessage />,
-      autoCloseTimeout: 3000 // Auto-close after 3 seconds
-    });
-  };
-
-  return <button onClick={handleOpenModal}>Show Success</button>;
-}
-```
-
-### Modal Content Switching
-
-```tsx
-// Switch between different modal contents
-const switchToSettings = () => {
-  modal.actions.switchContent({
-    id: "settings",
-    title: "Settings",
-    component: <SettingsPanel />,
-    autoCloseTimeout: 15000
-  });
-};
+## Browser Support
 
-const switchToAbout = () => {
-  modal.actions.switchContent({
-    id: "about", 
-    title: "About",
-    component: <AboutPanel />
-    // No timeout - stays open until user closes
-  });
-};
-```
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (latest)
+- Mobile browsers (iOS Safari, Chrome Mobile)
 
-### External Modal Control
+## Keyboard Controls
 
-```tsx
-// Close modal from anywhere in the app
-modal.actions.closeModal();
+- **Arrow Keys**: Navigate UI elements
+- **Space**: Play/Pause
+- **ESC**: Close modals
+- **Mouse Wheel**: Adjust volume dial
 
-// Perfect for burger menus or navigation
-const handleMenuClick = (menuItem) => {
-  if (modal.state.isOpen) {
-    // Switch content instead of closing/reopening
-    modal.actions.switchContent({
-      id: menuItem.id,
-      title: menuItem.title, 
-      component: menuItem.component,
-      autoCloseTimeout: menuItem.timeout
-    });
-  } else {
-    modal.actions.openModal({...menuItem});
-  }
-};
-```
+## Touch Controls
 
-### Features
+- **Drag Player**: Touch and drag the wood panel to reposition
+- **Resize Player**: Touch and drag the resize handle (bottom-right corner)
+- **Dial Controls**: Touch and drag dials vertically to adjust
+- **Display Panel Toggle**: Touch and drag the toggle handle to open/close
 
-- ✅ **Auto-close timeout** - Set custom timeout durations
-- ✅ **Content switching** - Change modal content without closing/reopening  
-- ✅ **Global state management** - Control modals from anywhere in the app
-- ✅ **Smooth transitions** - Fade in/out effects with scale and translate
-- ✅ **Background dimming** - Prevents interaction with background content
-- ✅ **Keyboard support** - ESC key to close
-- ✅ **Click outside to close** - Intuitive UX pattern
-- ✅ **Scrollable content** - Handles long content gracefully
+## License
 
-<hr>
+This project uses the GPLv3 License.
 
-## useStore Hook
+## Contributing
 
-For more control you can import the `useStore` custom hook to globally access player state. View the inner components like `MixmotionPlayerUI` for examples of use. The below snippet shows basic usage to get current show title and playing state:
+This is a personal project, but feedback and suggestions are welcome. Please open an issue for any bugs or feature requests.
 
-```jsx
-// 1. import useStore
-import { MixmotionPlayer, useStore } from "mixmotion-player";
+## Acknowledgments
 
-// 2. get desired state values
-const playing = useStore((s) => s.playing);
-const title = useStore((s) => s.title);
+- Built with [Next.js](https://nextjs.org/)
+- Music data from [Mixcloud API](https://www.mixcloud.com/developers/)
+- Inspired by retro hardware audio equipment design
 
-console.log("playing: state ", playing);
-console.log("Current title: ", title);
+---
 
-<MixmotionPlayer ... />;
-```
+**Live URL**: [https://steffm.azurewebsites.net](https://steffm.azurewebsites.net) (when deployed)
 
-<hr>
-
-## App Screenshots and Videos
-
-| [![https://lewhunt.github.io/mixmotion/](https://lewhunt.github.io/assets/readme/mm-player-example-03.jpg)](https://lewhunt.github.io/mixmotion/) | [![https://lewhunt.github.io/mixmotion/](https://lewhunt.github.io/assets/readme/mm-player-example-04.jpg)](https://lewhunt.github.io/mixmotion/) |
-| :-----------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------: |
-|                                                            <i>Player UI on Desktop</i>                                                            |                                                                 <i>on Mobile</i>                                                                  |
-
-&nbsp;
-
-[![https://lewhunt.github.io/mixmotion/](https://lewhunt.github.io/assets/readme/mm-player-example-02.jpg)](https://lewhunt.github.io/mixmotion/)
-
-<p align='center'><i>Search Page</i>
-
-&nbsp;
-
-[![https://lewhunt.github.io/mixmotion/](https://lewhunt.github.io/assets/readme/mm-promo-4.jpg)](https://lewhunt.github.io/mixmotion/)
-
-<p align='center'><i>Playback Mode</i>
-
-&nbsp;
-
-https://github.com/lewhunt/mixmotion/assets/9886284/fe234146-28f5-49ca-8786-d2efde7f7476
-
-<p align='center'><i>Playback Mode (example 1)</i>
-
-&nbsp;
-
-[![Mixmotion video on YouTube](https://lewhunt.github.io/assets/readme/mm-player-example.jpg)](https://www.youtube.com/watch?v=_oPRTqFwmRs)
-
-<p align='center'><i>Click to view video promo on YouTube</i>
-
-&nbsp;
-
-<br/>
-
-## Support
-
-I hope this has given a good intro to the app and component.
-
-[💬 Fire over a comment](https://github.com/lewhunt/mixmotion/issues) if you have any feedback, requests or issues 🐛
-
-[⭐ Give it a star](https://github.com/lewhunt/mixmotion) if you like the component or want to bookmark it 🙏
-
-<br/>
+**Repository**: [GitHub Repository URL]
