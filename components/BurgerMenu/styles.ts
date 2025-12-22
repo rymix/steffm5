@@ -231,6 +231,11 @@ export const StyledThemeToggleContainer = styled.div<StyledThemeToggleContainerP
   justify-content: center;
   gap: 12px;
   padding: 16px 20px;
+
+  @media (max-width: 1024px) and (orientation: landscape) {
+    padding: 4px 20px;
+    gap: 8px;
+  }
 `;
 
 interface StyledThemeButtonProps {
@@ -268,6 +273,12 @@ export const StyledThemeButton = styled.button<StyledThemeButtonProps>`
   justify-content: center;
   transition: all 0.2s ease;
 
+  @media (max-width: 1024px) and (orientation: landscape) {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
   &:hover {
     border-color: ${(props) => (props.$isActive ? "#3a8f3a" : "#4a9f4a")};
     background: ${(props) => {
@@ -300,6 +311,10 @@ export const StyledMenuFooter = styled.footer<StyledMenuFooterProps>`
     ${(props) => (props.$themeMode === "light" ? "#d0d0d0" : "#3a3a3a")};
   background: ${(props) =>
     props.$themeMode === "light" ? "#e8e8e8" : "#2a2a2a"};
+
+  @media (max-width: 1024px) and (orientation: landscape) {
+    padding: 10px 24px;
+  }
 
   p {
     margin: 0;

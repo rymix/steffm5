@@ -85,8 +85,8 @@ export const StyledMobileWoodSlats = styled.div`
     inset -1px -1px 3px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;
-  padding-left: 20px;
+  justify-content: flex-end;
+  padding-right: 20px;
   padding-top: 8px;
 
   &::before {
@@ -156,6 +156,10 @@ export const StyledMobileScreenWrapper = styled.div<ThemeProps>`
   flex-direction: column;
   background: ${(props) =>
     props.$themeMode === "dark" ? "#1a1a1a" : "#f5f5f5"};
+
+  @media (max-width: 1024px) and (orientation: landscape) {
+    display: none;
+  }
 `;
 
 export const StyledMobileScreenToggle = styled.button<{ $collapsed: boolean }>`
@@ -173,6 +177,10 @@ export const StyledMobileScreenToggle = styled.button<{ $collapsed: boolean }>`
   flex-shrink: 0;
   position: relative;
   z-index: 2;
+
+  @media (max-width: 1024px) and (orientation: landscape) {
+    display: none;
+  }
 
   &:hover {
     background: linear-gradient(180deg, #454545 0%, #505050 50%, #555555 100%);

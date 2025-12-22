@@ -358,6 +358,20 @@ const MainPlayer: React.FC = () => {
     setElementStart({ x: positionRef.current.x, y: positionRef.current.y });
   };
 
+  const handlePlayerTouchStart = (e: React.TouchEvent) => {
+    const target = e.target as HTMLElement;
+    const isWoodPanel = target.closest('[data-draggable="true"]');
+    if (!isWoodPanel) return;
+
+    if (e.touches.length === 1) {
+      const touch = e.touches[0];
+      hasUserDraggedRef.current = true;
+      setIsDraggingPlayer(true);
+      setDragStart({ x: touch.clientX, y: touch.clientY });
+      setElementStart({ x: positionRef.current.x, y: positionRef.current.y });
+    }
+  };
+
   // Button handlers
 
   const handleShuffleClick = () => {
@@ -412,6 +426,20 @@ const MainPlayer: React.FC = () => {
     };
   };
 
+  const handleResizeTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      e.stopPropagation();
+      const touch = e.touches[0];
+      hasUserDraggedRef.current = true;
+      setIsDraggingResize(true);
+      resizeStartRef.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+        scale: scale,
+      };
+    }
+  };
+
   // Initialize position centered on mount
   useEffect(() => {
     centerPlayer();
@@ -445,16 +473,51 @@ const MainPlayer: React.FC = () => {
       }
     };
 
+    const handlePlayerTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - dragStart.x;
+        const deltaY = touch.clientY - dragStart.y;
+
+        const playerWidth = 640 * scale;
+        const playerHeight = 500 * scale;
+
+        const newX = Math.max(
+          0,
+          Math.min(window.innerWidth - playerWidth, elementStart.x + deltaX),
+        );
+        const newY = Math.max(
+          0,
+          Math.min(window.innerHeight - playerHeight, elementStart.y + deltaY),
+        );
+
+        positionRef.current = { x: newX, y: newY };
+        if (playerRef.current) {
+          playerRef.current.style.transform = `scale(${scale})`;
+          playerRef.current.style.transformOrigin = "0 0";
+          playerRef.current.style.translate = `${newX}px ${newY}px`;
+        }
+      }
+    };
+
     const handlePlayerMouseUp = () => {
+      setIsDraggingPlayer(false);
+    };
+
+    const handlePlayerTouchEnd = () => {
       setIsDraggingPlayer(false);
     };
 
     document.addEventListener("mousemove", handlePlayerMouseMove);
     document.addEventListener("mouseup", handlePlayerMouseUp);
+    document.addEventListener("touchmove", handlePlayerTouchMove);
+    document.addEventListener("touchend", handlePlayerTouchEnd);
 
     return () => {
       document.removeEventListener("mousemove", handlePlayerMouseMove);
       document.removeEventListener("mouseup", handlePlayerMouseUp);
+      document.removeEventListener("touchmove", handlePlayerTouchMove);
+      document.removeEventListener("touchend", handlePlayerTouchEnd);
     };
   }, [isDraggingPlayer, dragStart, elementStart, scale]);
 
@@ -479,16 +542,42 @@ const MainPlayer: React.FC = () => {
       setScale(newScale);
     };
 
+    const handleResizeTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - resizeStartRef.current.x;
+        const deltaY = touch.clientY - resizeStartRef.current.y;
+
+        const delta = (deltaX + deltaY) / 2;
+        const scaleDelta = delta / 300;
+
+        const newScale = Math.max(
+          0.5,
+          Math.min(2, resizeStartRef.current.scale + scaleDelta),
+        );
+
+        setScale(newScale);
+      }
+    };
+
     const handleResizeMouseUp = () => {
+      setIsDraggingResize(false);
+    };
+
+    const handleResizeTouchEnd = () => {
       setIsDraggingResize(false);
     };
 
     document.addEventListener("mousemove", handleResizeMouseMove);
     document.addEventListener("mouseup", handleResizeMouseUp);
+    document.addEventListener("touchmove", handleResizeTouchMove);
+    document.addEventListener("touchend", handleResizeTouchEnd);
 
     return () => {
       document.removeEventListener("mousemove", handleResizeMouseMove);
       document.removeEventListener("mouseup", handleResizeMouseUp);
+      document.removeEventListener("touchmove", handleResizeTouchMove);
+      document.removeEventListener("touchend", handleResizeTouchEnd);
     };
   }, [isDraggingResize]);
 
@@ -629,6 +718,7 @@ const MainPlayer: React.FC = () => {
       <StyledMainPlayer
         ref={playerRef}
         onMouseDown={handlePlayerMouseDown}
+        onTouchStart={handlePlayerTouchStart}
         style={{
           transform: `scale(${scale})`,
           transformOrigin: "0 0",
@@ -720,6 +810,7 @@ const MainPlayer: React.FC = () => {
         </StyledControls>
         <StyledResizeHandle
           onMouseDown={handleResizeMouseDown}
+          onTouchStart={handleResizeTouchStart}
           title="Resize player"
         />
       </StyledMainPlayer>

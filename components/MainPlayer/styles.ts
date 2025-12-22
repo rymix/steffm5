@@ -24,7 +24,6 @@ export const StyledMainPlayer = styled.div`
   border-radius: 4px;
   overflow: hidden;
   user-select: none;
-  cursor: move;
   will-change: transform;
 `;
 
@@ -42,6 +41,7 @@ export const StyledWoodPanel = styled.div`
   box-shadow:
     inset 2px 2px 4px rgba(255, 255, 255, 0.2),
     inset -1px -1px 3px rgba(0, 0, 0, 0.3);
+  cursor: move;
 `;
 
 export const StyledHeader = styled.div`
