@@ -1,0 +1,968 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coiled Telephone Wire Physics</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #1a1a2e 0%,
+          #16213e 50%,
+          #0f3460 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        overflow: hidden;
+      }
+
+      .container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      canvas {
+        display: block;
+      }
+
+      .box {
+        position: absolute;
+        width: 120px;
+        height: 80px;
+        background: linear-gradient(145deg, #e8e8e8, #c4c4c4);
+        border-radius: 12px;
+        cursor: grab;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow:
+          0 10px 30px rgba(0, 0, 0, 0.4),
+          inset 0 2px 0 rgba(255, 255, 255, 0.5),
+          inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+        user-select: none;
+        transition: box-shadow 0.2s;
+      }
+
+      .box:active {
+        cursor: grabbing;
+        box-shadow:
+          0 5px 20px rgba(0, 0, 0, 0.5),
+          inset 0 2px 0 rgba(255, 255, 255, 0.5),
+          inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+      }
+
+      .box-label {
+        font-size: 11px;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+      }
+
+      .box-icon {
+        font-size: 28px;
+      }
+
+      .controls {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 15px 25px;
+        border-radius: 12px;
+        display: flex;
+        gap: 20px;
+        align-items: center;
+      }
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .control-group label {
+        color: #aaa;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .control-group input[type="range"] {
+        width: 120px;
+        accent-color: #e94560;
+      }
+
+      .info {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <canvas id="canvas"></canvas>
+
+      <div class="box" id="box1">
+        <span class="box-label">Unit A</span>
+        <span class="box-icon">📞</span>
+      </div>
+
+      <div class="box" id="box2">
+        <span class="box-label">Unit B</span>
+        <span class="box-icon">🔌</span>
+      </div>
+    </div>
+
+    <div class="info">
+      Drag the boxes or grab the wire itself to stretch and pull
+    </div>
+
+    <div class="controls">
+      <div class="control-group">
+        <label>Stiffness</label>
+        <input
+          type="range"
+          id="stiffness"
+          min="0.01"
+          max="0.15"
+          step="0.01"
+          value="0.06"
+        />
+      </div>
+      <div class="control-group">
+        <label>Damping</label>
+        <input
+          type="range"
+          id="damping"
+          min="0.9"
+          max="0.995"
+          step="0.005"
+          value="0.97"
+        />
+      </div>
+      <div class="control-group">
+        <label>Coil Tightness</label>
+        <input
+          type="range"
+          id="coilTightness"
+          min="0.3"
+          max="2"
+          step="0.1"
+          value="1"
+        />
+      </div>
+      <div class="control-group">
+        <label>Gravity</label>
+        <input
+          type="range"
+          id="gravity"
+          min="0"
+          max="0.5"
+          step="0.02"
+          value="0.15"
+        />
+      </div>
+      <div class="control-group">
+        <label>Wire Length</label>
+        <input
+          type="range"
+          id="wireLength"
+          min="20"
+          max="100"
+          step="5"
+          value="40"
+        />
+      </div>
+    </div>
+
+    <script>
+      // Canvas setup
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      // Physics parameters
+      let stiffness = 0.06;
+      let damping = 0.97;
+      let gravity = 0.15;
+      let coilTightness = 1;
+
+      // Wire configuration
+      let numSegments = 40;
+      const restLength = 12;
+
+      // Ferrule configuration
+      const ferruleLength = 20;
+      const ferruleWidth = 14;
+
+      // Particle class for Verlet integration
+      class Particle {
+        constructor(x, y, pinned = false) {
+          this.x = x;
+          this.y = y;
+          this.oldX = x;
+          this.oldY = y;
+          this.pinned = pinned;
+        }
+
+        update() {
+          if (this.pinned) return;
+
+          const vx = (this.x - this.oldX) * damping;
+          const vy = (this.y - this.oldY) * damping;
+
+          this.oldX = this.x;
+          this.oldY = this.y;
+
+          this.x += vx;
+          this.y += vy + gravity;
+        }
+      }
+
+      // Wire dragging state
+      let isDraggingWire = false;
+      let draggedParticleIndex = -1;
+      let wireGrabRadius = 25; // How close you need to click to grab the wire
+      let hoverParticleIndex = -1; // Track which particle we're hovering near
+
+      // Mouse position for nudge effect
+      let mouseX = -1000;
+      let mouseY = -1000;
+      const nudgeRadius = 30; // How close the mouse needs to be to trigger nudge
+      const nudgeStrength = 0.8; // How strong the jolt is
+      let hasNudged = false; // Track if we've already nudged (one-shot)
+
+      // Initialize particles
+      let particles = [];
+
+      function initParticles() {
+        particles = [];
+        const box1 = document.getElementById("box1");
+        const box2 = document.getElementById("box2");
+
+        // Cable attaches at the far end of each ferrule
+        // Box1: ferrule exits from right side
+        const startX = box1.offsetLeft + box1.offsetWidth + ferruleLength;
+        const startY = box1.offsetTop + box1.offsetHeight / 2;
+
+        // Box2: ferrule exits from left side
+        const endX = box2.offsetLeft - ferruleLength;
+        const endY = box2.offsetTop + box2.offsetHeight / 2;
+
+        for (let i = 0; i <= numSegments; i++) {
+          const t = i / numSegments;
+          const x = startX + (endX - startX) * t;
+          const y = startY + (endY - startY) * t;
+          particles.push(new Particle(x, y, i === 0 || i === numSegments));
+        }
+      }
+
+      // Constraint solver
+      function solveConstraints() {
+        // Distance constraints between adjacent particles
+        for (let iteration = 0; iteration < 5; iteration++) {
+          for (let i = 0; i < particles.length - 1; i++) {
+            const p1 = particles[i];
+            const p2 = particles[i + 1];
+
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const diff = (restLength - dist) / dist;
+
+            const offsetX = dx * diff * 0.5 * stiffness * 10;
+            const offsetY = dy * diff * 0.5 * stiffness * 10;
+
+            if (!p1.pinned) {
+              p1.x -= offsetX;
+              p1.y -= offsetY;
+            }
+            if (!p2.pinned) {
+              p2.x += offsetX;
+              p2.y += offsetY;
+            }
+          }
+        }
+      }
+
+      // Update pinned particle positions based on box positions (at ferrule ends)
+      function updatePinnedParticles() {
+        const box1 = document.getElementById("box1");
+        const box2 = document.getElementById("box2");
+
+        // Box1: cable attaches at right side ferrule end
+        particles[0].x = box1.offsetLeft + box1.offsetWidth + ferruleLength;
+        particles[0].y = box1.offsetTop + box1.offsetHeight / 2;
+        particles[0].oldX = particles[0].x;
+        particles[0].oldY = particles[0].y;
+
+        // Box2: cable attaches at left side ferrule end
+        particles[particles.length - 1].x = box2.offsetLeft - ferruleLength;
+        particles[particles.length - 1].y =
+          box2.offsetTop + box2.offsetHeight / 2;
+        particles[particles.length - 1].oldX =
+          particles[particles.length - 1].x;
+        particles[particles.length - 1].oldY =
+          particles[particles.length - 1].y;
+      }
+
+      // Apply mouse proximity nudge to particles (one-time jolt)
+      function applyMouseNudge() {
+        if (isDraggingWire || hasNudged) return; // Don't nudge while dragging or if already nudged
+
+        // Find if mouse is close to any particle
+        let closestDist = Infinity;
+        let closestIndex = -1;
+
+        for (let i = 1; i < particles.length - 1; i++) {
+          const p = particles[i];
+          const dx = p.x - mouseX;
+          const dy = p.y - mouseY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < closestDist) {
+            closestDist = dist;
+            closestIndex = i;
+          }
+        }
+
+        // If close enough, apply a one-time jolt to nearby particles
+        if (closestDist < nudgeRadius && closestIndex !== -1) {
+          hasNudged = true;
+
+          // Apply jolt to a few particles around the closest one
+          for (
+            let i = Math.max(1, closestIndex - 3);
+            i <= Math.min(particles.length - 2, closestIndex + 3);
+            i++
+          ) {
+            const p = particles[i];
+            if (p.pinned) continue;
+
+            const dx = p.x - mouseX;
+            const dy = p.y - mouseY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist > 0) {
+              // Small impulse away from mouse
+              const nx = dx / dist;
+              const ny = dy / dist;
+
+              // Jolt by adjusting oldX/oldY to create velocity
+              p.oldX -= nx * nudgeStrength;
+              p.oldY -= ny * nudgeStrength;
+            }
+          }
+        }
+      }
+
+      // Draw the coiled wire
+      function drawWire() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (particles.length < 2) return;
+
+        // Calculate total wire length for coil frequency
+        let totalLength = 0;
+        for (let i = 0; i < particles.length - 1; i++) {
+          const dx = particles[i + 1].x - particles[i].x;
+          const dy = particles[i + 1].y - particles[i].y;
+          totalLength += Math.sqrt(dx * dx + dy * dy);
+        }
+
+        // Coil parameters
+        const coilRadius = 8;
+        const coilFrequency = totalLength / (15 / coilTightness);
+
+        // Draw shadow first
+        ctx.save();
+        ctx.translate(4, 6);
+        drawCoil(coilRadius, coilFrequency, "rgba(0, 0, 0, 0.3)", 6);
+        ctx.restore();
+
+        // Draw main coil with gradient effect
+        drawCoil(coilRadius, coilFrequency, null, 5, true);
+
+        // Draw ferrules on top
+        drawFerrules();
+      }
+
+      function drawCoil(
+        radius,
+        frequency,
+        color,
+        lineWidth,
+        useGradient = false,
+      ) {
+        const points = [];
+        const coilPoints = 500;
+
+        for (let i = 0; i <= coilPoints; i++) {
+          const t = i / coilPoints;
+
+          // Find position along the particle chain
+          const segmentFloat = t * (particles.length - 1);
+          const segmentIndex = Math.floor(segmentFloat);
+          const segmentT = segmentFloat - segmentIndex;
+
+          const p1 = particles[Math.min(segmentIndex, particles.length - 1)];
+          const p2 =
+            particles[Math.min(segmentIndex + 1, particles.length - 1)];
+
+          // Interpolate position
+          const baseX = p1.x + (p2.x - p1.x) * segmentT;
+          const baseY = p1.y + (p2.y - p1.y) * segmentT;
+
+          // Calculate tangent direction
+          const dx = p2.x - p1.x;
+          const dy = p2.y - p1.y;
+          const len = Math.sqrt(dx * dx + dy * dy) || 1;
+
+          // Perpendicular vector (for coil offset)
+          const perpX = -dy / len;
+          const perpY = dx / len;
+
+          // Coil offset with sine wave
+          const coilPhase = t * frequency * Math.PI * 2;
+          const coilOffset = Math.sin(coilPhase) * radius;
+
+          // Z-depth for 3D effect (cosine gives us front/back)
+          const zDepth = Math.cos(coilPhase);
+
+          points.push({
+            x: baseX + perpX * coilOffset,
+            y: baseY + perpY * coilOffset,
+            z: zDepth,
+          });
+        }
+
+        // Sort points by depth and draw back-to-front for 3D effect
+        if (useGradient) {
+          // Draw back parts first (z < 0)
+          ctx.beginPath();
+          ctx.strokeStyle = "#1a1a1a";
+          ctx.lineWidth = lineWidth + 2;
+          ctx.lineCap = "round";
+
+          let drawing = false;
+          for (let i = 0; i < points.length; i++) {
+            if (points[i].z < 0) {
+              if (!drawing) {
+                ctx.moveTo(points[i].x, points[i].y);
+                drawing = true;
+              } else {
+                ctx.lineTo(points[i].x, points[i].y);
+              }
+            } else {
+              if (drawing) {
+                ctx.stroke();
+                ctx.beginPath();
+                drawing = false;
+              }
+            }
+          }
+          ctx.stroke();
+
+          // Draw front parts (z >= 0) with highlight
+          ctx.beginPath();
+          ctx.strokeStyle = "#3a3a3a";
+          ctx.lineWidth = lineWidth + 2;
+
+          drawing = false;
+          for (let i = 0; i < points.length; i++) {
+            if (points[i].z >= 0) {
+              if (!drawing) {
+                ctx.moveTo(points[i].x, points[i].y);
+                drawing = true;
+              } else {
+                ctx.lineTo(points[i].x, points[i].y);
+              }
+            } else {
+              if (drawing) {
+                ctx.stroke();
+                ctx.beginPath();
+                drawing = false;
+              }
+            }
+          }
+          ctx.stroke();
+
+          // Draw highlight on front
+          ctx.beginPath();
+          ctx.strokeStyle = "#5a5a5a";
+          ctx.lineWidth = lineWidth - 1;
+
+          drawing = false;
+          for (let i = 0; i < points.length; i++) {
+            if (points[i].z > 0.5) {
+              if (!drawing) {
+                ctx.moveTo(points[i].x, points[i].y);
+                drawing = true;
+              } else {
+                ctx.lineTo(points[i].x, points[i].y);
+              }
+            } else {
+              if (drawing) {
+                ctx.stroke();
+                ctx.beginPath();
+                drawing = false;
+              }
+            }
+          }
+          ctx.stroke();
+        } else {
+          // Simple solid color draw
+          ctx.beginPath();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = lineWidth;
+          ctx.lineCap = "round";
+
+          ctx.moveTo(points[0].x, points[0].y);
+          for (let i = 1; i < points.length; i++) {
+            ctx.lineTo(points[i].x, points[i].y);
+          }
+          ctx.stroke();
+        }
+      }
+
+      // Draw ferrules at box connection points
+      function drawFerrules() {
+        const box1 = document.getElementById("box1");
+        const box2 = document.getElementById("box2");
+
+        // Ferrule 1 (right side of box1, pointing right)
+        const f1x = box1.offsetLeft + box1.offsetWidth;
+        const f1y = box1.offsetTop + box1.offsetHeight / 2;
+        drawFerrule(f1x, f1y, -Math.PI / 2); // pointing right
+
+        // Ferrule 2 (left side of box2, pointing left)
+        const f2x = box2.offsetLeft;
+        const f2y = box2.offsetTop + box2.offsetHeight / 2;
+        drawFerrule(f2x, f2y, Math.PI / 2); // pointing left
+      }
+
+      function drawFerrule(x, y, rotation) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rotation);
+
+        // Shadow
+        ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+        roundedRect(3, 3, -ferruleWidth / 2, 0, ferruleWidth, ferruleLength, 4);
+        ctx.fill();
+
+        // Main ferrule body with gradient
+        const gradient = ctx.createLinearGradient(
+          -ferruleWidth / 2,
+          0,
+          ferruleWidth / 2,
+          0,
+        );
+        gradient.addColorStop(0, "#1a1a1a");
+        gradient.addColorStop(0.2, "#3d3d3d");
+        gradient.addColorStop(0.5, "#4a4a4a");
+        gradient.addColorStop(0.8, "#3d3d3d");
+        gradient.addColorStop(1, "#1a1a1a");
+
+        ctx.fillStyle = gradient;
+        roundedRect(0, 0, -ferruleWidth / 2, 0, ferruleWidth, ferruleLength, 4);
+        ctx.fill();
+
+        // Highlight line
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(-ferruleWidth / 4, 4);
+        ctx.lineTo(-ferruleWidth / 4, ferruleLength - 4);
+        ctx.stroke();
+
+        // Strain relief ridges
+        ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
+        ctx.lineWidth = 1.5;
+        const ridgeSpacing = 5;
+        const ridgeStart = ferruleLength * 0.4;
+        for (let i = 0; i < 4; i++) {
+          const ry = ridgeStart + i * ridgeSpacing;
+          ctx.beginPath();
+          ctx.moveTo(-ferruleWidth / 2 + 2, ry);
+          ctx.lineTo(ferruleWidth / 2 - 2, ry);
+          ctx.stroke();
+        }
+
+        // Top ring (where it meets the box)
+        ctx.fillStyle = "#2a2a2a";
+        roundedRect(0, 0, -ferruleWidth / 2 - 2, -2, ferruleWidth + 4, 6, 2);
+        ctx.fill();
+
+        // Bottom ring (where cable exits)
+        ctx.fillStyle = "#2a2a2a";
+        ctx.beginPath();
+        ctx.ellipse(
+          0,
+          ferruleLength,
+          ferruleWidth / 2 + 1,
+          3,
+          0,
+          0,
+          Math.PI * 2,
+        );
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      function roundedRect(offsetX, offsetY, x, y, width, height, radius) {
+        ctx.beginPath();
+        ctx.moveTo(x + offsetX + radius, y + offsetY);
+        ctx.lineTo(x + offsetX + width - radius, y + offsetY);
+        ctx.quadraticCurveTo(
+          x + offsetX + width,
+          y + offsetY,
+          x + offsetX + width,
+          y + offsetY + radius,
+        );
+        ctx.lineTo(x + offsetX + width, y + offsetY + height - radius);
+        ctx.quadraticCurveTo(
+          x + offsetX + width,
+          y + offsetY + height,
+          x + offsetX + width - radius,
+          y + offsetY + height,
+        );
+        ctx.lineTo(x + offsetX + radius, y + offsetY + height);
+        ctx.quadraticCurveTo(
+          x + offsetX,
+          y + offsetY + height,
+          x + offsetX,
+          y + offsetY + height - radius,
+        );
+        ctx.lineTo(x + offsetX, y + offsetY + radius);
+        ctx.quadraticCurveTo(
+          x + offsetX,
+          y + offsetY,
+          x + offsetX + radius,
+          y + offsetY,
+        );
+        ctx.closePath();
+      }
+
+      // Animation loop
+      function animate() {
+        updatePinnedParticles();
+        applyMouseNudge();
+
+        for (const particle of particles) {
+          particle.update();
+        }
+
+        solveConstraints();
+        drawWire();
+
+        requestAnimationFrame(animate);
+      }
+
+      // Dragging functionality
+      function makeDraggable(element) {
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        element.addEventListener("mousedown", (e) => {
+          isDragging = true;
+          offsetX = e.clientX - element.offsetLeft;
+          offsetY = e.clientY - element.offsetTop;
+          element.style.cursor = "grabbing";
+        });
+
+        element.addEventListener("touchstart", (e) => {
+          isDragging = true;
+          const touch = e.touches[0];
+          offsetX = touch.clientX - element.offsetLeft;
+          offsetY = touch.clientY - element.offsetTop;
+        });
+
+        document.addEventListener("mousemove", (e) => {
+          if (!isDragging) return;
+
+          const x = Math.max(
+            0,
+            Math.min(
+              window.innerWidth - element.offsetWidth,
+              e.clientX - offsetX,
+            ),
+          );
+          const y = Math.max(
+            0,
+            Math.min(
+              window.innerHeight - element.offsetHeight,
+              e.clientY - offsetY,
+            ),
+          );
+
+          element.style.left = x + "px";
+          element.style.top = y + "px";
+        });
+
+        document.addEventListener("touchmove", (e) => {
+          if (!isDragging) return;
+
+          const touch = e.touches[0];
+          const x = Math.max(
+            0,
+            Math.min(
+              window.innerWidth - element.offsetWidth,
+              touch.clientX - offsetX,
+            ),
+          );
+          const y = Math.max(
+            0,
+            Math.min(
+              window.innerHeight - element.offsetHeight,
+              touch.clientY - offsetY,
+            ),
+          );
+
+          element.style.left = x + "px";
+          element.style.top = y + "px";
+        });
+
+        document.addEventListener("mouseup", () => {
+          isDragging = false;
+          element.style.cursor = "grab";
+        });
+
+        document.addEventListener("touchend", () => {
+          isDragging = false;
+        });
+      }
+
+      // Control listeners
+      document.getElementById("stiffness").addEventListener("input", (e) => {
+        stiffness = parseFloat(e.target.value);
+      });
+
+      document.getElementById("damping").addEventListener("input", (e) => {
+        damping = parseFloat(e.target.value);
+      });
+
+      document.getElementById("gravity").addEventListener("input", (e) => {
+        gravity = parseFloat(e.target.value);
+      });
+
+      document
+        .getElementById("coilTightness")
+        .addEventListener("input", (e) => {
+          coilTightness = parseFloat(e.target.value);
+        });
+
+      document.getElementById("wireLength").addEventListener("input", (e) => {
+        numSegments = parseInt(e.target.value);
+        initParticles();
+      });
+
+      // Initialize
+      function init() {
+        const box1 = document.getElementById("box1");
+        const box2 = document.getElementById("box2");
+
+        // Position boxes (box1 on left, box2 on right)
+        box1.style.left = window.innerWidth / 2 - 250 + "px";
+        box1.style.top = window.innerHeight / 2 - 40 + "px";
+
+        box2.style.left = window.innerWidth / 2 + 130 + "px";
+        box2.style.top = window.innerHeight / 2 - 40 + "px";
+
+        makeDraggable(box1);
+        makeDraggable(box2);
+
+        initParticles();
+        animate();
+      }
+
+      init();
+
+      // Reinitialize on window resize
+      window.addEventListener("resize", () => {
+        resizeCanvas();
+      });
+
+      // Wire interaction - find closest particle to a point
+      function findClosestParticle(x, y) {
+        let closestIndex = -1;
+        let closestDist = Infinity;
+
+        // Skip first and last particles (they're pinned to boxes)
+        for (let i = 1; i < particles.length - 1; i++) {
+          const dx = particles[i].x - x;
+          const dy = particles[i].y - y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < closestDist) {
+            closestDist = dist;
+            closestIndex = i;
+          }
+        }
+
+        return { index: closestIndex, distance: closestDist };
+      }
+
+      // Wire mouse/touch handlers
+      canvas.addEventListener("mousedown", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const closest = findClosestParticle(x, y);
+
+        if (closest.distance < wireGrabRadius && closest.index !== -1) {
+          isDraggingWire = true;
+          draggedParticleIndex = closest.index;
+          particles[draggedParticleIndex].pinned = true;
+          hasNudged = true; // Prevent nudging while dragging
+          canvas.style.cursor = "grabbing";
+        }
+      });
+
+      canvas.addEventListener("mousemove", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        // Always track mouse position for nudge effect
+        mouseX = x;
+        mouseY = y;
+
+        if (isDraggingWire && draggedParticleIndex !== -1) {
+          // Move the grabbed particle
+          particles[draggedParticleIndex].x = x;
+          particles[draggedParticleIndex].y = y;
+          particles[draggedParticleIndex].oldX = x;
+          particles[draggedParticleIndex].oldY = y;
+          hoverParticleIndex = -1;
+        } else {
+          // Update cursor and hover state based on proximity to wire
+          const closest = findClosestParticle(x, y);
+          if (closest.distance < wireGrabRadius && closest.index !== -1) {
+            canvas.style.cursor = "grab";
+            hoverParticleIndex = closest.index;
+          } else {
+            canvas.style.cursor = "default";
+            hoverParticleIndex = -1;
+            // Reset nudge when mouse moves away from wire
+            if (closest.distance > nudgeRadius * 1.5) {
+              hasNudged = false;
+            }
+          }
+        }
+      });
+
+      canvas.addEventListener("mouseup", () => {
+        if (isDraggingWire && draggedParticleIndex !== -1) {
+          // Release the particle - it will spring back
+          particles[draggedParticleIndex].pinned = false;
+        }
+        isDraggingWire = false;
+        draggedParticleIndex = -1;
+        hoverParticleIndex = -1;
+        hasNudged = false;
+        canvas.style.cursor = "default";
+      });
+
+      canvas.addEventListener("mouseleave", () => {
+        if (isDraggingWire && draggedParticleIndex !== -1) {
+          particles[draggedParticleIndex].pinned = false;
+        }
+        isDraggingWire = false;
+        draggedParticleIndex = -1;
+        hoverParticleIndex = -1;
+        hasNudged = false;
+        canvas.style.cursor = "default";
+        // Move mouse position off-screen to stop nudging
+        mouseX = -1000;
+        mouseY = -1000;
+      });
+
+      // Touch support for wire interaction
+      canvas.addEventListener(
+        "touchstart",
+        (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const touch = e.touches[0];
+          const x = touch.clientX - rect.left;
+          const y = touch.clientY - rect.top;
+
+          const closest = findClosestParticle(x, y);
+
+          if (closest.distance < wireGrabRadius * 1.5 && closest.index !== -1) {
+            e.preventDefault();
+            isDraggingWire = true;
+            draggedParticleIndex = closest.index;
+            particles[draggedParticleIndex].pinned = true;
+            hasNudged = true; // Prevent nudging while dragging
+          }
+        },
+        { passive: false },
+      );
+
+      canvas.addEventListener(
+        "touchmove",
+        (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const touch = e.touches[0];
+          const x = touch.clientX - rect.left;
+          const y = touch.clientY - rect.top;
+
+          // Track touch position for nudge effect
+          mouseX = x;
+          mouseY = y;
+
+          if (isDraggingWire && draggedParticleIndex !== -1) {
+            e.preventDefault();
+
+            particles[draggedParticleIndex].x = x;
+            particles[draggedParticleIndex].y = y;
+            particles[draggedParticleIndex].oldX = x;
+            particles[draggedParticleIndex].oldY = y;
+          }
+        },
+        { passive: false },
+      );
+
+      canvas.addEventListener("touchend", () => {
+        if (isDraggingWire && draggedParticleIndex !== -1) {
+          particles[draggedParticleIndex].pinned = false;
+        }
+        isDraggingWire = false;
+        draggedParticleIndex = -1;
+        hasNudged = false;
+        // Reset touch position
+        mouseX = -1000;
+        mouseY = -1000;
+      });
+    </script>
+  </body>
+</html>

@@ -14,9 +14,10 @@ export const StyledDisplayDeviceWrapper = styled.div`
 `;
 
 export const StyledDisplayDevice = styled.div<{ $isOpen: boolean }>`
+  position: relative;
   width: ${({ $isOpen }) => ($isOpen ? "420px" : "0")};
   height: 100%;
-  z-index: 1000;
+  z-index: 50;
   box-shadow: ${({ $isOpen }) =>
     $isOpen ? "-4px 0 24px rgba(0, 0, 0, 0.5)" : "none"};
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -177,7 +178,7 @@ export const StyledToggleButton = styled.button<{ $isOpen: boolean }>`
   justify-content: center;
   font-size: 20px;
   color: #2a2a2a;
-  z-index: 1001;
+  z-index: 51;
   user-select: none;
 
   &:hover {

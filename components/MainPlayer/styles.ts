@@ -12,6 +12,9 @@ export const GlobalFonts = createGlobalStyle`
 `;
 
 export const StyledMainPlayer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 640px;
   height: 500px;
   z-index: 100;
@@ -21,6 +24,8 @@ export const StyledMainPlayer = styled.div`
   border-radius: 4px;
   overflow: hidden;
   user-select: none;
+  cursor: move;
+  will-change: transform;
 `;
 
 export const StyledWoodPanel = styled.div`
@@ -40,6 +45,77 @@ export const StyledWoodPanel = styled.div`
 
 export const StyledHeader = styled.div`
   height: 16px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 8px;
+`;
+
+export const StyledResetButton = styled.button`
+  width: 20px;
+  height: 12px;
+  background: #4a4a4a;
+  border: 1px solid #2a2a2a;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 8px;
+  color: #c8c8c8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: all 0.1s ease;
+
+  &:hover {
+    background: #5a5a5a;
+    box-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.15),
+      0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  &:active {
+    background: #3a3a3a;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+export const StyledResizeHandle = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background: #4a4a4a;
+  border-top: 1px solid #2a2a2a;
+  border-left: 1px solid #2a2a2a;
+  cursor: nwse-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #888;
+  user-select: none;
+  z-index: 10;
+  box-shadow:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.1),
+    -1px -1px 2px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background: #5a5a5a;
+    color: #aaa;
+  }
+
+  &:active {
+    background: #3a3a3a;
+  }
+
+  &::before {
+    content: "⋰";
+    transform: rotate(90deg);
+  }
 `;
 
 export const StyledSlats = styled.div`
