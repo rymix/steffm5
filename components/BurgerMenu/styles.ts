@@ -21,7 +21,7 @@ export const StyledBurgerButton = styled.button<StyledBurgerButtonProps>`
   position: fixed;
   top: 20px;
   left: 20px;
-  z-index: 1002; /* Above shared overlay and menu */
+  z-index: 500; /* Menu level - highest */
   width: 48px;
   height: 48px;
   background: ${(props) =>
@@ -101,7 +101,7 @@ export const StyledMenu = styled.div<StyledMenuProps>`
   background: ${(props) =>
     props.$themeMode === "light" ? "#f5f5f5" : "#1a1a1a"};
   box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
-  z-index: 1001; /* Above shared overlay, below burger button */
+  z-index: 499; /* Menu level - below burger button */
   transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   transform: ${(props) =>
     props.$isOpen ? "translateX(0)" : "translateX(-100%)"};

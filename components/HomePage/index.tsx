@@ -1,5 +1,6 @@
 import { useMixcloud } from "contexts/mixcloud";
 import { useTheme } from "contexts/theme";
+import { WindowManagerProvider } from "contexts/windowManager";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { getCategoryName, getPanelThemeMode } from "utils/themeHelpers";
 
@@ -29,7 +30,10 @@ import {
   StyledTrackRemix,
   StyledTrackTime,
 } from "@/components/DisplayDevice/styles";
+import TetrisWindow from "@/components/TetrisWindow";
 import Wallpaper from "@/components/Wallpaper";
+import WindowLauncher from "@/components/WindowLauncher";
+import ZXSpectrumWindow from "@/components/ZXSpectrumWindow";
 import MainPlayer from "components/MainPlayer";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 import { useWallpaperManager } from "hooks/useWallpaperManager";
@@ -217,7 +221,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <>
+    <WindowManagerProvider>
       <Wallpaper
         wallpaperUrl={wallpaperState.currentWallpaper}
         tileType={wallpaperState.tileType}
@@ -225,6 +229,15 @@ const HomePage: React.FC = () => {
       />
       <BurgerMenu />
       <MixcloudPlayerWrapper autoPlay={true} />
+      <WindowLauncher />
+
+      {/* Game windows - rendered at root level, only shown in desktop mode */}
+      {typeof window !== "undefined" && window.innerWidth > 1024 && (
+        <>
+          <ZXSpectrumWindow />
+          <TetrisWindow />
+        </>
+      )}
 
       <StyledLayoutWrapper>
         <StyledPlayerPage $panelOpen={isPanelOpen}>
@@ -448,7 +461,7 @@ const HomePage: React.FC = () => {
 
         <DisplayDevice isOpen={isPanelOpen} onToggle={togglePanel} />
       </StyledLayoutWrapper>
-    </>
+    </WindowManagerProvider>
   );
 };
 

@@ -1039,6 +1039,230 @@
       "tileType": "tile",
       "width": 64,
       "height": 64
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Blue Dalmation",
+      "fileName": "blue-dalmation.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Blueberry Oxygeb",
+      "fileName": "blueberry-oxygen.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Blueberry Union",
+      "fileName": "blueberry-union.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Bottles",
+      "fileName": "bottles.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Capsule",
+      "fileName": "capsule.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Flower Power",
+      "fileName": "flower-power.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Golden Poppy",
+      "fileName": "golden-poppy.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Grape Gravity",
+      "fileName": "grape-gravity.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Heavy Petal 1",
+      "fileName": "heavy-petal-1.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Heavy Petal 2",
+      "fileName": "heavy-petal-2.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Heavy Petal 3",
+      "fileName": "heavy-petal-3.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Heavy Petal 4",
+      "fileName": "heavy-petal-4.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Indigo Foam",
+      "fileName": "indigo-foam.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Lime Horizon",
+      "fileName": "lime-horizon.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Lime Sharp",
+      "fileName": "lime-sharp.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Mac OS",
+      "fileName": "mac-os-background.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Metallic Foam",
+      "fileName": "metallic-foam.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Quantum Foam",
+      "fileName": "quantum-foam.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Ruby Foam",
+      "fileName": "ruby-foam.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Sage Foam",
+      "fileName": "sage-foam.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Shutters",
+      "fileName": "shutters.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Strawberry Parabola",
+      "fileName": "strawberry-parabola.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Strawberry Baby",
+      "fileName": "strawberry-baby.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Tangerine Fusion",
+      "fileName": "tangerine-fusion.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Tangerine Melt",
+      "fileName": "tangerine-melt.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "Tub",
+      "fileName": "tub.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "UFO 1",
+      "fileName": "ufo-1.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
+    },
+    {
+      "backgroundCategory": "macos9",
+      "name": "UFO 2",
+      "fileName": "ufo-2.jpg",
+      "tileType": "stretch",
+      "width": 800,
+      "height": 600
     }
   ]
 }

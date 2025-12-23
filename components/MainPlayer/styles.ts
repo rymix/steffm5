@@ -17,7 +17,7 @@ export const StyledMainPlayer = styled.div`
   left: 0;
   width: 640px;
   height: 500px;
-  z-index: 100;
+  z-index: 300; /* Player window - below pull-out panel */
   box-shadow:
     0 12px 48px rgba(0, 0, 0, 0.5),
     0 6px 24px rgba(0, 0, 0, 0.4);
@@ -189,8 +189,9 @@ export const StyledSlats = styled.div`
   background-size: 100% 12px;
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding-left: 26px;
+  padding-right: 26px;
   padding-top: 12px;
 `;
 

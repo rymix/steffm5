@@ -74,6 +74,7 @@ const useMixcloudContextState = (
     mixProgress,
     pendingSeekPosition: null,
     shuffleMode: false,
+    temporaryMessage: null,
   });
 
   // Sync state with persisted mix progress
@@ -757,6 +758,44 @@ const useMixcloudContextState = (
     }
   }, []);
 
+  const temporaryMessageTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const showTemporaryMessage = useCallback((message: string) => {
+    // Clear any existing timeout to prevent overlapping messages
+    if (temporaryMessageTimeoutRef.current) {
+      clearTimeout(temporaryMessageTimeoutRef.current);
+    }
+
+    // Don't show if already showing the same message
+    setState((prev) => {
+      if (prev.temporaryMessage === message) {
+        return prev;
+      }
+      return { ...prev, temporaryMessage: message };
+    });
+
+    // Calculate duration based on message length
+    // Message format: padding (30) + formatted message + padding (30)
+    // Formatted message: uppercase, spaces->!, remove apostrophes
+    const formattedMessage = message
+      .toUpperCase()
+      .replace(/'/g, "")
+      .replace(/ /g, "!");
+    const DISPLAY_WIDTH = 30;
+    const TEMP_SCROLL_SPEED = 150; // ms per character scroll (faster than normal 300ms)
+
+    // Clear when the last character (end of trailing padding) exits the visible display
+    // This happens when we've scrolled: message.length + DISPLAY_WIDTH (trailing pad)
+    // The leading padding is just for the initial delay before message appears
+    const scrollsNeeded = formattedMessage.length + DISPLAY_WIDTH;
+    const duration = scrollsNeeded * TEMP_SCROLL_SPEED;
+
+    temporaryMessageTimeoutRef.current = setTimeout(() => {
+      setState((prev) => ({ ...prev, temporaryMessage: null }));
+      temporaryMessageTimeoutRef.current = null;
+    }, duration);
+  }, []);
+
   const shareCurrentMix = useCallback(() => {
     if (state.currentKey) {
       // Clean up the mix key for sharing - remove /rymixxx/ prefix and trailing slash
@@ -770,14 +809,14 @@ const useMixcloudContextState = (
       navigator.clipboard
         .writeText(shareUrl)
         .then(() => {
-          // Success - tooltip will be handled in the UI component
+          showTemporaryMessage("*** Link copied to clipboard ***");
         })
         .catch((err) => {
           console.error("Failed to copy to clipboard:", err);
-          // Could potentially emit an error event here if needed
+          showTemporaryMessage("Failed to copy link");
         });
     }
-  }, [state.currentKey]);
+  }, [state.currentKey, showTemporaryMessage]);
 
   const getMixProgress = useCallback(
     (key: string): MixProgress => {
@@ -860,6 +899,9 @@ const useMixcloudContextState = (
     const randomIndex = Math.floor(Math.random() * state.keys.length);
     const randomKey = state.keys[randomIndex];
 
+    // Show temporary message
+    showTemporaryMessage("*** Playing random mix ***");
+
     // Update state to play the random mix
     setState((prev) => ({
       ...prev,
@@ -869,11 +911,17 @@ const useMixcloudContextState = (
       position: 0,
       duration: 0,
     }));
-  }, [state.keys]);
+  }, [state.keys, showTemporaryMessage]);
 
   const toggleShuffle = useCallback(() => {
-    setState((prev) => ({ ...prev, shuffleMode: !prev.shuffleMode }));
-  }, []);
+    setState((prev) => {
+      const newShuffleMode = !prev.shuffleMode;
+      showTemporaryMessage(
+        `*** Shuffle mode ${newShuffleMode ? "on" : "off"} ***`,
+      );
+      return { ...prev, shuffleMode: newShuffleMode };
+    });
+  }, [showTemporaryMessage]);
 
   const setBackground = useCallback((background: BackgroundExtended | null) => {
     setSession((prev) => ({ ...prev, background }));
@@ -919,6 +967,7 @@ const useMixcloudContextState = (
       setBackground,
       setScale,
       setManualMode,
+      showTemporaryMessage,
     }),
     [
       play,
@@ -951,6 +1000,7 @@ const useMixcloudContextState = (
       setBackground,
       setScale,
       setManualMode,
+      showTemporaryMessage,
     ],
   );
 

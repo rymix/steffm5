@@ -58,6 +58,7 @@ export type MixcloudState = {
   mixProgress: MixProgressMap;
   pendingSeekPosition: number | null;
   shuffleMode: boolean;
+  temporaryMessage: string | null;
 };
 
 export type MixcloudActions = {
@@ -95,6 +96,7 @@ export type MixcloudActions = {
   setBackground: (_background: BackgroundExtended | null) => void;
   setScale: (_scale: Scale) => void;
   setManualMode: (_manualMode: boolean) => void;
+  showTemporaryMessage: (_message: string) => void;
 };
 
 export type MixcloudContextState = {

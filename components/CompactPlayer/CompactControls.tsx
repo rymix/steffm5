@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   StyledButton,
   StyledButtonIcon,
+  StyledButtonLabel,
   StyledButtonsContainer,
   StyledControls,
   StyledControlsPanel,
@@ -14,7 +15,6 @@ import {
   StyledModeDial,
   StyledModeDialShadow,
   StyledModeDialWrapper,
-  StyledPlayPauseButton,
   StyledVolumeDial,
   StyledVolumeDialShadow,
   StyledVolumeDialWrapper,
@@ -52,6 +52,33 @@ const CompactControls: React.FC = () => {
   // Button press states
   const [prevPressed, setPrevPressed] = useState(false);
   const [nextPressed, setNextPressed] = useState(false);
+
+  const MOMENTARY_LED_DURATION = 300;
+
+  // Button handlers
+  const handlePrevClick = () => {
+    setPrevPressed(true);
+    setTimeout(() => setPrevPressed(false), MOMENTARY_LED_DURATION);
+    actions.previous();
+  };
+
+  const handleNextClick = () => {
+    setNextPressed(true);
+    setTimeout(() => setNextPressed(false), MOMENTARY_LED_DURATION);
+    actions.next();
+  };
+
+  const handleShuffleClick = () => {
+    // TODO: Implement shuffle
+  };
+
+  const handleRandomClick = () => {
+    actions.playRandomFromCurrentList();
+  };
+
+  const handleShareClick = () => {
+    // TODO: Implement share functionality
+  };
 
   // Initialize dial position
   useEffect(() => {
@@ -312,38 +339,48 @@ const CompactControls: React.FC = () => {
 
         <StyledButtonsContainer>
           <StyledButton
-            $pressed={prevPressed}
-            onMouseDown={() => setPrevPressed(true)}
-            onMouseUp={() => setPrevPressed(false)}
-            onMouseLeave={() => setPrevPressed(false)}
-            onClick={actions.previous}
+            $iconOnly
+            onClick={handlePrevClick}
             disabled={state.keys.length <= 1}
           >
-            <StyledButtonIcon $active={prevPressed}>
+            <StyledButtonIcon $active={prevPressed} $momentary>
               <SkipPreviousIcon />
             </StyledButtonIcon>
           </StyledButton>
 
-          <StyledPlayPauseButton
+          <StyledButton
+            $iconOnly
             onClick={actions.toggle}
             disabled={state.isLoading}
           >
-            <StyledButtonIcon>
-              <PlayArrowIcon /> <PauseIcon />
+            <StyledButtonIcon $active={state.isPlaying} $isPlaying>
+              <PlayArrowIcon />
             </StyledButtonIcon>
-          </StyledPlayPauseButton>
+            <StyledButtonIcon $active={!state.isPlaying} $isPaused>
+              <PauseIcon />
+            </StyledButtonIcon>
+          </StyledButton>
 
           <StyledButton
-            $pressed={nextPressed}
-            onMouseDown={() => setNextPressed(true)}
-            onMouseUp={() => setNextPressed(false)}
-            onMouseLeave={() => setNextPressed(false)}
-            onClick={actions.next}
+            $iconOnly
+            onClick={handleNextClick}
             disabled={state.keys.length <= 1}
           >
-            <StyledButtonIcon $active={nextPressed}>
+            <StyledButtonIcon $active={nextPressed} $momentary>
               <SkipNextIcon />
             </StyledButtonIcon>
+          </StyledButton>
+
+          <StyledButton onClick={handleShuffleClick}>
+            <StyledButtonLabel>Shuffle</StyledButtonLabel>
+          </StyledButton>
+
+          <StyledButton onClick={handleRandomClick}>
+            <StyledButtonLabel>Random</StyledButtonLabel>
+          </StyledButton>
+
+          <StyledButton onClick={handleShareClick}>
+            <StyledButtonLabel>Share</StyledButtonLabel>
           </StyledButton>
         </StyledButtonsContainer>
       </StyledControls>

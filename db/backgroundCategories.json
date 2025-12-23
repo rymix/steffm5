@@ -27,6 +27,13 @@
       "folder": "wallpapers/mac/system7",
       "type": "Macintosh",
       "order": 5
+    },
+    {
+      "code": "macos9",
+      "name": "Mac OS 9",
+      "folder": "wallpapers/mac/os9",
+      "type": "Macintosh",
+      "order": 6
     }
   ]
 }

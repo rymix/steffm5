@@ -1,4 +1,18 @@
+.DS_Store
+**/.DS_Store
 .next
 .npm-cache
 node_modules
 /dist
+
+# JSSpeccy3 emulator (third-party library)
+/public/jsspeccy/
+/public/jsspeccy3.zip
+/public/__MACOSX/
+/public/CHANGELOG.md
+/public/COPYING
+/public/README.md
+/public/index.html
+
+# Tetr.js Tetris game (third-party library)
+/public/tetris/

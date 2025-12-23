@@ -9,6 +9,8 @@ export const StyledLayoutWrapper = styled.div`
   display: flex;
   align-items: stretch;
   overflow: hidden;
+  z-index: 100; /* Above launcher icons (z-index: 10) but below menu/modals */
+  pointer-events: none; /* Allow clicks to pass through to launcher icons below */
 
   @media (max-width: 1024px) {
     flex-direction: column;
@@ -22,7 +24,8 @@ export const StyledPlayerPage = styled.div<{ $panelOpen?: boolean }>`
   justify-content: center;
   overflow: hidden;
   position: relative;
-  z-index: 1;
+  z-index: auto;
+  pointer-events: none; /* Inherit from parent, allow clicks through empty space */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   width: ${({ $panelOpen }) => ($panelOpen ? "calc(100vw - 420px)" : "100vw")};
 
@@ -38,6 +41,7 @@ export const StyledDevicesContainer = styled.div`
   gap: 40px;
   align-items: center;
   justify-content: center;
+  pointer-events: auto; /* Restore pointer events for interactive player */
 
   @media (max-width: 1024px) {
     display: none;
@@ -55,6 +59,7 @@ export const StyledMobileLayout = styled.div`
     height: 100vh;
     padding: 10px 20px 20px 20px;
     overflow: hidden;
+    pointer-events: auto; /* Restore pointer events for mobile layout */
   }
 `;
 

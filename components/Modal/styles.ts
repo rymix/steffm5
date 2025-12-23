@@ -12,7 +12,7 @@ export const StyledModal = styled.div<StyledModalProps>`
   left: 50%;
   transform: translate(-50%, -50%)
     ${(props) => (props.$isOpen ? "scale(1)" : "scale(0.9) translateY(-20px)")};
-  z-index: 1000; /* Above shared overlay, below menu */
+  z-index: 460; /* Modal - above overlay, below menu */
   background: ${(props) =>
     props.$themeMode === "dark" ? "#1a1a1a" : "#f5f5f5"};
   border: 1px solid
