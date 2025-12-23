@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { getCategoryName } from "utils/themeHelpers";
 
 import PlaybackButtons from "@/components/PlaybackButtons";
 
@@ -136,6 +137,15 @@ const MainPlayer: React.FC = () => {
     }
   }, [state.filters.category, categoryValues, modeStep]);
 
+  // Detect volume mute
+  const prevVolumeRef = useRef(state.volume);
+  useEffect(() => {
+    if (prevVolumeRef.current > 0 && state.volume === 0) {
+      actions.showTemporaryMessage("*** Volume muted ***");
+    }
+    prevVolumeRef.current = state.volume;
+  }, [state.volume, actions]);
+
   // Apply category filter
   useEffect(() => {
     if (!isUserChangingDialRef.current) return;
@@ -155,6 +165,10 @@ const MainPlayer: React.FC = () => {
         ),
       );
       actions.applyFilters(cleanFilters);
+
+      // Show category change message
+      const categoryName = getCategoryName(categoryValue);
+      actions.showTemporaryMessage(`*** Category: ${categoryName} ***`);
     }
 
     isUserChangingDialRef.current = false;
@@ -249,10 +263,20 @@ const MainPlayer: React.FC = () => {
     currentMix?.name,
   ]);
 
-  const scrollText = useMemo(
-    () => (trackName + "!***!").repeat(3),
-    [trackName],
-  );
+  const scrollText = useMemo(() => {
+    if (state.temporaryMessage) {
+      // Format temporary message: uppercase, remove special chars, replace spaces with !
+      const formattedMessage = state.temporaryMessage
+        .toUpperCase()
+        .replace(/'/g, "")
+        .replace(/ /g, "!");
+
+      // Add padding to start from right and exit left (DISPLAY_WIDTH = 30)
+      const padding = "!".repeat(DISPLAY_WIDTH);
+      return padding + formattedMessage + padding;
+    }
+    return (trackName + "!***!").repeat(3);
+  }, [trackName, state.temporaryMessage]);
 
   // Volume dial handlers
   const handleVolumeMouseDown = (e: React.MouseEvent) => {
@@ -377,7 +401,7 @@ const MainPlayer: React.FC = () => {
   // Button handlers
 
   const handleShuffleClick = () => {
-    // TODO: Implement shuffle
+    actions.toggleShuffle();
     setShuffleLEDActive(!shuffleLEDActive);
   };
 
@@ -390,11 +414,12 @@ const MainPlayer: React.FC = () => {
   const handleShareClick = () => {
     setSharePressed(true);
     setTimeout(() => setSharePressed(false), MOMENTARY_LED_DURATION);
-    // TODO: Implement share functionality
+    actions.shareCurrentMix();
   };
 
   const handleResetPosition = () => {
     hasUserDraggedRef.current = false;
+    actions.showTemporaryMessage("*** Player reset ***");
 
     // Calculate center position with scale = 1
     const resetScale = 1;
@@ -639,6 +664,13 @@ const MainPlayer: React.FC = () => {
     };
   }, [centerPlayer, scale]);
 
+  // Reset scroll position when temporary message appears
+  useEffect(() => {
+    if (state.temporaryMessage) {
+      scrollPositionRef.current = 0;
+    }
+  }, [state.temporaryMessage]);
+
   // Direct DOM manipulation for display
   useEffect(() => {
     displayTextRef.current = document.querySelector(
@@ -655,8 +687,15 @@ const MainPlayer: React.FC = () => {
     let lastUpdateTime = 0;
 
     const updateDisplay = (timestamp: number) => {
-      if (timestamp - lastUpdateTime >= SCROLL_SPEED) {
-        const wrapPoint = Math.floor(scrollText.length / 3);
+      // Use faster scroll speed for temporary messages
+      const currentScrollSpeed = state.temporaryMessage ? 150 : SCROLL_SPEED;
+
+      if (timestamp - lastUpdateTime >= currentScrollSpeed) {
+        // For temporary messages, wrap at full length (no repeating pattern)
+        // For normal messages, wrap at 1/3 (repeating pattern)
+        const wrapPoint = state.temporaryMessage
+          ? scrollText.length
+          : Math.floor(scrollText.length / 3);
         scrollPositionRef.current = (scrollPositionRef.current + 1) % wrapPoint;
         lastUpdateTime = timestamp;
       }
@@ -692,7 +731,7 @@ const MainPlayer: React.FC = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [scrollText]);
+  }, [scrollText, state.temporaryMessage]);
 
   // Mouse move listeners
   useEffect(() => {

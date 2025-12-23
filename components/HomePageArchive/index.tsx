@@ -1,11 +1,10 @@
 import { useMixcloud } from "contexts/mixcloud";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 
 import BurgerMenu from "@/components/BurgerMenu";
 import Controls from "@/components/Controls";
 import CurrentMixInfo from "@/components/CurrentMixInfo";
 import FilterStatusWidget from "@/components/FilterStatusWidget";
-import MiniPlayer from "@/components/MiniPlayer";
 import ProgressBar from "@/components/ProgressBar";
 import TrackList from "@/components/TrackList";
 import VolumeControl from "@/components/VolumeControl";
@@ -13,11 +12,8 @@ import Wallpaper from "@/components/Wallpaper";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 import { useWallpaperManager } from "hooks/useWallpaperManager";
 
-import { StyledMiniPlayerToggle } from "./styles";
-
 const HomePage: React.FC = () => {
   const { state, actions } = useMixcloud();
-  const [showMiniPlayer, setShowMiniPlayer] = useState(false);
   const { wallpaperState, changeWallpaper } = useWallpaperManager();
 
   // Track previous values to detect changes
@@ -131,13 +127,6 @@ const HomePage: React.FC = () => {
       <div className="container">
         <h1>Stef.FM</h1>
         <FilterStatusWidget />
-        <StyledMiniPlayerToggle
-          onClick={() => setShowMiniPlayer(!showMiniPlayer)}
-          $isActive={showMiniPlayer}
-          title="Toggle Mini Player"
-        >
-          {showMiniPlayer ? "🎵 Hide Mini Player" : "🎵 Show Mini Player"}
-        </StyledMiniPlayerToggle>
         <MixcloudPlayerWrapper autoPlay={true} />
         <Controls />
         <ProgressBar />
@@ -145,11 +134,6 @@ const HomePage: React.FC = () => {
         <CurrentMixInfo />
         <TrackList />
       </div>
-
-      <MiniPlayer
-        isVisible={showMiniPlayer}
-        onToggleVisibility={() => setShowMiniPlayer(false)}
-      />
     </>
   );
 };
