@@ -58,4 +58,21 @@ export const StyledWallpaper = styled.div<{
     `
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   `}
+
+  /* Subtle vignette overlay */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) 50%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+    pointer-events: none;
+  }
 `;
