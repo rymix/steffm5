@@ -1,15 +1,10 @@
 import { useMixcloud } from "contexts/mixcloud";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { getCategoryName } from "utils/themeHelpers";
 
 import MixcloudConnected from "@/components/MixcloudConnected";
 import PlaybackButtons from "@/components/PlaybackButtons";
+import { useDraggableWindow } from "hooks/useDraggableWindow";
 
 import {
   GlobalFonts,
@@ -73,19 +68,30 @@ const MainPlayer: React.FC = () => {
   const [randomPressed, setRandomPressed] = useState<boolean>(false);
   const [sharePressed, setSharePressed] = useState<boolean>(false);
 
-  // Player drag states
-  const positionRef = useRef({ x: 0, y: 0 });
-  const [isDraggingPlayer, setIsDraggingPlayer] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [elementStart, setElementStart] = useState({ x: 0, y: 0 });
-  const playerRef = useRef<HTMLDivElement>(null);
-  const hasUserDraggedRef = useRef(false);
-  const previousLayoutRef = useRef<"mobile" | "desktop">("desktop");
+  // Draggable window functionality
+  const {
+    windowRef: playerRef,
+    scale: _scale,
+    isDragging: _isDraggingPlayer,
+    isResizing: _isDraggingResize,
+    handleMouseDown: handlePlayerMouseDown,
+    handleTouchStart: handlePlayerTouchStart,
+    handleResizeMouseDown,
+    handleResizeTouchStart,
+    resetWindow: handleResetPosition,
+  } = useDraggableWindow({
+    width: 640,
+    height: 500,
+    initialScale: 1.0,
+    minScale: 0.5,
+    maxScale: 2.0,
+    autoCenter: true,
+    onReset: () => {
+      actions.showTemporaryMessage("*** Player reset ***");
+    },
+  });
 
-  // Player resize states
-  const [scale, setScale] = useState(1);
-  const [isDraggingResize, setIsDraggingResize] = useState(false);
-  const resizeStartRef = useRef({ x: 0, y: 0, scale: 1 });
+  const previousLayoutRef = useRef<"mobile" | "desktop">("desktop");
 
   // Dial refs
   const isDraggingVolumeRef = useRef(false);
@@ -356,49 +362,6 @@ const MainPlayer: React.FC = () => {
     setModeStep(newStep);
   };
 
-  // Center player function
-  const centerPlayer = useCallback(() => {
-    const playerWidth = 640 * scale;
-    const playerHeight = 500 * scale;
-
-    positionRef.current = {
-      x: (window.innerWidth - playerWidth) / 2,
-      y: (window.innerHeight - playerHeight) / 2,
-    };
-    if (playerRef.current) {
-      playerRef.current.style.transform = `scale(${scale})`;
-      playerRef.current.style.transformOrigin = "0 0";
-      playerRef.current.style.translate = `${positionRef.current.x}px ${positionRef.current.y}px`;
-    }
-  }, [scale]);
-
-  // Player drag handlers
-  const handlePlayerMouseDown = (e: React.MouseEvent) => {
-    const target = e.target as HTMLElement;
-    const isWoodPanel = target.closest('[data-draggable="true"]');
-    if (!isWoodPanel) return;
-
-    e.preventDefault();
-    hasUserDraggedRef.current = true;
-    setIsDraggingPlayer(true);
-    setDragStart({ x: e.clientX, y: e.clientY });
-    setElementStart({ x: positionRef.current.x, y: positionRef.current.y });
-  };
-
-  const handlePlayerTouchStart = (e: React.TouchEvent) => {
-    const target = e.target as HTMLElement;
-    const isWoodPanel = target.closest('[data-draggable="true"]');
-    if (!isWoodPanel) return;
-
-    if (e.touches.length === 1) {
-      const touch = e.touches[0];
-      hasUserDraggedRef.current = true;
-      setIsDraggingPlayer(true);
-      setDragStart({ x: touch.clientX, y: touch.clientY });
-      setElementStart({ x: positionRef.current.x, y: positionRef.current.y });
-    }
-  };
-
   // Button handlers
 
   const handleShuffleClick = () => {
@@ -418,252 +381,25 @@ const MainPlayer: React.FC = () => {
     actions.shareCurrentMix();
   };
 
-  const handleResetPosition = () => {
-    hasUserDraggedRef.current = false;
-    actions.showTemporaryMessage("*** Player reset ***");
-
-    // Calculate center position with scale = 1
-    const resetScale = 1;
-    const playerWidth = 640 * resetScale;
-    const playerHeight = 500 * resetScale;
-
-    positionRef.current = {
-      x: (window.innerWidth - playerWidth) / 2,
-      y: (window.innerHeight - playerHeight) / 2,
-    };
-
-    setScale(resetScale);
-
-    if (playerRef.current) {
-      playerRef.current.style.transform = `scale(${resetScale})`;
-      playerRef.current.style.transformOrigin = "0 0";
-      playerRef.current.style.translate = `${positionRef.current.x}px ${positionRef.current.y}px`;
-    }
-  };
-
-  // Resize handle handlers
-  const handleResizeMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    hasUserDraggedRef.current = true; // Mark as user-interacted to prevent auto-centering
-    setIsDraggingResize(true);
-    resizeStartRef.current = {
-      x: e.clientX,
-      y: e.clientY,
-      scale: scale,
-    };
-  };
-
-  const handleResizeTouchStart = (e: React.TouchEvent) => {
-    if (e.touches.length === 1) {
-      e.stopPropagation();
-      const touch = e.touches[0];
-      hasUserDraggedRef.current = true;
-      setIsDraggingResize(true);
-      resizeStartRef.current = {
-        x: touch.clientX,
-        y: touch.clientY,
-        scale: scale,
-      };
-    }
-  };
-
-  // Initialize position centered on mount
-  useEffect(() => {
-    centerPlayer();
-  }, []); // Only run on mount
-
-  // Player drag effect - direct DOM manipulation for performance
-  useEffect(() => {
-    if (!isDraggingPlayer) return;
-
-    const handlePlayerMouseMove = (e: MouseEvent) => {
-      const deltaX = e.clientX - dragStart.x;
-      const deltaY = e.clientY - dragStart.y;
-
-      const playerWidth = 640 * scale;
-      const playerHeight = 500 * scale;
-
-      const newX = Math.max(
-        0,
-        Math.min(window.innerWidth - playerWidth, elementStart.x + deltaX),
-      );
-      const newY = Math.max(
-        0,
-        Math.min(window.innerHeight - playerHeight, elementStart.y + deltaY),
-      );
-
-      positionRef.current = { x: newX, y: newY };
-      if (playerRef.current) {
-        playerRef.current.style.transform = `scale(${scale})`;
-        playerRef.current.style.transformOrigin = "0 0";
-        playerRef.current.style.translate = `${newX}px ${newY}px`;
-      }
-    };
-
-    const handlePlayerTouchMove = (e: TouchEvent) => {
-      if (e.touches.length === 1) {
-        const touch = e.touches[0];
-        const deltaX = touch.clientX - dragStart.x;
-        const deltaY = touch.clientY - dragStart.y;
-
-        const playerWidth = 640 * scale;
-        const playerHeight = 500 * scale;
-
-        const newX = Math.max(
-          0,
-          Math.min(window.innerWidth - playerWidth, elementStart.x + deltaX),
-        );
-        const newY = Math.max(
-          0,
-          Math.min(window.innerHeight - playerHeight, elementStart.y + deltaY),
-        );
-
-        positionRef.current = { x: newX, y: newY };
-        if (playerRef.current) {
-          playerRef.current.style.transform = `scale(${scale})`;
-          playerRef.current.style.transformOrigin = "0 0";
-          playerRef.current.style.translate = `${newX}px ${newY}px`;
-        }
-      }
-    };
-
-    const handlePlayerMouseUp = () => {
-      setIsDraggingPlayer(false);
-    };
-
-    const handlePlayerTouchEnd = () => {
-      setIsDraggingPlayer(false);
-    };
-
-    document.addEventListener("mousemove", handlePlayerMouseMove);
-    document.addEventListener("mouseup", handlePlayerMouseUp);
-    document.addEventListener("touchmove", handlePlayerTouchMove);
-    document.addEventListener("touchend", handlePlayerTouchEnd);
-
-    return () => {
-      document.removeEventListener("mousemove", handlePlayerMouseMove);
-      document.removeEventListener("mouseup", handlePlayerMouseUp);
-      document.removeEventListener("touchmove", handlePlayerTouchMove);
-      document.removeEventListener("touchend", handlePlayerTouchEnd);
-    };
-  }, [isDraggingPlayer, dragStart, elementStart, scale]);
-
-  // Resize drag effect
-  useEffect(() => {
-    if (!isDraggingResize) return;
-
-    const handleResizeMouseMove = (e: MouseEvent) => {
-      const deltaX = e.clientX - resizeStartRef.current.x;
-      const deltaY = e.clientY - resizeStartRef.current.y;
-
-      // Average horizontal and vertical drag for diagonal scaling
-      const delta = (deltaX + deltaY) / 2;
-      const scaleDelta = delta / 300; // Sensitivity factor
-
-      const newScale = Math.max(
-        0.5,
-        Math.min(2, resizeStartRef.current.scale + scaleDelta),
-      );
-
-      // Just update scale - position stays the same, top-left stays anchored
-      setScale(newScale);
-    };
-
-    const handleResizeTouchMove = (e: TouchEvent) => {
-      if (e.touches.length === 1) {
-        const touch = e.touches[0];
-        const deltaX = touch.clientX - resizeStartRef.current.x;
-        const deltaY = touch.clientY - resizeStartRef.current.y;
-
-        const delta = (deltaX + deltaY) / 2;
-        const scaleDelta = delta / 300;
-
-        const newScale = Math.max(
-          0.5,
-          Math.min(2, resizeStartRef.current.scale + scaleDelta),
-        );
-
-        setScale(newScale);
-      }
-    };
-
-    const handleResizeMouseUp = () => {
-      setIsDraggingResize(false);
-    };
-
-    const handleResizeTouchEnd = () => {
-      setIsDraggingResize(false);
-    };
-
-    document.addEventListener("mousemove", handleResizeMouseMove);
-    document.addEventListener("mouseup", handleResizeMouseUp);
-    document.addEventListener("touchmove", handleResizeTouchMove);
-    document.addEventListener("touchend", handleResizeTouchEnd);
-
-    return () => {
-      document.removeEventListener("mousemove", handleResizeMouseMove);
-      document.removeEventListener("mouseup", handleResizeMouseUp);
-      document.removeEventListener("touchmove", handleResizeTouchMove);
-      document.removeEventListener("touchend", handleResizeTouchEnd);
-    };
-  }, [isDraggingResize]);
-
-  // Keep player in bounds on window resize, recenter on breakpoint change
+  // Track layout changes for responsive behavior
   useEffect(() => {
     const handleResize = () => {
-      const playerWidth = 640 * scale;
-      const playerHeight = 500 * scale;
       const isMobile = window.innerWidth <= 1024;
       const currentLayout = isMobile ? "mobile" : "desktop";
 
       // Check if layout changed (breakpoint crossed)
       if (currentLayout !== previousLayoutRef.current) {
         previousLayoutRef.current = currentLayout;
-        // Reset size and position when switching from responsive to regular
-        if (currentLayout === "desktop") {
-          hasUserDraggedRef.current = false;
-          setScale(1);
-          centerPlayer();
-          return;
-        }
-      }
-
-      // If user hasn't dragged yet, keep centered
-      if (!hasUserDraggedRef.current) {
-        centerPlayer();
-        return;
-      }
-
-      // Otherwise, constrain to bounds
-      const constrainedX = Math.max(
-        0,
-        Math.min(window.innerWidth - playerWidth, positionRef.current.x),
-      );
-      const constrainedY = Math.max(
-        0,
-        Math.min(window.innerHeight - playerHeight, positionRef.current.y),
-      );
-
-      if (
-        constrainedX !== positionRef.current.x ||
-        constrainedY !== positionRef.current.y
-      ) {
-        positionRef.current = { x: constrainedX, y: constrainedY };
-        if (playerRef.current) {
-          playerRef.current.style.transform = `scale(${scale})`;
-          playerRef.current.style.transformOrigin = "0 0";
-          playerRef.current.style.translate = `${constrainedX}px ${constrainedY}px`;
-        }
       }
     };
 
     window.addEventListener("resize", handleResize);
+    handleResize(); // Check on mount
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [centerPlayer, scale]);
+  }, []);
 
   // Reset scroll position when temporary message appears
   useEffect(() => {
@@ -761,11 +497,6 @@ const MainPlayer: React.FC = () => {
         ref={playerRef}
         onMouseDown={handlePlayerMouseDown}
         onTouchStart={handlePlayerTouchStart}
-        style={{
-          transform: `scale(${scale})`,
-          transformOrigin: "0 0",
-          translate: `${positionRef.current.x}px ${positionRef.current.y}px`,
-        }}
       >
         <StyledWoodPanel data-draggable="true">
           <StyledSlats>

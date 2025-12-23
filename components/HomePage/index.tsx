@@ -29,6 +29,7 @@ import {
   StyledTrackRemix,
   StyledTrackTime,
 } from "@/components/DisplayDevice/styles";
+import DummyWindow from "@/components/DummyWindow";
 import Wallpaper from "@/components/Wallpaper";
 import MainPlayer from "components/MainPlayer";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
@@ -231,6 +232,7 @@ const HomePage: React.FC = () => {
           {/* Desktop Layout */}
           <StyledDevicesContainer>
             <MainPlayer />
+            <DummyWindow />
           </StyledDevicesContainer>
 
           {/* Mobile Layout */}
