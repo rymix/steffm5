@@ -1,5 +1,6 @@
 import { useMixcloud } from "contexts/mixcloud";
 import { useTheme } from "contexts/theme";
+import { WindowManagerProvider } from "contexts/windowManager";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { getCategoryName, getPanelThemeMode } from "utils/themeHelpers";
 
@@ -30,7 +31,9 @@ import {
   StyledTrackTime,
 } from "@/components/DisplayDevice/styles";
 import DummyWindow from "@/components/DummyWindow";
+import DummyWindow2 from "@/components/DummyWindow2";
 import Wallpaper from "@/components/Wallpaper";
+import WindowLauncher from "@/components/WindowLauncher";
 import MainPlayer from "components/MainPlayer";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 import { useWallpaperManager } from "hooks/useWallpaperManager";
@@ -218,7 +221,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <>
+    <WindowManagerProvider>
       <Wallpaper
         wallpaperUrl={wallpaperState.currentWallpaper}
         tileType={wallpaperState.tileType}
@@ -226,6 +229,7 @@ const HomePage: React.FC = () => {
       />
       <BurgerMenu />
       <MixcloudPlayerWrapper autoPlay={true} />
+      <WindowLauncher />
 
       <StyledLayoutWrapper>
         <StyledPlayerPage $panelOpen={isPanelOpen}>
@@ -233,6 +237,7 @@ const HomePage: React.FC = () => {
           <StyledDevicesContainer>
             <MainPlayer />
             <DummyWindow />
+            <DummyWindow2 />
           </StyledDevicesContainer>
 
           {/* Mobile Layout */}
@@ -450,7 +455,7 @@ const HomePage: React.FC = () => {
 
         <DisplayDevice isOpen={isPanelOpen} onToggle={togglePanel} />
       </StyledLayoutWrapper>
-    </>
+    </WindowManagerProvider>
   );
 };
 
