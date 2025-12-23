@@ -32,6 +32,7 @@ import {
 } from "@/components/DisplayDevice/styles";
 import DummyWindow from "@/components/DummyWindow";
 import DummyWindow2 from "@/components/DummyWindow2";
+import TetrisWindow from "@/components/TetrisWindow";
 import Wallpaper from "@/components/Wallpaper";
 import WindowLauncher from "@/components/WindowLauncher";
 import ZXSpectrumWindow from "@/components/ZXSpectrumWindow";
@@ -240,6 +241,7 @@ const HomePage: React.FC = () => {
             <DummyWindow />
             <DummyWindow2 />
             <ZXSpectrumWindow />
+            <TetrisWindow />
           </StyledDevicesContainer>
 
           {/* Mobile Layout */}
