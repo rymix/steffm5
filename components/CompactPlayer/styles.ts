@@ -420,26 +420,28 @@ export const StyledDialLabel = styled.div.attrs<{
 `;
 
 export const StyledButtonsContainer = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
   flex-shrink: 0;
   order: 1;
   width: 100%;
-  justify-content: center;
+  max-width: 280px;
 
   @media (min-width: 520px) {
     order: 3;
-    width: auto;
-    justify-content: flex-start;
   }
 `;
 
-export const StyledButton = styled.button<{ $pressed?: boolean }>`
+export const StyledButton = styled.button<{
+  $pressed?: boolean;
+  $iconOnly?: boolean;
+}>`
   position: relative;
-  width: 56px;
-  height: 32px;
-  padding: 0;
+  width: 100%;
+  min-width: ${(props) => (props.$iconOnly ? "40px" : "60px")};
+  height: ${(props) => (props.$iconOnly ? "38px" : "30px")};
+  padding: 2px;
   border: 1px solid rgba(0, 0, 0, 0.4);
   border-radius: 2px;
   background: #8a8a8a;
@@ -459,8 +461,10 @@ export const StyledButton = styled.button<{ $pressed?: boolean }>`
   cursor: pointer;
   transition: all 0.04s ease;
   display: flex;
+  flex-direction: ${(props) => (props.$iconOnly ? "row" : "column")};
   align-items: center;
   justify-content: center;
+  gap: ${(props) => (props.$iconOnly ? "4px" : "2px")};
   font-size: 14px;
 
   &:active {
@@ -476,25 +480,47 @@ export const StyledButton = styled.button<{ $pressed?: boolean }>`
   }
 `;
 
-export const StyledButtonIcon = styled.div.attrs<{ $active?: boolean }>(
-  ({ $active }) => ({
-    style: {
-      color: $active ? "#ff3333" : "#3a0000",
-      textShadow: $active
-        ? "0 0 8px #ff3333, 0 0 3px #ff0000, inset 0 0.5px 1px rgba(255, 255, 255, 0.6)"
-        : "none",
-    },
-  }),
-)<{ $active?: boolean }>`
-  font-size: 16px;
-  height: 18px;
+export const StyledButtonIcon = styled.div<{
+  $active?: boolean;
+  $momentary?: boolean;
+  $isPlaying?: boolean;
+  $isPaused?: boolean;
+}>`
+  font-size: 12px;
+  color: ${(props) => {
+    if (props.$momentary && props.$active) return "#ff3333";
+    if (props.$isPlaying && props.$active) return "#33ff33";
+    if (props.$isPaused && props.$active) return "#ffaa00";
+    return "#2a2a2a";
+  }};
+  height: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 2px;
+  filter: ${(props) => {
+    if (props.$momentary && props.$active)
+      return "drop-shadow(0 0 4px #ff3333) drop-shadow(0 0 2px #ff0000)";
+    if (props.$isPlaying && props.$active)
+      return "drop-shadow(0 0 4px #33ff33) drop-shadow(0 0 2px #00ff00)";
+    if (props.$isPaused && props.$active)
+      return "drop-shadow(0 0 4px #ffaa00) drop-shadow(0 0 2px #ff8800)";
+    return "none";
+  }};
   transition: all 0.15s ease;
+
+  svg {
+    font-size: 16px;
+  }
 `;
 
-export const StyledPlayPauseButton = styled(StyledButton)`
-  width: 70px;
-  gap: 8px;
+export const StyledButtonLabel = styled.div`
+  font-size: 6.5px;
+  font-weight: bold;
+  color: #2a2a2a;
+  text-transform: uppercase;
+  letter-spacing: 0.1px;
+  text-align: center;
+  line-height: 1;
+  white-space: nowrap;
 `;
