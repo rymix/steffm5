@@ -37,6 +37,7 @@ const TetrisWindow: React.FC = () => {
     initiallyOpen: false,
     windowLabel: "Tetris",
     windowIcon: "🧱",
+    resizeMode: "dimensions",
   });
 
   if (!isVisible) return null;
@@ -62,7 +63,11 @@ const TetrisWindow: React.FC = () => {
           </StyledResetButton>
         </div>
       </StyledHeader>
-      <StyledIframe src="/tetris/index.html" title="Tetris Game" />
+      <StyledIframe
+        src="/tetris/index.html"
+        title="Tetris Game"
+        $isResizing={isResizing}
+      />
       <StyledResizeHandle
         onMouseDown={handleResizeMouseDown}
         onTouchStart={handleResizeTouchStart}

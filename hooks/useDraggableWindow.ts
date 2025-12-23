@@ -99,6 +99,13 @@ export interface UseDraggableWindowOptions {
    * Callback when window is opened
    */
   onOpen?: () => void;
+
+  /**
+   * Resize mode: "scale" uses CSS transform (better for canvas/DOM),
+   * "dimensions" changes actual width/height (better for iframes)
+   * (default: "scale")
+   */
+  resizeMode?: "scale" | "dimensions";
 }
 
 export interface UseDraggableWindowReturn {
@@ -151,6 +158,7 @@ export const useDraggableWindow = (
     onReset,
     onClose,
     onOpen,
+    resizeMode = "scale",
   } = options;
 
   // Window manager (optional - only if provider exists)
@@ -172,6 +180,7 @@ export const useDraggableWindow = (
 
   // State
   const [scale, setScale] = useState(initialScale);
+  const [dimensions, setDimensions] = useState({ width, height });
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -180,12 +189,20 @@ export const useDraggableWindow = (
     startOnTop ? getTopZIndex() : getNextZIndex(),
   );
   const [isVisible, setIsVisible] = useState(initiallyOpen);
-  const resizeStartRef = useRef({ x: 0, y: 0, scale: initialScale });
+  const resizeStartRef = useRef({
+    x: 0,
+    y: 0,
+    scale: initialScale,
+    width,
+    height,
+  });
 
   // Center the window
   const centerWindow = useCallback(() => {
-    const windowWidth = width * scale;
-    const windowHeight = height * scale;
+    const windowWidth =
+      resizeMode === "scale" ? width * scale : dimensions.width;
+    const windowHeight =
+      resizeMode === "scale" ? height * scale : dimensions.height;
 
     positionRef.current = {
       x: (window.innerWidth - windowWidth) / 2,
@@ -193,19 +210,25 @@ export const useDraggableWindow = (
     };
 
     if (windowRef.current) {
-      windowRef.current.style.transform = `scale(${scale})`;
-      windowRef.current.style.transformOrigin = "0 0";
+      if (resizeMode === "scale") {
+        windowRef.current.style.transform = `scale(${scale})`;
+        windowRef.current.style.transformOrigin = "0 0";
+      } else {
+        windowRef.current.style.width = `${dimensions.width}px`;
+        windowRef.current.style.height = `${dimensions.height}px`;
+      }
       windowRef.current.style.translate = `${positionRef.current.x}px ${positionRef.current.y}px`;
     }
-  }, [width, height, scale]);
+  }, [width, height, scale, dimensions, resizeMode]);
 
   // Reset window to initial state
   const resetWindow = useCallback(() => {
     hasUserInteractedRef.current = false;
 
     const resetScale = initialScale;
-    const windowWidth = width * resetScale;
-    const windowHeight = height * resetScale;
+    const resetDimensions = { width, height };
+    const windowWidth = resizeMode === "scale" ? width * resetScale : width;
+    const windowHeight = resizeMode === "scale" ? height * resetScale : height;
 
     // Use defaultPosition if provided, otherwise center
     if (defaultPosition) {
@@ -218,15 +241,21 @@ export const useDraggableWindow = (
     }
 
     setScale(resetScale);
+    setDimensions(resetDimensions);
 
     if (windowRef.current) {
-      windowRef.current.style.transform = `scale(${resetScale})`;
-      windowRef.current.style.transformOrigin = "0 0";
+      if (resizeMode === "scale") {
+        windowRef.current.style.transform = `scale(${resetScale})`;
+        windowRef.current.style.transformOrigin = "0 0";
+      } else {
+        windowRef.current.style.width = `${width}px`;
+        windowRef.current.style.height = `${height}px`;
+      }
       windowRef.current.style.translate = `${positionRef.current.x}px ${positionRef.current.y}px`;
     }
 
     onReset?.();
-  }, [width, height, initialScale, defaultPosition, onReset]);
+  }, [width, height, initialScale, defaultPosition, onReset, resizeMode]);
 
   // Bring window to front
   const bringToFront = useCallback(() => {
@@ -248,14 +277,27 @@ export const useDraggableWindow = (
 
     // Apply the stored position to the element when reopening
     if (windowRef.current) {
-      windowRef.current.style.transform = `scale(${scale})`;
-      windowRef.current.style.transformOrigin = "0 0";
+      if (resizeMode === "scale") {
+        windowRef.current.style.transform = `scale(${scale})`;
+        windowRef.current.style.transformOrigin = "0 0";
+      } else {
+        windowRef.current.style.width = `${dimensions.width}px`;
+        windowRef.current.style.height = `${dimensions.height}px`;
+      }
       windowRef.current.style.translate = `${positionRef.current.x}px ${positionRef.current.y}px`;
     }
 
     windowManager?.updateWindow(windowId, { isVisible: true });
     onOpen?.();
-  }, [bringToFront, onOpen, windowManager, windowId, scale]);
+  }, [
+    bringToFront,
+    onOpen,
+    windowManager,
+    windowId,
+    scale,
+    dimensions,
+    resizeMode,
+  ]);
 
   // Drag handlers
   const handleMouseDown = (_e: React.MouseEvent) => {
@@ -301,6 +343,8 @@ export const useDraggableWindow = (
       x: _e.clientX,
       y: _e.clientY,
       scale: scale,
+      width: dimensions.width,
+      height: dimensions.height,
     };
   };
 
@@ -315,6 +359,8 @@ export const useDraggableWindow = (
         x: touch.clientX,
         y: touch.clientY,
         scale: scale,
+        width: dimensions.width,
+        height: dimensions.height,
       };
     }
   };
@@ -351,8 +397,13 @@ export const useDraggableWindow = (
     } else if (defaultPosition) {
       positionRef.current = { ...defaultPosition };
       if (windowRef.current) {
-        windowRef.current.style.transform = `scale(${initialScale})`;
-        windowRef.current.style.transformOrigin = "0 0";
+        if (resizeMode === "scale") {
+          windowRef.current.style.transform = `scale(${initialScale})`;
+          windowRef.current.style.transformOrigin = "0 0";
+        } else {
+          windowRef.current.style.width = `${width}px`;
+          windowRef.current.style.height = `${height}px`;
+        }
         windowRef.current.style.translate = `${defaultPosition.x}px ${defaultPosition.y}px`;
       }
     }
@@ -361,11 +412,16 @@ export const useDraggableWindow = (
   // Apply position when window becomes visible (for reopening)
   useEffect(() => {
     if (isVisible && windowRef.current) {
-      windowRef.current.style.transform = `scale(${scale})`;
-      windowRef.current.style.transformOrigin = "0 0";
+      if (resizeMode === "scale") {
+        windowRef.current.style.transform = `scale(${scale})`;
+        windowRef.current.style.transformOrigin = "0 0";
+      } else {
+        windowRef.current.style.width = `${dimensions.width}px`;
+        windowRef.current.style.height = `${dimensions.height}px`;
+      }
       windowRef.current.style.translate = `${positionRef.current.x}px ${positionRef.current.y}px`;
     }
-  }, [isVisible, scale]);
+  }, [isVisible, scale, dimensions, resizeMode]);
 
   // Handle drag movement
   useEffect(() => {
@@ -400,8 +456,10 @@ export const useDraggableWindow = (
       }
 
       positionRef.current = { x: newX, y: newY };
-      windowRef.current.style.transform = `scale(${scale})`;
-      windowRef.current.style.transformOrigin = "0 0";
+      if (resizeMode === "scale") {
+        windowRef.current.style.transform = `scale(${scale})`;
+        windowRef.current.style.transformOrigin = "0 0";
+      }
       windowRef.current.style.translate = `${newX}px ${newY}px`;
     };
 
@@ -437,8 +495,10 @@ export const useDraggableWindow = (
         }
 
         positionRef.current = { x: newX, y: newY };
-        windowRef.current.style.transform = `scale(${scale})`;
-        windowRef.current.style.transformOrigin = "0 0";
+        if (resizeMode === "scale") {
+          windowRef.current.style.transform = `scale(${scale})`;
+          windowRef.current.style.transformOrigin = "0 0";
+        }
         windowRef.current.style.translate = `${newX}px ${newY}px`;
       }
     };
@@ -457,7 +517,7 @@ export const useDraggableWindow = (
       document.removeEventListener("touchmove", handleTouchMove);
       document.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [isDragging, dragStart, elementStart, scale, width, height]);
+  }, [isDragging, dragStart, elementStart, scale, width, height, resizeMode]);
 
   // Handle resize movement
   useEffect(() => {
@@ -467,24 +527,8 @@ export const useDraggableWindow = (
       const deltaX = e.clientX - resizeStartRef.current.x;
       const deltaY = e.clientY - resizeStartRef.current.y;
 
-      // Average horizontal and vertical drag for diagonal scaling
-      const delta = (deltaX + deltaY) / 2;
-      const scaleDelta = delta / resizeSensitivity;
-
-      const newScale = Math.max(
-        minScale,
-        Math.min(maxScale, resizeStartRef.current.scale + scaleDelta),
-      );
-
-      setScale(newScale);
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length === 1) {
-        const touch = e.touches[0];
-        const deltaX = touch.clientX - resizeStartRef.current.x;
-        const deltaY = touch.clientY - resizeStartRef.current.y;
-
+      if (resizeMode === "scale") {
+        // Average horizontal and vertical drag for diagonal scaling
         const delta = (deltaX + deltaY) / 2;
         const scaleDelta = delta / resizeSensitivity;
 
@@ -494,6 +538,62 @@ export const useDraggableWindow = (
         );
 
         setScale(newScale);
+      } else {
+        // Dimensions mode: directly change width and height
+        const newWidth = Math.max(
+          width * minScale,
+          Math.min(width * maxScale, resizeStartRef.current.width + deltaX),
+        );
+        const newHeight = Math.max(
+          height * minScale,
+          Math.min(height * maxScale, resizeStartRef.current.height + deltaY),
+        );
+
+        setDimensions({ width: newWidth, height: newHeight });
+
+        // Update the element immediately
+        if (windowRef.current) {
+          windowRef.current.style.width = `${newWidth}px`;
+          windowRef.current.style.height = `${newHeight}px`;
+        }
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - resizeStartRef.current.x;
+        const deltaY = touch.clientY - resizeStartRef.current.y;
+
+        if (resizeMode === "scale") {
+          const delta = (deltaX + deltaY) / 2;
+          const scaleDelta = delta / resizeSensitivity;
+
+          const newScale = Math.max(
+            minScale,
+            Math.min(maxScale, resizeStartRef.current.scale + scaleDelta),
+          );
+
+          setScale(newScale);
+        } else {
+          // Dimensions mode: directly change width and height
+          const newWidth = Math.max(
+            width * minScale,
+            Math.min(width * maxScale, resizeStartRef.current.width + deltaX),
+          );
+          const newHeight = Math.max(
+            height * minScale,
+            Math.min(height * maxScale, resizeStartRef.current.height + deltaY),
+          );
+
+          setDimensions({ width: newWidth, height: newHeight });
+
+          // Update the element immediately
+          if (windowRef.current) {
+            windowRef.current.style.width = `${newWidth}px`;
+            windowRef.current.style.height = `${newHeight}px`;
+          }
+        }
       }
     };
 
@@ -511,16 +611,29 @@ export const useDraggableWindow = (
       document.removeEventListener("touchmove", handleTouchMove);
       document.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [isResizing, minScale, maxScale, resizeSensitivity]);
+  }, [
+    isResizing,
+    minScale,
+    maxScale,
+    resizeSensitivity,
+    resizeMode,
+    width,
+    height,
+  ]);
 
-  // Update window dimensions when scale changes
+  // Update window dimensions when scale or dimensions change
   useEffect(() => {
     if (windowRef.current) {
-      windowRef.current.style.transform = `scale(${scale})`;
-      windowRef.current.style.transformOrigin = "0 0";
+      if (resizeMode === "scale") {
+        windowRef.current.style.transform = `scale(${scale})`;
+        windowRef.current.style.transformOrigin = "0 0";
+      } else {
+        windowRef.current.style.width = `${dimensions.width}px`;
+        windowRef.current.style.height = `${dimensions.height}px`;
+      }
       windowRef.current.style.translate = `${positionRef.current.x}px ${positionRef.current.y}px`;
     }
-  }, [scale]);
+  }, [scale, dimensions, resizeMode]);
 
   // Handle window resize - keep windows fully within viewport
   useEffect(() => {
@@ -530,8 +643,10 @@ export const useDraggableWindow = (
         centerWindow();
       } else {
         // Constrain window to stay fully within viewport
-        const windowWidth = width * scale;
-        const windowHeight = height * scale;
+        const windowWidth =
+          resizeMode === "scale" ? width * scale : dimensions.width;
+        const windowHeight =
+          resizeMode === "scale" ? height * scale : dimensions.height;
 
         const constrainedX = Math.max(
           0,
@@ -548,8 +663,13 @@ export const useDraggableWindow = (
         ) {
           positionRef.current = { x: constrainedX, y: constrainedY };
           if (windowRef.current) {
-            windowRef.current.style.transform = `scale(${scale})`;
-            windowRef.current.style.transformOrigin = "0 0";
+            if (resizeMode === "scale") {
+              windowRef.current.style.transform = `scale(${scale})`;
+              windowRef.current.style.transformOrigin = "0 0";
+            } else {
+              windowRef.current.style.width = `${dimensions.width}px`;
+              windowRef.current.style.height = `${dimensions.height}px`;
+            }
             windowRef.current.style.translate = `${constrainedX}px ${constrainedY}px`;
           }
         }
@@ -560,7 +680,7 @@ export const useDraggableWindow = (
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [centerWindow, autoCenter, scale, width, height]);
+  }, [centerWindow, autoCenter, scale, width, height, dimensions, resizeMode]);
 
   return {
     windowRef,

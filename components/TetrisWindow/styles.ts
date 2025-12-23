@@ -7,8 +7,6 @@ export const StyledTetrisWindow = styled.div<{
   position: fixed;
   top: 0;
   left: 0;
-  width: 800px;
-  height: 650px;
   background: #1a1a1a;
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
@@ -47,12 +45,13 @@ export const StyledHeader = styled.div`
   }
 `;
 
-export const StyledIframe = styled.iframe`
+export const StyledIframe = styled.iframe<{ $isResizing: boolean }>`
   width: 100%;
   height: calc(100% - 50px);
   border: none;
   display: block;
   background: #000;
+  pointer-events: ${(props) => (props.$isResizing ? "none" : "auto")};
 `;
 
 export const StyledResizeHandle = styled.div`
