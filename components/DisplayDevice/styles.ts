@@ -7,6 +7,7 @@ interface ThemeProps {
 export const StyledDisplayDeviceWrapper = styled.div`
   position: relative;
   flex-shrink: 0;
+  pointer-events: auto; /* Restore pointer events for interactive panel */
 
   @media (max-width: 1024px) {
     display: none;
@@ -17,7 +18,7 @@ export const StyledDisplayDevice = styled.div<{ $isOpen: boolean }>`
   position: relative;
   width: ${({ $isOpen }) => ($isOpen ? "420px" : "0")};
   height: 100%;
-  z-index: 50;
+  z-index: 400; /* Pull-out panel - below menu */
   box-shadow: ${({ $isOpen }) =>
     $isOpen ? "-4px 0 24px rgba(0, 0, 0, 0.5)" : "none"};
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);

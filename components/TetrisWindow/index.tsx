@@ -36,7 +36,7 @@ const TetrisWindow: React.FC = () => {
     closeable: true,
     initiallyOpen: false,
     windowLabel: "Tetris",
-    windowIcon: "🧱",
+    windowIcon: "/icons/tetris.png",
     resizeMode: "dimensions",
   });
 

@@ -11,7 +11,7 @@ export const StyledBackdrop = styled.div<StyledBackdropProps>`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
-  z-index: 999; /* Below menu and modal but above everything else */
+  z-index: 450; /* Overlay - between pull-out panel and menu */
   transition: opacity 0.3s ease-in-out;
   opacity: ${(props) => (props.$isVisible ? 1 : 0)};
   pointer-events: ${(props) => (props.$isVisible ? "auto" : "none")};

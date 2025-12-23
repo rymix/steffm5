@@ -528,16 +528,31 @@ export const useDraggableWindow = (
       const deltaY = e.clientY - resizeStartRef.current.y;
 
       if (resizeMode === "scale") {
-        // Average horizontal and vertical drag for diagonal scaling
-        const delta = (deltaX + deltaY) / 2;
-        const scaleDelta = delta / resizeSensitivity;
-
-        const newScale = Math.max(
-          minScale,
-          Math.min(maxScale, resizeStartRef.current.scale + scaleDelta),
+        // Calculate desired dimensions based on mouse position
+        const desiredWidth = Math.max(
+          width * minScale,
+          Math.min(width * maxScale, resizeStartRef.current.width + deltaX),
+        );
+        const desiredHeight = Math.max(
+          height * minScale,
+          Math.min(height * maxScale, resizeStartRef.current.height + deltaY),
         );
 
-        setScale(newScale);
+        // Calculate scale from average of width and height ratios
+        const scaleX = desiredWidth / width;
+        const scaleY = desiredHeight / height;
+        const newScale = (scaleX + scaleY) / 2;
+
+        // Clamp to min/max
+        const clampedScale = Math.max(minScale, Math.min(maxScale, newScale));
+
+        setScale(clampedScale);
+
+        // Update the element immediately
+        if (windowRef.current) {
+          windowRef.current.style.transform = `scale(${clampedScale})`;
+          windowRef.current.style.transformOrigin = "0 0";
+        }
       } else {
         // Dimensions mode: directly change width and height
         const newWidth = Math.max(
@@ -566,15 +581,31 @@ export const useDraggableWindow = (
         const deltaY = touch.clientY - resizeStartRef.current.y;
 
         if (resizeMode === "scale") {
-          const delta = (deltaX + deltaY) / 2;
-          const scaleDelta = delta / resizeSensitivity;
-
-          const newScale = Math.max(
-            minScale,
-            Math.min(maxScale, resizeStartRef.current.scale + scaleDelta),
+          // Calculate desired dimensions based on touch position
+          const desiredWidth = Math.max(
+            width * minScale,
+            Math.min(width * maxScale, resizeStartRef.current.width + deltaX),
+          );
+          const desiredHeight = Math.max(
+            height * minScale,
+            Math.min(height * maxScale, resizeStartRef.current.height + deltaY),
           );
 
-          setScale(newScale);
+          // Calculate scale from average of width and height ratios
+          const scaleX = desiredWidth / width;
+          const scaleY = desiredHeight / height;
+          const newScale = (scaleX + scaleY) / 2;
+
+          // Clamp to min/max
+          const clampedScale = Math.max(minScale, Math.min(maxScale, newScale));
+
+          setScale(clampedScale);
+
+          // Update the element immediately
+          if (windowRef.current) {
+            windowRef.current.style.transform = `scale(${clampedScale})`;
+            windowRef.current.style.transformOrigin = "0 0";
+          }
         } else {
           // Dimensions mode: directly change width and height
           const newWidth = Math.max(

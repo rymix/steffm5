@@ -57,8 +57,8 @@ const ZXSpectrumWindow: React.FC = () => {
     },
     closeable: true,
     initiallyOpen: false,
-    windowLabel: "ZX Spectrum",
-    windowIcon: "🎮",
+    windowLabel: "Chuckie Egg",
+    windowIcon: "/icons/chuckieegg.png",
   });
 
   const emulatorContainerRef = useRef<HTMLDivElement>(null);
@@ -70,21 +70,7 @@ const ZXSpectrumWindow: React.FC = () => {
   useEffect(() => {
     if (!isVisible) return;
 
-    // Load JSSpeccy script if not already loaded
-    if (!scriptLoadedRef.current) {
-      const script = document.createElement("script");
-      script.src = "/jsspeccy/jsspeccy.js";
-      script.async = true;
-      script.onload = () => {
-        scriptLoadedRef.current = true;
-        initializeEmulator();
-      };
-      document.head.appendChild(script);
-    } else if (window.JSSpeccy && emulatorContainerRef.current) {
-      initializeEmulator();
-    }
-
-    function initializeEmulator() {
+    const initializeEmulator = () => {
       if (
         !emulatorContainerRef.current ||
         !window.JSSpeccy ||
@@ -109,6 +95,23 @@ const ZXSpectrumWindow: React.FC = () => {
           uiEnabled: false,
         },
       );
+    };
+
+    // Load JSSpeccy script if not already loaded
+    if (!scriptLoadedRef.current) {
+      const script = document.createElement("script");
+      script.src = "/jsspeccy/jsspeccy.js";
+      script.async = true;
+      script.onload = () => {
+        scriptLoadedRef.current = true;
+        initializeEmulator();
+      };
+      document.head.appendChild(script);
+    } else if (
+      typeof window.JSSpeccy !== "undefined" &&
+      emulatorContainerRef.current
+    ) {
+      initializeEmulator();
     }
 
     return () => {

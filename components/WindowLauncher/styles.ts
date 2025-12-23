@@ -8,15 +8,21 @@ export const StyledLauncher = styled.div`
   flex-direction: row;
   gap: 8px;
   padding: 12px;
-  z-index: 10000;
+  z-index: 10; /* Launcher icons - bottom layer (above wallpaper) */
   pointer-events: none;
 
   > * {
     pointer-events: auto;
   }
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
 `;
 
-export const StyledLauncherIcon = styled.button`
+export const StyledLauncherIcon = styled.button<{
+  $themeMode: "light" | "dark";
+}>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,8 +30,15 @@ export const StyledLauncherIcon = styled.button`
   gap: 4px;
   width: 80px;
   height: 80px;
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid rgba(0, 0, 0, 0.1);
+  background: ${(props) =>
+    props.$themeMode === "dark"
+      ? "rgba(30, 30, 30, 0.8)"
+      : "rgba(255, 255, 255, 0.8)"};
+  border: 2px solid
+    ${(props) =>
+      props.$themeMode === "dark"
+        ? "rgba(255, 255, 255, 0.1)"
+        : "rgba(0, 0, 0, 0.1)"};
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -38,7 +51,10 @@ export const StyledLauncherIcon = styled.button`
     box-shadow:
       0 4px 12px rgba(0, 0, 0, 0.2),
       0 2px 4px rgba(0, 0, 0, 0.15);
-    background: rgba(255, 255, 255, 1);
+    background: ${(props) =>
+      props.$themeMode === "dark"
+        ? "rgba(40, 40, 40, 1)"
+        : "rgba(255, 255, 255, 1)"};
   }
 
   &:active {
@@ -53,10 +69,16 @@ export const StyledLauncherIcon = styled.button`
     line-height: 1;
   }
 
+  .icon-image {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+  }
+
   .label {
     font-size: 11px;
     font-weight: 500;
-    color: #333;
+    color: ${(props) => (props.$themeMode === "dark" ? "#e0e0e0" : "#333")};
     text-align: center;
     line-height: 1.2;
     max-width: 100%;

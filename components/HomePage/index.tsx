@@ -30,8 +30,6 @@ import {
   StyledTrackRemix,
   StyledTrackTime,
 } from "@/components/DisplayDevice/styles";
-import DummyWindow from "@/components/DummyWindow";
-import DummyWindow2 from "@/components/DummyWindow2";
 import TetrisWindow from "@/components/TetrisWindow";
 import Wallpaper from "@/components/Wallpaper";
 import WindowLauncher from "@/components/WindowLauncher";
@@ -233,15 +231,19 @@ const HomePage: React.FC = () => {
       <MixcloudPlayerWrapper autoPlay={true} />
       <WindowLauncher />
 
+      {/* Game windows - rendered at root level, only shown in desktop mode */}
+      {typeof window !== "undefined" && window.innerWidth > 1024 && (
+        <>
+          <ZXSpectrumWindow />
+          <TetrisWindow />
+        </>
+      )}
+
       <StyledLayoutWrapper>
         <StyledPlayerPage $panelOpen={isPanelOpen}>
           {/* Desktop Layout */}
           <StyledDevicesContainer>
             <MainPlayer />
-            <DummyWindow />
-            <DummyWindow2 />
-            <ZXSpectrumWindow />
-            <TetrisWindow />
           </StyledDevicesContainer>
 
           {/* Mobile Layout */}

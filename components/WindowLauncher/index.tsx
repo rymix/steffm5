@@ -1,10 +1,14 @@
 import React from "react";
 
+import { useTheme } from "../../contexts/theme";
 import { useWindowManager } from "../../contexts/windowManager";
 import { StyledLauncher, StyledLauncherIcon } from "./styles";
 
 const WindowLauncher: React.FC = () => {
   const { windows } = useWindowManager();
+  const theme = useTheme();
+  // Mixed and dark modes should use dark launcher icons
+  const launcherThemeMode = theme.state.mode === "light" ? "light" : "dark";
 
   // Get all closeable windows that are not visible
   const closedWindows = Array.from(windows.values()).filter(
@@ -22,8 +26,13 @@ const WindowLauncher: React.FC = () => {
           key={window.id}
           onClick={window.openWindow}
           title={window.label}
+          $themeMode={launcherThemeMode}
         >
-          <span className="icon">{window.icon || "◻"}</span>
+          {window.icon?.startsWith("/") ? (
+            <img src={window.icon} alt={window.label} className="icon-image" />
+          ) : (
+            <span className="icon">{window.icon || "◻"}</span>
+          )}
           <span className="label">{window.label}</span>
         </StyledLauncherIcon>
       ))}

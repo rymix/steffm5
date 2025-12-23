@@ -21,7 +21,7 @@ export const StyledZXSpectrumWindow = styled.div<{
         : "auto"};
   user-select: ${(props) =>
     props.$isDragging || props.$isResizing ? "none" : "auto"};
-  z-index: 1000;
+  z-index: 200; /* Other windows - below player window */
 `;
 
 export const StyledHeader = styled.div`

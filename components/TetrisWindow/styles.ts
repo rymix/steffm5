@@ -19,12 +19,12 @@ export const StyledTetrisWindow = styled.div<{
         : "auto"};
   user-select: ${(props) =>
     props.$isDragging || props.$isResizing ? "none" : "auto"};
-  z-index: 1000;
+  z-index: 200; /* Other windows - below player window */
 `;
 
 export const StyledHeader = styled.div`
   height: 50px;
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  background: linear-gradient(135deg, #fa8072 0%, #ff8c00 100%);
   display: flex;
   align-items: center;
   justify-content: space-between;
