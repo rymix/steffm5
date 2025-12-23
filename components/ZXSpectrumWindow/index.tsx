@@ -45,14 +45,14 @@ const ZXSpectrumWindow: React.FC = () => {
     resetWindow,
     closeWindow,
   } = useDraggableWindow({
-    width: 800,
-    height: 650,
+    width: 640,
+    height: 530,
     initialScale: 1.0,
     minScale: 0.5,
     maxScale: 2.0,
     autoCenter: false,
     defaultPosition: {
-      x: typeof window !== "undefined" ? window.innerWidth - 820 : 0,
+      x: typeof window !== "undefined" ? window.innerWidth - 660 : 0,
       y: typeof window !== "undefined" ? 50 : 0,
     },
     closeable: true,
@@ -106,7 +106,7 @@ const ZXSpectrumWindow: React.FC = () => {
           autoLoadTapes: true,
           tapeAutoLoadMode: "usr0",
           keyboardEnabled: true,
-          uiEnabled: true,
+          uiEnabled: false,
         },
       );
     }

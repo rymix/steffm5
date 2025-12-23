@@ -7,8 +7,8 @@ export const StyledZXSpectrumWindow = styled.div<{
   position: fixed;
   top: 0;
   left: 0;
-  width: 800px;
-  height: 650px;
+  width: 640px;
+  height: 530px;
   background: #1a1a1a;
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
@@ -48,19 +48,26 @@ export const StyledHeader = styled.div`
 
 export const StyledContent = styled.div`
   padding: 0;
+  margin: 0;
   height: calc(100% - 50px);
   overflow: hidden;
   background: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  line-height: 0;
 
   > div {
     width: 100%;
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+    display: block;
+  }
+
+  canvas {
+    display: block;
+    margin: 0;
+    padding: 0;
   }
 `;
 
