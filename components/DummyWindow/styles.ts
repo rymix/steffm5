@@ -5,6 +5,8 @@ export const StyledDummyWindow = styled.div<{
   $isResizing: boolean;
 }>`
   position: fixed;
+  top: 0;
+  left: 0;
   width: 400px;
   height: 300px;
   background: white;

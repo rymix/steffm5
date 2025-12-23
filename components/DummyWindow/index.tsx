@@ -15,19 +15,29 @@ const DummyWindow: React.FC = () => {
     scale,
     isDragging,
     isResizing,
+    zIndex,
+    isVisible,
     handleMouseDown,
     handleTouchStart,
     handleResizeMouseDown,
     handleResizeTouchStart,
     resetWindow,
+    closeWindow,
   } = useDraggableWindow({
     width: 400,
     height: 300,
     initialScale: 1.0,
     minScale: 0.5,
     maxScale: 2.0,
-    autoCenter: true,
+    autoCenter: false,
+    initialPosition: {
+      x: typeof window !== "undefined" ? window.innerWidth - 420 : 0,
+      y: typeof window !== "undefined" ? window.innerHeight - 320 : 0,
+    },
+    closeable: true,
   });
+
+  if (!isVisible) return null;
 
   return (
     <StyledDummyWindow
@@ -36,10 +46,19 @@ const DummyWindow: React.FC = () => {
       onTouchStart={handleTouchStart}
       $isDragging={isDragging}
       $isResizing={isResizing}
+      style={{ zIndex }}
     >
       <StyledHeader data-draggable="true">
         <h2>Dummy Window</h2>
-        <StyledResetButton onClick={resetWindow}>Reset</StyledResetButton>
+        <div>
+          <StyledResetButton onClick={resetWindow}>Reset</StyledResetButton>
+          <StyledResetButton
+            onClick={closeWindow}
+            style={{ marginLeft: "8px" }}
+          >
+            Close
+          </StyledResetButton>
+        </div>
       </StyledHeader>
       <StyledContent>
         <p>This is a test window using the useDraggableWindow hook.</p>

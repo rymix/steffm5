@@ -74,6 +74,7 @@ const MainPlayer: React.FC = () => {
     scale: _scale,
     isDragging: _isDraggingPlayer,
     isResizing: _isDraggingResize,
+    zIndex,
     handleMouseDown: handlePlayerMouseDown,
     handleTouchStart: handlePlayerTouchStart,
     handleResizeMouseDown,
@@ -497,6 +498,7 @@ const MainPlayer: React.FC = () => {
         ref={playerRef}
         onMouseDown={handlePlayerMouseDown}
         onTouchStart={handlePlayerTouchStart}
+        style={{ zIndex }}
       >
         <StyledWoodPanel data-draggable="true">
           <StyledSlats>
