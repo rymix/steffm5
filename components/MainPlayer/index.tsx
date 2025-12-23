@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { getCategoryName } from "utils/themeHelpers";
 
+import MixcloudConnected from "@/components/MixcloudConnected";
 import PlaybackButtons from "@/components/PlaybackButtons";
 
 import {
@@ -771,6 +772,7 @@ const MainPlayer: React.FC = () => {
             <StyledLogoPlate>
               <StyledLogoText>STEF.FM</StyledLogoText>
             </StyledLogoPlate>
+            <MixcloudConnected />
           </StyledSlats>
           <StyledMainPanel>
             <DisplayContent />

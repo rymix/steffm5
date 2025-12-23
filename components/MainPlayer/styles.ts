@@ -189,8 +189,9 @@ export const StyledSlats = styled.div`
   background-size: 100% 12px;
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding-left: 26px;
+  padding-right: 26px;
   padding-top: 12px;
 `;
 
