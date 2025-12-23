@@ -34,6 +34,7 @@ import DummyWindow from "@/components/DummyWindow";
 import DummyWindow2 from "@/components/DummyWindow2";
 import Wallpaper from "@/components/Wallpaper";
 import WindowLauncher from "@/components/WindowLauncher";
+import ZXSpectrumWindow from "@/components/ZXSpectrumWindow";
 import MainPlayer from "components/MainPlayer";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 import { useWallpaperManager } from "hooks/useWallpaperManager";
@@ -238,6 +239,7 @@ const HomePage: React.FC = () => {
             <MainPlayer />
             <DummyWindow />
             <DummyWindow2 />
+            <ZXSpectrumWindow />
           </StyledDevicesContainer>
 
           {/* Mobile Layout */}
