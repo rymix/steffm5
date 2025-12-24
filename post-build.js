@@ -3,20 +3,20 @@ const path = require("path");
 
 async function copyFiles() {
   try {
-    // Copy static files
+    // Copy static files to the correct location next to server.js
     const staticSrcPath = path.join(__dirname, ".next/static");
     const staticDestPath = path.join(
       __dirname,
-      ".next/standalone/steffm5/steffm5/.next/static",
+      ".next/standalone/Node/steffm5/.next/static",
     );
     await fs.copy(staticSrcPath, staticDestPath);
     console.log("Static files copied successfully.");
 
-    // Copy public files
+    // Copy public files to the correct location next to server.js
     const publicSrcPath = path.join(__dirname, "public");
     const publicDestPath = path.join(
       __dirname,
-      ".next/standalone/steffm5/steffm5/public",
+      ".next/standalone/Node/steffm5/public",
     );
     await fs.copy(publicSrcPath, publicDestPath);
     console.log("Public files copied successfully.");
