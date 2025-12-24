@@ -76,3 +76,52 @@ export const StyledWallpaper = styled.div<{
     pointer-events: none;
   }
 `;
+
+export const StyledInfoBox = styled.div`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 12px 16px;
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+  z-index: 5; /* Info box - above wallpaper, below launcher icons */
+  pointer-events: auto;
+  user-select: none;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+  cursor: default;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  .system-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+
+  .wallpaper-name {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.2;
+  }
+
+  @media (max-width: 768px) {
+    bottom: 10px;
+    right: 10px;
+    padding: 8px 12px;
+
+    .system-name {
+      font-size: 12px;
+    }
+
+    .wallpaper-name {
+      font-size: 11px;
+    }
+  }
+`;

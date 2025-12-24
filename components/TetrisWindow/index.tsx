@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 import { useDraggableWindow } from "../../hooks/useDraggableWindow";
 import {
@@ -10,6 +10,8 @@ import {
 } from "./styles";
 
 const TetrisWindow: React.FC = () => {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
   const {
     windowRef,
     isDragging,
@@ -22,6 +24,7 @@ const TetrisWindow: React.FC = () => {
     handleResizeTouchStart,
     resetWindow,
     closeWindow,
+    bringToFront,
   } = useDraggableWindow({
     width: 800,
     height: 650,
@@ -39,6 +42,25 @@ const TetrisWindow: React.FC = () => {
     windowIcon: "/icons/tetris.png",
     resizeMode: "dimensions",
   });
+
+  // Detect when iframe is clicked/focused and bring window to front
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const handleWindowBlur = () => {
+      // Check if focus moved to the iframe
+      setTimeout(() => {
+        if (iframeRef.current && document.activeElement === iframeRef.current) {
+          bringToFront();
+        }
+      }, 0);
+    };
+
+    window.addEventListener("blur", handleWindowBlur);
+    return () => {
+      window.removeEventListener("blur", handleWindowBlur);
+    };
+  }, [isVisible, bringToFront]);
 
   if (!isVisible) return null;
 
@@ -64,6 +86,7 @@ const TetrisWindow: React.FC = () => {
         </div>
       </StyledHeader>
       <StyledIframe
+        ref={iframeRef}
         src="/tetris/index.html"
         title="Tetris Game"
         $isResizing={isResizing}

@@ -64,6 +64,7 @@ const ZXSpectrumWindow: React.FC = () => {
     handleResizeTouchStart,
     resetWindow,
     closeWindow,
+    bringToFront,
   } = useDraggableWindow({
     width: 640,
     height: 530,
@@ -199,7 +200,7 @@ const ZXSpectrumWindow: React.FC = () => {
           </StyledResetButton>
         </div>
       </StyledHeader>
-      <StyledContent>
+      <StyledContent onMouseDown={bringToFront} onTouchStart={bringToFront}>
         <div ref={emulatorContainerRef} />
       </StyledContent>
       <StyledResizeHandle

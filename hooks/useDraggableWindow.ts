@@ -2,15 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useWindowManager } from "../contexts/windowManager";
 
-// Global z-index manager
-let globalZIndex = 1000;
-const getNextZIndex = () => ++globalZIndex;
-
-// Special function to ensure a window starts on top of all others
-const getTopZIndex = () => {
-  globalZIndex += 100; // Jump ahead to ensure it's on top
-  return globalZIndex;
-};
+let currentMaxZIndex = 200;
 
 export interface UseDraggableWindowOptions {
   /**
@@ -69,11 +61,6 @@ export interface UseDraggableWindowOptions {
    * Whether the window starts open (default: true)
    */
   initiallyOpen?: boolean;
-
-  /**
-   * Whether the window should start on top of all others (default: false)
-   */
-  startOnTop?: boolean;
 
   /**
    * Window label for launcher icon
@@ -152,7 +139,6 @@ export const useDraggableWindow = (
     draggableSelector = '[data-draggable="true"]',
     closeable = false,
     initiallyOpen = true,
-    startOnTop = false,
     windowLabel,
     windowIcon,
     onReset,
@@ -162,12 +148,15 @@ export const useDraggableWindow = (
   } = options;
 
   // Window manager (optional - only if provider exists)
-  let windowManager: ReturnType<typeof useWindowManager> | undefined;
+  // Use a ref to avoid re-running effects when windowManager changes
+  const windowManagerRef = useRef<
+    ReturnType<typeof useWindowManager> | undefined
+  >();
   try {
-    windowManager = useWindowManager();
+    windowManagerRef.current = useWindowManager();
   } catch {
     // No window manager provider - that's OK
-    windowManager = undefined;
+    windowManagerRef.current = undefined;
   }
 
   // Refs
@@ -185,10 +174,13 @@ export const useDraggableWindow = (
   const [isResizing, setIsResizing] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [elementStart, setElementStart] = useState({ x: 0, y: 0 });
-  const [zIndex, setZIndex] = useState(
-    startOnTop ? getTopZIndex() : getNextZIndex(),
-  );
   const [isVisible, setIsVisible] = useState(initiallyOpen);
+  const [zIndex, setZIndex] = useState(() => {
+    // Start new windows on top
+    currentMaxZIndex += 1;
+    return currentMaxZIndex;
+  });
+
   const resizeStartRef = useRef({
     x: 0,
     y: 0,
@@ -259,19 +251,26 @@ export const useDraggableWindow = (
 
   // Bring window to front
   const bringToFront = useCallback(() => {
-    setZIndex(getNextZIndex());
+    currentMaxZIndex += 1;
+    setZIndex(currentMaxZIndex);
   }, []);
 
   // Close window
   const closeWindow = useCallback(() => {
     if (!closeable) return;
     setIsVisible(false);
-    windowManager?.updateWindow(windowId, { isVisible: false });
+    windowManagerRef.current?.updateWindow(windowId, { isVisible: false });
     onClose?.();
-  }, [closeable, onClose, windowManager, windowId]);
+  }, [closeable, onClose, windowId]);
 
   // Open window
   const openWindow = useCallback(() => {
+    // If already visible, just bring to front
+    if (isVisible) {
+      bringToFront();
+      return;
+    }
+
     // Reset window to initial state when reopening
     hasUserInteractedRef.current = false;
 
@@ -307,12 +306,12 @@ export const useDraggableWindow = (
       windowRef.current.style.translate = `${positionRef.current.x}px ${positionRef.current.y}px`;
     }
 
-    windowManager?.updateWindow(windowId, { isVisible: true });
+    windowManagerRef.current?.updateWindow(windowId, { isVisible: true });
     onOpen?.();
   }, [
+    isVisible,
     bringToFront,
     onOpen,
-    windowManager,
     windowId,
     initialScale,
     width,
@@ -323,7 +322,6 @@ export const useDraggableWindow = (
 
   // Drag handlers
   const handleMouseDown = (_e: React.MouseEvent) => {
-    // Always bring to front on any click
     bringToFront();
 
     const target = _e.target as HTMLElement;
@@ -338,7 +336,6 @@ export const useDraggableWindow = (
   };
 
   const handleTouchStart = (_e: React.TouchEvent) => {
-    // Always bring to front on any touch
     bringToFront();
 
     const target = _e.target as HTMLElement;
@@ -358,7 +355,6 @@ export const useDraggableWindow = (
   const handleResizeMouseDown = (_e: React.MouseEvent) => {
     _e.preventDefault();
     _e.stopPropagation();
-    bringToFront(); // Bring to front on interaction
     hasUserInteractedRef.current = true;
     setIsResizing(true);
     resizeStartRef.current = {
@@ -374,7 +370,6 @@ export const useDraggableWindow = (
     if (_e.touches.length === 1) {
       _e.stopPropagation();
       const touch = _e.touches[0];
-      bringToFront(); // Bring to front on interaction
       hasUserInteractedRef.current = true;
       setIsResizing(true);
       resizeStartRef.current = {
@@ -387,10 +382,11 @@ export const useDraggableWindow = (
     }
   };
 
-  // Register with window manager
+  // Register with window manager - only register once on mount
   useEffect(() => {
-    if (windowManager && closeable && windowLabel) {
-      windowManager.registerWindow({
+    const wm = windowManagerRef.current;
+    if (wm && closeable && windowLabel) {
+      wm.registerWindow({
         id: windowId,
         label: windowLabel,
         icon: windowIcon,
@@ -399,18 +395,17 @@ export const useDraggableWindow = (
       });
 
       return () => {
-        windowManager.unregisterWindow(windowId);
+        wm.unregisterWindow(windowId);
       };
     }
-  }, [
-    windowManager,
-    closeable,
-    windowLabel,
-    windowIcon,
-    windowId,
-    initiallyOpen,
-    openWindow,
-  ]);
+  }, [windowId]);
+
+  // Update window visibility separately to avoid infinite loops
+  useEffect(() => {
+    if (closeable && windowLabel) {
+      windowManagerRef.current?.updateWindow(windowId, { isVisible });
+    }
+  }, [closeable, windowLabel, windowId, isVisible]);
 
   // Initialize position on mount
   useEffect(() => {

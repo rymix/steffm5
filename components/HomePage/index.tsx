@@ -63,11 +63,17 @@ const HomePage: React.FC = () => {
   const [expandedTrackIndex, setExpandedTrackIndex] = useState<number | null>(
     null,
   );
+  const [isClient, setIsClient] = useState(false);
 
   // Track previous values to detect changes
   const prevCurrentKey = useRef<string | null>(null);
   const prevCurrentTrack = useRef<string | null>(null);
   const hasMadeInitialMixLoad = useRef(false);
+
+  // Set client-side flag after mount
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Helper function to get current playing track
   const getCurrentPlayingTrack = useCallback(() => {
@@ -226,14 +232,17 @@ const HomePage: React.FC = () => {
         wallpaperUrl={wallpaperState.currentWallpaper}
         tileType={wallpaperState.tileType}
         isLoading={wallpaperState.isLoading}
+        systemName={wallpaperState.systemName}
+        wallpaperName={wallpaperState.wallpaperName}
       />
       <BurgerMenu />
       <MixcloudPlayerWrapper autoPlay={true} />
       <WindowLauncher />
 
-      {/* Game windows - rendered at root level, only shown in desktop mode */}
-      {typeof window !== "undefined" && window.innerWidth > 1024 && (
+      {/* All windows - rendered at root level, only shown in desktop mode */}
+      {isClient && (
         <>
+          <MainPlayer />
           <ZXSpectrumWindow />
           <TetrisWindow />
         </>
@@ -242,9 +251,7 @@ const HomePage: React.FC = () => {
       <StyledLayoutWrapper>
         <StyledPlayerPage $panelOpen={isPanelOpen}>
           {/* Desktop Layout */}
-          <StyledDevicesContainer>
-            <MainPlayer />
-          </StyledDevicesContainer>
+          <StyledDevicesContainer></StyledDevicesContainer>
 
           {/* Mobile Layout */}
           <StyledMobileLayout>
