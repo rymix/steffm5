@@ -27,14 +27,17 @@ jobs:
 
       - name: Create wwwroot structure
         run: |
+          # Find where server.js is located
+          STANDALONE_DIR=$(dirname $(find .next/standalone -name "server.js" -not -path "*/node_modules/*" | head -1))
+
+          echo "Found standalone directory at: $STANDALONE_DIR"
+
+          # Copy entire standalone directory contents to wwwroot
           mkdir -p wwwroot
-          cp -R .next/standalone/Node/steffm5/.next wwwroot/
-          cp -R .next/standalone/Node/steffm5/db wwwroot/
-          cp -R .next/standalone/Node/steffm5/node_modules wwwroot/
-          cp .next/standalone/Node/steffm5/package.json wwwroot/
-          cp -R .next/standalone/Node/steffm5/pages wwwroot/
-          cp -R .next/standalone/Node/steffm5/public wwwroot/
-          cp .next/standalone/Node/steffm5/server.js wwwroot/
+          cp -R "$STANDALONE_DIR"/* wwwroot/
+
+          echo "Contents of wwwroot:"
+          ls -la wwwroot/
 
       - name: Zip wwwroot
         run: zip -r wwwroot.zip wwwroot
