@@ -71,7 +71,7 @@ export const StyledWallpaper = styled.div<{
       ellipse at center,
       rgba(0, 0, 0, 0) 0%,
       rgba(0, 0, 0, 0) 50%,
-      rgba(0, 0, 0, 0.3) 100%
+      rgba(0, 0, 0, 0.5) 100%
     );
     pointer-events: none;
   }
