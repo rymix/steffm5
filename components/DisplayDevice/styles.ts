@@ -5,9 +5,13 @@ interface ThemeProps {
 }
 
 export const StyledDisplayDeviceWrapper = styled.div`
-  position: relative;
-  flex-shrink: 0;
-  pointer-events: auto; /* Restore pointer events for interactive panel */
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none; /* Don't block clicks, children will re-enable */
+  z-index: 9999;
 
   @media (max-width: 1024px) {
     display: none;
@@ -27,6 +31,7 @@ export const StyledDisplayDevice = styled.div<{ $isOpen: boolean }>`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  pointer-events: ${({ $isOpen }) => ($isOpen ? "auto" : "none")};
 `;
 
 export const StyledWoodSlats = styled.div`
@@ -183,6 +188,7 @@ export const StyledToggleButton = styled.button<{ $isOpen: boolean }>`
   color: #2a2a2a;
   z-index: 9999; /* Same as pull-out panel */
   user-select: none;
+  pointer-events: auto; /* Always clickable */
   transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {

@@ -64,15 +64,22 @@ const HomePage: React.FC = () => {
     null,
   );
   const [isClient, setIsClient] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   // Track previous values to detect changes
   const prevCurrentKey = useRef<string | null>(null);
   const prevCurrentTrack = useRef<string | null>(null);
   const hasMadeInitialMixLoad = useRef(false);
 
-  // Set client-side flag after mount
+  // Set client-side flag and check screen size after mount
   useEffect(() => {
     setIsClient(true);
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth > 1024);
+    };
+    checkDesktop();
+    window.addEventListener("resize", checkDesktop);
+    return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
   // Helper function to get current playing track
@@ -204,7 +211,13 @@ const HomePage: React.FC = () => {
     changeWallpaper,
   ]);
 
-  const togglePanel = () => setIsPanelOpen(!isPanelOpen);
+  const togglePanel = () => {
+    console.log(
+      "HomePage togglePanel called, current isPanelOpen:",
+      isPanelOpen,
+    );
+    setIsPanelOpen(!isPanelOpen);
+  };
   const toggleMobileInfo = () =>
     setIsMobileInfoCollapsed(!isMobileInfoCollapsed);
   const toggleTrackExpanded = (index: number) => {
@@ -240,7 +253,7 @@ const HomePage: React.FC = () => {
       <WindowLauncher />
 
       {/* All windows - rendered at root level, only shown in desktop mode */}
-      {isClient && (
+      {isClient && isDesktop && (
         <>
           <MainPlayer />
           <ZXSpectrumWindow />
@@ -248,8 +261,10 @@ const HomePage: React.FC = () => {
         </>
       )}
 
-      {/* Pull-out panel - rendered at root level to be above all windows */}
-      <DisplayDevice isOpen={isPanelOpen} onToggle={togglePanel} />
+      {/* Pull-out panel - rendered at root level to be above all windows, hidden in mobile via CSS */}
+      {isClient && (
+        <DisplayDevice isOpen={isPanelOpen} onToggle={togglePanel} />
+      )}
 
       <StyledLayoutWrapper>
         <StyledPlayerPage $panelOpen={isPanelOpen}>
