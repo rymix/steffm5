@@ -1,23 +1,31 @@
 const fs = require("fs-extra");
 const path = require("path");
+const { execSync } = require("child_process");
 
 async function copyFiles() {
   try {
-    // Copy static files (works in both local and CI environments)
+    // Find where server.js is located (handles both local and CI environments)
+    const findCommand =
+      'find .next/standalone -name "server.js" -not -path "*/node_modules/*" | head -1';
+    const serverJsPath = execSync(findCommand, { encoding: "utf-8" }).trim();
+
+    if (!serverJsPath) {
+      throw new Error("Could not find server.js in .next/standalone");
+    }
+
+    // Get the directory containing server.js
+    const standaloneBaseDir = path.dirname(serverJsPath);
+    console.log(`Found standalone directory at: ${standaloneBaseDir}`);
+
+    // Copy static files
     const staticSrcPath = path.join(__dirname, ".next/static");
-    const staticDestPath = path.join(
-      __dirname,
-      ".next/standalone/steffm5/steffm5/.next/static",
-    );
+    const staticDestPath = path.join(standaloneBaseDir, ".next/static");
     await fs.copy(staticSrcPath, staticDestPath);
     console.log("Static files copied successfully.");
 
-    // Copy public files (works in both local and CI environments)
+    // Copy public files
     const publicSrcPath = path.join(__dirname, "public");
-    const publicDestPath = path.join(
-      __dirname,
-      ".next/standalone/steffm5/steffm5/public",
-    );
+    const publicDestPath = path.join(standaloneBaseDir, "public");
     await fs.copy(publicSrcPath, publicDestPath);
     console.log("Public files copied successfully.");
 
