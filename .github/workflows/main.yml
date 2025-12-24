@@ -32,9 +32,9 @@ jobs:
 
           echo "Found standalone directory at: $STANDALONE_DIR"
 
-          # Copy entire standalone directory contents to wwwroot
+          # Copy entire standalone directory contents to wwwroot (including hidden files)
           mkdir -p wwwroot
-          cp -R "$STANDALONE_DIR"/* wwwroot/
+          cp -R "$STANDALONE_DIR"/. wwwroot/
 
           echo "Contents of wwwroot:"
           ls -la wwwroot/
