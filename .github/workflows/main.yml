@@ -28,13 +28,13 @@ jobs:
       - name: Create wwwroot structure
         run: |
           mkdir -p wwwroot
-          cp -R .next/standalone/steffm5/steffm5/.next wwwroot/
-          cp -R .next/standalone/steffm5/steffm5/db wwwroot/
-          cp -R .next/standalone/steffm5/steffm5/node_modules wwwroot/
-          cp .next/standalone/steffm5/steffm5/package.json wwwroot/
-          cp -R .next/standalone/steffm5/steffm5/pages wwwroot/
-          cp -R .next/standalone/steffm5/steffm5/public wwwroot/
-          cp .next/standalone/steffm5/steffm5/server.js wwwroot/
+          cp -R .next/standalone/Node/steffm5/.next wwwroot/
+          cp -R .next/standalone/Node/steffm5/db wwwroot/
+          cp -R .next/standalone/Node/steffm5/node_modules wwwroot/
+          cp .next/standalone/Node/steffm5/package.json wwwroot/
+          cp -R .next/standalone/Node/steffm5/pages wwwroot/
+          cp -R .next/standalone/Node/steffm5/public wwwroot/
+          cp .next/standalone/Node/steffm5/server.js wwwroot/
 
       - name: Zip wwwroot
         run: zip -r wwwroot.zip wwwroot
