@@ -5,8 +5,8 @@
 node_modules
 /dist
 
-# JSSpeccy3 emulator (third-party library)
-/public/jsspeccy/
+# JSSpeccy3 emulator (third-party library) - now included for deployment
+# /public/jsspeccy/
 /public/jsspeccy3.zip
 /public/__MACOSX/
 /public/CHANGELOG.md
@@ -14,5 +14,5 @@ node_modules
 /public/README.md
 /public/index.html
 
-# Tetr.js Tetris game (third-party library)
-/public/tetris/
+# Tetr.js Tetris game (third-party library) - now included for deployment
+# /public/tetris/
