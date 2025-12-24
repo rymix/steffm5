@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 
 import { useDraggableWindow } from "../../hooks/useDraggableWindow";
 import {
@@ -66,9 +66,42 @@ const ZXSpectrumWindow: React.FC = () => {
     null,
   );
   const scriptLoadedRef = useRef(false);
+  const audioContextsRef = useRef<AudioContext[]>([]);
+
+  // Cleanup function to stop all audio and clear emulator
+  const cleanupEmulator = useCallback(() => {
+    // Close all tracked Audio Contexts
+    audioContextsRef.current.forEach((ctx) => {
+      if (ctx.state !== "closed") {
+        ctx.close().catch(() => {
+          // Ignore errors if already closed
+        });
+      }
+    });
+    audioContextsRef.current = [];
+
+    if (emulatorContainerRef.current) {
+      // Stop all audio elements
+      const audioElements =
+        emulatorContainerRef.current.querySelectorAll("audio");
+      audioElements.forEach((audio) => {
+        audio.pause();
+        audio.src = "";
+        audio.load(); // Reset the audio element
+      });
+
+      // Clear the container completely to destroy all DOM elements
+      emulatorContainerRef.current.innerHTML = "";
+    }
+    jsSpeccyInstanceRef.current = null;
+  }, []);
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible) {
+      // Clean up emulator when window becomes invisible
+      cleanupEmulator();
+      return;
+    }
 
     const initializeEmulator = () => {
       if (
@@ -81,20 +114,57 @@ const ZXSpectrumWindow: React.FC = () => {
       // Clear any existing content
       emulatorContainerRef.current.innerHTML = "";
 
-      // Initialize JSSpeccy with 48K mode and auto-load the game
-      jsSpeccyInstanceRef.current = window.JSSpeccy(
-        emulatorContainerRef.current,
-        {
-          machine: 48,
-          zoom: 2,
-          openUrl: "/roms/zxspectrum/chuckieegg.tzx.zip",
-          autoStart: true,
-          autoLoadTapes: true,
-          tapeAutoLoadMode: "usr0",
-          keyboardEnabled: true,
-          uiEnabled: false,
-        },
-      );
+      // Intercept AudioContext creation to track it
+      const OriginalAudioContext =
+        window.AudioContext || (window as any).webkitAudioContext;
+      if (OriginalAudioContext) {
+        const TrackedAudioContext = function (
+          this: AudioContext,
+          ...args: any[]
+        ) {
+          const ctx = new OriginalAudioContext(...args);
+          audioContextsRef.current.push(ctx);
+          return ctx;
+        } as any;
+        TrackedAudioContext.prototype = OriginalAudioContext.prototype;
+        const tempContext = window.AudioContext;
+        window.AudioContext = TrackedAudioContext as typeof AudioContext;
+        (window as any).webkitAudioContext = TrackedAudioContext;
+
+        // Initialize JSSpeccy with 48K mode and auto-load the game
+        jsSpeccyInstanceRef.current = window.JSSpeccy(
+          emulatorContainerRef.current,
+          {
+            machine: 48,
+            zoom: 2,
+            openUrl: "/roms/zxspectrum/chuckieegg.tzx.zip",
+            autoStart: true,
+            autoLoadTapes: true,
+            tapeAutoLoadMode: "usr0",
+            keyboardEnabled: true,
+            uiEnabled: false,
+          },
+        );
+
+        // Restore original AudioContext
+        window.AudioContext = tempContext;
+        (window as any).webkitAudioContext = OriginalAudioContext;
+      } else {
+        // Fallback if AudioContext doesn't exist
+        jsSpeccyInstanceRef.current = window.JSSpeccy(
+          emulatorContainerRef.current,
+          {
+            machine: 48,
+            zoom: 2,
+            openUrl: "/roms/zxspectrum/chuckieegg.tzx.zip",
+            autoStart: true,
+            autoLoadTapes: true,
+            tapeAutoLoadMode: "usr0",
+            keyboardEnabled: true,
+            uiEnabled: false,
+          },
+        );
+      }
     };
 
     // Load JSSpeccy script if not already loaded
@@ -115,14 +185,10 @@ const ZXSpectrumWindow: React.FC = () => {
     }
 
     return () => {
-      // Cleanup is tricky with JSSpeccy - it doesn't provide a destroy method
-      // We'll just clear the container
-      if (emulatorContainerRef.current) {
-        emulatorContainerRef.current.innerHTML = "";
-      }
-      jsSpeccyInstanceRef.current = null;
+      // Cleanup when component unmounts
+      cleanupEmulator();
     };
-  }, [isVisible]);
+  }, [isVisible, cleanupEmulator]);
 
   if (!isVisible) return null;
 

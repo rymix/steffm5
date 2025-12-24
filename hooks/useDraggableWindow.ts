@@ -272,17 +272,37 @@ export const useDraggableWindow = (
 
   // Open window
   const openWindow = useCallback(() => {
+    // Reset window to initial state when reopening
+    hasUserInteractedRef.current = false;
+
+    const resetScale = initialScale;
+    const resetDimensions = { width, height };
+    const windowWidth = resizeMode === "scale" ? width * resetScale : width;
+    const windowHeight = resizeMode === "scale" ? height * resetScale : height;
+
+    // Use defaultPosition if provided, otherwise center
+    if (defaultPosition) {
+      positionRef.current = { ...defaultPosition };
+    } else {
+      positionRef.current = {
+        x: (window.innerWidth - windowWidth) / 2,
+        y: (window.innerHeight - windowHeight) / 2,
+      };
+    }
+
+    setScale(resetScale);
+    setDimensions(resetDimensions);
     setIsVisible(true);
     bringToFront();
 
-    // Apply the stored position to the element when reopening
+    // Apply the reset position to the element
     if (windowRef.current) {
       if (resizeMode === "scale") {
-        windowRef.current.style.transform = `scale(${scale})`;
+        windowRef.current.style.transform = `scale(${resetScale})`;
         windowRef.current.style.transformOrigin = "0 0";
       } else {
-        windowRef.current.style.width = `${dimensions.width}px`;
-        windowRef.current.style.height = `${dimensions.height}px`;
+        windowRef.current.style.width = `${width}px`;
+        windowRef.current.style.height = `${height}px`;
       }
       windowRef.current.style.translate = `${positionRef.current.x}px ${positionRef.current.y}px`;
     }
@@ -294,8 +314,10 @@ export const useDraggableWindow = (
     onOpen,
     windowManager,
     windowId,
-    scale,
-    dimensions,
+    initialScale,
+    width,
+    height,
+    defaultPosition,
     resizeMode,
   ]);
 
