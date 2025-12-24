@@ -87,7 +87,6 @@ const MainPlayer: React.FC = () => {
     minScale: 0.5,
     maxScale: 2.0,
     autoCenter: true,
-    startOnTop: true,
     onReset: () => {
       actions.showTemporaryMessage("*** Player reset ***");
     },

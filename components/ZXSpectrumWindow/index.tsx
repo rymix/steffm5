@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 
 import { useDraggableWindow } from "../../hooks/useDraggableWindow";
 import {
@@ -8,6 +8,9 @@ import {
   StyledResizeHandle,
   StyledZXSpectrumWindow,
 } from "./styles";
+
+// Global registry to track AudioContexts
+const globalAudioContexts = new Set<AudioContext>();
 
 declare global {
   interface Window {
@@ -31,6 +34,23 @@ declare global {
   }
 }
 
+// Monkey-patch AudioContext globally to track all instances
+if (typeof window !== "undefined" && !(window as any)._audioContextPatched) {
+  const OriginalAudioContext =
+    window.AudioContext || (window as any).webkitAudioContext;
+  if (OriginalAudioContext) {
+    const PatchedAudioContext = function (this: any, ...args: any[]) {
+      const instance = new OriginalAudioContext(...args);
+      globalAudioContexts.add(instance);
+      return instance;
+    };
+    PatchedAudioContext.prototype = OriginalAudioContext.prototype;
+    window.AudioContext = PatchedAudioContext as any;
+    (window as any).webkitAudioContext = PatchedAudioContext;
+    (window as any)._audioContextPatched = true;
+  }
+}
+
 const ZXSpectrumWindow: React.FC = () => {
   const {
     windowRef,
@@ -44,6 +64,7 @@ const ZXSpectrumWindow: React.FC = () => {
     handleResizeTouchStart,
     resetWindow,
     closeWindow,
+    bringToFront,
   } = useDraggableWindow({
     width: 640,
     height: 530,
@@ -67,8 +88,43 @@ const ZXSpectrumWindow: React.FC = () => {
   );
   const scriptLoadedRef = useRef(false);
 
+  // Cleanup function to stop all audio and clear emulator
+  const cleanupEmulator = useCallback(() => {
+    // Close ALL AudioContexts from the global registry
+    globalAudioContexts.forEach((ctx) => {
+      try {
+        if (ctx.state !== "closed") {
+          ctx.close();
+        }
+        globalAudioContexts.delete(ctx);
+      } catch {
+        // Ignore errors
+      }
+    });
+
+    if (emulatorContainerRef.current) {
+      // Stop all audio elements
+      const audioElements =
+        emulatorContainerRef.current.querySelectorAll("audio");
+      audioElements.forEach((audio) => {
+        audio.pause();
+        audio.src = "";
+        audio.load();
+      });
+
+      // Clear the container completely
+      emulatorContainerRef.current.innerHTML = "";
+    }
+
+    jsSpeccyInstanceRef.current = null;
+  }, []);
+
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible) {
+      // Clean up emulator when window becomes invisible
+      cleanupEmulator();
+      return;
+    }
 
     const initializeEmulator = () => {
       if (
@@ -82,6 +138,7 @@ const ZXSpectrumWindow: React.FC = () => {
       emulatorContainerRef.current.innerHTML = "";
 
       // Initialize JSSpeccy with 48K mode and auto-load the game
+      // The global AudioContext patch will automatically track any contexts it creates
       jsSpeccyInstanceRef.current = window.JSSpeccy(
         emulatorContainerRef.current,
         {
@@ -115,14 +172,10 @@ const ZXSpectrumWindow: React.FC = () => {
     }
 
     return () => {
-      // Cleanup is tricky with JSSpeccy - it doesn't provide a destroy method
-      // We'll just clear the container
-      if (emulatorContainerRef.current) {
-        emulatorContainerRef.current.innerHTML = "";
-      }
-      jsSpeccyInstanceRef.current = null;
+      // Cleanup when component unmounts
+      cleanupEmulator();
     };
-  }, [isVisible]);
+  }, [isVisible, cleanupEmulator]);
 
   if (!isVisible) return null;
 
@@ -147,7 +200,7 @@ const ZXSpectrumWindow: React.FC = () => {
           </StyledResetButton>
         </div>
       </StyledHeader>
-      <StyledContent>
+      <StyledContent onMouseDown={bringToFront} onTouchStart={bringToFront}>
         <div ref={emulatorContainerRef} />
       </StyledContent>
       <StyledResizeHandle

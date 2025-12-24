@@ -179,7 +179,7 @@ export const StyledToggleButton = styled.button<{ $isOpen: boolean }>`
   justify-content: center;
   font-size: 20px;
   color: #2a2a2a;
-  z-index: 51;
+  z-index: 400; /* Same as pull-out panel */
   user-select: none;
 
   &:hover {

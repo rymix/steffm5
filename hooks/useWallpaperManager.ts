@@ -8,6 +8,8 @@ type WallpaperState = {
   tileType?: string;
   isLoading: boolean;
   error: string | null;
+  systemName?: string;
+  wallpaperName?: string;
 };
 
 export const useWallpaperManager = () => {
@@ -31,6 +33,8 @@ export const useWallpaperManager = () => {
         tileType: session.background.tileType,
         isLoading: false,
         error: null,
+        systemName: session.background.backgroundCategoryObject?.name,
+        wallpaperName: session.background.name,
       });
     }
   }, [session.background]);

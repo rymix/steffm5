@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
 export interface WindowInfo {
   id: string;
@@ -44,6 +50,10 @@ export const WindowManagerProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const unregisterWindow = useCallback((id: string) => {
     setWindows((prev) => {
+      // Only update state if the window actually exists
+      if (!prev.has(id)) {
+        return prev;
+      }
       const next = new Map(prev);
       next.delete(id);
       return next;
@@ -64,10 +74,13 @@ export const WindowManagerProvider: React.FC<{ children: React.ReactNode }> = ({
     [],
   );
 
+  const contextValue = useMemo(
+    () => ({ windows, registerWindow, unregisterWindow, updateWindow }),
+    [windows, registerWindow, unregisterWindow, updateWindow],
+  );
+
   return (
-    <WindowManagerContext.Provider
-      value={{ windows, registerWindow, unregisterWindow, updateWindow }}
-    >
+    <WindowManagerContext.Provider value={contextValue}>
       {children}
     </WindowManagerContext.Provider>
   );
