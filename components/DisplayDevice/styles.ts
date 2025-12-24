@@ -15,10 +15,12 @@ export const StyledDisplayDeviceWrapper = styled.div`
 `;
 
 export const StyledDisplayDevice = styled.div<{ $isOpen: boolean }>`
-  position: relative;
+  position: fixed;
+  top: 0;
+  right: 0;
   width: ${({ $isOpen }) => ($isOpen ? "420px" : "0")};
-  height: 100%;
-  z-index: 400; /* Pull-out panel - below menu */
+  height: 100vh;
+  z-index: 9999; /* Pull-out panel - always above all windows */
   box-shadow: ${({ $isOpen }) =>
     $isOpen ? "-4px 0 24px rgba(0, 0, 0, 0.5)" : "none"};
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -154,9 +156,9 @@ export const StyledMetalPanel = styled.div`
 `;
 
 export const StyledToggleButton = styled.button<{ $isOpen: boolean }>`
-  position: absolute;
+  position: fixed;
   top: 50%;
-  left: -40px;
+  right: ${({ $isOpen }) => ($isOpen ? "420px" : "0")};
   transform: translateY(-50%);
   width: 40px;
   height: 80px;
@@ -179,8 +181,9 @@ export const StyledToggleButton = styled.button<{ $isOpen: boolean }>`
   justify-content: center;
   font-size: 20px;
   color: #2a2a2a;
-  z-index: 400; /* Same as pull-out panel */
+  z-index: 9999; /* Same as pull-out panel */
   user-select: none;
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     background: #d8d8d8;

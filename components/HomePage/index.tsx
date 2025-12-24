@@ -248,6 +248,9 @@ const HomePage: React.FC = () => {
         </>
       )}
 
+      {/* Pull-out panel - rendered at root level to be above all windows */}
+      <DisplayDevice isOpen={isPanelOpen} onToggle={togglePanel} />
+
       <StyledLayoutWrapper>
         <StyledPlayerPage $panelOpen={isPanelOpen}>
           {/* Desktop Layout */}
@@ -465,8 +468,6 @@ const HomePage: React.FC = () => {
             </StyledMobileDevice>
           </StyledMobileLayout>
         </StyledPlayerPage>
-
-        <DisplayDevice isOpen={isPanelOpen} onToggle={togglePanel} />
       </StyledLayoutWrapper>
     </WindowManagerProvider>
   );
