@@ -25,16 +25,42 @@ jobs:
       - name: Run Tests
         run: yarn test
 
+      - name: Debug standalone structure
+        run: |
+          echo "=== Checking standalone directory structure ==="
+          find .next/standalone -type d -maxdepth 3 | head -20
+          echo "=== Contents of standalone root ==="
+          ls -la .next/standalone/ || echo "standalone root not found"
+          echo "=== Looking for server.js ==="
+          find .next/standalone -name "server.js" -type f
+
       - name: Create wwwroot structure
         run: |
           mkdir -p wwwroot
-          cp -R .next/standalone/Node/steffm5/.next wwwroot/
-          cp -R .next/standalone/Node/steffm5/db wwwroot/
-          cp -R .next/standalone/Node/steffm5/node_modules wwwroot/
-          cp .next/standalone/Node/steffm5/package.json wwwroot/
-          cp -R .next/standalone/Node/steffm5/pages wwwroot/
-          cp -R .next/standalone/Node/steffm5/public wwwroot/
-          cp .next/standalone/Node/steffm5/server.js wwwroot/
+
+          # Find the actual standalone directory (could be Node/steffm5 or steffm5/steffm5)
+          if [ -d ".next/standalone/Node/steffm5" ]; then
+            STANDALONE_DIR=".next/standalone/Node/steffm5"
+          elif [ -d ".next/standalone/steffm5/steffm5" ]; then
+            STANDALONE_DIR=".next/standalone/steffm5/steffm5"
+          else
+            echo "Error: Could not find standalone directory"
+            exit 1
+          fi
+
+          echo "Using standalone directory: $STANDALONE_DIR"
+
+          # Copy files, only if they exist
+          [ -d "$STANDALONE_DIR/.next" ] && cp -R "$STANDALONE_DIR/.next" wwwroot/ || echo "Skipping .next (not found)"
+          [ -d "$STANDALONE_DIR/db" ] && cp -R "$STANDALONE_DIR/db" wwwroot/ || echo "Skipping db (not found)"
+          [ -d "$STANDALONE_DIR/node_modules" ] && cp -R "$STANDALONE_DIR/node_modules" wwwroot/ || echo "Skipping node_modules (not found)"
+          [ -f "$STANDALONE_DIR/package.json" ] && cp "$STANDALONE_DIR/package.json" wwwroot/ || echo "Skipping package.json (not found)"
+          [ -d "$STANDALONE_DIR/pages" ] && cp -R "$STANDALONE_DIR/pages" wwwroot/ || echo "Skipping pages (not found)"
+          [ -d "$STANDALONE_DIR/public" ] && cp -R "$STANDALONE_DIR/public" wwwroot/ || echo "Skipping public (not found)"
+          [ -f "$STANDALONE_DIR/server.js" ] && cp "$STANDALONE_DIR/server.js" wwwroot/ || echo "Skipping server.js (not found)"
+
+          echo "=== wwwroot contents ==="
+          ls -la wwwroot/
 
       - name: Zip wwwroot
         run: zip -r wwwroot.zip wwwroot
