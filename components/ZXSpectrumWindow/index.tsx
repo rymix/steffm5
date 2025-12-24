@@ -9,6 +9,9 @@ import {
   StyledZXSpectrumWindow,
 } from "./styles";
 
+// Global registry to track AudioContexts
+const globalAudioContexts = new Set<AudioContext>();
+
 declare global {
   interface Window {
     JSSpeccy: (
@@ -28,6 +31,23 @@ declare global {
       onReady: (_callback: () => void) => void;
       openUrl: (_url: string) => void;
     };
+  }
+}
+
+// Monkey-patch AudioContext globally to track all instances
+if (typeof window !== "undefined" && !(window as any)._audioContextPatched) {
+  const OriginalAudioContext =
+    window.AudioContext || (window as any).webkitAudioContext;
+  if (OriginalAudioContext) {
+    const PatchedAudioContext = function (this: any, ...args: any[]) {
+      const instance = new OriginalAudioContext(...args);
+      globalAudioContexts.add(instance);
+      return instance;
+    };
+    PatchedAudioContext.prototype = OriginalAudioContext.prototype;
+    window.AudioContext = PatchedAudioContext as any;
+    (window as any).webkitAudioContext = PatchedAudioContext;
+    (window as any)._audioContextPatched = true;
   }
 }
 
@@ -66,19 +86,20 @@ const ZXSpectrumWindow: React.FC = () => {
     null,
   );
   const scriptLoadedRef = useRef(false);
-  const audioContextsRef = useRef<AudioContext[]>([]);
 
   // Cleanup function to stop all audio and clear emulator
   const cleanupEmulator = useCallback(() => {
-    // Close all tracked Audio Contexts
-    audioContextsRef.current.forEach((ctx) => {
-      if (ctx.state !== "closed") {
-        ctx.close().catch(() => {
-          // Ignore errors if already closed
-        });
+    // Close ALL AudioContexts from the global registry
+    globalAudioContexts.forEach((ctx) => {
+      try {
+        if (ctx.state !== "closed") {
+          ctx.close();
+        }
+        globalAudioContexts.delete(ctx);
+      } catch {
+        // Ignore errors
       }
     });
-    audioContextsRef.current = [];
 
     if (emulatorContainerRef.current) {
       // Stop all audio elements
@@ -87,12 +108,13 @@ const ZXSpectrumWindow: React.FC = () => {
       audioElements.forEach((audio) => {
         audio.pause();
         audio.src = "";
-        audio.load(); // Reset the audio element
+        audio.load();
       });
 
-      // Clear the container completely to destroy all DOM elements
+      // Clear the container completely
       emulatorContainerRef.current.innerHTML = "";
     }
+
     jsSpeccyInstanceRef.current = null;
   }, []);
 
@@ -114,57 +136,21 @@ const ZXSpectrumWindow: React.FC = () => {
       // Clear any existing content
       emulatorContainerRef.current.innerHTML = "";
 
-      // Intercept AudioContext creation to track it
-      const OriginalAudioContext =
-        window.AudioContext || (window as any).webkitAudioContext;
-      if (OriginalAudioContext) {
-        const TrackedAudioContext = function (
-          this: AudioContext,
-          ...args: any[]
-        ) {
-          const ctx = new OriginalAudioContext(...args);
-          audioContextsRef.current.push(ctx);
-          return ctx;
-        } as any;
-        TrackedAudioContext.prototype = OriginalAudioContext.prototype;
-        const tempContext = window.AudioContext;
-        window.AudioContext = TrackedAudioContext as typeof AudioContext;
-        (window as any).webkitAudioContext = TrackedAudioContext;
-
-        // Initialize JSSpeccy with 48K mode and auto-load the game
-        jsSpeccyInstanceRef.current = window.JSSpeccy(
-          emulatorContainerRef.current,
-          {
-            machine: 48,
-            zoom: 2,
-            openUrl: "/roms/zxspectrum/chuckieegg.tzx.zip",
-            autoStart: true,
-            autoLoadTapes: true,
-            tapeAutoLoadMode: "usr0",
-            keyboardEnabled: true,
-            uiEnabled: false,
-          },
-        );
-
-        // Restore original AudioContext
-        window.AudioContext = tempContext;
-        (window as any).webkitAudioContext = OriginalAudioContext;
-      } else {
-        // Fallback if AudioContext doesn't exist
-        jsSpeccyInstanceRef.current = window.JSSpeccy(
-          emulatorContainerRef.current,
-          {
-            machine: 48,
-            zoom: 2,
-            openUrl: "/roms/zxspectrum/chuckieegg.tzx.zip",
-            autoStart: true,
-            autoLoadTapes: true,
-            tapeAutoLoadMode: "usr0",
-            keyboardEnabled: true,
-            uiEnabled: false,
-          },
-        );
-      }
+      // Initialize JSSpeccy with 48K mode and auto-load the game
+      // The global AudioContext patch will automatically track any contexts it creates
+      jsSpeccyInstanceRef.current = window.JSSpeccy(
+        emulatorContainerRef.current,
+        {
+          machine: 48,
+          zoom: 2,
+          openUrl: "/roms/zxspectrum/chuckieegg.tzx.zip",
+          autoStart: true,
+          autoLoadTapes: true,
+          tapeAutoLoadMode: "usr0",
+          keyboardEnabled: true,
+          uiEnabled: false,
+        },
+      );
     };
 
     // Load JSSpeccy script if not already loaded
