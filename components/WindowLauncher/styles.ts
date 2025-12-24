@@ -28,8 +28,9 @@ export const StyledLauncherIcon = styled.button<{
   align-items: center;
   justify-content: center;
   gap: 4px;
-  width: 80px;
+  width: 100px;
   height: 80px;
+  opacity: 0.3;
   background: ${(props) =>
     props.$themeMode === "dark"
       ? "rgba(30, 30, 30, 0.8)"
@@ -48,13 +49,7 @@ export const StyledLauncherIcon = styled.button<{
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow:
-      0 4px 12px rgba(0, 0, 0, 0.2),
-      0 2px 4px rgba(0, 0, 0, 0.15);
-    background: ${(props) =>
-      props.$themeMode === "dark"
-        ? "rgba(40, 40, 40, 1)"
-        : "rgba(255, 255, 255, 1)"};
+    opacity: 1;
   }
 
   &:active {

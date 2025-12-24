@@ -26,15 +26,15 @@ const TetrisWindow: React.FC = () => {
     closeWindow,
     bringToFront,
   } = useDraggableWindow({
-    width: 800,
-    height: 650,
+    width: 640,
+    height: 550,
     initialScale: 1.0,
     minScale: 0.5,
     maxScale: 2.0,
     autoCenter: false,
     defaultPosition: {
-      x: typeof window !== "undefined" ? 100 : 0,
-      y: typeof window !== "undefined" ? 100 : 0,
+      x: typeof window !== "undefined" ? 50 : 0,
+      y: typeof window !== "undefined" ? 50 : 0,
     },
     closeable: true,
     initiallyOpen: false,
@@ -74,7 +74,7 @@ const TetrisWindow: React.FC = () => {
       style={{ zIndex }}
     >
       <StyledHeader data-draggable="true">
-        <h2>Tetr.js - HTML5 Tetris</h2>
+        <h2>Alexey Pajitnov's Tetris - Tetr.js</h2>
         <div>
           <StyledResetButton onClick={resetWindow}>Reset</StyledResetButton>
           <StyledResetButton

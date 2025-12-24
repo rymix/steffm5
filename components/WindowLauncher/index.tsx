@@ -10,18 +10,16 @@ const WindowLauncher: React.FC = () => {
   // Mixed and dark modes should use dark launcher icons
   const launcherThemeMode = theme.state.mode === "light" ? "light" : "dark";
 
-  // Get all closeable windows that are not visible
-  const closedWindows = Array.from(windows.values()).filter(
-    (window) => !window.isVisible && window.label,
-  );
+  // Get all windows
+  const allWindows = Array.from(windows.values());
 
-  if (closedWindows.length === 0) {
+  if (allWindows.length === 0) {
     return null;
   }
 
   return (
     <StyledLauncher>
-      {closedWindows.map((window) => (
+      {allWindows.map((window) => (
         <StyledLauncherIcon
           key={window.id}
           onClick={window.openWindow}

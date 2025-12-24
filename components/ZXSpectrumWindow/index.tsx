@@ -74,7 +74,7 @@ const ZXSpectrumWindow: React.FC = () => {
     autoCenter: false,
     defaultPosition: {
       x: typeof window !== "undefined" ? window.innerWidth - 660 : 0,
-      y: typeof window !== "undefined" ? 50 : 0,
+      y: typeof window !== "undefined" ? window.innerHeight - 550 : 0,
     },
     closeable: true,
     initiallyOpen: false,
