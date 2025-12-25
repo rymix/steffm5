@@ -1,0 +1,129 @@
+import React, { useEffect, useRef } from "react";
+
+import { useWindowManager } from "../../contexts/windowManager";
+import { useDraggableWindow } from "../../hooks/useDraggableWindow";
+import {
+  StyledHeader,
+  StyledIframe,
+  StyledMinesweeperWindow,
+  StyledResetButton,
+  StyledResizeHandle,
+} from "./styles";
+
+import CloseIcon from "@mui/icons-material/Close";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+
+const MinesweeperWindow: React.FC = () => {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const { setGameFocus } = useWindowManager();
+
+  const {
+    windowRef,
+    isDragging,
+    isResizing,
+    zIndex,
+    isVisible,
+    handleMouseDown,
+    handleTouchStart,
+    handleResizeMouseDown,
+    handleResizeTouchStart,
+    resetWindow,
+    closeWindow,
+    bringToFront,
+  } = useDraggableWindow({
+    width: 800,
+    height: 600,
+    initialScale: 1.0,
+    minScale: 0.5,
+    maxScale: 2.0,
+    autoCenter: false,
+    defaultPosition: {
+      x: typeof window !== "undefined" ? window.innerWidth - 850 : 0,
+      y: typeof window !== "undefined" ? 50 : 0,
+    },
+    closeable: true,
+    initiallyOpen: false,
+    windowLabel: "Minesweeper",
+    windowIcon: "/icons/minesweeper.png",
+    resizeMode: "dimensions",
+  });
+
+  // Detect when iframe is clicked/focused and bring window to front
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const handleWindowBlur = () => {
+      // Check if focus moved to the iframe
+      setTimeout(() => {
+        if (iframeRef.current && document.activeElement === iframeRef.current) {
+          bringToFront();
+          setGameFocus(true);
+        }
+      }, 0);
+    };
+
+    const handleWindowFocus = () => {
+      // Check if focus left the iframe
+      setTimeout(() => {
+        if (
+          !iframeRef.current ||
+          document.activeElement !== iframeRef.current
+        ) {
+          setGameFocus(false);
+        }
+      }, 0);
+    };
+
+    window.addEventListener("blur", handleWindowBlur);
+    window.addEventListener("focus", handleWindowFocus);
+    return () => {
+      window.removeEventListener("blur", handleWindowBlur);
+      window.removeEventListener("focus", handleWindowFocus);
+      setGameFocus(false);
+    };
+  }, [isVisible, bringToFront, setGameFocus]);
+
+  if (!isVisible) return null;
+
+  return (
+    <StyledMinesweeperWindow
+      ref={windowRef}
+      onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
+      $isDragging={isDragging}
+      $isResizing={isResizing}
+      style={{ zIndex }}
+    >
+      <StyledHeader data-draggable="true">
+        <h2>Minesweeper</h2>
+        <div>
+          <StyledResetButton
+            onClick={resetWindow}
+            title="Reset position and size"
+          >
+            <RestartAltIcon style={{ fontSize: "16px" }} />
+          </StyledResetButton>
+          <StyledResetButton
+            onClick={closeWindow}
+            style={{ marginLeft: "8px" }}
+            title="Close window"
+          >
+            <CloseIcon style={{ fontSize: "16px" }} />
+          </StyledResetButton>
+        </div>
+      </StyledHeader>
+      <StyledIframe
+        ref={iframeRef}
+        src="/minesweeper/index.html"
+        title="Minesweeper Game"
+        $isResizing={isResizing}
+      />
+      <StyledResizeHandle
+        onMouseDown={handleResizeMouseDown}
+        onTouchStart={handleResizeTouchStart}
+      />
+    </StyledMinesweeperWindow>
+  );
+};
+
+export default MinesweeperWindow;
