@@ -211,13 +211,7 @@ const HomePage: React.FC = () => {
     changeWallpaper,
   ]);
 
-  const togglePanel = () => {
-    console.log(
-      "HomePage togglePanel called, current isPanelOpen:",
-      isPanelOpen,
-    );
-    setIsPanelOpen(!isPanelOpen);
-  };
+  const togglePanel = () => setIsPanelOpen(!isPanelOpen);
   const toggleMobileInfo = () =>
     setIsMobileInfoCollapsed(!isMobileInfoCollapsed);
   const toggleTrackExpanded = (index: number) => {

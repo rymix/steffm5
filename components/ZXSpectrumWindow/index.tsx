@@ -9,6 +9,9 @@ import {
   StyledZXSpectrumWindow,
 } from "./styles";
 
+import CloseIcon from "@mui/icons-material/Close";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+
 // Global registry to track AudioContexts
 const globalAudioContexts = new Set<AudioContext>();
 
@@ -191,12 +194,18 @@ const ZXSpectrumWindow: React.FC = () => {
       <StyledHeader data-draggable="true">
         <h2>ZX Spectrum 48K - Chuckie Egg</h2>
         <div>
-          <StyledResetButton onClick={resetWindow}>Reset</StyledResetButton>
+          <StyledResetButton
+            onClick={resetWindow}
+            title="Reset position and size"
+          >
+            <RestartAltIcon style={{ fontSize: "16px" }} />
+          </StyledResetButton>
           <StyledResetButton
             onClick={closeWindow}
             style={{ marginLeft: "8px" }}
+            title="Close window"
           >
-            Close
+            <CloseIcon style={{ fontSize: "16px" }} />
           </StyledResetButton>
         </div>
       </StyledHeader>

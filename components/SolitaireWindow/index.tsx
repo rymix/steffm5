@@ -6,13 +6,13 @@ import {
   StyledIframe,
   StyledResetButton,
   StyledResizeHandle,
-  StyledTetrisWindow,
+  StyledSolitaireWindow,
 } from "./styles";
 
 import CloseIcon from "@mui/icons-material/Close";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
-const TetrisWindow: React.FC = () => {
+const SolitaireWindow: React.FC = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const {
@@ -29,29 +29,29 @@ const TetrisWindow: React.FC = () => {
     closeWindow,
     bringToFront,
   } = useDraggableWindow({
-    width: 640,
-    height: 550,
+    width: 520,
+    height: 620,
     initialScale: 1.0,
     minScale: 0.5,
     maxScale: 2.0,
     autoCenter: false,
     defaultPosition: {
-      x: typeof window !== "undefined" ? 50 : 0,
+      x: typeof window !== "undefined" ? window.innerWidth - 640 : 0,
       y: typeof window !== "undefined" ? 50 : 0,
     },
     closeable: true,
     initiallyOpen: false,
-    windowLabel: "Tetris",
-    windowIcon: "/icons/tetris.png",
+    windowLabel: "Solitaire",
+    windowIcon: "/solitaire/icon.png",
     resizeMode: "dimensions",
   });
 
-  // Detect when iframe is clicked/focused and bring window to front
+  // Detect when iframe gains focus (user clicked inside)
   useEffect(() => {
     if (!isVisible) return;
 
     const handleWindowBlur = () => {
-      // Check if focus moved to the iframe
+      // Small delay to check if iframe is now focused
       setTimeout(() => {
         if (iframeRef.current && document.activeElement === iframeRef.current) {
           bringToFront();
@@ -68,7 +68,7 @@ const TetrisWindow: React.FC = () => {
   if (!isVisible) return null;
 
   return (
-    <StyledTetrisWindow
+    <StyledSolitaireWindow
       ref={windowRef}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
@@ -77,7 +77,7 @@ const TetrisWindow: React.FC = () => {
       style={{ zIndex }}
     >
       <StyledHeader data-draggable="true">
-        <h2>Alexey Pajitnov's Tetris - Tetr.js</h2>
+        <h2>Solitaire - Klondike</h2>
         <div>
           <StyledResetButton
             onClick={resetWindow}
@@ -96,16 +96,15 @@ const TetrisWindow: React.FC = () => {
       </StyledHeader>
       <StyledIframe
         ref={iframeRef}
-        src="/tetris/index.html"
-        title="Tetris Game"
-        $isResizing={isResizing}
+        src="/solitaire/index.html#klondike?stockDraws=3"
+        title="Solitaire Game"
       />
       <StyledResizeHandle
         onMouseDown={handleResizeMouseDown}
         onTouchStart={handleResizeTouchStart}
       />
-    </StyledTetrisWindow>
+    </StyledSolitaireWindow>
   );
 };
 
-export default TetrisWindow;
+export default SolitaireWindow;

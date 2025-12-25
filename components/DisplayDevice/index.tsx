@@ -57,16 +57,6 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
   const toggleDisplay =
     onToggleProp || (() => setIsOpenInternal(!isOpenInternal));
 
-  // Debug logging
-  useEffect(() => {
-    console.log("DisplayDevice render:", {
-      isOpenProp,
-      isOpenInternal,
-      isOpen,
-      hasOnToggleProp: !!onToggleProp,
-    });
-  }, [isOpenProp, isOpenInternal, isOpen, onToggleProp]);
-
   const currentMix = actions.getCurrentMix();
 
   const toggleTrackExpanded = (index: number) => {
@@ -215,9 +205,7 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
 
   // Handle click - only toggle if we didn't drag
   const handleClick = () => {
-    console.log("Toggle button clicked, didDrag:", didDragRef.current);
     if (!didDragRef.current) {
-      console.log("Calling toggleDisplay, current isOpen:", isOpen);
       toggleDisplay();
     }
   };
