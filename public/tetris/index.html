@@ -18,7 +18,7 @@
   <link rel="shortcut icon" href="tetr_js/icons/favicon.ico">
   <meta name="msapplication-TileColor" content="#9f00a7">
   <meta name="msapplication-config" content="icons/browserconfig.xml">
-  
+
  <meta content="Tetr.js Enhanced" property="og:title" />
 <meta content="🕹️ Tetr.js Enhanced clone in HTML5 and JavaScript" property="og:description" />
 
@@ -106,28 +106,19 @@
       </div>
       <nav class="menu on">
         <img style="margin: 0px" width="72%" src="tetr_js/tetrjslogoenhanced.svg">
-        <!--      <h1 style="font-weight: 4;font-size: 2rem;margin: 0px">Tetr.js Enhanced</h1>-->
-        <p style="margin:0px">v1.1.0 <a class="link" href="changelog.html">(view changelog)</a></p>
-<!--
-        <p style=margin:3px>designed by simonlc<br>
-          overhauled by farter<br>
-          enhanced by Dr Ocelot</p>
-        <p style=margin:5px;>forked from: <a class="link" href="https://github.com/farteryhr/tetr.js/tree/gh-pages">&gt;&gt;Dig v0.58 by farter</a><br />
--->
+          <div><strong>Controls</strong><br />
+          Arrow keys - move left and right<br />
+          Down - soft drop<br />
+          Space - hard drop<br />
+          Q/W - rotate left/right<br />
+          E - Hold<br />
+          R - Retry
+        </div>
           <div class="btn-container" style="margin: 0px">
-            <a class="btn tournament" target="_blank" href="https://tetralegends.app/" style="margin-top: 9px;">Tetra Legends</a>
-            <a class="btn btn-inline" target="_blank" href="https://discord.gg/cvqaewgd7J" style="margin-bottom: 1.1em;">Discord</a>
-            <div style="display:none">
-            <a class="btn tournament" onclick="tourneySettings();init(1, {tournament: true})"><i class="material-icons">&#xE8E5;</i>Tournament</a>
-            <p><a class="link" style="margin:0" target="_blank" href="https://www.youtube.com/watch?v=qL9-eKF9oso">More Information</a></p>
-            </div>
-            <a class="btn" onclick="menu(9,1)"><i class="material-icons">&#xe3e7;</i>Sprint</a>
+            <a class="btn" onclick="menu(9,1)" style="margin-top: 9px;"><i class="material-icons">&#xe3e7;</i>Sprint</a>
             <a class="btn" onclick="menu(10,1)"><i class="material-icons">&#xE8E5;</i>Marathon</a>
             <a class="btn" onclick="menu(11,1)"><i class="material-icons">&#xe80c;</i>Master</a>
-            <a class="btn" onclick="menu(8,1)"><i class="material-icons">&#xe161;</i>Retro</a>
-            <a class="btn" onclick="menu(7,1)"><i class="material-icons">&#xE8E5;</i>Dig</a>
-            <a class="btn" onclick="menu(16,1)"><i class="material-icons">&#xE8E5;</i>Survival</a>
-            <a class="btn" onclick="menu(17,1)" style="margin-bottom: 1.1em;"><i class="material-icons">&#xE8E5;</i>Grades? (WIP)</a>
+            <a class="btn" onclick="menu(8,1)" style="margin-bottom: 1.1em;"><i class="material-icons">&#xe161;</i>Retro</a>
             <a class="btn" onclick="menu(2)" id="btnbinds"><i class="material-icons">&#xE021;</i> Controls</a>
             <a class="btn" onclick="menu(12)"><i class="material-icons">&#xE869;</i> Settings</a>
             <a class="btn" onclick="menu(6,1)"><i class="material-icons">&#xE04A;</i> Replay</a>
