@@ -64,15 +64,22 @@ const HomePage: React.FC = () => {
     null,
   );
   const [isClient, setIsClient] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   // Track previous values to detect changes
   const prevCurrentKey = useRef<string | null>(null);
   const prevCurrentTrack = useRef<string | null>(null);
   const hasMadeInitialMixLoad = useRef(false);
 
-  // Set client-side flag after mount
+  // Set client-side flag and check screen size after mount
   useEffect(() => {
     setIsClient(true);
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth > 1024);
+    };
+    checkDesktop();
+    window.addEventListener("resize", checkDesktop);
+    return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
   // Helper function to get current playing track
@@ -240,12 +247,17 @@ const HomePage: React.FC = () => {
       <WindowLauncher />
 
       {/* All windows - rendered at root level, only shown in desktop mode */}
-      {isClient && (
+      {isClient && isDesktop && (
         <>
           <MainPlayer />
           <ZXSpectrumWindow />
           <TetrisWindow />
         </>
+      )}
+
+      {/* Pull-out panel - rendered at root level to be above all windows, hidden in mobile via CSS */}
+      {isClient && (
+        <DisplayDevice isOpen={isPanelOpen} onToggle={togglePanel} />
       )}
 
       <StyledLayoutWrapper>
@@ -465,8 +477,6 @@ const HomePage: React.FC = () => {
             </StyledMobileDevice>
           </StyledMobileLayout>
         </StyledPlayerPage>
-
-        <DisplayDevice isOpen={isPanelOpen} onToggle={togglePanel} />
       </StyledLayoutWrapper>
     </WindowManagerProvider>
   );

@@ -5,9 +5,13 @@ interface ThemeProps {
 }
 
 export const StyledDisplayDeviceWrapper = styled.div`
-  position: relative;
-  flex-shrink: 0;
-  pointer-events: auto; /* Restore pointer events for interactive panel */
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none; /* Don't block clicks, children will re-enable */
+  z-index: 9999;
 
   @media (max-width: 1024px) {
     display: none;
@@ -15,16 +19,19 @@ export const StyledDisplayDeviceWrapper = styled.div`
 `;
 
 export const StyledDisplayDevice = styled.div<{ $isOpen: boolean }>`
-  position: relative;
+  position: fixed;
+  top: 0;
+  right: 0;
   width: ${({ $isOpen }) => ($isOpen ? "420px" : "0")};
-  height: 100%;
-  z-index: 400; /* Pull-out panel - below menu */
+  height: 100vh;
+  z-index: 9999; /* Pull-out panel - always above all windows */
   box-shadow: ${({ $isOpen }) =>
     $isOpen ? "-4px 0 24px rgba(0, 0, 0, 0.5)" : "none"};
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  pointer-events: ${({ $isOpen }) => ($isOpen ? "auto" : "none")};
 `;
 
 export const StyledWoodSlats = styled.div`
@@ -154,9 +161,9 @@ export const StyledMetalPanel = styled.div`
 `;
 
 export const StyledToggleButton = styled.button<{ $isOpen: boolean }>`
-  position: absolute;
+  position: fixed;
   top: 50%;
-  left: -40px;
+  right: ${({ $isOpen }) => ($isOpen ? "420px" : "0")};
   transform: translateY(-50%);
   width: 40px;
   height: 80px;
@@ -179,8 +186,10 @@ export const StyledToggleButton = styled.button<{ $isOpen: boolean }>`
   justify-content: center;
   font-size: 20px;
   color: #2a2a2a;
-  z-index: 400; /* Same as pull-out panel */
+  z-index: 9999; /* Same as pull-out panel */
   user-select: none;
+  pointer-events: auto; /* Always clickable */
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     background: #d8d8d8;
