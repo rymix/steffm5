@@ -3,13 +3,9 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
 import HomePage from "@/components/HomePage";
-import useKeyboardControls from "hooks/useKeyboardControls";
 
 const IndexPage: React.FC = () => {
   const router = useRouter();
-
-  // Enable keyboard controls
-  useKeyboardControls({ enabled: true });
 
   useEffect(() => {
     // Clean up URL if it has a mix query parameter

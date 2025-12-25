@@ -1,4 +1,5 @@
 import { useMixcloud } from "contexts/mixcloud";
+import { useWindowManager } from "contexts/windowManager";
 import { useCallback, useEffect } from "react";
 
 interface KeyboardControlsOptions {
@@ -8,9 +9,15 @@ interface KeyboardControlsOptions {
 const useKeyboardControls = (options: KeyboardControlsOptions = {}) => {
   const { enabled = true } = options;
   const { state, actions } = useMixcloud();
+  const { hasGameFocus } = useWindowManager();
 
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
+      // Don't handle keyboard shortcuts if a game window has focus
+      if (hasGameFocus) {
+        return;
+      }
+
       // Don't handle keyboard shortcuts if user is typing in an input field
       if (
         event.target instanceof HTMLInputElement ||
@@ -76,7 +83,7 @@ const useKeyboardControls = (options: KeyboardControlsOptions = {}) => {
           break;
       }
     },
-    [state.volume, actions],
+    [state.volume, actions, hasGameFocus],
   );
 
   useEffect(() => {

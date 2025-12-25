@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
+import { useWindowManager } from "../../contexts/windowManager";
 import { useDraggableWindow } from "../../hooks/useDraggableWindow";
 import {
   StyledHeader,
@@ -14,6 +15,7 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 const TetrisWindow: React.FC = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const { setGameFocus } = useWindowManager();
 
   const {
     windowRef,
@@ -55,15 +57,31 @@ const TetrisWindow: React.FC = () => {
       setTimeout(() => {
         if (iframeRef.current && document.activeElement === iframeRef.current) {
           bringToFront();
+          setGameFocus(true);
+        }
+      }, 0);
+    };
+
+    const handleWindowFocus = () => {
+      // Check if focus left the iframe
+      setTimeout(() => {
+        if (
+          !iframeRef.current ||
+          document.activeElement !== iframeRef.current
+        ) {
+          setGameFocus(false);
         }
       }, 0);
     };
 
     window.addEventListener("blur", handleWindowBlur);
+    window.addEventListener("focus", handleWindowFocus);
     return () => {
       window.removeEventListener("blur", handleWindowBlur);
+      window.removeEventListener("focus", handleWindowFocus);
+      setGameFocus(false);
     };
-  }, [isVisible, bringToFront]);
+  }, [isVisible, bringToFront, setGameFocus]);
 
   if (!isVisible) return null;
 

@@ -36,6 +36,7 @@ import WindowLauncher from "@/components/WindowLauncher";
 import ZXSpectrumWindow from "@/components/ZXSpectrumWindow";
 import MainPlayer from "components/MainPlayer";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
+import useKeyboardControls from "hooks/useKeyboardControls";
 import { useWallpaperManager } from "hooks/useWallpaperManager";
 
 import {
@@ -53,11 +54,14 @@ import {
   StyledPlayerPage,
 } from "./styles";
 
-const HomePage: React.FC = () => {
+const HomePageContent: React.FC = () => {
   const { state, actions } = useMixcloud();
   const theme = useTheme();
   const panelThemeMode = getPanelThemeMode(theme.state.mode);
   const { wallpaperState, changeWallpaper } = useWallpaperManager();
+
+  // Enable keyboard controls (must be inside WindowManagerProvider)
+  useKeyboardControls({ enabled: true });
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isMobileInfoCollapsed, setIsMobileInfoCollapsed] = useState(false);
   const [expandedTrackIndex, setExpandedTrackIndex] = useState<number | null>(
@@ -234,7 +238,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <WindowManagerProvider>
+    <>
       <Wallpaper
         wallpaperUrl={wallpaperState.currentWallpaper}
         tileType={wallpaperState.tileType}
@@ -478,6 +482,14 @@ const HomePage: React.FC = () => {
           </StyledMobileLayout>
         </StyledPlayerPage>
       </StyledLayoutWrapper>
+    </>
+  );
+};
+
+const HomePage: React.FC = () => {
+  return (
+    <WindowManagerProvider>
+      <HomePageContent />
     </WindowManagerProvider>
   );
 };

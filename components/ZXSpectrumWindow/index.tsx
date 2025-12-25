@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef } from "react";
 
+import { useWindowManager } from "../../contexts/windowManager";
 import { useDraggableWindow } from "../../hooks/useDraggableWindow";
 import {
   StyledContent,
@@ -55,6 +56,7 @@ if (typeof window !== "undefined" && !(window as any)._audioContextPatched) {
 }
 
 const ZXSpectrumWindow: React.FC = () => {
+  const { setGameFocus } = useWindowManager();
   const {
     windowRef,
     isDragging,
@@ -179,6 +181,40 @@ const ZXSpectrumWindow: React.FC = () => {
       cleanupEmulator();
     };
   }, [isVisible, cleanupEmulator]);
+
+  // Handle focus tracking for keyboard controls
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const handleContentClick = () => {
+      // When user clicks in the emulator, set game focus
+      setGameFocus(true);
+    };
+
+    const handleDocumentClick = (e: MouseEvent) => {
+      // When user clicks outside the window, clear game focus
+      if (windowRef.current && !windowRef.current.contains(e.target as Node)) {
+        setGameFocus(false);
+      }
+    };
+
+    // Listen for clicks on the emulator container
+    const container = emulatorContainerRef.current;
+    if (container) {
+      container.addEventListener("mousedown", handleContentClick);
+    }
+
+    // Listen for clicks anywhere on the document
+    document.addEventListener("mousedown", handleDocumentClick);
+
+    return () => {
+      if (container) {
+        container.removeEventListener("mousedown", handleContentClick);
+      }
+      document.removeEventListener("mousedown", handleDocumentClick);
+      setGameFocus(false);
+    };
+  }, [isVisible, setGameFocus, windowRef]);
 
   if (!isVisible) return null;
 
