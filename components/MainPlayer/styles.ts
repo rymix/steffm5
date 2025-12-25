@@ -52,10 +52,16 @@ export const StyledHeader = styled.div`
   padding-right: 8px;
 `;
 
-export const StyledResetButton = styled.button`
+export const StyledButtonContainer = styled.div`
   position: absolute;
-  top: 12px;
+  bottom: 12px;
   right: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 20;
+`;
+
+export const StyledResetButton = styled.button`
   width: 26px;
   height: 26px;
   background: #5a5a5a;
@@ -81,7 +87,7 @@ export const StyledResetButton = styled.button`
     0 2px 2px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
   transition: all 0.04s ease;
-  z-index: 20;
+  text-decoration: none;
 
   &:hover {
     background: #6a6a6a;

@@ -323,7 +323,7 @@ export const StyledControlsContainer = styled.div`
 `;
 
 export const StyledControlButton = styled.button<{
-  $variant?: "play" | "resume" | "restart" | "pause";
+  $variant?: "play" | "resume" | "restart" | "pause" | "download";
 }>`
   font-size: 11px;
   font-weight: 500;
@@ -333,6 +333,8 @@ export const StyledControlButton = styled.button<{
   cursor: pointer;
   color: white;
   transition: background-color 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
   background-color: ${(props) => {
     switch (props.$variant) {
       case "play":
@@ -343,6 +345,8 @@ export const StyledControlButton = styled.button<{
         return "#4a8fc4";
       case "pause":
         return "#d64444";
+      case "download":
+        return "#8b5fbf";
       default:
         return "#888888";
     }
@@ -359,6 +363,8 @@ export const StyledControlButton = styled.button<{
           return "#3a7fb4";
         case "pause":
           return "#c63434";
+        case "download":
+          return "#7b4faf";
         default:
           return "#787878";
       }

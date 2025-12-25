@@ -260,6 +260,18 @@ const MixList: React.FC = () => {
                           Start Over
                         </StyledControlButton>
                       )}
+                      {mix?.fileName && (
+                        <StyledControlButton
+                          as="a"
+                          href={`https://steffm.blob.core.windows.net/steffm/${mix.fileName}`}
+                          download
+                          $variant="download"
+                          title="Download this mix"
+                          onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                        >
+                          Download
+                        </StyledControlButton>
+                      )}
                     </StyledHoverControls>
 
                     {/* Playing status and pause button - moved to the right */}

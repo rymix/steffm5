@@ -9,6 +9,7 @@ import { useDraggableWindow } from "hooks/useDraggableWindow";
 import {
   GlobalFonts,
   StyledButton,
+  StyledButtonContainer,
   StyledButtonLabel,
   StyledButtonLED,
   StyledButtonRowsWrapper,
@@ -38,6 +39,7 @@ import {
   StyledWoodPanel,
 } from "./styles";
 
+import DownloadIcon from "@mui/icons-material/Download";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 // Constants
@@ -510,14 +512,36 @@ const MainPlayer: React.FC = () => {
           <StyledMainPanel>
             <DisplayContent />
           </StyledMainPanel>
+          <StyledButtonContainer>
+            {currentMix?.fileName ? (
+              <StyledResetButton
+                as="a"
+                href={`https://steffm.blob.core.windows.net/steffm/${currentMix.fileName}`}
+                download
+                title="Download current mix"
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              >
+                <DownloadIcon style={{ fontSize: "16px" }} />
+              </StyledResetButton>
+            ) : (
+              <StyledResetButton
+                as="button"
+                disabled
+                title="Download not available for this mix"
+                style={{ opacity: 0.5, cursor: "not-allowed" }}
+              >
+                <DownloadIcon style={{ fontSize: "16px" }} />
+              </StyledResetButton>
+            )}
+            <StyledResetButton
+              onClick={handleResetPosition}
+              title="Reset position and size"
+            >
+              <RestartAltIcon style={{ fontSize: "16px" }} />
+            </StyledResetButton>
+          </StyledButtonContainer>
         </StyledWoodPanel>
         <StyledControls>
-          <StyledResetButton
-            onClick={handleResetPosition}
-            title="Reset position and size"
-          >
-            <RestartAltIcon style={{ fontSize: "16px" }} />
-          </StyledResetButton>
           <StyledDialContainer>
             <StyledVolumeDialWrapper>
               {Array.from({ length: 11 }).map((_, i) => {
