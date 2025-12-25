@@ -19,6 +19,8 @@ interface WindowManagerContextType {
   registerWindow: (_window: WindowInfo) => void;
   unregisterWindow: (_id: string) => void;
   updateWindow: (_id: string, _updates: Partial<WindowInfo>) => void;
+  hasGameFocus: boolean;
+  setGameFocus: (_hasFocus: boolean) => void;
 }
 
 const WindowManagerContext = createContext<WindowManagerContextType | null>(
@@ -39,6 +41,7 @@ export const WindowManagerProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [windows, setWindows] = useState<Map<string, WindowInfo>>(new Map());
+  const [hasGameFocus, setHasGameFocus] = useState(false);
 
   const registerWindow = useCallback((window: WindowInfo) => {
     setWindows((prev) => {
@@ -74,9 +77,27 @@ export const WindowManagerProvider: React.FC<{ children: React.ReactNode }> = ({
     [],
   );
 
+  const setGameFocus = useCallback((hasFocus: boolean) => {
+    setHasGameFocus(hasFocus);
+  }, []);
+
   const contextValue = useMemo(
-    () => ({ windows, registerWindow, unregisterWindow, updateWindow }),
-    [windows, registerWindow, unregisterWindow, updateWindow],
+    () => ({
+      windows,
+      registerWindow,
+      unregisterWindow,
+      updateWindow,
+      hasGameFocus,
+      setGameFocus,
+    }),
+    [
+      windows,
+      registerWindow,
+      unregisterWindow,
+      updateWindow,
+      hasGameFocus,
+      setGameFocus,
+    ],
   );
 
   return (
