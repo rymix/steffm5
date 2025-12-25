@@ -83,6 +83,28 @@ const MinesweeperWindow: React.FC = () => {
     };
   }, [isVisible, bringToFront, setGameFocus]);
 
+  // Listen for resize messages from iframe
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === "minesweeper-resize") {
+        const { width, height } = event.data;
+        if (windowRef.current && width && height) {
+          // Add header height (50px) to the height
+          const totalHeight = height + 50;
+          windowRef.current.style.width = `${width}px`;
+          windowRef.current.style.height = `${totalHeight}px`;
+        }
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, [isVisible, windowRef]);
+
   if (!isVisible) return null;
 
   return (
