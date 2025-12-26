@@ -7,7 +7,6 @@ import {
   StyledIframe,
   StyledMinesweeperWindow,
   StyledResetButton,
-  StyledResizeHandle,
 } from "./styles";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -16,6 +15,9 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 const MinesweeperWindow: React.FC = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { setGameFocus } = useWindowManager();
+  const currentDimensionsRef = useRef<{ width: number; height: number } | null>(
+    null,
+  );
 
   const {
     windowRef,
@@ -25,8 +27,6 @@ const MinesweeperWindow: React.FC = () => {
     isVisible,
     handleMouseDown,
     handleTouchStart,
-    handleResizeMouseDown,
-    handleResizeTouchStart,
     resetWindow,
     closeWindow,
     bringToFront,
@@ -46,6 +46,7 @@ const MinesweeperWindow: React.FC = () => {
     windowLabel: "Minesweeper",
     windowIcon: "/icons/minesweeper.png",
     resizeMode: "dimensions",
+    disableViewportResize: true,
   });
 
   // Detect when iframe is clicked/focused and bring window to front
@@ -83,6 +84,41 @@ const MinesweeperWindow: React.FC = () => {
     };
   }, [isVisible, bringToFront, setGameFocus]);
 
+  // Handle viewport resize - constrain window position to stay within viewport
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const handleViewportResize = () => {
+      if (!windowRef.current || !currentDimensionsRef.current) return;
+
+      const { width, height } = currentDimensionsRef.current;
+
+      // Get current position from translate
+      const computedStyle = window.getComputedStyle(windowRef.current);
+      const translate = computedStyle.translate;
+      const [currentX, currentY] = translate
+        .split(" ")
+        .map((v) => parseFloat(v) || 0);
+
+      // Calculate constrained position to keep window fully within viewport
+      const maxX = Math.max(0, window.innerWidth - width);
+      const maxY = Math.max(0, window.innerHeight - height);
+
+      const constrainedX = Math.max(0, Math.min(maxX, currentX));
+      const constrainedY = Math.max(0, Math.min(maxY, currentY));
+
+      // Update position if needed
+      if (constrainedX !== currentX || constrainedY !== currentY) {
+        windowRef.current.style.translate = `${constrainedX}px ${constrainedY}px`;
+      }
+    };
+
+    window.addEventListener("resize", handleViewportResize);
+    return () => {
+      window.removeEventListener("resize", handleViewportResize);
+    };
+  }, [isVisible, windowRef]);
+
   // Listen for resize messages from iframe
   useEffect(() => {
     if (!isVisible) return;
@@ -93,8 +129,45 @@ const MinesweeperWindow: React.FC = () => {
         if (windowRef.current && width && height) {
           // Add header height (50px) to the height
           const totalHeight = height + 50;
+
+          // Store dimensions for viewport resize handler
+          currentDimensionsRef.current = { width, height: totalHeight };
+
+          // Set new dimensions
           windowRef.current.style.width = `${width}px`;
           windowRef.current.style.height = `${totalHeight}px`;
+
+          // Manually constrain position using actual DOM dimensions
+          // Use double requestAnimationFrame to ensure dimensions are fully applied
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              if (!windowRef.current) return;
+
+              // Get actual dimensions from DOM
+              const rect = windowRef.current.getBoundingClientRect();
+              const actualWidth = rect.width;
+              const actualHeight = rect.height;
+
+              // Get current position from translate
+              const computedStyle = window.getComputedStyle(windowRef.current);
+              const translate = computedStyle.translate;
+              const [currentX, currentY] = translate
+                .split(" ")
+                .map((v) => parseFloat(v) || 0);
+
+              // Calculate constrained position
+              const maxX = Math.max(0, window.innerWidth - actualWidth);
+              const maxY = Math.max(0, window.innerHeight - actualHeight);
+
+              const constrainedX = Math.max(0, Math.min(maxX, currentX));
+              const constrainedY = Math.max(0, Math.min(maxY, currentY));
+
+              // Only update if position needs to change
+              if (constrainedX !== currentX || constrainedY !== currentY) {
+                windowRef.current.style.translate = `${constrainedX}px ${constrainedY}px`;
+              }
+            });
+          });
         }
       }
     };
@@ -139,10 +212,6 @@ const MinesweeperWindow: React.FC = () => {
         src="/minesweeper/index.html"
         title="Minesweeper Game"
         $isResizing={isResizing}
-      />
-      <StyledResizeHandle
-        onMouseDown={handleResizeMouseDown}
-        onTouchStart={handleResizeTouchStart}
       />
     </StyledMinesweeperWindow>
   );
