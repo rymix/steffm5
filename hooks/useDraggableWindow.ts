@@ -93,6 +93,12 @@ export interface UseDraggableWindowOptions {
    * (default: "scale")
    */
   resizeMode?: "scale" | "dimensions";
+
+  /**
+   * Disable viewport resize handling (useful for windows with dynamic dimensions)
+   * (default: false)
+   */
+  disableViewportResize?: boolean;
 }
 
 export interface UseDraggableWindowReturn {
@@ -145,6 +151,7 @@ export const useDraggableWindow = (
     onClose,
     onOpen,
     resizeMode = "scale",
+    disableViewportResize = false,
   } = options;
 
   // Window manager (optional - only if provider exists)
@@ -685,6 +692,8 @@ export const useDraggableWindow = (
 
   // Handle window resize - keep windows fully within viewport
   useEffect(() => {
+    if (disableViewportResize) return;
+
     const handleResize = () => {
       if (!hasUserInteractedRef.current && autoCenter) {
         // Auto-center if user hasn't interacted
@@ -728,7 +737,16 @@ export const useDraggableWindow = (
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [centerWindow, autoCenter, scale, width, height, dimensions, resizeMode]);
+  }, [
+    centerWindow,
+    autoCenter,
+    scale,
+    width,
+    height,
+    dimensions,
+    resizeMode,
+    disableViewportResize,
+  ]);
 
   return {
     windowRef,

@@ -30,6 +30,7 @@ import {
   StyledTrackRemix,
   StyledTrackTime,
 } from "@/components/DisplayDevice/styles";
+import MinesweeperWindow from "@/components/MinesweeperWindow";
 import TetrisWindow from "@/components/TetrisWindow";
 import Wallpaper from "@/components/Wallpaper";
 import WindowLauncher from "@/components/WindowLauncher";
@@ -256,6 +257,7 @@ const HomePageContent: React.FC = () => {
           <MainPlayer />
           <ZXSpectrumWindow />
           <TetrisWindow />
+          <MinesweeperWindow />
         </>
       )}
 

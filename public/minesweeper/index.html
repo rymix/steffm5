@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>JavaScript Minesweeper</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/minesweeper.css" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="css/smoothness/jquery-ui-1.9.2.custom.min.css"
+      type="text/css"
+    />
+    <!-- Source: https://github.com/michaelbutler/minesweeper -->
+  </head>
+  <body>
+    <div id="minesweeper"></div>
+
+    <script src="js/MineSweeper.js" type="text/javascript"></script>
+    <script>
+      jQuery(function ($) {
+        // set a global instance of Minesweeper
+        minesweeper = new MineSweeper();
+
+        // init the (first) game
+        minesweeper.init();
+
+        // Function to send board dimensions to parent window
+        function sendBoardDimensions() {
+          var boardWrap = document.querySelector('.board-wrap');
+          var gameSettings = document.querySelector('.game_settings');
+          var minesweeperDiv = document.querySelector('#minesweeper');
+
+          if (boardWrap && minesweeperDiv && window.parent) {
+            // For width: use the board width as the base
+            var boardWidth = boardWrap.offsetWidth;
+            var settingsWidth = gameSettings ? gameSettings.offsetWidth : 0;
+
+            // Use the wider of the two (board or settings)
+            var contentWidth = Math.max(boardWidth, settingsWidth);
+
+            // For height: use the full container height (already includes all elements)
+            var height = minesweeperDiv.offsetHeight;
+
+            // Add #minesweeper padding (0.75em = 12px, left+right = 24px, top+bottom = 24px)
+            var containerPaddingWidth = 24;
+            var containerPaddingHeight = 24;
+
+            // Add body padding (0.5em = 8px, left+right = 16px, top+bottom = 16px)
+            var bodyPaddingWidth = 16;
+            var bodyPaddingHeight = 16;
+
+            window.parent.postMessage({
+              type: 'minesweeper-resize',
+              width: contentWidth + containerPaddingWidth + bodyPaddingWidth,
+              height: height + bodyPaddingHeight
+            }, '*');
+          }
+        }
+
+        // Send dimensions after game loads
+        setTimeout(sendBoardDimensions, 100);
+
+        // Listen for new game events to update size
+        $(document).on('click', 'input[value="New Game"]', function() {
+          setTimeout(sendBoardDimensions, 200);
+        });
+
+        // Also listen for changes to game settings
+        $('select, input[type="text"]').on('change', function() {
+          setTimeout(sendBoardDimensions, 200);
+        });
+      });
+    </script>
+  </body>
+</html>
