@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { StyledInfoBox, StyledWallpaper } from "./styles";
 import type { WallpaperProps } from "./types";
@@ -10,9 +10,16 @@ const Wallpaper: React.FC<WallpaperProps> = ({
   systemName,
   wallpaperName,
 }) => {
+  const [infoBoxActive, setInfoBoxActive] = useState(false);
+
   if (!wallpaperUrl && !isLoading) {
     return null;
   }
+
+  const handleInfoBoxTap = () => {
+    setInfoBoxActive(true);
+    setTimeout(() => setInfoBoxActive(false), 3000);
+  };
 
   return (
     <>
@@ -24,7 +31,10 @@ const Wallpaper: React.FC<WallpaperProps> = ({
         aria-hidden="true"
       />
       {systemName && wallpaperName && (
-        <StyledInfoBox>
+        <StyledInfoBox
+          className={infoBoxActive ? "active" : ""}
+          onClick={handleInfoBoxTap}
+        >
           <div className="system-name">{systemName}</div>
           <div className="wallpaper-name">{wallpaperName}</div>
         </StyledInfoBox>

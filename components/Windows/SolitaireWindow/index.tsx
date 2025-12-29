@@ -32,14 +32,14 @@ const SolitaireWindow: React.FC = () => {
     bringToFront,
   } = useDraggableWindow({
     width: 720,
-    height: 500,
+    height: 570,
     initialScale: 1.0,
     minScale: 0.5,
     maxScale: 2.0,
     autoCenter: false,
     defaultPosition: {
       x: typeof window !== "undefined" ? window.innerWidth - 740 : 0,
-      y: typeof window !== "undefined" ? 50 : 0,
+      y: typeof window !== "undefined" ? 30 : 0,
     },
     closeable: true,
     initiallyOpen: false,

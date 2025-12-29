@@ -5,16 +5,22 @@ import { useDraggableWindow } from "../../../hooks/useDraggableWindow";
 import {
   StyledContent,
   StyledHeader,
+  StyledHeaderControls,
+  StyledMuteButton,
   StyledResetButton,
   StyledResizeHandle,
+  StyledVolumeControl,
+  StyledVolumeSlider,
   StyledZXSpectrumWindow,
 } from "./styles";
 
 import CloseIcon from "@mui/icons-material/Close";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 
-// Global registry to track AudioContexts
-const globalAudioContexts = new Set<AudioContext>();
+// Global registry to track AudioContexts and their gain nodes
+const globalAudioContexts = new Map<AudioContext, GainNode>();
 
 declare global {
   interface Window {
@@ -38,15 +44,48 @@ declare global {
   }
 }
 
-// Monkey-patch AudioContext globally to track all instances
+// Monkey-patch AudioContext to intercept audio and control volume
 if (typeof window !== "undefined" && !(window as any)._audioContextPatched) {
   const OriginalAudioContext =
     window.AudioContext || (window as any).webkitAudioContext;
   if (OriginalAudioContext) {
     const PatchedAudioContext = function (this: any, ...args: any[]) {
-      const instance = new OriginalAudioContext(...args);
-      globalAudioContexts.add(instance);
-      return instance;
+      const ctx = new OriginalAudioContext(...args);
+
+      // Create a gain node for this context
+      const gainNode = ctx.createGain();
+      gainNode.gain.value = 0.7; // Default volume
+      gainNode.connect(ctx.destination);
+
+      // Store the gain node
+      globalAudioContexts.set(ctx, gainNode);
+
+      // Store the real destination
+      const realDestination = ctx.destination;
+
+      // Monkey-patch the connect method on AudioNode prototype for this context
+      const originalConnect = AudioNode.prototype.connect;
+      const patchedConnect = function (this: AudioNode, ...connectArgs: any[]) {
+        // If connecting to the destination, redirect to our gain node
+        if (connectArgs[0] === realDestination) {
+          return (originalConnect as any).call(
+            this,
+            gainNode,
+            ...connectArgs.slice(1),
+          );
+        }
+        // Otherwise, use original connect
+        return originalConnect.apply(this, connectArgs as any);
+      };
+
+      // Replace connect method (we need to do this per context to capture the right destination)
+      // Store original for cleanup
+      if (!(window as any)._originalAudioNodeConnect) {
+        (window as any)._originalAudioNodeConnect = originalConnect;
+      }
+      AudioNode.prototype.connect = patchedConnect as any;
+
+      return ctx;
     };
     PatchedAudioContext.prototype = OriginalAudioContext.prototype;
     window.AudioContext = PatchedAudioContext as any;
@@ -57,6 +96,9 @@ if (typeof window !== "undefined" && !(window as any)._audioContextPatched) {
 
 const ZXSpectrumWindow: React.FC = () => {
   const { setGameFocus } = useWindowManager();
+  const [isMuted, setIsMuted] = React.useState(false);
+  const [volume, setVolume] = React.useState(0.7); // Default 70% volume
+
   const {
     windowRef,
     isDragging,
@@ -93,10 +135,45 @@ const ZXSpectrumWindow: React.FC = () => {
   );
   const scriptLoadedRef = useRef(false);
 
+  // Update volume on all gain nodes
+  const updateVolume = useCallback(
+    (newVolume: number) => {
+      globalAudioContexts.forEach((gainNode) => {
+        const targetValue = isMuted ? 0 : newVolume;
+        gainNode.gain.value = targetValue;
+      });
+    },
+    [isMuted],
+  );
+
+  // Toggle mute
+  const toggleMute = useCallback(() => {
+    setIsMuted((prev) => {
+      const newMuted = !prev;
+      globalAudioContexts.forEach((gainNode) => {
+        gainNode.gain.value = newMuted ? 0 : volume;
+      });
+      return newMuted;
+    });
+  }, [volume]);
+
+  // Handle volume change
+  const handleVolumeChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newVolume = parseFloat(e.target.value);
+      setVolume(newVolume);
+      updateVolume(newVolume);
+      if (newVolume > 0 && isMuted) {
+        setIsMuted(false);
+      }
+    },
+    [updateVolume, isMuted],
+  );
+
   // Cleanup function to stop all audio and clear emulator
   const cleanupEmulator = useCallback(() => {
     // Close ALL AudioContexts from the global registry
-    globalAudioContexts.forEach((ctx) => {
+    globalAudioContexts.forEach((_gainNode, ctx) => {
       try {
         if (ctx.state !== "closed") {
           ctx.close();
@@ -230,7 +307,31 @@ const ZXSpectrumWindow: React.FC = () => {
     >
       <StyledHeader data-draggable="true">
         <h2>ZX Spectrum 48K - Chuckie Egg</h2>
-        <div>
+        <StyledHeaderControls>
+          <StyledVolumeControl
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+          >
+            <StyledMuteButton
+              onClick={toggleMute}
+              title={isMuted ? "Unmute" : "Mute"}
+            >
+              {isMuted ? (
+                <VolumeOffIcon style={{ fontSize: "20px" }} />
+              ) : (
+                <VolumeUpIcon style={{ fontSize: "20px" }} />
+              )}
+            </StyledMuteButton>
+            <StyledVolumeSlider
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={volume}
+              onChange={handleVolumeChange}
+              title={`Volume: ${Math.round(volume * 100)}%`}
+            />
+          </StyledVolumeControl>
           <StyledResetButton
             onClick={resetWindow}
             title="Reset position and size"
@@ -244,7 +345,7 @@ const ZXSpectrumWindow: React.FC = () => {
           >
             <CloseIcon style={{ fontSize: "16px" }} />
           </StyledResetButton>
-        </div>
+        </StyledHeaderControls>
       </StyledHeader>
       <StyledContent onMouseDown={bringToFront} onTouchStart={bringToFront}>
         <div ref={emulatorContainerRef} />

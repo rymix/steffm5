@@ -59,7 +59,7 @@ export const StyledMobileLayout = styled.div`
     height: 100vh;
     padding: 10px 20px 20px 20px;
     overflow: hidden;
-    pointer-events: auto; /* Restore pointer events for mobile layout */
+    pointer-events: none; /* Allow clicks to pass through to elements behind */
   }
 `;
 
@@ -71,6 +71,7 @@ export const StyledMobileDevice = styled.div`
   flex-direction: column;
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
   overflow: hidden;
+  pointer-events: auto; /* Restore pointer events for mobile device content */
 `;
 
 export const StyledMobileWoodSlats = styled.div`
