@@ -173,6 +173,7 @@ export const useDraggableWindow = (
   const windowId = useRef(
     `window-${Math.random().toString(36).substr(2, 9)}`,
   ).current;
+  const openWindowRef = useRef<() => void>(() => {});
 
   // State
   const [scale, setScale] = useState(initialScale);
@@ -270,51 +271,59 @@ export const useDraggableWindow = (
     onClose?.();
   }, [closeable, onClose, windowId]);
 
-  // Open window
+  // Open window - using callback to always use latest isVisible value
   const openWindow = useCallback(() => {
-    // If already visible, just bring to front
-    if (isVisible) {
-      bringToFront();
-      return;
-    }
+    openWindowRef.current();
+  }, []);
 
-    // Reset window to initial state when reopening
-    hasUserInteractedRef.current = false;
-
-    const resetScale = initialScale;
-    const resetDimensions = { width, height };
-    const windowWidth = resizeMode === "scale" ? width * resetScale : width;
-    const windowHeight = resizeMode === "scale" ? height * resetScale : height;
-
-    // Use defaultPosition if provided, otherwise center
-    if (defaultPosition) {
-      positionRef.current = { ...defaultPosition };
-    } else {
-      positionRef.current = {
-        x: (window.innerWidth - windowWidth) / 2,
-        y: (window.innerHeight - windowHeight) / 2,
-      };
-    }
-
-    setScale(resetScale);
-    setDimensions(resetDimensions);
-    setIsVisible(true);
-    bringToFront();
-
-    // Apply the reset position to the element
-    if (windowRef.current) {
-      if (resizeMode === "scale") {
-        windowRef.current.style.transform = `scale(${resetScale})`;
-        windowRef.current.style.transformOrigin = "0 0";
-      } else {
-        windowRef.current.style.width = `${width}px`;
-        windowRef.current.style.height = `${height}px`;
+  // Update the openWindowRef implementation whenever dependencies change
+  useEffect(() => {
+    openWindowRef.current = () => {
+      // If already visible, just bring to front
+      if (isVisible) {
+        bringToFront();
+        return;
       }
-      windowRef.current.style.translate = `${positionRef.current.x}px ${positionRef.current.y}px`;
-    }
 
-    windowManagerRef.current?.updateWindow(windowId, { isVisible: true });
-    onOpen?.();
+      // Reset window to initial state when reopening
+      hasUserInteractedRef.current = false;
+
+      const resetScale = initialScale;
+      const resetDimensions = { width, height };
+      const windowWidth = resizeMode === "scale" ? width * resetScale : width;
+      const windowHeight =
+        resizeMode === "scale" ? height * resetScale : height;
+
+      // Use defaultPosition if provided, otherwise center
+      if (defaultPosition) {
+        positionRef.current = { ...defaultPosition };
+      } else {
+        positionRef.current = {
+          x: (window.innerWidth - windowWidth) / 2,
+          y: (window.innerHeight - windowHeight) / 2,
+        };
+      }
+
+      setScale(resetScale);
+      setDimensions(resetDimensions);
+      setIsVisible(true);
+      bringToFront();
+
+      // Apply the reset position to the element
+      if (windowRef.current) {
+        if (resizeMode === "scale") {
+          windowRef.current.style.transform = `scale(${resetScale})`;
+          windowRef.current.style.transformOrigin = "0 0";
+        } else {
+          windowRef.current.style.width = `${width}px`;
+          windowRef.current.style.height = `${height}px`;
+        }
+        windowRef.current.style.translate = `${positionRef.current.x}px ${positionRef.current.y}px`;
+      }
+
+      windowManagerRef.current?.updateWindow(windowId, { isVisible: true });
+      onOpen?.();
+    };
   }, [
     isVisible,
     bringToFront,
@@ -390,6 +399,7 @@ export const useDraggableWindow = (
   };
 
   // Register with window manager - only register once on mount
+  // openWindow is stable thanks to the ref pattern, so it won't cause re-registration
   useEffect(() => {
     const wm = windowManagerRef.current;
     if (wm && closeable && windowLabel) {
@@ -405,7 +415,7 @@ export const useDraggableWindow = (
         wm.unregisterWindow(windowId);
       };
     }
-  }, [windowId]);
+  }, [windowId, closeable, windowLabel, windowIcon, initiallyOpen, openWindow]);
 
   // Update window visibility separately to avoid infinite loops
   useEffect(() => {

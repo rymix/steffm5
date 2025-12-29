@@ -92,7 +92,14 @@ export const StyledInfoBox = styled.div`
   transition: opacity 0.3s ease;
   cursor: default;
 
-  &:hover {
+  /* Only apply hover on devices with hover capability (not touch) */
+  @media (hover: hover) {
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &.active {
     opacity: 1;
   }
 

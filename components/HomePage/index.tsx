@@ -30,11 +30,12 @@ import {
   StyledTrackRemix,
   StyledTrackTime,
 } from "@/components/DisplayDevice/styles";
-import MinesweeperWindow from "@/components/MinesweeperWindow";
-import TetrisWindow from "@/components/TetrisWindow";
 import Wallpaper from "@/components/Wallpaper";
 import WindowLauncher from "@/components/WindowLauncher";
-import ZXSpectrumWindow from "@/components/ZXSpectrumWindow";
+import MinesweeperWindow from "@/components/Windows/MinesweeperWindow";
+import SolitaireWindow from "@/components/Windows/SolitaireWindow";
+import TetrisWindow from "@/components/Windows/TetrisWindow";
+import ZXSpectrumWindow from "@/components/Windows/ZXSpectrumWindow";
 import MainPlayer from "components/MainPlayer";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 import useKeyboardControls from "hooks/useKeyboardControls";
@@ -258,6 +259,7 @@ const HomePageContent: React.FC = () => {
           <ZXSpectrumWindow />
           <TetrisWindow />
           <MinesweeperWindow />
+          <SolitaireWindow />
         </>
       )}
 
