@@ -1,76 +1,31 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Solitaire</title>
-    <link href="index.css" rel="stylesheet">
-    <link rel="icon shortcut" href="icon.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, shrink-to-fit=no">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Classic Windows 3.1 Solitaire recreated in React" />
+    <title>Solitaire - Windows 3.1 Style</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background: #1a5f1a;
-        }
-        #buttons {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-            display: flex;
-            gap: 8px;
-        }
-        #buttons button {
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        #buttons button:hover {
-            background: rgba(255, 255, 255, 1);
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      html, body, #root {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #008080;
+      }
     </style>
-    <script>
-        // Clear the specific localStorage key for klondike with our settings
-        // The game stores state with a key like: {"gameName":"klondike","version":0,"options":{"stockDraws":3,"restocksAllowed":null}}
-        // We need to clear any klondike keys to force a fresh game
-        const keysToRemove = [];
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key && key.includes('"gameName":"klondike"')) {
-                keysToRemove.push(key);
-            }
-        }
-        keysToRemove.forEach(key => localStorage.removeItem(key));
-        console.log('[SOLITAIRE] Cleared', keysToRemove.length, 'saved klondike games');
-    </script>
-    <script src="index.js" defer></script>
-</head>
-<body>
-    <div id="tableHolder"></div>
-    <div id="buttons">
-        <button id="newGameButton">New Game</button>
-        <button id="undoButton">Undo</button>
-        <button id="redoButton">Redo</button>
-    </div>
-</body>
-<template id="rootViewTemplate">
-    <div class="cardTable">
-        <span class="gameScore">12 / 100</span>
-    </div>
-</template>
-<template id="cardViewTemplate">
-    <div class="card">
-        <div class="cardRotation">
-            <div class="cardFront"></div>
-            <div class="cardBack"></div>
-        </div>
-    </div>
-</template>
-<template id="pileViewTemplate">
-    <div class="pile">
-    </div>
-</template>
+    <script type="module" crossorigin src="./assets/index-DeXBS3so.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>

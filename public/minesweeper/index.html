@@ -69,6 +69,13 @@
         $('select, input[type="text"]').on('change', function() {
           setTimeout(sendBoardDimensions, 200);
         });
+
+        // Listen for recalculate message from parent window
+        window.addEventListener('message', function(event) {
+          if (event.data?.type === 'minesweeper-recalculate') {
+            setTimeout(sendBoardDimensions, 100);
+          }
+        });
       });
     </script>
   </body>
