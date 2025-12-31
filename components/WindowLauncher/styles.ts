@@ -1,3 +1,4 @@
+import { Z_INDEX } from "constants/zIndex";
 import styled from "styled-components";
 
 export const StyledLauncher = styled.div`
@@ -8,7 +9,7 @@ export const StyledLauncher = styled.div`
   flex-direction: row;
   gap: 8px;
   padding: 12px;
-  z-index: 10; /* Launcher icons - bottom layer (above wallpaper) */
+  z-index: ${Z_INDEX.LAUNCHER_ICONS};
   pointer-events: none;
 
   > * {
