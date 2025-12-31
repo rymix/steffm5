@@ -1,3 +1,4 @@
+import { Z_INDEX } from "constants/zIndex";
 import styled from "styled-components";
 
 export const StyledLayoutWrapper = styled.div`
@@ -9,7 +10,7 @@ export const StyledLayoutWrapper = styled.div`
   display: flex;
   align-items: stretch;
   overflow: hidden;
-  z-index: 100; /* Above launcher icons (z-index: 10) but below menu/modals */
+  z-index: ${Z_INDEX.HOMEPAGE_LAYOUT};
   pointer-events: none; /* Allow clicks to pass through to launcher icons below */
 
   @media (max-width: 1024px) {

@@ -1,3 +1,4 @@
+import { Z_INDEX } from "constants/zIndex";
 import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalFonts = createGlobalStyle`
@@ -17,7 +18,7 @@ export const StyledMainPlayer = styled.div`
   left: 0;
   width: 640px;
   height: 500px;
-  z-index: 300; /* Player window - below pull-out panel */
+  z-index: ${Z_INDEX.MAIN_PLAYER_WINDOW};
   box-shadow:
     0 12px 48px rgba(0, 0, 0, 0.5),
     0 6px 24px rgba(0, 0, 0, 0.4);

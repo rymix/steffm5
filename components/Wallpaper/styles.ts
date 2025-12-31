@@ -1,3 +1,4 @@
+import { Z_INDEX } from "constants/zIndex";
 import styled from "styled-components";
 
 export const StyledWallpaper = styled.div<{
@@ -10,7 +11,7 @@ export const StyledWallpaper = styled.div<{
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -999;
+  z-index: ${Z_INDEX.WALLPAPER};
 
   background-image: ${({ $wallpaperUrl }) =>
     $wallpaperUrl ? `url(${$wallpaperUrl})` : "none"};
@@ -85,7 +86,7 @@ export const StyledInfoBox = styled.div`
   padding: 12px 16px;
   border-radius: 8px;
   backdrop-filter: blur(4px);
-  z-index: 5; /* Info box - above wallpaper, below launcher icons */
+  z-index: ${Z_INDEX.WALLPAPER_INFO};
   pointer-events: auto;
   user-select: none;
   opacity: 0.3;

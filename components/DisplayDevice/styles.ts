@@ -1,3 +1,4 @@
+import { Z_INDEX } from "constants/zIndex";
 import styled from "styled-components";
 
 interface ThemeProps {
@@ -11,7 +12,7 @@ export const StyledDisplayDeviceWrapper = styled.div`
   width: 0;
   height: 0;
   pointer-events: none; /* Don't block clicks, children will re-enable */
-  z-index: 9999;
+  z-index: ${Z_INDEX.PULL_OUT_PANEL};
 
   @media (max-width: 1024px) {
     display: none;
@@ -24,7 +25,7 @@ export const StyledDisplayDevice = styled.div<{ $isOpen: boolean }>`
   right: 0;
   width: ${({ $isOpen }) => ($isOpen ? "420px" : "0")};
   height: 100vh;
-  z-index: 9999; /* Pull-out panel - always above all windows */
+  z-index: ${Z_INDEX.PULL_OUT_PANEL};
   box-shadow: ${({ $isOpen }) =>
     $isOpen ? "-4px 0 24px rgba(0, 0, 0, 0.5)" : "none"};
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -186,7 +187,7 @@ export const StyledToggleButton = styled.button<{ $isOpen: boolean }>`
   justify-content: center;
   font-size: 20px;
   color: #2a2a2a;
-  z-index: 9999; /* Same as pull-out panel */
+  z-index: ${Z_INDEX.PULL_OUT_PANEL};
   user-select: none;
   pointer-events: auto; /* Always clickable */
   transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);

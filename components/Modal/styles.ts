@@ -1,3 +1,4 @@
+import { Z_INDEX } from "constants/zIndex";
 import type { ThemeMode } from "contexts/theme/types";
 import styled from "styled-components";
 
@@ -12,7 +13,7 @@ export const StyledModal = styled.div<StyledModalProps>`
   left: 50%;
   transform: translate(-50%, -50%)
     ${(props) => (props.$isOpen ? "scale(1)" : "scale(0.9) translateY(-20px)")};
-  z-index: 460; /* Modal - above overlay, below menu */
+  z-index: ${Z_INDEX.MODAL_PAGE};
   background: ${(props) =>
     props.$themeMode === "dark" ? "#1a1a1a" : "#f5f5f5"};
   border: 1px solid

@@ -1,3 +1,4 @@
+import { Z_INDEX } from "constants/zIndex";
 import styled from "styled-components";
 
 export const StyledTetrisWindow = styled.div<{
@@ -19,7 +20,7 @@ export const StyledTetrisWindow = styled.div<{
         : "auto"};
   user-select: ${(props) =>
     props.$isDragging || props.$isResizing ? "none" : "auto"};
-  z-index: 200; /* Other windows - below player window */
+  z-index: ${Z_INDEX.GAME_WINDOWS};
 `;
 
 export const StyledHeader = styled.div`
