@@ -373,12 +373,20 @@ export const useDraggableWindow = (
     _e.stopPropagation();
     hasUserInteractedRef.current = true;
     setIsResizing(true);
+
+    // For scale mode, store the actual scaled dimensions as the starting point
+    // For dimensions mode, store the current dimensions
+    const startWidth =
+      resizeMode === "scale" ? width * scale : dimensions.width;
+    const startHeight =
+      resizeMode === "scale" ? height * scale : dimensions.height;
+
     resizeStartRef.current = {
       x: _e.clientX,
       y: _e.clientY,
       scale: scale,
-      width: dimensions.width,
-      height: dimensions.height,
+      width: startWidth,
+      height: startHeight,
     };
   };
 
@@ -388,12 +396,20 @@ export const useDraggableWindow = (
       const touch = _e.touches[0];
       hasUserInteractedRef.current = true;
       setIsResizing(true);
+
+      // For scale mode, store the actual scaled dimensions as the starting point
+      // For dimensions mode, store the current dimensions
+      const startWidth =
+        resizeMode === "scale" ? width * scale : dimensions.width;
+      const startHeight =
+        resizeMode === "scale" ? height * scale : dimensions.height;
+
       resizeStartRef.current = {
         x: touch.clientX,
         y: touch.clientY,
         scale: scale,
-        width: dimensions.width,
-        height: dimensions.height,
+        width: startWidth,
+        height: startHeight,
       };
     }
   };
