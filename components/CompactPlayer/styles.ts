@@ -147,7 +147,7 @@ export const StyledControls = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 0 20px;
+  padding: 0;
   gap: 16px;
   flex-wrap: wrap;
 
@@ -302,6 +302,7 @@ export const StyledDialTick = styled.div.attrs<{ $angle: number }>(
 
 export const StyledModeDialWrapper = styled.div`
   position: relative;
+  top: -5px;
   width: 72px;
   height: 60px;
   flex-shrink: 0;
@@ -402,7 +403,7 @@ export const StyledDialLabel = styled.div.attrs<{
   $active: boolean;
 }>(({ $angle }) => ({
   style: {
-    transform: `translate(-50%, -50%) rotate(${$angle}deg) translate(0, -36px) rotate(${-$angle}deg)`,
+    transform: `translate(-50%, -50%) rotate(${$angle}deg) translate(0, -44px) rotate(${-$angle}deg)`,
   },
 }))<{ $angle: number; $active: boolean }>`
   position: absolute;
@@ -410,7 +411,7 @@ export const StyledDialLabel = styled.div.attrs<{
   left: 50%;
   width: 30px;
   text-align: center;
-  font-size: 7px;
+  font-size: 9px;
   font-weight: bold;
   color: #2a2a2a;
   text-transform: uppercase;
@@ -510,12 +511,12 @@ export const StyledButtonIcon = styled.div<{
   transition: all 0.15s ease;
 
   svg {
-    font-size: 16px;
+    font-size: 26px;
   }
 `;
 
 export const StyledButtonLabel = styled.div`
-  font-size: 6.5px;
+  font-size: 12px;
   font-weight: bold;
   color: #2a2a2a;
   text-transform: uppercase;
