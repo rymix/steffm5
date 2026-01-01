@@ -172,7 +172,7 @@ export const StyledDialContainer = styled.div`
 `;
 
 export const StyledDialLabelText = styled.div`
-  font-family: "Helvetica Neue", "Arial", sans-serif;
+  font-family: "Helvetica Neue", Arial, sans-serif;
   font-size: 10px;
   font-weight: 600;
   color: #2a2a2a;

@@ -79,7 +79,6 @@ export const StyledShareTooltip = styled.div<{
   position: absolute;
   top: -45px;
   left: 50%;
-  transform: translateX(-50%);
   background: #333;
   color: white;
   padding: 8px 12px;
@@ -114,12 +113,14 @@ export const StyledShareTooltip = styled.div<{
   @keyframes fadeUpOut {
     0% {
       opacity: 1;
-      transform: translateX(-50%) translateY(0px);
+      transform: translateX(-50%) translateY(0);
     }
+
     70% {
       opacity: 1;
-      transform: translateX(-50%) translateY(0px);
+      transform: translateX(-50%) translateY(0);
     }
+
     100% {
       opacity: 0;
       transform: translateX(-50%) translateY(-10px);

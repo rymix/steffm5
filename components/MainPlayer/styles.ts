@@ -224,7 +224,7 @@ export const StyledLogoPlate = styled.div`
 `;
 
 export const StyledLogoText = styled.div`
-  font-family: "Lexend", sans-serif;
+  font-family: Lexend, sans-serif;
   font-optical-sizing: auto;
   font-size: 18px;
   font-weight: 700;
@@ -478,7 +478,7 @@ export const StyledDialContainer = styled.div`
 `;
 
 export const StyledDialLabelText = styled.div`
-  font-family: "Helvetica Neue", "Arial", sans-serif;
+  font-family: "Helvetica Neue", Arial, sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #2a2a2a;

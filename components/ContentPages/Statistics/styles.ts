@@ -144,6 +144,7 @@ export const StyledShowHideBlock = styled.button<ThemeProps>`
 
 export const StyledArrowDropDown = styled.span`
   font-size: 12px;
+
   &::after {
     content: "▼";
   }
@@ -151,6 +152,7 @@ export const StyledArrowDropDown = styled.span`
 
 export const StyledArrowDropUp = styled.span`
   font-size: 12px;
+
   &::after {
     content: "▲";
   }

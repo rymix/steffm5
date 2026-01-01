@@ -7,10 +7,7 @@ interface StyledBackdropProps {
 
 export const StyledBackdrop = styled.div<StyledBackdropProps>`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0 0 0 0;
   background-color: rgba(0, 0, 0, 0.75);
   z-index: ${Z_INDEX.OVERLAY};
   transition: opacity 0.3s ease-in-out;

@@ -63,7 +63,7 @@ export const StyledManual = styled.div<ThemeProps>`
 
 export const StyledManualTitle = styled.div`
   display: block;
-  font-family: "Lexend", sans-serif;
+  font-family: Lexend, sans-serif;
   font-size: 92px;
   font-weight: 700;
   flex-shrink: 0;
@@ -77,7 +77,7 @@ export const StyledManualSubTitle = styled.div`
 
 export const StyledManualFooter = styled.div`
   display: block;
-  font-family: "Lexend", sans-serif;
+  font-family: Lexend, sans-serif;
   font-size: 64px;
   font-weight: 700;
   flex-shrink: 0;

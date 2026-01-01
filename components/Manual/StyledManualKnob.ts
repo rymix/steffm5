@@ -99,7 +99,7 @@ export const StyledManualGrip = styled.div`
 `;
 
 export const StyledManualKnobLabel = styled.div<ThemeProps>`
-  font-family: "Helvetica Neue", "Arial", sans-serif;
+  font-family: "Helvetica Neue", Arial, sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: ${(props) => (props.$themeMode === "dark" ? "#e8e8e8" : "#2a2a2a")};

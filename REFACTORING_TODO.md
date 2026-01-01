@@ -12,22 +12,22 @@ Generated: 2026-01-01
 ## 1. UNUSED CODE CLEANUP
 
 ### 🔴 Remove Unused Demo/Prototype Components
-- [ ] **1.1** Remove `/components/HomePageArchive/` (archived old version)
+- [x] **1.1** Remove `/components/HomePageArchive/` (archived old version)
   - Files: `index.tsx`, `styles.ts`
   - Never imported anywhere
 
-- [ ] **1.2** Remove `/components/HelloWorldModal/`
+- [x] **1.2** Remove `/components/HelloWorldModal/`
   - Files: `index.tsx`, `styles.ts`
   - Only used in demo component
 
-- [ ] **1.3** Remove `/components/SecondModal/`
+- [x] **1.3** Remove `/components/SecondModal/`
   - Files: `index.tsx`, `styles.ts`
   - Demo modal, not in production
 
-- [ ] **1.4** Evaluate `/components/PlayerPrototype/`
+- [x] **1.4** Evaluate `/components/PlayerPrototype/`
   - Files: `index.tsx`, `styles.ts`
   - Only imported in `/pages/player.tsx`
-  - Decision: Keep as test page OR remove entirely?
+  - Decision: **KEPT** as test/dev page (isolated, not affecting production)
 
 ### 🟢 Audit Type Files for Unused Exports
 - [ ] **1.5** Review 16 type files for unused exports
@@ -46,7 +46,7 @@ This is the **most duplicated code** in the entire codebase. The same track dete
 
 #### 2.A Create Track Utility Functions
 
-- [ ] **2.A.1** Create `/utils/trackHelpers.ts` with shared utilities:
+- [x] **2.A.1** Create `/utils/trackHelpers.ts` with shared utilities:
 
 ```typescript
 /**
@@ -130,7 +130,7 @@ export function findTrackIndexAtPosition(
 
 #### 2.A.2 Create `useCurrentTrack` Hook
 
-- [ ] **2.A.2** Create `/hooks/useCurrentTrack.ts`:
+- [x] **2.A.2** Create `/hooks/useCurrentTrack.ts`:
 
 ```typescript
 import { useMemo } from 'react';
@@ -185,7 +185,7 @@ export function useCurrentTrackIndex(
 
 #### 2.A.3 Create `useTrackDisplayName` Hook
 
-- [ ] **2.A.3** Create `/hooks/useTrackDisplayName.ts`:
+- [x] **2.A.3** Create `/hooks/useTrackDisplayName.ts`:
 
 ```typescript
 import { useMemo } from 'react';
@@ -237,7 +237,7 @@ export function useTrackDisplayName(
 
 #### 2.A.4 Create `useTrackChangeDetection` Hook
 
-- [ ] **2.A.4** Create `/hooks/useTrackChangeDetection.ts`:
+- [x] **2.A.4** Create `/hooks/useTrackChangeDetection.ts`:
 
 ```typescript
 import { useEffect, useRef, useCallback } from 'react';
@@ -318,7 +318,7 @@ export function useTrackChangeDetection(
 ### 🔴 Create `useIframeInteraction` Hook
 **Impact:** Eliminates 165 duplicate lines across 3 files
 
-- [ ] **2.1** Create `/hooks/useIframeInteraction.ts`
+- [x] **2.1** Create `/hooks/useIframeInteraction.ts`
   ```typescript
   export function useIframeInteraction(
     iframeRef: RefObject<HTMLIFrameElement>,
@@ -327,7 +327,7 @@ export function useTrackChangeDetection(
   ): void
   ```
 
-- [ ] **2.2** Replace duplicate code in:
+- [x] **2.2** Replace duplicate code in:
   - `/components/Windows/TetrisWindow/index.tsx` (lines 52-106)
   - `/components/Windows/SolitaireWindow/index.tsx` (lines 52-106)
   - `/components/Windows/MinesweeperWindow/index.tsx` (lines 76-130)
@@ -335,7 +335,7 @@ export function useTrackChangeDetection(
 ### 🔴 Create Shared Window Styled Components
 **Impact:** Eliminates 400+ duplicate lines across 4 files
 
-- [ ] **2.3** Create `/components/Windows/shared/styles.ts` with:
+- [x] **2.3** Create `/components/Windows/shared/styles.ts` with:
   - `createStyledWindow(gradientColors: string)`
   - `StyledHeader` (parameterized for gradient)
   - `StyledIframe`
@@ -344,11 +344,11 @@ export function useTrackChangeDetection(
   - `StyledHeaderControls`
   - `StyledContent`
 
-- [ ] **2.4** Refactor window styles to use shared components:
-  - `/components/Windows/TetrisWindow/styles.ts`
-  - `/components/Windows/SolitaireWindow/styles.ts`
-  - `/components/Windows/MinesweeperWindow/styles.ts`
-  - `/components/Windows/ZXSpectrumWindow/styles.ts`
+- [x] **2.4** Refactor window styles to use shared components:
+  - `/components/Windows/TetrisWindow/styles.ts` (102 → 19 lines, 81% reduction)
+  - `/components/Windows/SolitaireWindow/styles.ts` (102 → 19 lines, 81% reduction)
+  - `/components/Windows/MinesweeperWindow/styles.ts` (102 → 18 lines, 82% reduction)
+  - `/components/Windows/ZXSpectrumWindow/styles.ts` (193 → 89 lines, 54% reduction)
 
 ### 🔴 Create Theme Helper Hooks
 **Impact:** Improves readability in 12 files
