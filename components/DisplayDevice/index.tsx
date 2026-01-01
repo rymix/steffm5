@@ -1,13 +1,13 @@
 import { useMixcloud } from "contexts/mixcloud";
-import { useTheme } from "contexts/theme";
 import React, { useEffect, useRef, useState } from "react";
-import { getCategoryName, getPanelThemeMode } from "utils/themeHelpers";
+import { getCategoryName } from "utils/themeHelpers";
 import {
   getTrackDuration as calculateTrackDuration,
   sortTracksByTime,
 } from "utils/trackHelpers";
 
 import { useCurrentTrackIndex } from "hooks/useCurrentTrack";
+import { usePanelTheme } from "hooks/useThemeMode";
 
 import {
   StyledDisplayDevice,
@@ -49,8 +49,7 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
   onToggle: onToggleProp,
 }) => {
   const { state, actions } = useMixcloud();
-  const theme = useTheme();
-  const panelThemeMode = getPanelThemeMode(theme.state.mode);
+  const panelThemeMode = usePanelTheme();
   const [isOpenInternal, setIsOpenInternal] = useState(false);
   const [expandedTrackIndex, setExpandedTrackIndex] = useState<number | null>(
     null,

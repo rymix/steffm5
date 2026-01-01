@@ -1,12 +1,10 @@
-import { useTheme } from "contexts/theme";
 import React from "react";
-import { getModalThemeMode } from "utils/themeHelpers";
 
 import { StyledContact } from "components/Contact/StyledContact";
+import { useModalTheme } from "hooks/useThemeMode";
 
 export const Contact: React.FC = () => {
-  const theme = useTheme();
-  const modalThemeMode = getModalThemeMode(theme.state.mode);
+  const modalThemeMode = useModalTheme();
 
   return (
     <StyledContact $themeMode={modalThemeMode}>

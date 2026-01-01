@@ -1,7 +1,7 @@
-import { useTheme } from "contexts/theme";
 import React, { useEffect, useState } from "react";
 import { convertTimeToHumanReadable } from "utils/functions";
-import { getModalThemeMode } from "utils/themeHelpers";
+
+import { useModalTheme } from "hooks/useThemeMode";
 
 import {
   StyledArrowDropDown,
@@ -30,8 +30,7 @@ import type {
 } from "./types";
 
 export const Statistics: React.FC = () => {
-  const theme = useTheme();
-  const modalThemeMode = getModalThemeMode(theme.state.mode);
+  const modalThemeMode = useModalTheme();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

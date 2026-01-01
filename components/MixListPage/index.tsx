@@ -1,10 +1,9 @@
-import { useTheme } from "contexts/theme";
 import React from "react";
-import { getModalThemeMode } from "utils/themeHelpers";
 
 import FilterStatus from "@/components/FilterStatus";
 import MixFilter from "@/components/MixFilter";
 import MixList from "@/components/MixList";
+import { useModalTheme } from "hooks/useThemeMode";
 
 import {
   StyledMixListPage,
@@ -14,8 +13,7 @@ import {
 } from "./styles";
 
 const MixListPage: React.FC = () => {
-  const theme = useTheme();
-  const modalThemeMode = getModalThemeMode(theme.state.mode);
+  const modalThemeMode = useModalTheme();
 
   return (
     <StyledMixListPage $themeMode={modalThemeMode}>

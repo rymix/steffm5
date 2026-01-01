@@ -1,7 +1,5 @@
 import { useMixcloud } from "contexts/mixcloud";
-import { useTheme } from "contexts/theme";
 import React, { useEffect, useState } from "react";
-import { getModalThemeMode } from "utils/themeHelpers";
 
 import type {
   Background,
@@ -10,6 +8,7 @@ import type {
 } from "db/types";
 import Macintosh from "components/BackgroundList/Macintosh";
 import RetroPC from "components/BackgroundList/RetroPC";
+import { useModalTheme } from "hooks/useThemeMode";
 
 import {
   StyledButton,
@@ -26,8 +25,7 @@ import {
 
 export const Wallpapers: React.FC = () => {
   const { actions } = useMixcloud();
-  const theme = useTheme();
-  const modalThemeMode = getModalThemeMode(theme.state.mode);
+  const modalThemeMode = useModalTheme();
   const [background, setBackground] = useState<BackgroundExtended | null>(null);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<BackgroundCategory[]>([]);

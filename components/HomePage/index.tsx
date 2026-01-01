@@ -1,8 +1,7 @@
 import { useMixcloud } from "contexts/mixcloud";
-import { useTheme } from "contexts/theme";
 import { WindowManagerProvider } from "contexts/windowManager";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { getCategoryName, getPanelThemeMode } from "utils/themeHelpers";
+import { getCategoryName } from "utils/themeHelpers";
 import {
   getTrackDuration as calculateTrackDuration,
   sortTracksByTime,
@@ -44,6 +43,7 @@ import MainPlayer from "components/MainPlayer";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
 import { useCurrentTrack, useCurrentTrackIndex } from "hooks/useCurrentTrack";
 import useKeyboardControls from "hooks/useKeyboardControls";
+import { usePanelTheme } from "hooks/useThemeMode";
 import { useWallpaperManager } from "hooks/useWallpaperManager";
 
 import {
@@ -63,8 +63,7 @@ import {
 
 const HomePageContent: React.FC = () => {
   const { state, actions } = useMixcloud();
-  const theme = useTheme();
-  const panelThemeMode = getPanelThemeMode(theme.state.mode);
+  const panelThemeMode = usePanelTheme();
   const { wallpaperState, changeWallpaper } = useWallpaperManager();
 
   // Enable keyboard controls (must be inside WindowManagerProvider)

@@ -1,7 +1,7 @@
 import { useMixcloud } from "contexts/mixcloud";
-import { useTheme } from "contexts/theme";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { getModalThemeMode } from "utils/themeHelpers";
+
+import { useModalTheme } from "hooks/useThemeMode";
 
 import {
   StyledFilterTitle,
@@ -20,8 +20,7 @@ import {
 
 const MixFilter: React.FC = () => {
   const { state, actions } = useMixcloud();
-  const theme = useTheme();
-  const modalThemeMode = getModalThemeMode(theme.state.mode);
+  const modalThemeMode = useModalTheme();
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [availableTags, setAvailableTags] = useState<string[]>([]);
   const [selectedTag, setSelectedTag] = useState<string>("");

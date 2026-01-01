@@ -2,9 +2,9 @@ import { useModal } from "contexts/modal";
 import { useOverlay } from "contexts/overlay";
 import { useTheme } from "contexts/theme";
 import React, { useEffect, useRef, useState } from "react";
-import { getModalThemeMode } from "utils/themeHelpers";
 
 import MixListPage from "components/MixListPage";
+import { useModalTheme } from "hooks/useThemeMode";
 
 import Contact from "../Contact";
 import About from "../ContentPages/About";
@@ -34,7 +34,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
   const modal = useModal();
   const overlay = useOverlay();
   const theme = useTheme();
-  const menuThemeMode = getModalThemeMode(theme.state.mode);
+  const menuThemeMode = useModalTheme();
   const justOpenedMenuRef = useRef(false);
 
   const toggleMenu = () => {

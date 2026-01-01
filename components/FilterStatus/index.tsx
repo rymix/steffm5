@@ -1,14 +1,13 @@
 import { useMixcloud } from "contexts/mixcloud";
-import { useTheme } from "contexts/theme";
 import React from "react";
-import { getModalThemeMode } from "utils/themeHelpers";
+
+import { useModalTheme } from "hooks/useThemeMode";
 
 import { StyledFilterStatus, StyledFilterStatusItem } from "./styles";
 
 const FilterStatus: React.FC = () => {
   const { state } = useMixcloud();
-  const theme = useTheme();
-  const modalThemeMode = getModalThemeMode(theme.state.mode);
+  const modalThemeMode = useModalTheme();
   const { filters } = state;
 
   const activeFilters = Object.entries(filters).filter(

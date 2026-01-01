@@ -1,7 +1,5 @@
-import { useTheme } from "contexts/theme";
 import React from "react";
 import { VOLUME_AVAILABLE } from "utils/constants";
-import { getModalThemeMode } from "utils/themeHelpers";
 
 import {
   CautionIcon,
@@ -42,10 +40,10 @@ import {
   StyledManualScreen,
   StyledManualScreenWrapper,
 } from "components/Manual/StyledManualScreen";
+import { useModalTheme } from "hooks/useThemeMode";
 
 export const Manual: React.FC = () => {
-  const theme = useTheme();
-  const modalThemeMode = getModalThemeMode(theme.state.mode);
+  const modalThemeMode = useModalTheme();
 
   // Static categories for display in manual (same angles as real dial)
   const modeMaxAngle = 115;

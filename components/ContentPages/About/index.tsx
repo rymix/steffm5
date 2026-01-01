@@ -1,14 +1,11 @@
-import { useTheme } from "contexts/theme";
-import { getModalThemeMode } from "utils/themeHelpers";
-
 import {
   StyledAbout,
   StyledImage,
 } from "@/components/ContentPages/About/styles";
+import { useModalTheme } from "hooks/useThemeMode";
 
 export const About: React.FC = () => {
-  const theme = useTheme();
-  const modalThemeMode = getModalThemeMode(theme.state.mode);
+  const modalThemeMode = useModalTheme();
 
   return (
     <StyledAbout $themeMode={modalThemeMode}>

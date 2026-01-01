@@ -1,9 +1,8 @@
 import { useMixcloud } from "contexts/mixcloud";
-import { useTheme } from "contexts/theme";
 import React, { useCallback, useState } from "react";
-import { getModalThemeMode } from "utils/themeHelpers";
 
 import type { Track } from "db/types";
+import { useModalTheme } from "hooks/useThemeMode";
 
 import {
   StyledControlButton,
@@ -45,8 +44,7 @@ type MixItemState = {
 
 const MixList: React.FC = () => {
   const { state, actions } = useMixcloud();
-  const theme = useTheme();
-  const modalThemeMode = getModalThemeMode(theme.state.mode);
+  const modalThemeMode = useModalTheme();
   const [mixStates, setMixStates] = useState<Record<string, MixItemState>>({});
 
   // Early return if context is not properly initialized
