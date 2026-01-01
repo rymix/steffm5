@@ -4,6 +4,7 @@ import { useTheme } from "contexts/theme";
 import React, { useEffect, useRef, useState } from "react";
 
 import MixListPage from "components/MixListPage";
+import { useEscapeKey } from "hooks/useEscapeKey";
 import { useModalTheme } from "hooks/useThemeMode";
 
 import Contact from "../Contact";
@@ -56,21 +57,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
   };
 
   // Handle ESC key
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isOpen) {
-        closeMenu();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("keydown", handleKeyDown);
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen]);
+  useEscapeKey(isOpen, closeMenu);
 
   // Sync local state with overlay state (for external close commands like backdrop clicks)
   useEffect(() => {

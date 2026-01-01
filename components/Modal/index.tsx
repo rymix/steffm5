@@ -1,6 +1,7 @@
 import { useOverlay } from "contexts/overlay";
 import React, { useEffect, useRef, useState } from "react";
 
+import { useEscapeKey } from "hooks/useEscapeKey";
 import { useModalTheme } from "hooks/useThemeMode";
 
 import {
@@ -63,21 +64,7 @@ const Modal: React.FC<ModalProps> = ({
   }, [isOpen, overlayActions]);
 
   // Handle ESC key press
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isOpen) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("keydown", handleKeyDown);
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, onClose]);
+  useEscapeKey(isOpen, onClose);
 
   if (!isVisible) {
     return null;
