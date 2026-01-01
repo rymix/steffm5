@@ -29,6 +29,53 @@ interface BurgerMenuProps {
   className?: string;
 }
 
+interface MenuItem {
+  id: string;
+  label: string;
+  title: string;
+  component: React.ReactNode;
+  timeout?: number;
+}
+
+const MENU_ITEMS: MenuItem[] = [
+  {
+    id: "about-modal",
+    label: "About",
+    title: "About STEF.FM",
+    component: <About />,
+  },
+  {
+    id: "manual-modal",
+    label: "Manual",
+    title: "User Manual",
+    component: <Manual />,
+  },
+  {
+    id: "mix-list-modal",
+    label: "Mix List",
+    title: "Mix Library",
+    component: <MixListPage />,
+  },
+  {
+    id: "wallpapers-modal",
+    label: "Wallpapers",
+    title: "Wallpapers",
+    component: <Wallpapers />,
+  },
+  {
+    id: "statistics-modal",
+    label: "Statistics",
+    title: "Statistics",
+    component: <Statistics />,
+  },
+  {
+    id: "contact-modal",
+    label: "Contact",
+    title: "Contact",
+    component: <Contact />,
+  },
+];
+
 const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [prevModalOpen, setPrevModalOpen] = useState(false);
@@ -126,84 +173,22 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ className }) => {
         >
           <StyledMenuContent $themeMode={theme.state.mode}>
             <StyledMenuSection $themeMode={theme.state.mode}>
-              <StyledMenuItem
-                $themeMode={menuThemeMode}
-                onClick={() =>
-                  handleModalDemo(
-                    "about-modal",
-                    "About STEF.FM",
-                    <About />,
-                    undefined,
-                  )
-                }
-              >
-                About
-              </StyledMenuItem>
-              <StyledMenuItem
-                $themeMode={menuThemeMode}
-                onClick={() =>
-                  handleModalDemo(
-                    "manual-modal",
-                    "User Manual",
-                    <Manual />,
-                    undefined,
-                  )
-                }
-              >
-                Manual
-              </StyledMenuItem>
-              <StyledMenuItem
-                $themeMode={menuThemeMode}
-                onClick={() =>
-                  handleModalDemo(
-                    "mix-list-modal",
-                    "Mix Library",
-                    <MixListPage />,
-                    undefined,
-                  )
-                }
-              >
-                Mix List
-              </StyledMenuItem>
-              <StyledMenuItem
-                $themeMode={menuThemeMode}
-                onClick={() =>
-                  handleModalDemo(
-                    "wallpapers-modal",
-                    "Wallpapers",
-                    <Wallpapers />,
-                    undefined,
-                  )
-                }
-              >
-                Wallpapers
-              </StyledMenuItem>
-              <StyledMenuItem
-                $themeMode={menuThemeMode}
-                onClick={() =>
-                  handleModalDemo(
-                    "statistics-modal",
-                    "Statistics",
-                    <Statistics />,
-                    undefined,
-                  )
-                }
-              >
-                Statistics
-              </StyledMenuItem>
-              <StyledMenuItem
-                $themeMode={menuThemeMode}
-                onClick={() =>
-                  handleModalDemo(
-                    "contact-modal",
-                    "Contact",
-                    <Contact />,
-                    undefined,
-                  )
-                }
-              >
-                Contact
-              </StyledMenuItem>
+              {MENU_ITEMS.map((item) => (
+                <StyledMenuItem
+                  key={item.id}
+                  $themeMode={menuThemeMode}
+                  onClick={() =>
+                    handleModalDemo(
+                      item.id,
+                      item.title,
+                      item.component,
+                      item.timeout,
+                    )
+                  }
+                >
+                  {item.label}
+                </StyledMenuItem>
+              ))}
             </StyledMenuSection>
           </StyledMenuContent>
 
