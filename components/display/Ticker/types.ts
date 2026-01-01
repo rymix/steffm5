@@ -6,10 +6,3 @@ export type TickerProps = {
   height?: string | number;
   className?: string;
 };
-
-export type TickerState = {
-  containerWidth: number;
-  charactersPerLine: number;
-  currentMessageIndex: number;
-  scrollOffset: number;
-};

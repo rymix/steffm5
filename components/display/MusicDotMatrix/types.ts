@@ -15,9 +15,3 @@ export interface MusicDotMatrixProps extends Omit<DotMatrixProps, "text"> {
   autoTransition?: boolean;
   transitionEffects?: TransitionEffect[]; // Array of effects to cycle through
 }
-
-export interface MessageCycle {
-  messages: string[];
-  currentIndex: number;
-  lastUpdate: number;
-}

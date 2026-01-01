@@ -12,13 +12,6 @@ export interface DotMatrixProps {
   onTransitionComplete?: () => void;
 }
 
-export interface DotMatrixState {
-  currentText: string;
-  previousText: string;
-  isAnimating: boolean;
-  animationProgress: number;
-}
-
 export type TransitionEffect =
   | "none"
   | "slideLeft"
