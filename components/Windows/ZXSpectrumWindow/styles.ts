@@ -7,7 +7,7 @@ import {
   StyledHeaderControls,
   StyledResetButton,
   StyledResizeHandle,
-} from "../shared/styles";
+} from "components/Windows/shared/styles";
 
 // ZXSpectrum-specific window (fixed dimensions for emulator)
 export const StyledZXSpectrumWindow = createStyledWindow("640px", "530px");

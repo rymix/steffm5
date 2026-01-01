@@ -1,4 +1,4 @@
-import type { FontDefinition } from "../types";
+import type { FontDefinition } from "components/DotMatrix/types";
 
 // 5x7 dot matrix font - classic pinball style
 export const MATRIX_FONT_5x7: FontDefinition = {

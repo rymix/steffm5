@@ -1,8 +1,11 @@
+import { useTheme } from "contexts/theme";
+import { useWindowManager } from "contexts/windowManager";
 import React from "react";
 
-import { useTheme } from "../../contexts/theme";
-import { useWindowManager } from "../../contexts/windowManager";
-import { StyledLauncher, StyledLauncherIcon } from "./styles";
+import {
+  StyledLauncher,
+  StyledLauncherIcon,
+} from "components/WindowLauncher/styles";
 
 const WindowLauncher: React.FC = () => {
   const { windows } = useWindowManager();

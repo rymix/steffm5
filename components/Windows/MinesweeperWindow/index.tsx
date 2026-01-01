@@ -1,14 +1,14 @@
+import { useWindowManager } from "contexts/windowManager";
 import React, { useCallback, useEffect, useRef } from "react";
 
-import { useWindowManager } from "../../../contexts/windowManager";
-import { useDraggableWindow } from "../../../hooks/useDraggableWindow";
-import { useIframeInteraction } from "../../../hooks/useIframeInteraction";
 import {
   StyledHeader,
   StyledIframe,
   StyledMinesweeperWindow,
   StyledResetButton,
-} from "./styles";
+} from "components/Windows/MinesweeperWindow/styles";
+import { useDraggableWindow } from "hooks/useDraggableWindow";
+import { useIframeInteraction } from "hooks/useIframeInteraction";
 
 import CloseIcon from "@mui/icons-material/Close";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";

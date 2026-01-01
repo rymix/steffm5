@@ -4,7 +4,7 @@ import {
   createStyledWindow,
   StyledResetButton,
   StyledResizeHandle,
-} from "../shared/styles";
+} from "components/Windows/shared/styles";
 
 // Tetris-specific window (no fixed dimensions)
 export const StyledTetrisWindow = createStyledWindow();

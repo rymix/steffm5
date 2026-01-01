@@ -1,10 +1,9 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useMemo } from "react";
 
+import type { MusicTickerProps } from "components/MusicTicker/types";
+import Ticker from "components/Ticker";
 import { useCurrentTrack } from "hooks/useCurrentTrack";
-
-import Ticker from "../Ticker";
-import type { MusicTickerProps } from "./types";
 
 const MusicTicker: React.FC<MusicTickerProps> = ({
   trackName,

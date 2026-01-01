@@ -1,4 +1,7 @@
-import type { DotMatrixProps, TransitionEffect } from "../DotMatrix/types";
+import type {
+  DotMatrixProps,
+  TransitionEffect,
+} from "components/DotMatrix/types";
 
 export interface MusicDotMatrixProps extends Omit<DotMatrixProps, "text"> {
   trackName?: string;

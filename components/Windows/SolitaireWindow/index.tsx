@@ -1,15 +1,15 @@
+import { useWindowManager } from "contexts/windowManager";
 import React, { useRef } from "react";
 
-import { useWindowManager } from "../../../contexts/windowManager";
-import { useDraggableWindow } from "../../../hooks/useDraggableWindow";
-import { useIframeInteraction } from "../../../hooks/useIframeInteraction";
 import {
   StyledHeader,
   StyledIframe,
   StyledResetButton,
   StyledResizeHandle,
   StyledSolitaireWindow,
-} from "./styles";
+} from "components/Windows/SolitaireWindow/styles";
+import { useDraggableWindow } from "hooks/useDraggableWindow";
+import { useIframeInteraction } from "hooks/useIframeInteraction";
 
 import CloseIcon from "@mui/icons-material/Close";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";

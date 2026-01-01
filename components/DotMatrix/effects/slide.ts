@@ -1,4 +1,7 @@
-import type { EffectRenderer, TransitionContext } from "../types";
+import type {
+  EffectRenderer,
+  TransitionContext,
+} from "components/DotMatrix/types";
 
 export class SlideLeftEffect implements EffectRenderer {
   render(context: TransitionContext): void {

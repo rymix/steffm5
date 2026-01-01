@@ -1,6 +1,5 @@
+import { useWindowManager } from "contexts/windowManager";
 import { useCallback, useEffect, useRef, useState } from "react";
-
-import { useWindowManager } from "../contexts/windowManager";
 
 let currentMaxZIndex = 200;
 

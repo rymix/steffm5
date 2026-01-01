@@ -1,7 +1,6 @@
+import { useWindowManager } from "contexts/windowManager";
 import React, { useCallback, useEffect, useRef } from "react";
 
-import { useWindowManager } from "../../../contexts/windowManager";
-import { useDraggableWindow } from "../../../hooks/useDraggableWindow";
 import {
   StyledContent,
   StyledHeader,
@@ -12,7 +11,8 @@ import {
   StyledVolumeControl,
   StyledVolumeSlider,
   StyledZXSpectrumWindow,
-} from "./styles";
+} from "components/Windows/ZXSpectrumWindow/styles";
+import { useDraggableWindow } from "hooks/useDraggableWindow";
 
 import CloseIcon from "@mui/icons-material/Close";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";

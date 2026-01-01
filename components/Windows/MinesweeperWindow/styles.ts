@@ -3,7 +3,7 @@ import {
   createStyledIframe,
   createStyledWindow,
   StyledResetButton,
-} from "../shared/styles";
+} from "components/Windows/shared/styles";
 
 // Minesweeper-specific window (no fixed dimensions, dynamic sizing)
 export const StyledMinesweeperWindow = createStyledWindow();

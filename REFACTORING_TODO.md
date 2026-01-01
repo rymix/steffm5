@@ -353,13 +353,13 @@ export function useTrackChangeDetection(
 ### 🔴 Create Theme Helper Hooks
 **Impact:** Improves readability in 12 files
 
-- [ ] **2.5** Add to `/hooks/useTheme.ts` (or create new file):
+- [x] **2.5** Add to `/hooks/useTheme.ts` (or create new file):
   ```typescript
   export function usePanelTheme(): "light" | "dark"
   export function useModalTheme(): "light" | "dark"
   ```
 
-- [ ] **2.6** Replace theme calculations in:
+- [x] **2.6** Replace theme calculations in:
   - `/components/BurgerMenu/index.tsx`
   - `/components/Modal/index.tsx`
   - `/components/DisplayDevice/index.tsx`
@@ -376,7 +376,7 @@ export function useTrackChangeDetection(
 ### 🟡 Create `useEscapeKey` Hook
 **Impact:** Eliminates 30 duplicate lines across 2 files
 
-- [ ] **2.7** Create `/hooks/useEscapeKey.ts`
+- [x] **2.7** Create `/hooks/useEscapeKey.ts`
   ```typescript
   export function useEscapeKey(
     isOpen: boolean,
@@ -384,14 +384,14 @@ export function useTrackChangeDetection(
   ): void
   ```
 
-- [ ] **2.8** Replace duplicate code in:
+- [x] **2.8** Replace duplicate code in:
   - `/components/Modal/index.tsx` (lines 69-83)
   - `/components/BurgerMenu/index.tsx` (lines 58-73)
 
 ### 🟡 Refactor BurgerMenu Menu Items
 **Impact:** Reduces 60 lines of repetition
 
-- [ ] **2.9** Create menu configuration array in `/components/BurgerMenu/menuConfig.ts`
+- [x] **2.9** Create menu configuration array in `/components/BurgerMenu/menuConfig.ts`
   ```typescript
   export interface MenuItem {
     id: string;
@@ -403,7 +403,7 @@ export function useTrackChangeDetection(
   export const menuItems: MenuItem[] = [...]
   ```
 
-- [ ] **2.10** Update `/components/BurgerMenu/index.tsx` to map over config
+- [x] **2.10** Update `/components/BurgerMenu/index.tsx` to map over config
 
 ### 🟢 Create `useDragGesture` Hook (Future-Proofing)
 - [ ] **2.11** Create `/hooks/useDragGesture.ts`
@@ -512,40 +512,40 @@ Proposed structure:
 **Files with relative imports (22 occurrences):**
 
 #### Window Components
-- [ ] **4.1** `/components/Windows/TetrisWindow/index.tsx`
+- [x] **4.1** `/components/Windows/TetrisWindow/index.tsx`
   - Line 3: `../../../contexts/windowManager` → `contexts/windowManager`
   - Line 4: `../../../hooks/useDraggableWindow` → `hooks/useDraggableWindow`
   - Lines 5-11: `./styles` → `components/Windows/TetrisWindow/styles`
 
-- [ ] **4.2** `/components/Windows/SolitaireWindow/index.tsx`
+- [x] **4.2** `/components/Windows/SolitaireWindow/index.tsx`
   - Line 3: `../../../contexts/windowManager` → `contexts/windowManager`
   - Line 4: `../../../hooks/useDraggableWindow` → `hooks/useDraggableWindow`
   - Lines 5-9: `./styles` → `components/Windows/SolitaireWindow/styles`
 
-- [ ] **4.3** `/components/Windows/MinesweeperWindow/index.tsx`
+- [x] **4.3** `/components/Windows/MinesweeperWindow/index.tsx`
   - Line 3: `../../../contexts/windowManager` → `contexts/windowManager`
   - Line 4: `../../../hooks/useDraggableWindow` → `hooks/useDraggableWindow`
   - Lines 5-9: `./styles` → `components/Windows/MinesweeperWindow/styles`
 
-- [ ] **4.4** `/components/Windows/ZXSpectrumWindow/index.tsx`
+- [x] **4.4** `/components/Windows/ZXSpectrumWindow/index.tsx`
   - Line 3: `../../../contexts/windowManager` → `contexts/windowManager`
   - Line 4: `../../../hooks/useDraggableWindow` → `hooks/useDraggableWindow`
   - Lines 5-14: `./styles` → `components/Windows/ZXSpectrumWindow/styles`
 
 #### Other Components with Relative Imports
-- [ ] **4.5** `/components/WindowLauncher/index.tsx`
+- [x] **4.5** `/components/WindowLauncher/index.tsx`
   - Convert `./styles` → `components/WindowLauncher/styles`
 
-- [ ] **4.6** `/components/DotMatrix/` subdirectories
+- [x] **4.6** `/components/DotMatrix/` subdirectories
   - Convert all relative imports to absolute
 
-- [ ] **4.7** `/components/BackgroundList/Macintosh/` files
+- [x] **4.7** `/components/BackgroundList/Macintosh/` files
   - Convert all relative imports to absolute
 
-- [ ] **4.8** `/components/BackgroundList/RetroPC/` files
+- [x] **4.8** `/components/BackgroundList/RetroPC/` files
   - Convert all relative imports to absolute
 
-- [ ] **4.9** `/components/MusicDotMatrix/`
+- [x] **4.9** `/components/MusicDotMatrix/`
   - Convert all relative imports to absolute
 
 ### 🟡 Update Import Paths After Component Reorganization
