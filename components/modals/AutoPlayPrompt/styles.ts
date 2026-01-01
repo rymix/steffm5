@@ -5,43 +5,43 @@ export const StyledAutoPlayPrompt = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 50vh;
+  min-height: 60vh;
   padding: 40px 20px;
   gap: 60px;
 `;
 
-export const StyledMessage = styled.div`
+export const StyledCurrentTrack = styled.div`
   text-align: center;
-  max-width: 500px;
-
-  h2 {
-    font-size: 32px;
-    font-weight: 600;
-    margin: 0 0 20px 0;
-    color: #333;
-  }
+  max-width: 600px;
 
   p {
-    font-size: 20px;
+    font-size: 24px;
     line-height: 1.5;
     color: #666;
     margin: 0;
   }
 
   @media (max-width: 768px) {
-    h2 {
-      font-size: 24px;
-    }
-
     p {
-      font-size: 16px;
+      font-size: 18px;
     }
   }
 `;
 
+export const StyledMixName = styled.h2`
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: #333;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
+`;
+
 export const StyledPlayButton = styled.button`
-  width: 160px;
-  height: 160px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   border: none;
   background: #666666;
@@ -66,17 +66,17 @@ export const StyledPlayButton = styled.button`
   }
 
   svg {
-    width: 90px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
   }
 
   @media (max-width: 768px) {
-    width: 130px;
-    height: 130px;
+    width: 140px;
+    height: 140px;
 
     svg {
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
     }
   }
 `;

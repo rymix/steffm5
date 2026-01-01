@@ -4,7 +4,8 @@ import React from "react";
 
 import {
   StyledAutoPlayPrompt,
-  StyledMessage,
+  StyledCurrentTrack,
+  StyledMixName,
   StyledPlayButton,
 } from "./styles";
 
@@ -13,6 +14,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 const AutoPlayPrompt: React.FC = () => {
   const { actions } = useMixcloud();
   const modal = useModal();
+  const currentMix = actions.getCurrentMix();
 
   const handlePlay = () => {
     actions.play();
@@ -22,10 +24,14 @@ const AutoPlayPrompt: React.FC = () => {
 
   return (
     <StyledAutoPlayPrompt>
-      <StyledMessage>
-        <h2>Playback Paused</h2>
-        <p>Tap the button below to continue playing</p>
-      </StyledMessage>
+      <StyledCurrentTrack>
+        {currentMix && (
+          <>
+            <StyledMixName>{currentMix.name}</StyledMixName>
+            <p>Tap to continue playing</p>
+          </>
+        )}
+      </StyledCurrentTrack>
 
       <StyledPlayButton
         onClick={handlePlay}
