@@ -59,6 +59,7 @@ export type MixcloudState = {
   pendingSeekPosition: number | null;
   shuffleMode: boolean;
   temporaryMessage: string | null;
+  autoPlayBlocked: boolean;
 };
 
 export type MixcloudActions = {
@@ -97,6 +98,7 @@ export type MixcloudActions = {
   setScale: (_scale: Scale) => void;
   setManualMode: (_manualMode: boolean) => void;
   showTemporaryMessage: (_message: string) => void;
+  setAutoPlayBlocked: (_blocked: boolean) => void;
 };
 
 export type MixcloudContextState = {

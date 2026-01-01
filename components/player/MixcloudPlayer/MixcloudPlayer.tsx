@@ -1,6 +1,8 @@
 import { useMixcloud } from "contexts/mixcloud";
+import { useModal } from "contexts/modal";
 import React, { useEffect, useRef } from "react";
 
+import AutoPlayPrompt from "components/modals/AutoPlayPrompt";
 import LoadingMessage from "components/shared/LoadingMessage";
 
 import {
@@ -13,9 +15,17 @@ import {
 import { MixcloudPlayerProps } from "./types";
 
 const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
-  const { state, actions, iframeRef, widgetUrl } = useMixcloud();
+  const {
+    state,
+    actions,
+    iframeRef,
+    widgetUrl,
+    autoPlay: autoPlayEnabled,
+  } = useMixcloud();
+  const modal = useModal();
   const initializedRef = useRef(false);
   const autoPlayTriggeredRef = useRef(false);
+  const currentKeyRef = useRef<string | null>(null);
 
   // Initialize by loading all mixes with random starting point (client-side only)
   useEffect(() => {
@@ -62,6 +72,63 @@ const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
     state.isPlaying,
     actions,
   ]);
+
+  // Auto-play detection: Detect when a new mix loads but doesn't auto-play
+  useEffect(() => {
+    // Only check if:
+    // 1. AutoPlay is enabled
+    // 2. Mix has loaded (not loading)
+    // 3. Current key has changed (new mix)
+    // 4. Not currently playing
+    if (
+      autoPlayEnabled &&
+      !state.isLoadingMixes &&
+      state.currentKey &&
+      currentKeyRef.current !== state.currentKey &&
+      !state.isPlaying
+    ) {
+      // Wait 2 seconds to see if playback starts automatically
+      const timer = setTimeout(() => {
+        // If still not playing after 2 seconds, auto-play is blocked
+        if (!state.isPlaying) {
+          actions.setAutoPlayBlocked(true);
+        }
+      }, 2000);
+
+      // Update the ref to track this mix
+      currentKeyRef.current = state.currentKey;
+
+      return () => clearTimeout(timer);
+    }
+
+    // Update ref when key changes
+    if (state.currentKey !== currentKeyRef.current) {
+      currentKeyRef.current = state.currentKey;
+    }
+
+    // Clear blocked state when playback starts
+    if (state.isPlaying && state.autoPlayBlocked) {
+      actions.setAutoPlayBlocked(false);
+    }
+  }, [
+    autoPlayEnabled,
+    state.isLoadingMixes,
+    state.currentKey,
+    state.isPlaying,
+    state.autoPlayBlocked,
+    actions,
+  ]);
+
+  // Open AutoPlayPrompt modal when auto-play is blocked
+  useEffect(() => {
+    if (state.autoPlayBlocked && !modal.state.isOpen) {
+      modal.actions.openModal({
+        id: "auto-play-prompt",
+        title: "Continue Playing",
+        component: <AutoPlayPrompt />,
+      });
+    }
+  }, [state.autoPlayBlocked, modal.state.isOpen, modal.actions]);
 
   if (state.isLoadingMixes) {
     return <LoadingMessage message="Loading mixes..." fullScreen />;

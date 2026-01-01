@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import MixListPage from "components/layout/MixListPage";
 import Wallpapers from "components/layout/Wallpapers";
+import DrivingMode from "components/modals/DrivingMode";
 import About from "components/pages/About";
 import Contact from "components/pages/Contact";
 import Manual from "components/pages/Manual";
@@ -38,6 +39,12 @@ interface MenuItem {
 }
 
 const MENU_ITEMS: MenuItem[] = [
+  {
+    id: "driving-mode-modal",
+    label: "Driving Mode",
+    title: "Driving Mode",
+    component: <DrivingMode />,
+  },
   {
     id: "about-modal",
     label: "About",

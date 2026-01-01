@@ -75,6 +75,7 @@ const useMixcloudContextState = (
     pendingSeekPosition: null,
     shuffleMode: false,
     temporaryMessage: null,
+    autoPlayBlocked: false,
   });
 
   // Sync state with persisted mix progress
@@ -935,6 +936,10 @@ const useMixcloudContextState = (
     setSession((prev) => ({ ...prev, manualMode }));
   }, []);
 
+  const setAutoPlayBlocked = useCallback((blocked: boolean) => {
+    setState((prev) => ({ ...prev, autoPlayBlocked: blocked }));
+  }, []);
+
   const actions: MixcloudActions = useMemo(
     () => ({
       play,
@@ -968,6 +973,7 @@ const useMixcloudContextState = (
       setScale,
       setManualMode,
       showTemporaryMessage,
+      setAutoPlayBlocked,
     }),
     [
       play,
@@ -1001,6 +1007,7 @@ const useMixcloudContextState = (
       setScale,
       setManualMode,
       showTemporaryMessage,
+      setAutoPlayBlocked,
     ],
   );
 
