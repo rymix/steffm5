@@ -1,6 +1,6 @@
 import { useMixcloud } from "contexts/mixcloud";
 
-import Screen from "components/BackgroundList/Macintosh/Screen";
+import Screen from "components/shared/BackgroundList/Macintosh/Screen";
 import {
   StyledBadge,
   StyledCableContainer,
@@ -15,7 +15,7 @@ import {
   StyledOpening,
   StyledOpeningInner,
   StyledScreenCutout,
-} from "components/BackgroundList/Macintosh/StyledMacintosh";
+} from "components/shared/BackgroundList/Macintosh/StyledMacintosh";
 
 export const Macintosh: React.FC = () => {
   const {

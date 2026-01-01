@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { StyledMacintoshProps } from "components/BackgroundList/Macintosh/types";
+import { StyledMacintoshProps } from "components/shared/BackgroundList/Macintosh/types";
 
 export const StyledMacintosh = styled.div<StyledMacintoshProps>`
   display: block;

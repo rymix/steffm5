@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { StyledUserManualCoverProps } from "components/Manual/types";
+import { StyledUserManualCoverProps } from "components/pages/Manual/types";
 
 export const StyledUserManualCover = styled.div<StyledUserManualCoverProps>`
   cursor: pointer;

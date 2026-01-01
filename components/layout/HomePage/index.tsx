@@ -7,10 +7,7 @@ import {
   sortTracksByTime,
 } from "utils/trackHelpers";
 
-import BurgerMenu from "@/components/BurgerMenu";
-import CompactControls from "@/components/CompactPlayer/CompactControls";
-import CompactDisplay from "@/components/CompactPlayer/CompactDisplay";
-import DisplayDevice from "@/components/DisplayDevice";
+import DisplayDevice from "@/components/display/DisplayDevice";
 import {
   StyledMixCard,
   StyledMixCoverArt,
@@ -32,15 +29,18 @@ import {
   StyledTrackNumber,
   StyledTrackRemix,
   StyledTrackTime,
-} from "@/components/DisplayDevice/styles";
-import Wallpaper from "@/components/Wallpaper";
-import WindowLauncher from "@/components/WindowLauncher";
-import MinesweeperWindow from "@/components/Windows/MinesweeperWindow";
-import SolitaireWindow from "@/components/Windows/SolitaireWindow";
-import TetrisWindow from "@/components/Windows/TetrisWindow";
-import ZXSpectrumWindow from "@/components/Windows/ZXSpectrumWindow";
-import MainPlayer from "components/MainPlayer";
-import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
+} from "@/components/display/DisplayDevice/styles";
+import CompactControls from "@/components/layout/CompactPlayer/CompactControls";
+import CompactDisplay from "@/components/layout/CompactPlayer/CompactDisplay";
+import Wallpaper from "@/components/layout/Wallpaper";
+import WindowLauncher from "@/components/layout/WindowLauncher";
+import BurgerMenu from "@/components/modals/BurgerMenu";
+import MinesweeperWindow from "@/components/windows/MinesweeperWindow";
+import SolitaireWindow from "@/components/windows/SolitaireWindow";
+import TetrisWindow from "@/components/windows/TetrisWindow";
+import ZXSpectrumWindow from "@/components/windows/ZXSpectrumWindow";
+import MainPlayer from "components/layout/MainPlayer";
+import MixcloudPlayerWrapper from "components/player/MixcloudPlayer/MixcloudPlayerWrapper";
 import { useCurrentTrack, useCurrentTrackIndex } from "hooks/useCurrentTrack";
 import useKeyboardControls from "hooks/useKeyboardControls";
 import { usePanelTheme } from "hooks/useThemeMode";

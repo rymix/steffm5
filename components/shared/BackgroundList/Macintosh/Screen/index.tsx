@@ -4,7 +4,7 @@ import {
   StyledScreen,
   StyledScreenBanner,
   StyledScreenShadow,
-} from "components/BackgroundList/Macintosh/Screen/StyledScreen";
+} from "components/shared/BackgroundList/Macintosh/Screen/StyledScreen";
 
 export const Screen: React.FC = () => {
   const {

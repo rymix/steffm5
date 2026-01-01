@@ -4,7 +4,7 @@ import {
   createStyledWindow,
   StyledResetButton,
   StyledResizeHandle,
-} from "components/Windows/shared/styles";
+} from "components/windows/shared/styles";
 
 // Solitaire-specific window (no fixed dimensions)
 export const StyledSolitaireWindow = createStyledWindow();

@@ -1,7 +1,7 @@
 import type {
   EffectRenderer,
   TransitionContext,
-} from "components/DotMatrix/types";
+} from "components/display/DotMatrix/types";
 
 export class SlideLeftEffect implements EffectRenderer {
   render(context: TransitionContext): void {

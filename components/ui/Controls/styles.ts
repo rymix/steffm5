@@ -42,7 +42,7 @@ export const StyledControlButton = styled.button<{
         return `
           background: #2196f3;
           color: white;
-          
+
           &:hover:not(:disabled) {
             background: #1976d2;
           }
@@ -52,7 +52,7 @@ export const StyledControlButton = styled.button<{
           background: #f5f5f5;
           color: #333;
           border: 1px solid #ddd;
-          
+
           &:hover:not(:disabled) {
             background: #e0e0e0;
             border-color: #bbb;
@@ -62,7 +62,7 @@ export const StyledControlButton = styled.button<{
         return `
           background: #4caf50;
           color: white;
-          
+
           &:hover:not(:disabled) {
             background: #388e3c;
           }
@@ -107,10 +107,10 @@ export const StyledShareTooltip = styled.div<{
   ${({ $show }) =>
     $show &&
     `
-    animation: fadeUpOut 2s ease-in-out forwards;
+    animation: fade-up-out 2s ease-in-out forwards;
   `}
 
-  @keyframes fadeUpOut {
+  @keyframes fade-up-out {
     0% {
       opacity: 1;
       transform: translateX(-50%) translateY(0);

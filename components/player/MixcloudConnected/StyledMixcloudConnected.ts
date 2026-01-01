@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import type { StyledMixcloudConnectedProps } from "components/MixcloudConnected/types";
+import type { StyledMixcloudConnectedProps } from "components/player/MixcloudConnected/types";
 
 export const StyledMixcloudConnectedWrapper = styled.div``;
 

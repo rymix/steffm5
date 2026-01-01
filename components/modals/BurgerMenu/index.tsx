@@ -3,15 +3,15 @@ import { useOverlay } from "contexts/overlay";
 import { useTheme } from "contexts/theme";
 import React, { useEffect, useRef, useState } from "react";
 
-import MixListPage from "components/MixListPage";
+import MixListPage from "components/layout/MixListPage";
+import Wallpapers from "components/layout/Wallpapers";
+import About from "components/pages/About";
+import Contact from "components/pages/Contact";
+import Manual from "components/pages/Manual";
+import Statistics from "components/pages/Statistics";
 import { useEscapeKey } from "hooks/useEscapeKey";
 import { useModalTheme } from "hooks/useThemeMode";
 
-import Contact from "../Contact";
-import About from "../ContentPages/About";
-import Statistics from "../ContentPages/Statistics";
-import Manual from "../Manual";
-import Wallpapers from "../Wallpapers";
 import {
   StyledBurgerButton,
   StyledBurgerLine,

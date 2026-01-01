@@ -13,13 +13,13 @@ import {
   StyledManualSectionTitle,
   StyledManualSubTitle,
   StyledManualTitle,
-} from "components/Manual/StyledManual";
+} from "components/pages/Manual/StyledManual";
 import {
   StyledManualButton,
   StyledManualButtonLabel,
   StyledManualButtonWrapper,
   StyledManualLed,
-} from "components/Manual/StyledManualButton";
+} from "components/pages/Manual/StyledManualButton";
 import {
   StyledManualDialTick,
   StyledManualGrip,
@@ -29,17 +29,17 @@ import {
   StyledManualKnobWrapper,
   StyledManualOuterKnob,
   StyledManualOuterKnobWrapper,
-} from "components/Manual/StyledManualKnob";
+} from "components/pages/Manual/StyledManualKnob";
 import {
   StyledManualProgressLed,
   StyledManualProgressLedsItemsWrapper,
   StyledManualProgressLedsWrapper,
-} from "components/Manual/StyledManualProgressLeds";
+} from "components/pages/Manual/StyledManualProgressLeds";
 import {
   StyledManualProgress,
   StyledManualScreen,
   StyledManualScreenWrapper,
-} from "components/Manual/StyledManualScreen";
+} from "components/pages/Manual/StyledManualScreen";
 import { useModalTheme } from "hooks/useThemeMode";
 
 export const Manual: React.FC = () => {

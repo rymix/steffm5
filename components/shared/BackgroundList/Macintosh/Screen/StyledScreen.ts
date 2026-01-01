@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { StyledScreenProps } from "components/BackgroundList/types";
+import { StyledScreenProps } from "components/shared/BackgroundList/types";
 
 export const StyledScreen = styled.div<StyledScreenProps>`
   display: block;

@@ -1,4 +1,4 @@
-import type { TickerProps } from "components/Ticker/types";
+import type { TickerProps } from "components/display/Ticker/types";
 
 export type MusicTickerProps = Omit<TickerProps, "messages"> & {
   trackName?: string;

@@ -4,7 +4,7 @@ import {
   StyledScreen,
   StyledScreenBanner,
   StyledScreenShadow,
-} from "components/BackgroundList/RetroPC/Screen/StyledScreen";
+} from "components/shared/BackgroundList/RetroPC/Screen/StyledScreen";
 
 export const Screen: React.FC = () => {
   const {

@@ -1,7 +1,7 @@
 import { useModal } from "contexts/modal";
 import React from "react";
 
-import Modal from "components/Modal";
+import Modal from "components/modals/Modal";
 
 const GlobalModal: React.FC = () => {
   const { state, actions } = useModal();

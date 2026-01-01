@@ -5,7 +5,7 @@ import React from "react";
 import {
   StyledLauncher,
   StyledLauncherIcon,
-} from "components/WindowLauncher/styles";
+} from "components/layout/WindowLauncher/styles";
 
 const WindowLauncher: React.FC = () => {
   const { windows } = useWindowManager();

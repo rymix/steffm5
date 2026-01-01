@@ -7,7 +7,7 @@ import {
   StyledResetButton,
   StyledResizeHandle,
   StyledSolitaireWindow,
-} from "components/Windows/SolitaireWindow/styles";
+} from "components/windows/SolitaireWindow/styles";
 import { useDraggableWindow } from "hooks/useDraggableWindow";
 import { useIframeInteraction } from "hooks/useIframeInteraction";
 

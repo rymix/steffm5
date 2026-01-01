@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { StyledMonitorWrapperProps } from "components/BackgroundList/RetroPC/types";
+import { StyledMonitorWrapperProps } from "components/shared/BackgroundList/RetroPC/types";
 
 const monitorWidth = 320;
 

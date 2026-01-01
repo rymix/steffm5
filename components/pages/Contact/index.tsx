@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StyledContact } from "components/Contact/StyledContact";
+import { StyledContact } from "components/pages/Contact/StyledContact";
 import { useModalTheme } from "hooks/useThemeMode";
 
 export const Contact: React.FC = () => {

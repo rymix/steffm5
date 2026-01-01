@@ -2,8 +2,8 @@ import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { getCategoryName } from "utils/themeHelpers";
 
-import MixcloudConnected from "@/components/MixcloudConnected";
-import PlaybackButtons from "@/components/PlaybackButtons";
+import MixcloudConnected from "@/components/player/MixcloudConnected";
+import PlaybackButtons from "@/components/ui/PlaybackButtons";
 import { useCurrentTrack } from "hooks/useCurrentTrack";
 import { useDraggableWindow } from "hooks/useDraggableWindow";
 import { useTrackDisplayName } from "hooks/useTrackDisplayName";

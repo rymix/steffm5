@@ -7,7 +7,7 @@ import {
   StyledResetButton,
   StyledResizeHandle,
   StyledTetrisWindow,
-} from "components/Windows/TetrisWindow/styles";
+} from "components/windows/TetrisWindow/styles";
 import { useDraggableWindow } from "hooks/useDraggableWindow";
 import { useIframeInteraction } from "hooks/useIframeInteraction";
 

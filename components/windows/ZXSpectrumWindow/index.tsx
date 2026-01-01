@@ -11,7 +11,7 @@ import {
   StyledVolumeControl,
   StyledVolumeSlider,
   StyledZXSpectrumWindow,
-} from "components/Windows/ZXSpectrumWindow/styles";
+} from "components/windows/ZXSpectrumWindow/styles";
 import { useDraggableWindow } from "hooks/useDraggableWindow";
 
 import CloseIcon from "@mui/icons-material/Close";

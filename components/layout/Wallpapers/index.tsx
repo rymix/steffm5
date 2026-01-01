@@ -6,8 +6,8 @@ import type {
   BackgroundCategory,
   BackgroundExtended,
 } from "db/types";
-import Macintosh from "components/BackgroundList/Macintosh";
-import RetroPC from "components/BackgroundList/RetroPC";
+import Macintosh from "components/shared/BackgroundList/Macintosh";
+import RetroPC from "components/shared/BackgroundList/RetroPC";
 import { useModalTheme } from "hooks/useThemeMode";
 
 import {

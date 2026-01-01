@@ -1,9 +1,9 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useMemo, useState } from "react";
 
-import DotMatrix from "components/DotMatrix";
-import type { TransitionEffect } from "components/DotMatrix/types";
-import type { MusicDotMatrixProps } from "components/MusicDotMatrix/types";
+import DotMatrix from "components/display/DotMatrix";
+import type { TransitionEffect } from "components/display/DotMatrix/types";
+import type { MusicDotMatrixProps } from "components/display/MusicDotMatrix/types";
 import { useCurrentTrack } from "hooks/useCurrentTrack";
 
 const MusicDotMatrix: React.FC<MusicDotMatrixProps> = ({

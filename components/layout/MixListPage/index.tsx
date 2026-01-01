@@ -1,8 +1,8 @@
 import React from "react";
 
-import FilterStatus from "@/components/FilterStatus";
-import MixFilter from "@/components/MixFilter";
-import MixList from "@/components/MixList";
+import MixList from "@/components/layout/MixList";
+import FilterStatus from "@/components/ui/FilterStatus";
+import MixFilter from "@/components/ui/MixFilter";
 import { useModalTheme } from "hooks/useThemeMode";
 
 import {

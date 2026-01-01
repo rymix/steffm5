@@ -196,9 +196,9 @@ export const StyledMixDetails = styled.div<ThemeProps>`
     props.$themeMode === "dark" ? "#343434" : "#d8d8d8"};
   border-top: 1px solid
     ${(props) => (props.$themeMode === "dark" ? "#4a4a4a" : "#b0b0b0")};
-  animation: slideDown 0.2s ease;
+  animation: slide-down 0.2s ease;
 
-  @keyframes slideDown {
+  @keyframes slide-down {
     from {
       opacity: 0;
       max-height: 0;

@@ -2,7 +2,7 @@ import { useMixcloud } from "contexts/mixcloud";
 import { useModal } from "contexts/modal";
 import React from "react";
 
-import MixListPage from "components/MixListPage";
+import MixListPage from "components/layout/MixListPage";
 
 import {
   StyledButtonGroup,

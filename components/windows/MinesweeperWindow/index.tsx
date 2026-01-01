@@ -6,7 +6,7 @@ import {
   StyledIframe,
   StyledMinesweeperWindow,
   StyledResetButton,
-} from "components/Windows/MinesweeperWindow/styles";
+} from "components/windows/MinesweeperWindow/styles";
 import { useDraggableWindow } from "hooks/useDraggableWindow";
 import { useIframeInteraction } from "hooks/useIframeInteraction";
 

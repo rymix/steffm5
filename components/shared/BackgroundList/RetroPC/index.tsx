@@ -1,7 +1,7 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React from "react";
 
-import Screen from "components/BackgroundList/RetroPC/Screen";
+import Screen from "components/shared/BackgroundList/RetroPC/Screen";
 import {
   StyledBadge,
   StyledLogo,
@@ -10,7 +10,7 @@ import {
   StyledMonitorPanel,
   StyledMonitorStand,
   StyledMonitorWrapper,
-} from "components/BackgroundList/RetroPC/StyledRetroPC";
+} from "components/shared/BackgroundList/RetroPC/StyledRetroPC";
 
 const MonitorComponent: React.FC = () => {
   const {

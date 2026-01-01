@@ -4,8 +4,8 @@ import { OverlayProvider } from "contexts/overlay";
 import { ThemeProvider } from "contexts/theme";
 import type { AppProps } from "next/app";
 
-import GlobalModal from "components/GlobalModal";
-import SharedOverlay from "components/SharedOverlay";
+import GlobalModal from "components/modals/GlobalModal";
+import SharedOverlay from "components/modals/SharedOverlay";
 
 import "../styles/globals.css";
 

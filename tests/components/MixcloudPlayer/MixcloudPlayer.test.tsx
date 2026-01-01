@@ -1,6 +1,6 @@
 import { MixcloudProvider } from "contexts/mixcloud";
 
-import MixcloudPlayer from "components/MixcloudPlayer/MixcloudPlayer";
+import MixcloudPlayer from "components/player/MixcloudPlayer/MixcloudPlayer";
 
 import "@testing-library/jest-dom";
 import { render, waitFor } from "@testing-library/react";

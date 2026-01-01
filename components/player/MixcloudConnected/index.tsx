@@ -4,8 +4,8 @@ import { useMemo } from "react";
 import {
   StyledMixcloudConnected,
   StyledMixcloudConnectedWrapper,
-} from "components/MixcloudConnected/StyledMixcloudConnected";
-import type { MixcloudConnectedProps } from "components/MixcloudConnected/types";
+} from "components/player/MixcloudConnected/StyledMixcloudConnected";
+import type { MixcloudConnectedProps } from "components/player/MixcloudConnected/types";
 
 const MixcloudConnected: React.FC<MixcloudConnectedProps> = ({ style }) => {
   const { state } = useMixcloud();

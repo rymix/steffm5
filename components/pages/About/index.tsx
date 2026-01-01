@@ -1,7 +1,4 @@
-import {
-  StyledAbout,
-  StyledImage,
-} from "@/components/ContentPages/About/styles";
+import { StyledAbout, StyledImage } from "@/components/pages/About/styles";
 import { useModalTheme } from "hooks/useThemeMode";
 
 export const About: React.FC = () => {

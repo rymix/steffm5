@@ -1,12 +1,12 @@
 import { useModal } from "contexts/modal";
 import { useEffect, useState } from "react";
 
-import Manual from "components/Manual";
+import Manual from "components/pages/Manual";
 import {
   StyledUserManualCover,
   StyledUserManualCoverSubTitle,
   StyledUserManualCoverTitle,
-} from "components/Manual/StyledUserManualCover";
+} from "components/pages/Manual/StyledUserManualCover";
 
 export const UserManualCover: React.FC = () => {
   const { actions: modalActions } = useModal();

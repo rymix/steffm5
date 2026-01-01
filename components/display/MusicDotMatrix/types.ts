@@ -1,7 +1,7 @@
 import type {
   DotMatrixProps,
   TransitionEffect,
-} from "components/DotMatrix/types";
+} from "components/display/DotMatrix/types";
 
 export interface MusicDotMatrixProps extends Omit<DotMatrixProps, "text"> {
   trackName?: string;
