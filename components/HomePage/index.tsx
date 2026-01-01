@@ -3,6 +3,10 @@ import { useTheme } from "contexts/theme";
 import { WindowManagerProvider } from "contexts/windowManager";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { getCategoryName, getPanelThemeMode } from "utils/themeHelpers";
+import {
+  getTrackDuration as calculateTrackDuration,
+  sortTracksByTime,
+} from "utils/trackHelpers";
 
 import BurgerMenu from "@/components/BurgerMenu";
 import CompactControls from "@/components/CompactPlayer/CompactControls";
@@ -38,6 +42,7 @@ import TetrisWindow from "@/components/Windows/TetrisWindow";
 import ZXSpectrumWindow from "@/components/Windows/ZXSpectrumWindow";
 import MainPlayer from "components/MainPlayer";
 import MixcloudPlayerWrapper from "components/MixcloudPlayer/MixcloudPlayerWrapper";
+import { useCurrentTrack, useCurrentTrackIndex } from "hooks/useCurrentTrack";
 import useKeyboardControls from "hooks/useKeyboardControls";
 import { useWallpaperManager } from "hooks/useWallpaperManager";
 
@@ -88,101 +93,31 @@ const HomePageContent: React.FC = () => {
     return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
-  // Helper function to get current playing track
-  const getCurrentPlayingTrack = useCallback(() => {
-    const currentMix = actions.getCurrentMix();
-    if (!currentMix?.tracks) return null;
-
-    const timeToSeconds = (timeString: string): number => {
-      const parts = timeString.split(":");
-      if (parts.length === 2) {
-        return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-      } else if (parts.length === 3) {
-        return (
-          parseInt(parts[0]) * 3600 +
-          parseInt(parts[1]) * 60 +
-          parseInt(parts[2])
-        );
-      }
-      return 0;
-    };
-
-    const sortedTracks = [...currentMix.tracks].sort((a, b) => {
-      return timeToSeconds(a.startTime) - timeToSeconds(b.startTime);
-    });
-
-    const currentPosition = state.position;
-    const tolerance = 2;
-
-    for (let trackIndex = 0; trackIndex < sortedTracks.length; trackIndex++) {
-      const track = sortedTracks[trackIndex];
-      const trackStartSeconds = timeToSeconds(track.startTime);
-
-      const nextTrack =
-        trackIndex < sortedTracks.length - 1
-          ? sortedTracks[trackIndex + 1]
-          : null;
-      const nextTrackStartSeconds = nextTrack
-        ? timeToSeconds(nextTrack.startTime)
-        : state.duration;
-
-      if (
-        currentPosition >= trackStartSeconds - tolerance &&
-        currentPosition < nextTrackStartSeconds - tolerance
-      ) {
-        return `${track.sectionNumber}-${track.trackName}-${track.artistName}`;
-      }
-    }
-
-    return null;
-  }, [state.position, state.duration, actions]);
-
-  // Helper to convert time string to seconds
-  const timeToSeconds = (timeString: string): number => {
-    const parts = timeString.split(":");
-    if (parts.length === 2) {
-      return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-    } else if (parts.length === 3) {
-      return (
-        parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2])
-      );
-    }
-    return 0;
-  };
-
   // Get current mix
   const currentMix = actions.getCurrentMix();
 
   // Get sorted tracks
   const sortedTracks = currentMix?.tracks
-    ? [...currentMix.tracks].sort(
-        (a, b) => timeToSeconds(a.startTime) - timeToSeconds(b.startTime),
-      )
+    ? sortTracksByTime(currentMix.tracks)
     : [];
 
-  // Determine currently playing track
-  const currentTrackIndex = (() => {
-    if (!sortedTracks.length || state.position <= 0) return -1;
+  // Get current track and index using hooks
+  const currentTrack = useCurrentTrack(
+    currentMix?.tracks,
+    state.position,
+    state.duration,
+  );
+  const currentTrackIndex = useCurrentTrackIndex(
+    currentMix?.tracks,
+    state.position,
+    state.duration,
+  );
 
-    const tolerance = 2;
-    for (let i = 0; i < sortedTracks.length; i++) {
-      const track = sortedTracks[i];
-      const trackStartSeconds = timeToSeconds(track.startTime);
-      const nextTrack =
-        i < sortedTracks.length - 1 ? sortedTracks[i + 1] : null;
-      const nextTrackStartSeconds = nextTrack
-        ? timeToSeconds(nextTrack.startTime)
-        : state.duration;
-
-      if (
-        state.position >= trackStartSeconds - tolerance &&
-        state.position < nextTrackStartSeconds - tolerance
-      ) {
-        return i;
-      }
-    }
-    return -1;
-  })();
+  // Helper function to get current playing track key
+  const getCurrentPlayingTrack = useCallback(() => {
+    if (!currentTrack) return null;
+    return `${currentTrack.sectionNumber}-${currentTrack.trackName}-${currentTrack.artistName}`;
+  }, [currentTrack]);
 
   // Detect mix and track changes for wallpaper changes
   useEffect(() => {
@@ -229,11 +164,11 @@ const HomePageContent: React.FC = () => {
     if (!sortedTracks[index]) {
       return "";
     }
-    const currentStart = timeToSeconds(sortedTracks[index].startTime);
-    const nextStart = sortedTracks[index + 1]
-      ? timeToSeconds(sortedTracks[index + 1].startTime)
-      : state.duration;
-    const durationSeconds = nextStart - currentStart;
+    const durationSeconds = calculateTrackDuration(
+      sortedTracks[index],
+      sortedTracks[index + 1] || null,
+      state.duration,
+    );
     const minutes = Math.floor(durationSeconds / 60);
     const seconds = Math.floor(durationSeconds % 60);
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;

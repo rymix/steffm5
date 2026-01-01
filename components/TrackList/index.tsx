@@ -1,5 +1,6 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useMemo } from "react";
+import { sortTracksByTime, timeToSeconds } from "utils/trackHelpers";
 
 import type { Track } from "db/types";
 
@@ -26,32 +27,11 @@ const TrackList: React.FC = () => {
     [state.currentKey, state.mixData],
   );
 
-  // Convert MM:SS or H:MM:SS format to seconds
-  const timeToSeconds = useMemo(() => {
-    return (timeString: string): number => {
-      const parts = timeString.split(":");
-      if (parts.length === 2) {
-        // MM:SS format
-        return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-      } else if (parts.length === 3) {
-        // H:MM:SS format
-        return (
-          parseInt(parts[0]) * 3600 +
-          parseInt(parts[1]) * 60 +
-          parseInt(parts[2])
-        );
-      }
-      return 0;
-    };
-  }, []);
-
   // Sort tracks by their start time to ensure chronological order
   const sortedTracks = useMemo(() => {
     if (!currentMix?.tracks) return [];
-    return [...currentMix.tracks].sort((a, b) => {
-      return timeToSeconds(a.startTime) - timeToSeconds(b.startTime);
-    });
-  }, [currentMix?.tracks, timeToSeconds]);
+    return sortTracksByTime(currentMix.tracks);
+  }, [currentMix?.tracks]);
 
   // Memoize track statuses to ensure re-rendering on position/duration changes
   const trackStatuses = useMemo(() => {

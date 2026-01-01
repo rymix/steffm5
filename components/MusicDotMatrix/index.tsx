@@ -1,6 +1,8 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useMemo, useState } from "react";
 
+import { useCurrentTrack } from "hooks/useCurrentTrack";
+
 import DotMatrix from "../DotMatrix";
 import type { TransitionEffect } from "../DotMatrix/types";
 import type { MusicDotMatrixProps } from "./types";
@@ -24,47 +26,12 @@ const MusicDotMatrix: React.FC<MusicDotMatrixProps> = ({
 
   // Get current track information
   const currentMix = actions.getCurrentMix();
-  const currentTrack = useMemo(() => {
-    if (!currentMix?.tracks || state.position <= 0) return null;
-
-    const timeToSeconds = (timeString: string): number => {
-      const parts = timeString.split(":");
-      if (parts.length === 2) {
-        return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-      } else if (parts.length === 3) {
-        return (
-          parseInt(parts[0]) * 3600 +
-          parseInt(parts[1]) * 60 +
-          parseInt(parts[2])
-        );
-      }
-      return 0;
-    };
-
-    const sortedTracks = [...currentMix.tracks].sort((a, b) => {
-      return timeToSeconds(a.startTime) - timeToSeconds(b.startTime);
-    });
-
-    for (let i = 0; i < sortedTracks.length; i++) {
-      const track = sortedTracks[i];
-      const nextTrack =
-        i < sortedTracks.length - 1 ? sortedTracks[i + 1] : null;
-
-      const trackStartSeconds = timeToSeconds(track.startTime);
-      const nextTrackStartSeconds = nextTrack
-        ? timeToSeconds(nextTrack.startTime)
-        : state.duration;
-
-      if (
-        state.position >= trackStartSeconds &&
-        state.position < nextTrackStartSeconds
-      ) {
-        return track;
-      }
-    }
-
-    return null;
-  }, [currentMix, state.position, state.duration]);
+  const currentTrack = useCurrentTrack(
+    currentMix?.tracks,
+    state.position,
+    state.duration,
+    0, // No tolerance for this component
+  );
 
   // Build message array
   const messages = useMemo(() => {

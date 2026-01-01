@@ -1,7 +1,13 @@
 import { useMixcloud } from "contexts/mixcloud";
 import { useTheme } from "contexts/theme";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getCategoryName, getPanelThemeMode } from "utils/themeHelpers";
+import {
+  getTrackDuration as calculateTrackDuration,
+  sortTracksByTime,
+} from "utils/trackHelpers";
+
+import { useCurrentTrackIndex } from "hooks/useCurrentTrack";
 
 import {
   StyledDisplayDevice,
@@ -143,65 +149,32 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
     };
   }, [isDragging, isOpen]);
 
+  // Get sorted tracks
+  const sortedTracks = currentMix?.tracks
+    ? sortTracksByTime(currentMix.tracks)
+    : [];
+
+  // Get current track index using hook
+  const currentTrackIndex = useCurrentTrackIndex(
+    currentMix?.tracks,
+    state.position,
+    state.duration,
+  );
+
   // Helper to calculate track duration
   const getTrackDuration = (index: number): string => {
     if (!sortedTracks[index]) {
       return "";
     }
-    const currentStart = timeToSeconds(sortedTracks[index].startTime);
-    const nextStart = sortedTracks[index + 1]
-      ? timeToSeconds(sortedTracks[index + 1].startTime)
-      : state.duration;
-    const durationSeconds = nextStart - currentStart;
+    const durationSeconds = calculateTrackDuration(
+      sortedTracks[index],
+      sortedTracks[index + 1] || null,
+      state.duration,
+    );
     const minutes = Math.floor(durationSeconds / 60);
     const seconds = Math.floor(durationSeconds % 60);
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
-
-  // Helper to convert time string to seconds
-  const timeToSeconds = (timeString: string): number => {
-    const parts = timeString.split(":");
-    if (parts.length === 2) {
-      return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-    } else if (parts.length === 3) {
-      return (
-        parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2])
-      );
-    }
-    return 0;
-  };
-
-  // Get sorted tracks
-  const sortedTracks = useMemo(() => {
-    if (!currentMix?.tracks) return [];
-    return [...currentMix.tracks].sort(
-      (a, b) => timeToSeconds(a.startTime) - timeToSeconds(b.startTime),
-    );
-  }, [currentMix]);
-
-  // Determine currently playing track
-  const currentTrackIndex = useMemo(() => {
-    if (!sortedTracks.length || state.position <= 0) return -1;
-
-    const tolerance = 2;
-    for (let i = 0; i < sortedTracks.length; i++) {
-      const track = sortedTracks[i];
-      const trackStartSeconds = timeToSeconds(track.startTime);
-      const nextTrack =
-        i < sortedTracks.length - 1 ? sortedTracks[i + 1] : null;
-      const nextTrackStartSeconds = nextTrack
-        ? timeToSeconds(nextTrack.startTime)
-        : state.duration;
-
-      if (
-        state.position >= trackStartSeconds - tolerance &&
-        state.position < nextTrackStartSeconds - tolerance
-      ) {
-        return i;
-      }
-    }
-    return -1;
-  }, [sortedTracks, state.position, state.duration]);
 
   // Handle click - only toggle if we didn't drag
   const handleClick = () => {

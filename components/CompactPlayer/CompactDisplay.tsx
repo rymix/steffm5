@@ -1,6 +1,9 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useMemo, useRef } from "react";
 
+import { useCurrentTrack } from "hooks/useCurrentTrack";
+import { useTrackDisplayName } from "hooks/useTrackDisplayName";
+
 import {
   GlobalFonts,
   StyledDisplay,
@@ -32,81 +35,14 @@ const CompactDisplay: React.FC = () => {
 
   // Get current mix and track
   const currentMix = actions.getCurrentMix();
-
-  const currentTrack = useMemo(() => {
-    if (!currentMix?.tracks || state.position <= 0) return null;
-
-    const timeToSeconds = (timeString: string): number => {
-      const parts = timeString.split(":");
-      if (parts.length === 2) {
-        return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-      } else if (parts.length === 3) {
-        return (
-          parseInt(parts[0]) * 3600 +
-          parseInt(parts[1]) * 60 +
-          parseInt(parts[2])
-        );
-      }
-      return 0;
-    };
-
-    const sortedTracks = [...currentMix.tracks].sort((a, b) => {
-      return timeToSeconds(a.startTime) - timeToSeconds(b.startTime);
-    });
-
-    const tolerance = 2;
-
-    for (let i = 0; i < sortedTracks.length; i++) {
-      const track = sortedTracks[i];
-      const nextTrack =
-        i < sortedTracks.length - 1 ? sortedTracks[i + 1] : null;
-
-      const trackStartSeconds = timeToSeconds(track.startTime);
-      const nextTrackStartSeconds = nextTrack
-        ? timeToSeconds(nextTrack.startTime)
-        : state.duration;
-
-      if (
-        state.position >= trackStartSeconds - tolerance &&
-        state.position < nextTrackStartSeconds - tolerance
-      ) {
-        return track;
-      }
-    }
-
-    return null;
-  }, [currentMix, state.position, state.duration]);
+  const currentTrack = useCurrentTrack(
+    currentMix?.tracks,
+    state.position,
+    state.duration,
+  );
 
   // Track name for display
-  const trackName = useMemo(() => {
-    const parts = [];
-
-    if (currentTrack?.trackName) {
-      parts.push(currentTrack.trackName);
-    }
-
-    if (currentTrack?.artistName) {
-      parts.push(currentTrack.artistName);
-    }
-
-    if (currentTrack?.remixArtistName) {
-      parts.push(currentTrack.remixArtistName);
-    }
-
-    if (currentMix?.name) {
-      parts.push(currentMix.name);
-    }
-
-    const text =
-      parts.length > 0 ? parts.join(" * ") : "STEF.FM MIXCLOUD PLAYER";
-
-    return text.toUpperCase().replace(/'/g, "").replace(/ /g, "!");
-  }, [
-    currentTrack?.trackName,
-    currentTrack?.artistName,
-    currentTrack?.remixArtistName,
-    currentMix?.name,
-  ]);
+  const trackName = useTrackDisplayName(currentTrack, currentMix?.name);
 
   const scrollText = useMemo(
     () => (trackName + "!***!").repeat(3),
