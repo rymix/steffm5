@@ -1,5 +1,5 @@
 import { useMixcloud } from "contexts/mixcloud";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { getCategoryName } from "utils/themeHelpers";
 import {
   getTrackDuration as calculateTrackDuration,
@@ -7,6 +7,7 @@ import {
 } from "utils/trackHelpers";
 
 import { useCurrentTrackIndex } from "hooks/useCurrentTrack";
+import { useDragGesture } from "hooks/useDragGesture";
 import { usePanelTheme } from "hooks/useThemeMode";
 
 import {
@@ -54,9 +55,6 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
   const [expandedTrackIndex, setExpandedTrackIndex] = useState<number | null>(
     null,
   );
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStartXRef = useRef(0);
-  const didDragRef = useRef(false);
 
   const isOpen = isOpenProp !== undefined ? isOpenProp : isOpenInternal;
   const toggleDisplay =
@@ -68,85 +66,12 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
     setExpandedTrackIndex(expandedTrackIndex === index ? null : index);
   };
 
-  // Drag handlers for toggle button
-  const handleDragStart = (clientX: number) => {
-    setIsDragging(true);
-    dragStartXRef.current = clientX;
-    didDragRef.current = false;
-  };
-
-  const handleDragMove = (clientX: number) => {
-    if (!isDragging) return;
-
-    const dragDistance = clientX - dragStartXRef.current;
-    const threshold = 50; // pixels to trigger toggle
-
-    if (isOpen && dragDistance > threshold) {
-      // Dragging right while open -> close
-      didDragRef.current = true;
-      toggleDisplay();
-      setIsDragging(false);
-    } else if (!isOpen && dragDistance < -threshold) {
-      // Dragging left while closed -> open
-      didDragRef.current = true;
-      toggleDisplay();
-      setIsDragging(false);
-    }
-  };
-
-  const handleDragEnd = () => {
-    setIsDragging(false);
-    // Reset didDrag after a short delay to allow click handler to check it
-    setTimeout(() => {
-      didDragRef.current = false;
-    }, 100);
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    handleDragStart(e.clientX);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (e.touches.length === 1) {
-      handleDragStart(e.touches[0].clientX);
-    }
-  };
-
-  // Mouse and touch event listeners
-  useEffect(() => {
-    if (!isDragging) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      handleDragMove(e.clientX);
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length === 1) {
-        handleDragMove(e.touches[0].clientX);
-      }
-    };
-
-    const handleMouseUp = () => {
-      handleDragEnd();
-    };
-
-    const handleTouchEnd = () => {
-      handleDragEnd();
-    };
-
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-    document.addEventListener("touchmove", handleTouchMove);
-    document.addEventListener("touchend", handleTouchEnd);
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [isDragging, isOpen]);
+  // Drag gesture handling for toggle button
+  const { handleMouseDown, handleTouchStart, handleClick } = useDragGesture({
+    threshold: 50,
+    onDragLeft: !isOpen ? toggleDisplay : undefined,
+    onDragRight: isOpen ? toggleDisplay : undefined,
+  });
 
   // Get sorted tracks
   const sortedTracks = currentMix?.tracks
@@ -173,13 +98,6 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
     const minutes = Math.floor(durationSeconds / 60);
     const seconds = Math.floor(durationSeconds % 60);
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  };
-
-  // Handle click - only toggle if we didn't drag
-  const handleClick = () => {
-    if (!didDragRef.current) {
-      toggleDisplay();
-    }
   };
 
   return (

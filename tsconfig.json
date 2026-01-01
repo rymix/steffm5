@@ -28,7 +28,15 @@
       "pages/*": ["./pages/*"],
       "public/*": ["./public/*"],
       "styles/*": ["./styles/*"],
-      "utils/*": ["./utils/*"]
+      "utils/*": ["./utils/*"],
+      "@ui/*": ["./components/ui/*"],
+      "@windows/*": ["./components/windows/*"],
+      "@modals/*": ["./components/modals/*"],
+      "@display/*": ["./components/display/*"],
+      "@layout/*": ["./components/layout/*"],
+      "@pages/*": ["./components/pages/*"],
+      "@player/*": ["./components/player/*"],
+      "@shared/*": ["./components/shared/*"]
     },
     "plugins": [
       {

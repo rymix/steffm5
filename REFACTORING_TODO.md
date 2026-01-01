@@ -406,7 +406,7 @@ export function useTrackChangeDetection(
 - [x] **2.10** Update `/components/BurgerMenu/index.tsx` to map over config
 
 ### 🟢 Create `useDragGesture` Hook (Future-Proofing)
-- [ ] **2.11** Create `/hooks/useDragGesture.ts`
+- [x] **2.11** Create `/hooks/useDragGesture.ts`
   ```typescript
   export function useDragGesture(options: {
     threshold?: number;
@@ -421,7 +421,7 @@ export function useTrackChangeDetection(
   }
   ```
 
-- [ ] **2.12** Optionally refactor `/components/DisplayDevice/index.tsx` (lines 67-98)
+- [x] **2.12** Refactor `/components/display/DisplayDevice/index.tsx` to use `useDragGesture` hook
 
 ---
 
@@ -452,9 +452,9 @@ Proposed structure:
   └── shared/          # Shared/Common Components
 ```
 
-- [ ] **3.1** Create new directory structure
+- [x] **3.1** Create new directory structure
 
-- [ ] **3.2** Move UI Controls to `/components/ui/`:
+- [x] **3.2** Move UI Controls to `/components/ui/`:
   - Controls/
   - PlaybackButtons/
   - VolumeControl/
@@ -463,15 +463,15 @@ Proposed structure:
   - FilterStatusWidget/
   - MixFilter/
 
-- [ ] **3.3** Rename `/components/Windows/` to `/components/windows/` (lowercase consistency)
+- [x] **3.3** Rename `/components/Windows/` to `/components/windows/` (lowercase consistency)
 
-- [ ] **3.4** Move Modal components to `/components/modals/`:
+- [x] **3.4** Move Modal components to `/components/modals/`:
   - Modal/
   - GlobalModal/
   - SharedOverlay/
   - BurgerMenu/
 
-- [ ] **3.5** Move Display components to `/components/display/`:
+- [x] **3.5** Move Display components to `/components/display/`:
   - DisplayDevice/
   - DotMatrix/
   - MusicDotMatrix/
@@ -479,7 +479,7 @@ Proposed structure:
   - MusicTicker/
   - CurrentMixInfo/
 
-- [ ] **3.6** Move Layout components to `/components/layout/`:
+- [x] **3.6** Move Layout components to `/components/layout/`:
   - MainPlayer/
   - CompactPlayer/
   - HomePage/
@@ -490,17 +490,17 @@ Proposed structure:
   - Wallpaper/
   - Wallpapers/
 
-- [ ] **3.7** Move Content Pages to `/components/pages/`:
+- [x] **3.7** Move Content Pages to `/components/pages/`:
   - ContentPages/About/
   - ContentPages/Statistics/
   - Contact/
   - Manual/
 
-- [ ] **3.8** Move Player Integration to `/components/player/`:
+- [x] **3.8** Move Player Integration to `/components/player/`:
   - MixcloudPlayer/
   - MixcloudConnected/
 
-- [ ] **3.9** Move Background Lists to `/components/shared/`:
+- [x] **3.9** Move Background Lists to `/components/shared/`:
   - BackgroundList/
 
 ---
@@ -552,11 +552,11 @@ Proposed structure:
 
 After completing sections 3.1-3.9 above:
 
-- [ ] **4.10** Update all imports throughout codebase to reflect new component locations
+- [x] **4.10** Update all imports throughout codebase to reflect new component locations
   - Use VSCode's "Find and Replace in Files"
   - Pattern: `from "components/OldPath"` → `from "components/category/OldPath"`
 
-- [ ] **4.11** Update path aliases in `tsconfig.json` if needed
+- [x] **4.11** Update path aliases in `tsconfig.json` if needed
   - Add component category aliases if beneficial:
     ```json
     {
