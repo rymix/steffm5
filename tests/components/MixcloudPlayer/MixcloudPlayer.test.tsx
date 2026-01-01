@@ -1,4 +1,5 @@
 import { MixcloudProvider } from "contexts/mixcloud";
+import { ModalProvider } from "contexts/modal";
 
 import MixcloudPlayer from "components/player/MixcloudPlayer/MixcloudPlayer";
 
@@ -8,7 +9,9 @@ import { render, waitFor } from "@testing-library/react";
 describe("MixcloudPlayer", () => {
   const renderWithProvider = (component: React.ReactElement) => {
     return render(
-      <MixcloudProvider initialAutoPlay={false}>{component}</MixcloudProvider>,
+      <ModalProvider>
+        <MixcloudProvider initialAutoPlay={false}>{component}</MixcloudProvider>
+      </ModalProvider>,
     );
   };
 
@@ -162,9 +165,11 @@ describe("MixcloudPlayer", () => {
     ) as jest.Mock;
 
     render(
-      <MixcloudProvider initialAutoPlay={false}>
-        <MixcloudPlayer />
-      </MixcloudProvider>,
+      <ModalProvider>
+        <MixcloudProvider initialAutoPlay={false}>
+          <MixcloudPlayer />
+        </MixcloudProvider>
+      </ModalProvider>,
     );
     await waitFor(() => {
       expect(document.querySelector("iframe")).toBeInTheDocument();
