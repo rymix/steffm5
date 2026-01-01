@@ -8,13 +8,14 @@
  * 1. Burger menu (1000)
  * 2. Modal pages (900)
  * 3. Burger/modal semi-opaque overlay (800)
- * 4. Pull-out panel (700)
- * 5. Windows - Main player (300)
- * 6. Windows - Game windows (200)
- * 7. HomePage layout (100)
- * 8. Launcher icons (10)
- * 9. Wallpaper info box (5)
- * 10. Wallpaper (-999)
+ * 4. Persistent controls (750)
+ * 5. Pull-out panel (700)
+ * 6. Windows - Main player (300)
+ * 7. Windows - Game windows (200)
+ * 8. HomePage layout (100)
+ * 9. Launcher icons (10)
+ * 10. Wallpaper info box (5)
+ * 11. Wallpaper (-999)
  */
 
 export const Z_INDEX = {
@@ -22,6 +23,7 @@ export const Z_INDEX = {
   BURGER_MENU: 1000,
   MODAL_PAGE: 900,
   OVERLAY: 800,
+  PERSISTENT_CONTROLS: 750,
   PULL_OUT_PANEL: 700,
 
   // Windows (maintain relative stacking within this range)
