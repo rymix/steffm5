@@ -1,6 +1,8 @@
 import { useMixcloud } from "contexts/mixcloud";
 import React, { useEffect, useRef } from "react";
 
+import LoadingMessage from "components/shared/LoadingMessage";
+
 import {
   StyledErrorMessage,
   StyledMixcloudPlayer,
@@ -62,7 +64,7 @@ const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
   ]);
 
   if (state.isLoadingMixes) {
-    return <div>Loading mixes...</div>;
+    return <LoadingMessage message="Loading mixes..." fullScreen />;
   }
 
   if (state.error) {

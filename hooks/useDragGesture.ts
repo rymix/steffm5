@@ -17,6 +17,11 @@ export interface UseDragGestureOptions {
   onDragRight?: () => void;
 
   /**
+   * Callback when user clicks (without dragging)
+   */
+  onClick?: () => void;
+
+  /**
    * Whether to prevent click events after a drag (default: true)
    */
   preventClick?: boolean;
@@ -52,6 +57,7 @@ export interface UseDragGestureReturn {
  *   threshold: 50,
  *   onDragLeft: () => console.log('Dragged left'),
  *   onDragRight: () => console.log('Dragged right'),
+ *   onClick: () => console.log('Clicked'),
  * });
  *
  * return (
@@ -60,7 +66,7 @@ export interface UseDragGestureReturn {
  *     onMouseDown={handleMouseDown}
  *     onTouchStart={handleTouchStart}
  *   >
- *     Drag me
+ *     Drag or click me
  *   </button>
  * );
  */
@@ -71,6 +77,7 @@ export function useDragGesture(
     threshold = 50,
     onDragLeft,
     onDragRight,
+    onClick,
     preventClick = true,
   } = options;
 
@@ -124,10 +131,13 @@ export function useDragGesture(
   };
 
   const handleClick = () => {
-    // Only allow click if we didn't drag (or preventClick is disabled)
-    if (!preventClick || !didDragRef.current) {
-      // Click is handled by the component's onClick
+    // Prevent click if we just dragged (and preventClick is enabled)
+    if (preventClick && didDragRef.current) {
       return;
+    }
+    // Call the onClick callback if provided
+    if (onClick) {
+      onClick();
     }
   };
 

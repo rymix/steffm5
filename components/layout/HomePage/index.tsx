@@ -35,6 +35,7 @@ import CompactDisplay from "@/components/layout/CompactPlayer/CompactDisplay";
 import Wallpaper from "@/components/layout/Wallpaper";
 import WindowLauncher from "@/components/layout/WindowLauncher";
 import BurgerMenu from "@/components/modals/BurgerMenu";
+import PersistentControls from "@/components/ui/PersistentControls";
 import MinesweeperWindow from "@/components/windows/MinesweeperWindow";
 import SolitaireWindow from "@/components/windows/SolitaireWindow";
 import TetrisWindow from "@/components/windows/TetrisWindow";
@@ -199,7 +200,10 @@ const HomePageContent: React.FC = () => {
 
       {/* Pull-out panel - rendered at root level to be above all windows, hidden in mobile via CSS */}
       {isClient && (
-        <DisplayDevice isOpen={isPanelOpen} onToggle={togglePanel} />
+        <>
+          <DisplayDevice isOpen={isPanelOpen} onToggle={togglePanel} />
+          <PersistentControls isPanelOpen={isPanelOpen} />
+        </>
       )}
 
       <StyledLayoutWrapper>

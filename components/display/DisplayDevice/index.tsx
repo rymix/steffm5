@@ -71,6 +71,7 @@ const DisplayDevice: React.FC<DisplayDeviceProps> = ({
     threshold: 50,
     onDragLeft: !isOpen ? toggleDisplay : undefined,
     onDragRight: isOpen ? toggleDisplay : undefined,
+    onClick: toggleDisplay,
   });
 
   // Get sorted tracks

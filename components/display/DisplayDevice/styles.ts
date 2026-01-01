@@ -51,8 +51,8 @@ export const StyledWoodSlats = styled.div`
     inset -1px -1px 3px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: flex-start;
-  justify-content: flex-end;
-  padding-right: 26px;
+  justify-content: flex-start;
+  padding-left: 26px;
   padding-top: 17px;
 
   &::before {

@@ -2,6 +2,7 @@ import { useMixcloud } from "contexts/mixcloud";
 import React, { useCallback, useState } from "react";
 
 import type { Track } from "db/types";
+import LoadingMessage from "components/shared/LoadingMessage";
 import { useModalTheme } from "hooks/useThemeMode";
 
 import {
@@ -149,7 +150,7 @@ const MixList: React.FC = () => {
     return (
       <StyledMixList $themeMode={modalThemeMode}>
         <h4>Mix List</h4>
-        <div>Loading mixes...</div>
+        <LoadingMessage message="Loading mixes..." />
       </StyledMixList>
     );
   }
