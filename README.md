@@ -265,4 +265,4 @@ This is a personal project, but feedback and suggestions are welcome. Please ope
 
 **Live URL**: [https://stef.fm](https://stef.fm)
 
-**Repository**: [[GitHub Repository URL](https://github.com/rymix/steffm5)]
+**Repository**: [https://github.com/rymix/steffm5](https://github.com/rymix/steffm5)
