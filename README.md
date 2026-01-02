@@ -1,6 +1,12 @@
-# STEF.FM
+### ☆。★。☆。★  
+### ★。☆。★。☆
+### ★。＼｜／。★ 
+# &nbsp; [stef.fm](https://stef.fm)
+### ★。／｜＼。★
+### ☆。☆。★。☆   
+### ☆。★。☆。★
 
-A Next.js-based immersive music player application with Mixcloud integration, dynamic visual effects, and retro-style hardware UI.
+Stef.FM is a Next.js-based immersive music player application with Mixcloud integration, dynamic visual effects, and retro-style hardware UI.
 
 ## Overview
 
@@ -257,6 +263,6 @@ This is a personal project, but feedback and suggestions are welcome. Please ope
 
 ---
 
-**Live URL**: [https://steffm.azurewebsites.net](https://steffm.azurewebsites.net) (when deployed)
+**Live URL**: [https://stef.fm](https://stef.fm)
 
-**Repository**: [GitHub Repository URL]
+**Repository**: [[GitHub Repository URL](https://github.com/rymix/steffm5)]
