@@ -86,3 +86,36 @@ export function findTrackIndexAtPosition(
 
   return -1;
 }
+
+/**
+ * Gets the currently playing track from a mix based on playback position
+ * @param mix - Mix object with tracks array
+ * @param position - Current playback position in seconds
+ * @param duration - Total mix duration in seconds
+ * @returns Current track object or null if no track found
+ */
+export function getCurrentTrack(
+  mix: any,
+  position: number,
+  duration: number,
+): any | null {
+  if (!mix || !mix.tracks || mix.tracks.length === 0) {
+    return null;
+  }
+
+  const sortedTracks = sortTracksByTime(mix.tracks);
+
+  for (let i = 0; i < sortedTracks.length; i++) {
+    const track = sortedTracks[i];
+    const nextTrack = sortedTracks[i + 1];
+    const trackStart = timeToSeconds(track.startTime);
+    const trackEnd = nextTrack ? timeToSeconds(nextTrack.startTime) : duration;
+
+    if (position >= trackStart && position < trackEnd) {
+      return track;
+    }
+  }
+
+  // Default to first track if position is before first track starts
+  return sortedTracks[0];
+}
