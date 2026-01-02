@@ -7,7 +7,6 @@ export const StyledDrivingMode = styled.div`
   justify-content: center;
   min-height: 60vh;
   padding: 40px 20px;
-  gap: 60px;
 `;
 
 export const StyledCurrentTrack = styled.div`

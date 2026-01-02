@@ -18,7 +18,6 @@ const AutoPlayPrompt: React.FC = () => {
 
   const handlePlay = () => {
     actions.play();
-    actions.setAutoPlayBlocked(false);
     modal.actions.closeModal();
   };
 
@@ -28,7 +27,6 @@ const AutoPlayPrompt: React.FC = () => {
         {currentMix && (
           <>
             <StyledMixName>{currentMix.name}</StyledMixName>
-            <p>Tap to continue playing</p>
           </>
         )}
       </StyledCurrentTrack>

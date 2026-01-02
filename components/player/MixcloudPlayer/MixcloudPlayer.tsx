@@ -26,6 +26,8 @@ const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
   const initializedRef = useRef(false);
   const autoPlayTriggeredRef = useRef(false);
   const currentKeyRef = useRef<string | null>(null);
+  const hasPlayedOnceRef = useRef(false); // Track if we've had successful playback
+  const promptShownForKeysRef = useRef<Set<string>>(new Set()); // Track which mixes we've shown prompt for
 
   // Initialize by loading all mixes with random starting point (client-side only)
   useEffect(() => {
@@ -73,6 +75,13 @@ const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
     actions,
   ]);
 
+  // Track when playback starts (to know we're past initial load)
+  useEffect(() => {
+    if (state.isPlaying) {
+      hasPlayedOnceRef.current = true;
+    }
+  }, [state.isPlaying]);
+
   // Auto-play detection: Detect when a new mix loads but doesn't auto-play
   useEffect(() => {
     // Only check if:
@@ -80,18 +89,24 @@ const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
     // 2. Mix has loaded (not loading)
     // 3. Current key has changed (new mix)
     // 4. Not currently playing
+    // 5. We've had successful playback before (not initial load)
+    // 6. Haven't already shown prompt for this mix
     if (
       autoPlayEnabled &&
       !state.isLoadingMixes &&
       state.currentKey &&
       currentKeyRef.current !== state.currentKey &&
-      !state.isPlaying
+      !state.isPlaying &&
+      hasPlayedOnceRef.current && // Only after initial playback
+      !promptShownForKeysRef.current.has(state.currentKey) // Only once per mix
     ) {
       // Wait 2 seconds to see if playback starts automatically
       const timer = setTimeout(() => {
         // If still not playing after 2 seconds, auto-play is blocked
-        if (!state.isPlaying) {
+        if (!state.isPlaying && state.currentKey) {
           actions.setAutoPlayBlocked(true);
+          // Mark that we've shown the prompt for this mix
+          promptShownForKeysRef.current.add(state.currentKey);
         }
       }, 2000);
 
@@ -124,11 +139,18 @@ const MixcloudPlayer: React.FC<MixcloudPlayerProps> = ({ autoPlay = true }) => {
     if (state.autoPlayBlocked && !modal.state.isOpen) {
       modal.actions.openModal({
         id: "auto-play-prompt",
-        title: "Continue Playing",
+        title: "Tap to Continue Playing",
         component: <AutoPlayPrompt />,
       });
     }
   }, [state.autoPlayBlocked, modal.state.isOpen, modal.actions]);
+
+  // Clear autoPlayBlocked when modal closes (so it doesn't reopen)
+  useEffect(() => {
+    if (!modal.state.isOpen && state.autoPlayBlocked) {
+      actions.setAutoPlayBlocked(false);
+    }
+  }, [modal.state.isOpen, state.autoPlayBlocked, actions]);
 
   if (state.isLoadingMixes) {
     return <LoadingMessage message="Loading mixes..." fullScreen />;
