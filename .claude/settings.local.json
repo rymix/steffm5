@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:www.slatebytes.com)",
+      "WebFetch(domain:vercel.com)",
+      "Bash(npm run build:*)",
+      "Bash(npm run prettier:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
