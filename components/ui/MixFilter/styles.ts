@@ -64,8 +64,7 @@ export const StyledMixFilterFormButtons = styled.div`
 `;
 
 interface StyledMixFilterFormButtonAllProps
-  extends StyledMixFilterFormButtonProps,
-    ThemeProps {}
+  extends StyledMixFilterFormButtonProps, ThemeProps {}
 
 export const StyledMixFilterFormButton = styled.button<StyledMixFilterFormButtonAllProps>`
   padding: 8px 16px;

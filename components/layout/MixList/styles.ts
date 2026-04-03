@@ -25,8 +25,7 @@ export const StyledMixList = styled.div<ThemeProps>`
 `;
 
 interface StyledMixListItemAllProps
-  extends StyledMixListItemProps,
-    ThemeProps {}
+  extends StyledMixListItemProps, ThemeProps {}
 
 export const StyledMixListItem = styled.li<StyledMixListItemAllProps>`
   margin: 8px 0;
@@ -95,8 +94,7 @@ export const StyledMixListItemInfo = styled.div`
 `;
 
 interface StyledMixListStatusDotAllProps
-  extends StyledMixListStatusDotProps,
-    ThemeProps {}
+  extends StyledMixListStatusDotProps, ThemeProps {}
 
 export const StyledMixListStatusDot = styled.div<StyledMixListStatusDotAllProps>`
   width: 12px;
@@ -140,8 +138,7 @@ export const StyledMixListProgressBarContainer = styled.div<ThemeProps>`
 `;
 
 interface StyledMixListProgressBarAllProps
-  extends StyledMixListProgressBarProps,
-    ThemeProps {}
+  extends StyledMixListProgressBarProps, ThemeProps {}
 
 export const StyledMixListProgressBar = styled.div<StyledMixListProgressBarAllProps>`
   height: 100%;
